@@ -1,7 +1,10 @@
-import React from 'react';
+import Employee from "@/appcomponents/employeeManagement/page";
+import React from "react";
 
 const EmployeeManagement = () => {
-  return <div>EmployeeManagement</div>;
+  return (
+    <Employee/>
+  );
 };
 
 export default EmployeeManagement;
