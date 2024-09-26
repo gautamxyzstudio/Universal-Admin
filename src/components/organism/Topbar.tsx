@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import Input from "@/components/atoms/Input";
-import { useState } from "react";
-import { Icons } from "../../../public/exporter";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import Input from '@/components/atoms/Input';
+import { useState } from 'react';
+import { Icons } from '../../../public/exporter';
 
 type ISearch = {
   searchText: string;
@@ -11,10 +11,10 @@ type ISearch = {
 
 const Topbar = () => {
   const [data, setData] = useState<ISearch>({
-    searchText: "",
+    searchText: '',
   });
   return (
-    <div className="text-disable flex justify-between border rounded-tl-[40px] border-[#EBEBEB]  px-10">
+    <div className="text-disable flex  bg-white justify-between border rounded-tl-[40px] border-borderGrey  px-10">
       <p className="my-[18px] text-[16px] leading-5">Welcome, Admin</p>
       <div className="flex w-[424px] my-3 rounded pl-1 border gap-x-1 items-center">
         <Image src={Icons.search} alt="search" className="w-auto h-auto" />
