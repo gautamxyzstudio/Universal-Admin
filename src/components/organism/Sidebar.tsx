@@ -1,20 +1,23 @@
-'use client'
-import { Icons } from "../../../public/exporter";
-import Image from "next/image";
-import React, { useState } from "react";
-import { quickLink } from "@/api/mockData/data";
-import Link from "next/link";
+'use client';
+import { Icons } from '../../../public/exporter';
+import Image from 'next/image';
+import React, { useState } from 'react';
+import { quickLink } from '@/api/mockData/data';
+import Link from 'next/link';
 
 const Sidebar = () => {
-  const [activeLinkId, setActiveLinkId] = useState<number | null>(null);
+  const [translateY, setTranslateValue] = useState(0);
+  const [activeLinkId, setActiveLinkId] = useState<number | null>(
+    quickLink[0].id
+  );
 
-  const dataClick = (id: number) => {
+  const dataClick = (id: number, index: number) => {
     setActiveLinkId(id);
-    console.log("Data Clicked", id);
+    setTranslateValue(index * 72);
   };
- 
- return (
-    <div className="my-6 flex flex-col justify-between">
+
+  return (
+    <div className="my-6 flex flex-col justify-between relative">
       <Image
         className="cursor-pointer mx-auto"
         width={144}
@@ -23,42 +26,33 @@ const Sidebar = () => {
         alt="logo"
       />
 
-      <div className="my-20 flex flex-col">
-        {quickLink.slice(0, 6).map((data) => {
+      <div className="mt-20 flex flex-col relative">
+        {/* Vertical indicator */}
+        <div
+          className={`h-[72px] w-1 bg-white rounded-custom absolute transition-transform duration-300 ease-in-out`}
+          style={{ transform: `translateY(${translateY}px)` }} // Use inline style for translation
+        />
+        {quickLink.map((data, index) => {
           const isActive = activeLinkId === data.id;
           return (
             <Link
               key={data.id}
               href={data.path}
-              onClick={() => dataClick(data.id)}
-              className={`m-6 flex items-center gap-x-3 ${isActive ? 'font-bold text-white ' : 'text-secondary'}`}
+              onClick={() => dataClick(data.id, index)}
+              className={`flex flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
             >
               <Image
-               src= {isActive ? data.iconfill : data.icon}
+                src={isActive ? data.iconfill : data.icon}
                 alt={data.title}
-                className="w-auto h-auto"
+                className="w-6 h-6"
               />
-              <span className="text-[16px] leading-5">{data.title}</span>
-            </Link>
-          );
-        })}
-      </div>
-      <div className="mt-20 flex flex-col">
-        {quickLink.slice(6).map((data) => {
-          const isActive = activeLinkId === data.id;
-          return (
-            <Link
-              key={data.id}
-              href={data.path}
-              onClick={() => dataClick(data.id)}
-              className='m-6 flex items-center gap-x-3'
-            >
-              <Image
-                src={isActive? data.iconfill : data.icon}
-                alt={data.title}
-                className="w-auto h-auto"
-              />
-              <span className="text-[16px] leading-5">{data.title}</span>
+              <span
+                className={`text-md ${
+                  isActive ? 'font-bold text-white' : 'text-secondary'
+                }`}
+              >
+                {data.title}
+              </span>
             </Link>
           );
         })}

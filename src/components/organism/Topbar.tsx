@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import Input from '@/components/atoms/Input';
+import Input from '@/components/atoms/Input/Input';
 import { useState } from 'react';
 import { Icons } from '../../../public/exporter';
 

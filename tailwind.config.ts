@@ -18,6 +18,24 @@ const config: Config = {
         extraWhite: '#FAFAFA',
         borderGrey: '#EBEBEB',
       },
+      borderRadius: {
+        custom: '0px 16px 16px 0px',
+      },
+      fontSize: {
+        'heading-40': [
+          '2.5rem',
+          {
+            lineHeight: '2.75rem',
+            fontWeight: '700',
+          },
+        ],
+        'subHeading-24': [
+          '1.5rem',
+          {
+            lineHeight: '1.75rem',
+          },
+        ],
+      },
     },
   },
   plugins: [],

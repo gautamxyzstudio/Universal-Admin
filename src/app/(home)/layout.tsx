@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import './globals.css';
+import '../globals.css';
 import Sidebar from '@/components/organism/Sidebar';
 import Topbar from '@/components/organism/Topbar';
 
 const helveticaBold = localFont({
-  src: '../fonts/Helvetica-Bold.ttf',
+  src: '../../fonts/Helvetica-Bold.ttf',
   variable: '--font-geist-sans',
   weight: '400 700',
 });
