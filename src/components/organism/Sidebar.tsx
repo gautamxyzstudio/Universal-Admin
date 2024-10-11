@@ -26,10 +26,10 @@ const Sidebar = () => {
         alt="logo"
       />
 
-      <div className="mt-20 flex flex-col relative">
+      <div className="mt-16 flex flex-col relative">
         {/* Vertical indicator */}
         <div
-          className={`h-[72px] w-1 bg-white rounded-custom absolute transition-transform duration-300 ease-in-out`}
+          className={`h-[72px] w-1 bg-primary rounded-custom absolute transition-transform duration-300 ease-in-out`}
           style={{ transform: `translateY(${translateY}px)` }} // Use inline style for translation
         />
         {quickLink.map((data, index) => {
@@ -48,7 +48,7 @@ const Sidebar = () => {
               />
               <span
                 className={`text-md ${
-                  isActive ? 'font-bold text-white' : 'text-secondary'
+                  isActive ? 'font-bold text-primary' : 'text-disable'
                 }`}
               >
                 {data.title}

@@ -12,11 +12,13 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        primary: `#182452`,
+        primary: '#FF7312',
         secondary: `#CCD4F2`,
         disable: '#868686',
         extraWhite: '#FAFAFA',
         borderGrey: '#EBEBEB',
+        Black:'#121212'
+        
       },
       borderRadius: {
         custom: '0px 16px 16px 0px',

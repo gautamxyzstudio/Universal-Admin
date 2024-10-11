@@ -10,14 +10,15 @@ import notification from "./notification.svg";
 import report from "./report.svg";
 import search from "./search.svg";
 import setting from "./setting.svg";
-import subAdmin from "./subadmin.svg";
+import subAdmin from "./subAdmin.svg";
 import buildingfill from "./buildingfill.svg";
 import clientfill from "./clientfill.svg";
 import peoplefill from "./peoplefill.svg";
 import homefill from "./homefill.svg";
 import reportfill from "./reportfill.svg";
 import settingfill from "./settingfill.svg";
-import subAdminfill from "./subadminfill.svg";
+import subAdminfill from "./subAdminfill.svg";
+import calender from "./calender.svg";
 
 
 // Icon Object
@@ -41,4 +42,13 @@ export const Icons = {
   reportfill,
   settingfill,
   subAdminfill,
+  calender,
+};
+
+// Images
+import demoImg from "./demoImage.png";
+
+// Image Object
+export const Images = {
+  demoImg,
 };
