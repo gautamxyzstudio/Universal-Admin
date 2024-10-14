@@ -1,22 +1,40 @@
-import React from 'react';
+import React from "react";
 
 // import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
-import { Button } from '@mui/material';
+import { Button } from "@mui/material";
+import { ICustomButtonProps } from "./CustomButton.types";
 
-const CustomButton = () => {
+
+const CustomButton: React.FC<ICustomButtonProps> = ({
+  title,
+  onClick,
+  size,
+  fullWidth,
+  variant = "contained",
+  icon,
+}) => {
   return (
-    // <Button
-    //   loading={false}
-    //   className="text-primary text-md rounded-[4px] w-[532px] h-12"
-    //   color="white"
-    //   placeholder={undefined}
-    //   onPointerEnterCapture={undefined}
-    //   onPointerLeaveCapture={undefined}
-    // >
-    //   <ActivityIndicator />
-    // </Button>
-    <Button/>
-
+    <div>
+      <Button
+        variant={variant}
+        fullWidth={fullWidth}
+        size={size}
+        sx={{
+          fontSize: "24px",
+          lineHeight: "28px",
+          fontWeight: "bold",
+          textTransform: "capitalize",
+          borderRadius: "4px",
+          paddingY: "10px",
+          backgroundColor: "primary",
+          color: variant === "contained" ? "white" : "primary",
+        }}
+        onClick={onClick}
+      >
+        {icon}
+        {title}
+      </Button>
+    </div>
   );
 };
 

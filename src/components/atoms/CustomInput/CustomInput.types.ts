@@ -1,3 +1,4 @@
+import { InputProps as MuiInputProps } from "@mui/material";
 export interface ICustomInputProps {
   label?: string | undefined;
   value: string;
@@ -5,4 +6,5 @@ export interface ICustomInputProps {
   type?: React.HTMLInputTypeAttribute | undefined;
   error?: boolean;
   errorMessage?: string;
+  InputProps?: MuiInputProps;
 }
