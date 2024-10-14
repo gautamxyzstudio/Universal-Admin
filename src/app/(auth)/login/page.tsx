@@ -8,7 +8,7 @@ import LoginForm from '@/components/templates/loginForm/LoginForm';
 
 const Login = () => {
   return (
-    <div className="w-full h-screen overflow-hidden">
+    <div className="w-full h-screen bg-black overflow-hidden">
       <div className="ml-20 pt-6 mb-[139px] flex h-full flex-col justify-between">
         <Image width={144} height={56} src={Icons.logo} alt="logo" />
         <div className="mb-[139px]">

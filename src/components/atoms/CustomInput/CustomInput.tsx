@@ -9,6 +9,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   error,
   errorMessage,
   onChange,
+  InputProps,
 }) => {
   return (
     <div>
@@ -26,14 +27,12 @@ const CustomInput: React.FC<ICustomInputProps> = ({
           '& .MuiInputBase-input': {
             color: 'white',
           },
-          '& .MuiInputBase-root': {
-            border: '1px solid',
-            borderRadius: '8px',
-            borderColor: error ? 'red' : 'white',
-          },
           '& .MuiFormLabel-root.MuiInputLabel-root': {
             color: error ? 'red' : 'white',
           },
+        }}
+        slotProps={{
+          input: InputProps,
         }}
       />
 
