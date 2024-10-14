@@ -1,6 +1,6 @@
-import React from "react";
-import { ICustomInputProps } from "./CustomInput.types";
-import { TextField } from "@mui/material";
+import React from 'react';
+import { ICustomInputProps } from './CustomInput.types';
+import { TextField } from '@mui/material';
 
 const CustomInput: React.FC<ICustomInputProps> = ({
   label,
@@ -12,26 +12,6 @@ const CustomInput: React.FC<ICustomInputProps> = ({
 }) => {
   return (
     <div>
-      {/* <Input
-        label={label}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        size="lg"
-        color="white"
-        className="text-md"
-        type={type}
-        containerProps={{
-          className: 'bg-pink',
-        }}
-        error={error}
-        variant="outlined"
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
-        crossOrigin={undefined}
-        
-      /> */}
-
       <TextField
         className="text-disable"
         label={label}
@@ -41,20 +21,19 @@ const CustomInput: React.FC<ICustomInputProps> = ({
         error={error}
         fullWidth
         variant="outlined"
-         color="secondary"
+        color="secondary"
         sx={{
-          "& .MuiInputBase-input": {
-            color: "white",
+          '& .MuiInputBase-input': {
+            color: 'white',
           },
-          "& .MuiInputBase-root": {
-            border: "1px solid",
-            borderRadius: "8px",
-            borderColor: error? "red" : "white",
+          '& .MuiInputBase-root': {
+            border: '1px solid',
+            borderRadius: '8px',
+            borderColor: error ? 'red' : 'white',
           },
-          "& .MuiFormLabel-root.MuiInputLabel-root":{
-            color: error? "red" : "white",
-          }
-        
+          '& .MuiFormLabel-root.MuiInputLabel-root': {
+            color: error ? 'red' : 'white',
+          },
         }}
       />
 

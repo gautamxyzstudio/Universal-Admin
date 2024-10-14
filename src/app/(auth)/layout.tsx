@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '../globals.css';
-import MaterialThemeProvider from '../MaterialTheme';
+import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
+import ReduxProvider from '@/providers/ReduxProvider';
+
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
   variable: '--font-geist-sans',
@@ -22,7 +24,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${helveticaBold.variable} antialiased`}>
         <div className="w-screen h-screen">
-          <MaterialThemeProvider>{children}</MaterialThemeProvider>
+          <MaterialThemeProvider>
+            <ReduxProvider>{children}</ReduxProvider>
+          </MaterialThemeProvider>
         </div>
       </body>
     </html>

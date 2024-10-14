@@ -1,7 +1,7 @@
-"use client";
-import theme from "@/themes/theme";
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
+'use client';
+import theme from '@/themes/theme';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 
 export default function MaterialThemeProvider({
   children,
