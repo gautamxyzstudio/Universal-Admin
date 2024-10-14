@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import Input from '@/components/atoms/Input/Input';
 import { useState } from 'react';
 import { Icons, Images } from '../../../public/exporter';
+import CustomInput from '../atoms/CustomInput/CustomInput';
 
 type ISearch = {
   searchText: string;
@@ -18,8 +18,8 @@ const Topbar = () => {
       <p className="my-[18px] text-[16px] leading-5">Welcome, Admin</p>
       <div className="flex w-[424px] my-3 rounded pl-1 border gap-x-1 items-center">
         <Image src={Icons.search} alt="search" className="w-auto h-auto" />
-        <Input
-          placeholder="Search"
+        <CustomInput
+         placeholder="Search"
           value={data.searchText}
           onChange={(e) => {
             console.log(e.target.value);

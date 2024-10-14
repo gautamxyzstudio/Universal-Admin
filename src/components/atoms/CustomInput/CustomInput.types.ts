@@ -1,5 +1,5 @@
 export interface ICustomInputProps {
-  label: string;
+  label?: string | undefined;
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   type?: React.HTMLInputTypeAttribute | undefined;

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '../globals.css';
-import MaterialThemeProvider from '../Mtailwind';
+import MaterialThemeProvider from '../MaterialTheme';
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
   variable: '--font-geist-sans',
