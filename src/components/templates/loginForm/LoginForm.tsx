@@ -17,11 +17,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleClickShowPassword = () => {
-    alert('eh')
     setShowPassword(!showPassword);
   };
-  
-  console.log(showPassword);
 
   return (
     <div className="w-[532px]">
@@ -38,32 +35,51 @@ const LoginForm = () => {
           setInputDetails((prev) => ({ ...prev, email: e.target.value }))
         }
         type="email"
+        fullWidth
+        sx={{
+          "& .MuiInputBase-input": {
+            color: "white",
+          },
+          "& .MuiFormLabel-root.MuiInputLabel-root": {
+            color: "white",
+          },
+        }}
       />
       <div className="h-9" />
       <CustomInput
         label={STRINGS.password}
         value={inputDetails.password}
-        onChange={(e) =>{
-          setInputDetails((prev) => ({ ...prev, password: e.target.value }))
-          }
-        }
+        fullWidth
+        onChange={(e) => {
+          setInputDetails((prev) => ({ ...prev, password: e.target.value }));
+        }}
+        sx={{
+          "& .MuiInputBase-input": {
+            color: "white",
+          },
+          "& .MuiFormLabel-root.MuiInputLabel-root": {
+            color: "white",
+          },
+        }}
         type={showPassword ? "text" : "password"}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                className="z-10"
-                onClick={handleClickShowPassword}
-                edge='start'
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  className="z-10"
+                  onClick={handleClickShowPassword}
+                  edge="start"
                 >
-                {showPassword ? (
-                  <VisibilityOutlined color="secondary" />
-                ) : (
-                  <VisibilityOffOutlined color="secondary" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
+                  {showPassword ? (
+                    <VisibilityOutlined color="secondary" />
+                  ) : (
+                    <VisibilityOffOutlined color="secondary" />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
         }}
       />
       <div className="h-14" />
@@ -71,6 +87,16 @@ const LoginForm = () => {
         title={STRINGS.login}
         onClick={() => console.log("Hello Admin")}
         fullWidth
+        sx={{
+          fontSize: "24px",
+          lineHeight: "28px",
+          fontWeight: "bold",
+          textTransform: "capitalize",
+          borderRadius: "4px",
+          paddingY: "10px",
+          backgroundColor: "primary",
+          color: "white",
+        }}
       />
     </div>
   );

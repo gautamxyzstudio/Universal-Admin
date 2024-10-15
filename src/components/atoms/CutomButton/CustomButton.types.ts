@@ -1,9 +1,9 @@
-export interface ICustomButtonProps {
+import { ButtonProps } from "@mui/material";
+export interface ICustomButtonProps extends ButtonProps  {
   title: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean | undefined;
   size?: "small" | "large" | "medium";
-  fullWidth?: boolean | undefined;
   variant?: "contained" | "outlined";
-  icon? : React.ReactNode
-}
+  icon? : React.ReactNode;
+} 

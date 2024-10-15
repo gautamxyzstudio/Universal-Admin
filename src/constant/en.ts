@@ -14,4 +14,10 @@ export const STRINGS = {
   email: 'Email',
   password: 'Password',
   signUp: 'Sign Up',
+  all : 'All',
+  pending: 'Pending',
+  approved: 'Approved',
+  declined: 'Declined',
+  fullTime: 'Full Time',
+  partTime: 'Part Time',  
 };

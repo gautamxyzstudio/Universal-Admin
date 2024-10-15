@@ -1,42 +1,27 @@
-'use client';
-import React from 'react';
-import Image from 'next/image';
-import { useState } from 'react';
-import { Icons, Images } from '../../../public/exporter';
-import CustomInput from '../atoms/CustomInput/CustomInput';
-
-type ISearch = {
-  searchText: string;
-};
+import React from "react";
+import Image from "next/image";
+import { Icons, Images } from "../../../public/exporter";
+import { IconButton} from "@mui/material";
+import SearchField from "../atoms/SearchField";
 
 const Topbar = () => {
-  const [data, setData] = useState<ISearch>({
-    searchText: '',
-  });
+ 
   return (
-    <div className="text-disable flex  bg-white justify-between border-b rounded-tl-[40px] border-borderGrey  px-10">
+    <div className="text-disable flex bg-white justify-between border-b rounded-tl-[40px] border-borderGrey px-10 h-14">
       <p className="my-[18px] text-[16px] leading-5">Welcome, Admin</p>
-      <div className="flex w-[424px] my-3 rounded pl-1 border gap-x-1 items-center">
-        <Image src={Icons.search} alt="search" className="w-auto h-auto" />
-        <CustomInput
-         placeholder="Search"
-          value={data.searchText}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setData({
-              searchText: e.target.value,
-            });
-          }}
-        />
-      </div>
+      <SearchField searchStyle=" w-[424px]"/>
+
       <div className="flex items-center my-[10px] gap-x-4">
-        <div className=" bg-extraWhite rounded-full  w-9 h-9">
-          <Image
-            src={Icons.notification}
-            alt="notification"
-            className="w-auto h-auto p-[6px]"
-          />
-        </div>
+        <IconButton>
+          <div className=" bg-extraWhite rounded-full  w-9 h-9">
+            <Image
+              src={Icons.notification}
+              alt="notification"
+              className="w-auto h-auto p-[6px]"
+            />
+          </div>
+        </IconButton>
+
         <div className="flex items-center gap-x-2">
           <Image
             src={Images.demoImg}
