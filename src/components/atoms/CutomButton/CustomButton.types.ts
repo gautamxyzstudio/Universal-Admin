@@ -1,56 +1,68 @@
-import { SxProps, Theme } from '@mui/material';
+import { ButtonProps, SxProps, Theme } from "@mui/material";
 
-export interface ICustomButtonProps {
+export interface ICustomButtonProps extends ButtonProps {
   title: string;
   onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
   disabled?: boolean | undefined;
-  size?: 'small' | 'large' | 'medium';
+  size?: "small" | "large" | "medium";
   fullWidth?: boolean | undefined;
   buttonType: IButtonType;
+  iconPosition?:'left' | 'right';
   isLoading?: boolean;
   customStyles?: SxProps<Theme> | undefined;
-  variant?: 'contained' | 'outlined';
+  variant?: "contained" | "outlined";
   icon?: React.ReactNode;
 }
 
 export type IButtonType =
-  | 'primary'
-  | 'outline-small-red'
-  | 'outline-small-green';
+  | "primary"
+  | "outline-small-red"
+  | "outline-small-green"
+  | "outline-small-disabled";
 
 export const getStylesFromButtonType = (
   buttonType: IButtonType
 ): SxProps<Theme> | undefined => {
   switch (buttonType) {
-    case 'primary':
+    case "primary":
       return {
-        color: 'white',
-        fontSize: '24px',
-        lineHeight: '28px',
-        fontWeight: 'bold',
-        textTransform: 'capitalize',
-        borderRadius: '4px',
-        paddingY: '10px',
+        color: "white",
+        fontSize: "24px",
+        lineHeight: "28px",
+        fontWeight: "bold",
+        textTransform: "capitalize",
+        borderRadius: "4px",
+        paddingY: "10px",
       };
-    case 'outline-small-red':
+    case "outline-small-red":
       return {
-        color: '#C11919',
-        fontSize: '14px',
-        lineHeight: '18px',
-        borderColor: '#C11919',
-        fontWeight: '400',
-        borderRadius: '4px',
-        padding: '8px',
+        color: "#C11919",
+        fontSize: "14px",
+        lineHeight: "18px",
+        borderColor: "#C11919",
+        fontWeight: "400",
+        borderRadius: "4px",
+        padding: "8px",
       };
-    case 'outline-small-green':
+    case "outline-small-green":
       return {
-        color: '#469C73',
-        borderColor: '#469C73',
-        fontSize: '14px',
-        lineHeight: '18px',
-        fontWeight: '400',
-        borderRadius: '4px',
-        padding: '8px',
+        color: "#469C73",
+        borderColor: "#469C73",
+        fontSize: "14px",
+        lineHeight: "18px",
+        fontWeight: "400",
+        borderRadius: "4px",
+        padding: "8px",
+      };
+    case "outline-small-disabled":
+      return {
+        color: "#868686",
+        borderColr: "#F2F2F2",
+        fontSize: "12px",
+        lineHeight: "16px",
+        fontWeight: "400",
+        borderRadius: "4px",
+        padding: "8px",
       };
   }
 };

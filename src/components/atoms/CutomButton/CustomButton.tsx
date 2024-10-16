@@ -15,6 +15,7 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
   buttonType = 'primary',
   size,
   customStyles,
+  iconPosition = 'left',
   fullWidth,
   variant = 'contained',
   icon,
@@ -32,12 +33,13 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
       loadingIndicator={<CircularProgress color="inherit" />}
       fullWidth={fullWidth}
       size={size}
-      sx={{ ...buttonStyles, cursor: 'pointer' }}
+      sx={{ ...buttonStyles, cursor: 'pointer',}}
       onClick={onClick}
       {...props}
     >
-      {icon}
+      {iconPosition === 'left' && icon} 
       {title}
+      {iconPosition === 'right' && icon}
     </LoadingButton>
   );
 };

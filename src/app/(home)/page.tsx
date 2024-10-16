@@ -8,8 +8,8 @@ export default function Home() {
     console.log('Create button');
   };
   return (
-    <div className="items-center px-10 justify-items-center min-h-screen bg-">
-      <div className="flex justify-between items-center mt-4 mb-6">
+    <div className="items-center px-10 justify-items-center min-h-screen ">
+      <div className="flex justify-between items-center pt-4 mb-6">
         <h1 className="text-Black font-bold text-[24px] leading-7">
           {STRINGS.dashboard}
         </h1>

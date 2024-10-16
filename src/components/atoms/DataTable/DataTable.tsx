@@ -9,22 +9,26 @@ export interface IDataTable extends TableProps {
 
 const DataTable: React.FC<IDataTable> = ({ columns, rows }) => {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center ">
       <DataGrid
         sx={{
-          
           border: 0,
+          height: "65vh",
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "#FAFAFA",
-            color:"#868686",
-            fontSize:"12px",
-            lineHeight:"16px",
+            color: "#868686",
+            fontSize: "12px",
+            lineHeight: "16px",
           },
-          "& .MuiDataGrid-row":{
-            "--rowBorderColor": "none"
-          },         
+          "& .MuiDataGrid-row": {
+            "--rowBorderColor": "none",
+          },
         }}
-        hideFooter
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        
+        hideFooterSelectedRowCount
         rowHeight={68}
         columns={columns}
         rows={rows}

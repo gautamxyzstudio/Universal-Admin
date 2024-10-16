@@ -22,6 +22,7 @@ import calender from './calender.svg';
 import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
+import excelfile from './excelApp.svg';
 
 // Icon Object
 export const Icons = {
@@ -48,6 +49,7 @@ export const Icons = {
   subAdminfill,
   calender,
   cross,
+  excelfile,
 };
 
 // Images
