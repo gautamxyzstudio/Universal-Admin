@@ -4,11 +4,13 @@ import CustomInput from '@/components/atoms/CustomInput/CustomInput';
 import CustomButton from '@/components/atoms/CutomButton/CustomButton';
 import { STRINGS } from '@/constant/en';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { IUserCookies, saveUserDetailsInCookies } from '@/utility/cookies';
 import { withAsyncErrorHandlingPost } from '@/utility/utils';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 import React, { useState } from 'react';
-
+import { useRouter } from 'next/navigation';
+import { routeNames } from '@/utility/routesName';
 const LoginForm = () => {
   const [inputDetails, setInputDetails] = useState<{
     email: string;
@@ -21,6 +23,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { displaySnackbar } = useSnackBarContext();
   const [login, { isLoading }] = useLoginMutation();
+  const router = useRouter();
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -35,7 +39,12 @@ const LoginForm = () => {
       password: inputDetails.password,
     }).unwrap();
     if (response) {
-      console.log(response);
+      const user: IUserCookies = {
+        token: response.jwt,
+        userDetails: { ...response.user },
+      };
+      saveUserDetailsInCookies(user);
+      router.push(routeNames.Dashboard);
       displaySnackbar('success', 'Login successful');
     }
   }, displaySnackbar);
