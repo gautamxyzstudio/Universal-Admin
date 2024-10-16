@@ -35,11 +35,11 @@ export default function RootLayout({
                   <div className="h-screen w-[25%] max-w-[280px] bg-black">
                     <Sidebar />
                   </div>
-                  <div className=" w-screen bg overflow-hidden flex flex-row justify-center">
+                  <div className=" w-screen bg-black overflow-hidden flex flex-row justify-center">
                     <div className="max-w-screen-2xl h-screen w-full">
-                      <div className="w-full h-screen overflow-hidden">
+                      <div className="w-full h-full rounded-l-[40px] overflow-hidden">
                         <Topbar />
-                        <div className="bg-extraWhite rounded-bl-lg overflow-scroll">
+                        <div className="bg-extraWhite rounded-bl-lg overflow-scroll px-10 pb-10">
                           {children}
                         </div>
                       </div>
