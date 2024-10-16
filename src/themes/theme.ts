@@ -8,6 +8,7 @@ const theme = createTheme({
     },
     secondary: {
       main: '#CCD4F2',
+      dark: '#868686',
     },
   },
   components: {

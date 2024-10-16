@@ -18,6 +18,7 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
   fullWidth,
   variant = 'contained',
   icon,
+  ...props
 }) => {
   const buttonStyles = {
     ...getStylesFromButtonType(buttonType),

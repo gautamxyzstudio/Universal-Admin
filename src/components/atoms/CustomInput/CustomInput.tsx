@@ -1,6 +1,6 @@
-import React from 'react';
-import { ICustomInputProps } from './CustomInput.types';
-import { TextField } from '@mui/material';
+import React from "react";
+import { ICustomInputProps } from "./CustomInput.types";
+import { TextField } from "@mui/material";
 
 const CustomInput: React.FC<ICustomInputProps> = ({
   label,
@@ -9,35 +9,22 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   error,
   errorMessage,
   onChange,
-  InputProps,
+  ...props
 }) => {
   return (
-    <div>
+    <>
       <TextField
-        className="text-disable"
+        {...props}
         label={label}
         type={type}
         value={value}
         onChange={onChange}
         error={error}
-        fullWidth
         variant="outlined"
-        color="secondary"
-        sx={{
-          '& .MuiInputBase-input': {
-            color: 'white',
-          },
-          '& .MuiFormLabel-root.MuiInputLabel-root': {
-            color: error ? 'red' : 'white',
-          },
-        }}
-        slotProps={{
-          input: InputProps,
-        }}
-      />
+      ></TextField>
 
       {errorMessage && <p>{errorMessage}</p>}
-    </div>
+    </>
   );
 };
 

@@ -1,10 +1,9 @@
-import { InputProps as MuiInputProps } from "@mui/material";
-export interface ICustomInputProps {
+import { TextFieldProps } from "@mui/material";
+export interface ICustomInputProps extends Omit<TextFieldProps, 'InputProps'> {
   label?: string | undefined;
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   type?: React.HTMLInputTypeAttribute | undefined;
   error?: boolean;
   errorMessage?: string;
-  InputProps?: MuiInputProps;
 }

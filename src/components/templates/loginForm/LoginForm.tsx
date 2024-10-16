@@ -62,6 +62,15 @@ const LoginForm = () => {
         value={inputDetails.email}
         onChange={(e) => onChangeField(e.target.value, 'email')}
         type="email"
+        fullWidth
+        sx={{
+          '& .MuiInputBase-input': {
+            color: 'white',
+          },
+          '& .MuiFormLabel-root.MuiInputLabel-root': {
+            color: 'white',
+          },
+        }}
       />
       <div className="h-9" />
       <CustomInput
@@ -69,7 +78,7 @@ const LoginForm = () => {
         value={inputDetails.password}
         onChange={(e) => onChangeField(e.target.value, 'password')}
         type={showPassword ? 'text' : 'password'}
-        InputProps={{
+        inputProps={{
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
