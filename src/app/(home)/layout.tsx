@@ -6,6 +6,7 @@ import Topbar from '@/components/organism/Topbar';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
 import ReduxProvider from '@/providers/ReduxProvider';
+import SnackBarProvider from '@/providers/SnackbarProvider';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
@@ -28,23 +29,25 @@ export default function RootLayout({
       <body className={`${helveticaBold.variable} antialiased`}>
         <AppRouterCacheProvider>
           <MaterialThemeProvider>
-            <ReduxProvider>
-              <div className="flex flex-row">
-                <div className="h-screen w-[25%] max-w-[280px] bg-black">
-                  <Sidebar />
-                </div>
-                <div className=" w-screen bg overflow-hidden flex flex-row justify-center">
-                  <div className="max-w-screen-2xl h-screen w-full">
-                    <div className="w-full h-screen overflow-hidden">
-                      <Topbar />
-                      <div className="bg-extraWhite rounded-bl-lg overflow-scroll">
-                        {children}
+            <SnackBarProvider>
+              <ReduxProvider>
+                <div className="flex flex-row">
+                  <div className="h-screen w-[25%] max-w-[280px] bg-black">
+                    <Sidebar />
+                  </div>
+                  <div className=" w-screen bg overflow-hidden flex flex-row justify-center">
+                    <div className="max-w-screen-2xl h-screen w-full">
+                      <div className="w-full h-screen overflow-hidden">
+                        <Topbar />
+                        <div className="bg-extraWhite rounded-bl-lg overflow-scroll">
+                          {children}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </ReduxProvider>
+              </ReduxProvider>
+            </SnackBarProvider>
           </MaterialThemeProvider>
         </AppRouterCacheProvider>
       </body>

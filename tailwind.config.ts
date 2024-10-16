@@ -14,10 +14,12 @@ const config: Config = {
         primary: '#FF7312',
         secondary: `#CCD4F2`,
         disable: '#868686',
+        red: '#C11919',
+        green: '#469C73',
+        yellow: '#FBC505',
         extraWhite: '#FAFAFA',
         borderGrey: '#EBEBEB',
-        Black:'#121212'
-        
+        Black: '#121212',
       },
       borderRadius: {
         custom: '0px 16px 16px 0px',
@@ -42,4 +44,4 @@ const config: Config = {
   plugins: [],
 };
 
-module.exports = (config);
+module.exports = config;

@@ -1,27 +1,44 @@
-"use client";
-import CustomInput from "@/components/atoms/CustomInput/CustomInput";
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
-import { STRINGS } from "@/constant/en";
-import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
-import { IconButton, InputAdornment } from "@mui/material";
-import React, { useState } from "react";
+'use client';
+import { useLoginMutation } from '@/api/fetures/Auth/AuthApis';
+import CustomInput from '@/components/atoms/CustomInput/CustomInput';
+import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import { STRINGS } from '@/constant/en';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { withAsyncErrorHandlingPost } from '@/utility/utils';
+import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
+import { IconButton, InputAdornment } from '@mui/material';
+import React, { useState } from 'react';
 
 const LoginForm = () => {
   const [inputDetails, setInputDetails] = useState<{
     email: string;
     password: string;
   }>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { displaySnackbar } = useSnackBarContext();
+  const [login, { isLoading }] = useLoginMutation();
   const handleClickShowPassword = () => {
-    alert('eh')
     setShowPassword(!showPassword);
   };
-  
-  console.log(showPassword);
+
+  const onChangeField = (value: string, key: 'email' | 'password') => {
+    setInputDetails((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const loginHandler = withAsyncErrorHandlingPost(async () => {
+    const response = await login({
+      identifier: inputDetails.email,
+      password: inputDetails.password,
+    }).unwrap();
+    if (response) {
+      console.log(response);
+      displaySnackbar('success', 'Login successful');
+    }
+  }, displaySnackbar);
 
   return (
     <div className="w-[532px]">
@@ -34,28 +51,23 @@ const LoginForm = () => {
       <CustomInput
         label={STRINGS.email}
         value={inputDetails.email}
-        onChange={(e) =>
-          setInputDetails((prev) => ({ ...prev, email: e.target.value }))
-        }
+        onChange={(e) => onChangeField(e.target.value, 'email')}
         type="email"
       />
       <div className="h-9" />
       <CustomInput
         label={STRINGS.password}
         value={inputDetails.password}
-        onChange={(e) =>{
-          setInputDetails((prev) => ({ ...prev, password: e.target.value }))
-          }
-        }
-        type={showPassword ? "text" : "password"}
+        onChange={(e) => onChangeField(e.target.value, 'password')}
+        type={showPassword ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
                 className="z-10"
                 onClick={handleClickShowPassword}
-                edge='start'
-                >
+                edge="start"
+              >
                 {showPassword ? (
                   <VisibilityOutlined color="secondary" />
                 ) : (
@@ -69,8 +81,11 @@ const LoginForm = () => {
       <div className="h-14" />
       <CustomButton
         title={STRINGS.login}
-        onClick={() => console.log("Hello Admin")}
+        isLoading={isLoading}
+        variant="contained"
+        onClick={loginHandler}
         fullWidth
+        buttonType={'primary'}
       />
     </div>
   );

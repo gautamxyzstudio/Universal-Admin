@@ -14,4 +14,5 @@ export const STRINGS = {
   email: 'Email',
   password: 'Password',
   signUp: 'Sign Up',
+  something_went_wrong: 'OOPS!! Something went wrong. please try again later',
 };

@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import '../globals.css';
 import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
 import ReduxProvider from '@/providers/ReduxProvider';
+import SnackBarProvider from '@/providers/SnackbarProvider';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
@@ -23,9 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${helveticaBold.variable} antialiased`}>
-        <div className="w-screen h-screen">
+        <div className="w-screen bg-black h-screen">
           <MaterialThemeProvider>
-            <ReduxProvider>{children}</ReduxProvider>
+            <ReduxProvider>
+              <SnackBarProvider>{children}</SnackBarProvider>
+            </ReduxProvider>
           </MaterialThemeProvider>
         </div>
       </body>

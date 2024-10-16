@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   BaseQueryApi,
-  createApi,
   FetchArgs,
-  fetchBaseQuery,
   FetchBaseQueryError,
   FetchBaseQueryMeta,
   QueryReturnValue,
 } from '@reduxjs/toolkit/query';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.BASE_URL}`,
@@ -33,7 +33,7 @@ const baseQuery = fetchBaseQuery({
 const queryFetcher = async (
   args: FetchArgs,
   api: BaseQueryApi,
-  extraOptions: object
+  extraOptions: any
 ): Promise<
   QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>
 > => {
@@ -63,6 +63,6 @@ const queryFetcher = async (
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
-  baseQuery: queryFetcher,
+  baseQuery: queryFetcher as any,
   endpoints: () => ({}),
 });

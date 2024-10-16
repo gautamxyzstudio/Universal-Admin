@@ -1,40 +1,42 @@
-import React from "react";
+import React from 'react';
 
 // import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
-import { Button } from "@mui/material";
-import { ICustomButtonProps } from "./CustomButton.types";
-
+import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  getStylesFromButtonType,
+  ICustomButtonProps,
+} from './CustomButton.types';
+import { CircularProgress } from '@mui/material';
 
 const CustomButton: React.FC<ICustomButtonProps> = ({
   title,
   onClick,
+  isLoading,
+  buttonType = 'primary',
   size,
+  customStyles,
   fullWidth,
-  variant = "contained",
+  variant = 'contained',
   icon,
 }) => {
+  const buttonStyles = {
+    ...getStylesFromButtonType(buttonType),
+    ...customStyles,
+  };
   return (
-    <div>
-      <Button
-        variant={variant}
-        fullWidth={fullWidth}
-        size={size}
-        sx={{
-          fontSize: "24px",
-          lineHeight: "28px",
-          fontWeight: "bold",
-          textTransform: "capitalize",
-          borderRadius: "4px",
-          paddingY: "10px",
-          backgroundColor: "primary",
-          color: variant === "contained" ? "white" : "primary",
-        }}
-        onClick={onClick}
-      >
-        {icon}
-        {title}
-      </Button>
-    </div>
+    <LoadingButton
+      loading={isLoading}
+      variant={isLoading ? 'outlined' : variant}
+      loadingPosition="start"
+      loadingIndicator={<CircularProgress color="inherit" />}
+      fullWidth={fullWidth}
+      size={size}
+      sx={{ ...buttonStyles, cursor: 'pointer' }}
+      onClick={onClick}
+    >
+      {icon}
+      {title}
+    </LoadingButton>
   );
 };
 

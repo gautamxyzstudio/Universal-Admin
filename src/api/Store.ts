@@ -8,7 +8,8 @@ const store: Store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     ...combineReducer,
   },
-  middleware: (gdm) => gdm().concat(baseApi.middleware),
+  middleware: (gdm) =>
+    gdm({ serializableCheck: false }).concat(baseApi.middleware),
 });
 
 export default store;

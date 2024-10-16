@@ -1,15 +1,14 @@
-import { outlinedInputClasses } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
+import { outlinedInputClasses } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   cssVariables: true,
   palette: {
     primary: {
-      main: "#FF7312",
+      main: '#FF7312',
     },
     secondary: {
-      main: "#CCD4F2",
+      main: '#CCD4F2',
     },
-   
   },
   components: {
     MuiTextField: {
@@ -24,6 +23,7 @@ const theme = createTheme({
         },
       },
     },
+
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {
@@ -51,6 +51,14 @@ const theme = createTheme({
           '&.Mui-focused:after': {
             borderBottom: '2px solid var(--TextField-brandBorderFocusedColor)',
           },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          '--mui-palette-action-disabled': '#FF7312',
+          '--mui-palette-action-disabledBackground': '#FF7312',
         },
       },
     },
