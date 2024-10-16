@@ -1,4 +1,4 @@
-import { TextFieldProps } from "@mui/material";
+import { TextFieldProps } from '@mui/material';
 export interface ICustomInputProps extends Omit<TextFieldProps, 'InputProps'> {
   label?: string | undefined;
   value: string;

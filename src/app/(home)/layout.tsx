@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '../globals.css';
-import Sidebar from '@/components/organism/Sidebar';
-import Topbar from '@/components/organism/Topbar';
+import Sidebar from '@/components/organism/Sidebar/Sidebar';
+
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
 import ReduxProvider from '@/providers/ReduxProvider';
 import SnackBarProvider from '@/providers/SnackbarProvider';
+import Topbar from '@/components/organism/Topbar/Topbar';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',

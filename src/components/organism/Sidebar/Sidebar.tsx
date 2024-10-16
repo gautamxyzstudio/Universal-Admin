@@ -1,11 +1,11 @@
 'use client';
-import { Icons } from '../../../public/exporter';
+import { Icons } from '../../../../public/exporter';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { IQuickLinkData, quickLink } from '@/api/mockData/data';
 import Link from 'next/link';
 import { STRINGS } from '@/constant/en';
-import ConfirmationDialog from '../molecules/DialogTypes/ComfirmationDialog/ConfirmationDialog';
+import ConfirmationDialog from '../../molecules/DialogTypes/ComfirmationDialog/ConfirmationDialog';
 import { removeUserDetailsFromCookies } from '@/utility/cookies';
 import { useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';

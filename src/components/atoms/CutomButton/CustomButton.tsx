@@ -34,6 +34,7 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
       size={size}
       sx={{ ...buttonStyles, cursor: 'pointer' }}
       onClick={onClick}
+      {...props}
     >
       {icon}
       {title}

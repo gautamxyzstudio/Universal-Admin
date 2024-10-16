@@ -78,22 +78,33 @@ const LoginForm = () => {
         value={inputDetails.password}
         onChange={(e) => onChangeField(e.target.value, 'password')}
         type={showPassword ? 'text' : 'password'}
-        inputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                className="z-10"
-                onClick={handleClickShowPassword}
-                edge="start"
-              >
-                {showPassword ? (
-                  <VisibilityOutlined color="secondary" />
-                ) : (
-                  <VisibilityOffOutlined color="secondary" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
+        fullWidth
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  className="z-10"
+                  onClick={handleClickShowPassword}
+                  edge="start"
+                >
+                  {showPassword ? (
+                    <VisibilityOutlined color="secondary" />
+                  ) : (
+                    <VisibilityOffOutlined color="secondary" />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
+        sx={{
+          '& .MuiInputBase-input': {
+            color: 'white',
+          },
+          '& .MuiFormLabel-root.MuiInputLabel-root': {
+            color: 'white',
+          },
         }}
       />
       <div className="h-14" />
