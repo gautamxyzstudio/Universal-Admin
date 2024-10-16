@@ -12,12 +12,10 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
   ...props
 }) => {
   return (
-    <div>
-      <Button variant={variant} size={size} onClick={onClick} {...props}>
-        {icon}
-        {title}
-      </Button>
-    </div>
+    <Button variant={variant} size={size} onClick={onClick} {...props}>
+      {icon}
+      {title}
+    </Button>
   );
 };
 

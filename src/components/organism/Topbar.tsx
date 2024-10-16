@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Icons, Images } from "../../../public/exporter";
 import { IconButton} from "@mui/material";
-import SearchField from "../atoms/SearchField";
+import SearchField from "../molecules/InputTypes/SearchInput/SearchInput";
 
 const Topbar = () => {
  

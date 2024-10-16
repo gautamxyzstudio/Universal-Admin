@@ -4,27 +4,77 @@ import DataTable from "@/components/atoms/DataTable/DataTable";
 import { STRINGS } from "@/constant/en";
 import { Add } from "@mui/icons-material";
 import React, { useState } from "react";
-import SearchField from "@/components/atoms/SearchField";
-import CustomInput from "@/components/atoms/CustomInput/CustomInput";
-import { Box, MenuItem } from "@mui/material";
+import SearchField from "@/components/molecules/InputTypes/SearchInput/SearchInput";
+import { MenuItem } from "@mui/material";
+import Image from "next/image";
+import { Images } from "../../../../public/exporter";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import CustomSelectInput from "@/components/molecules/InputTypes/SelectInput/CustomSelectInput";
 
 const EmployeeManagement = () => {
-  const [docStatusValue, setDocStatusValue] = useState(STRINGS.all); 
+  const [docStatusValue, setDocStatusValue] = useState(STRINGS.all);
   const [workStatusValue, setWorkStatusValue] = useState(STRINGS.all);
+
   const handleAddEmployee = () => {
     console.log("Add Employee");
     // TODO: Add logic to add employee here.
   };
-  const columns = [
+
+  const Employee = ({
+    name,
+    imgsrc,
+  }: {
+    name: string;
+    imgsrc: StaticImport;
+  }) => {
+    return (
+      <div className="inline-flex items-center gap-x-2 px-2">
+        <Image
+          src={imgsrc}
+          className="w-8 h-8 rounded-full"
+          alt="employee image"
+        />
+        <div className="flex">{name}</div>
+      </div>
+    );
+  };
+
+  const ContactDetails = ({
+    phone_number,
+    email,
+  }: {
+    phone_number: string;
+    email: string;
+  }) => {
+    return (
+      <div className="px-2 py-[14px] flex flex-col text-[14px] leading-[18px] justify-center h-full w-full">
+        {phone_number}
+        <span className="text-disable">{email}</span>
+      </div>
+    );
+  };
+
+  const columns: GridColDef[] = [
     {
       field: "employee_name",
       headerName: "Employee Name",
       width: 224,
+
+      renderCell: (params: GridRenderCellParams) => (
+        <Employee name={params.value.name} imgsrc={params.value.imgsrc} />
+      ),
     },
     {
       field: "contact_details",
       headerName: "Contact Details",
       width: 224,
+      renderCell: (params: GridRenderCellParams) => (
+        <ContactDetails
+          phone_number={params.value.phone_number}
+          email={params.value.email}
+        />
+      ),
     },
     {
       field: "sin_number",
@@ -56,8 +106,14 @@ const EmployeeManagement = () => {
   const rows = [
     {
       id: 1,
-      employee_name: "John Doe",
-      contact_details: "123 Main St, City, Country",
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
       sin_number: "123456789",
       license_number: "ABC123",
       gender: "Male",
@@ -66,8 +122,14 @@ const EmployeeManagement = () => {
     },
     {
       id: 2,
-      employee_name: "John Doe",
-      contact_details: "123 Main St, City, Country",
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
       sin_number: "123456789",
       license_number: "ABC123",
       gender: "Male",
@@ -76,8 +138,14 @@ const EmployeeManagement = () => {
     },
     {
       id: 3,
-      employee_name: "John Doe",
-      contact_details: "123 Main St, City, Country",
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
       sin_number: "123456789",
       license_number: "ABC123",
       gender: "Male",
@@ -86,8 +154,78 @@ const EmployeeManagement = () => {
     },
     {
       id: 4,
-      employee_name: "Joh",
-      contact_details: "123 Main St, City, Country",
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status: "Valid",
+    },
+    {
+      id: 5,
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status: "Valid",
+    },
+    {
+      id: 6,
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status: "Valid",
+    },
+    {
+      id: 7,
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status: "Valid",
+    },
+    {
+      id: 8,
+      employee_name: {
+        name: "John Doe",
+        imgsrc: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
       sin_number: "123456789",
       license_number: "ABC123",
       gender: "Male",
@@ -126,7 +264,7 @@ const EmployeeManagement = () => {
   ];
 
   return (
-    <div className="items-center justify-items-center min-h-screen">
+    <div className="items-center justify-items-center min-h-screen ">
       <div className="flex justify-between items-center mt-4 mb-6">
         <h1 className="text-Black font-bold text-[24px] leading-7">
           {STRINGS.employeeManagement}
@@ -150,45 +288,56 @@ const EmployeeManagement = () => {
       </div>
       <div className="p-4 border rounded-md bg-white flex flex-col gap-y-4">
         <div className="flex justify-between items-center">
-          <SearchField searchStyle=" w-[288px]" />
-          <div className=" flex ">
-            <div className="inline-flex items-center gap-x-2">
-              Document Status
-              <CustomInput
-                select
-                value={docStatusValue}
-                onChange={(e) => setDocStatusValue(e.target.value)}
-                size="small"
-                sx={{
-                  width: "100px",
-                }}
-              >
-                {docStatus.map((data, index) => (
-                  <MenuItem key={index} value={data.value}>
-                    {data.label}
-                  </MenuItem>
-                ))}
-              </CustomInput>
-            </div>
-            <div className="inline-flex items-center ml-4 gap-x-2">
-              Work Status
-              <CustomInput
-                select
-                value={workStatusValue}
-                onChange={(e) => setWorkStatusValue(e.target.value)}
-                size="small"
-                sx={{
-                  width: "100px",
-                }}
-              >
-                {workStatus.map((data, index) => (
-                  <MenuItem key={index} value={data.value}>
-                    {data.label}
-                  </MenuItem>
-                ))}
-              </CustomInput>
-            </div>
+          <div className="flex items-center gap-x-8">
+            <SearchField searchStyle=" w-[288px]" />
+            <CustomSelectInput
+              label="Document Status"
+              value={docStatusValue}
+              onChange={(e) => setDocStatusValue(e.target.value)}
+            >
+              {docStatus.map((data, index) => (
+                <MenuItem
+                  sx={{
+                    color: "#868686",
+                  }}
+                  key={index}
+                  value={data.value}
+                >
+                  {data.label}
+                </MenuItem>
+              ))}
+            </CustomSelectInput>
+
+            <CustomSelectInput
+              label="Work Status"
+              value={workStatusValue}
+              onChange={(e) => setWorkStatusValue(e.target.value)}
+            >
+              {workStatus.map((data, index) => (
+                <MenuItem
+                  sx={{
+                    color: "#868686",
+                  }}
+                  key={index}
+                  value={data.value}
+                >
+                  {data.label}
+                </MenuItem>
+              ))}
+            </CustomSelectInput>
           </div>
+          <CustomButton
+            title="Export as"
+            color="secondary"
+            size="small"
+            sx={{
+              textTransform:"capitalize",
+              "--variant-outlinedColor": "#868686",
+              "--variant-outlinedBorder": "#868686",
+            }}
+            variant="outlined"
+            onClick={() => console.log("Eprot as Exel")}
+          />
         </div>
         <DataTable columns={columns} rows={rows} />
       </div>

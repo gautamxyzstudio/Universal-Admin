@@ -1,20 +1,13 @@
 "use client"
 import React, { useState } from "react";
 import Image from "next/image";
-import { Icons } from "../../../public/exporter";
-import CustomInput from "../atoms/CustomInput/CustomInput";
+import { Icons } from "../../../../../public/exporter";
+import CustomInput from "../../../atoms/CustomInput/CustomInput";
 import { IconButton, InputAdornment } from "@mui/material";
-
-type ISearch = {
-  searchText: string;
-};
-
-export interface ISearchInput {
-  searchStyle? : string
-}
+import { ISearch, ISearchInputProps } from "./SearchInput.types";
 
 
-const SearchField:React.FC<ISearchInput> = ({searchStyle}) => {
+const SearchField:React.FC<ISearchInputProps> = ({searchStyle}) => {
   const [data, setData] = useState<ISearch>({
     searchText: "",
   });
