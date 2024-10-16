@@ -15,4 +15,5 @@ export const STRINGS = {
   password: 'Password',
   signUp: 'Sign Up',
   something_went_wrong: 'OOPS!! Something went wrong. please try again later',
+  logout_message: 'Are you sure you want to logout this account?',
 };

@@ -1,5 +1,5 @@
-import { STRINGS } from "@/constant/en";
-import React from "react";
+import { STRINGS } from '@/constant/en';
+import React from 'react';
 
 const ActivityLog = () => {
   return (

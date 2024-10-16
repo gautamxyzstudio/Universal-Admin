@@ -1,6 +1,5 @@
-import CustomButton from "@/components/atoms/CustomButton";
-import { STRINGS } from "@/constant/en";
-import React from "react";
+import { STRINGS } from '@/constant/en';
+import React from 'react';
 
 const SubAdminManagement = () => {
   return (
@@ -9,7 +8,6 @@ const SubAdminManagement = () => {
         <h1 className="text-Black font-bold text-[24px] leading-7">
           {STRINGS.subAdminManagement}
         </h1>
-        <CustomButton title="+ Add Sub-admin" />
       </div>
     </div>
   );

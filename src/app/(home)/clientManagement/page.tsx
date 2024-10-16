@@ -1,6 +1,5 @@
-import CustomButton from "@/components/atoms/CustomButton";
-import { STRINGS } from "@/constant/en";
-import React from "react";
+import { STRINGS } from '@/constant/en';
+import React from 'react';
 
 const ClientManagement = () => {
   return (
@@ -9,10 +8,7 @@ const ClientManagement = () => {
         <h1 className="text-Black font-bold text-[24px] leading-7">
           {STRINGS.clientManagement}
         </h1>
-        <div className="flex items-center gap-x-6">
-          <CustomButton title="Pending Request(48)" buttonType="outlined" />
-          <CustomButton title="+ Add Client" />
-        </div>
+        <div className="flex items-center gap-x-6"></div>
       </div>
     </div>
   );

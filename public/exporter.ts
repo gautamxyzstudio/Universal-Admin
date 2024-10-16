@@ -20,11 +20,15 @@ import settingfill from './settingfill.svg';
 import subAdminfill from './subAdminfill.svg';
 import calender from './calender.svg';
 import cross from './cross.svg';
+import logoutSecondary from './logout_secondary.svg';
+import success from './success.svg';
 
 // Icon Object
 export const Icons = {
   logo,
   arrow,
+  logoutSecondary,
+  success,
   building,
   client,
   people,

@@ -6,7 +6,7 @@ export interface routeNames {
   SubAdmin: '/subadminManagement';
   Activity: '/activityLogs';
   Settings: `/settings`;
-  LogOut:'/Logout';
+  Login: '/login';
 }
 export const routeNames: routeNames = {
   Dashboard: '/',
@@ -16,6 +16,5 @@ export const routeNames: routeNames = {
   SubAdmin: '/subadminManagement',
   Activity: '/activityLogs',
   Settings: `/settings`,
-  LogOut:'/Logout',
+  Login: '/login',
 };
-

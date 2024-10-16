@@ -1,6 +1,6 @@
-import { STRINGS } from "@/constant/en";
-import { routeNames } from "@/utility/routesName";
-import { Icons } from "../../../public/exporter";
+import { STRINGS } from '@/constant/en';
+import { routeNames } from '@/utility/routesName';
+import { Icons } from '../../../public/exporter';
 
 export type IQuickLinkData = {
   id: number;
@@ -17,7 +17,6 @@ export const quickLink: IQuickLinkData[] = [
     path: routeNames.Dashboard,
     icon: Icons.home,
     iconfill: Icons.homefill,
-
   },
   {
     id: 2,
@@ -54,18 +53,19 @@ export const quickLink: IQuickLinkData[] = [
     icon: Icons.report,
     iconfill: Icons.reportfill,
   },
-  {
-    id: 7,
-    title: STRINGS.settings,
-    path: routeNames.Settings,
-    icon: Icons.setting,
-    iconfill: Icons.settingfill,
-  },
-  {
-    id: 8,
-    title: STRINGS.logout,
-    path: routeNames.LogOut,
-    icon: Icons.logout,
-    iconfill: Icons.arrow
-  }
 ];
+
+// {
+//   id: 7,
+//   title: STRINGS.settings,
+//   path: routeNames.Settings,
+//   icon: Icons.setting,
+//   iconfill: Icons.settingfill,
+// },
+// {
+//   id: 8,
+//   title: STRINGS.logout,
+//   path: routeNames.LogOut,
+//   icon: Icons.logout,
+//   iconfill: Icons.arrow
+// }
