@@ -20,6 +20,7 @@ const config: Config = {
         extraWhite: '#FAFAFA',
         borderGrey: '#EBEBEB',
         Black: '#121212',
+        externalLink:'#2048E0'
       },
       borderRadius: {
         custom: '0px 16px 16px 0px',

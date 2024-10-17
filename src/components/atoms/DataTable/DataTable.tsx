@@ -1,13 +1,17 @@
 import { TableProps } from "@mui/material";
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridEventListener, GridRowsProp } from "@mui/x-data-grid";
 import React from "react";
 
 export interface IDataTable extends TableProps {
   columns: GridColDef[];
   rows: GridRowsProp;
+  onRowClick?: GridEventListener<"rowClick">;
 }
 
-const DataTable: React.FC<IDataTable> = ({ columns, rows }) => {
+const DataTable: React.FC<IDataTable> = ({ columns, rows, onRowClick }) => {
+
+  
+ 
   return (
     <div className="flex justify-center items-center ">
       <DataGrid
@@ -25,9 +29,10 @@ const DataTable: React.FC<IDataTable> = ({ columns, rows }) => {
           },
         }}
         initialState={{
-          pagination: { paginationModel: { pageSize: 5 } },
+          pagination: { paginationModel: { pageSize: 10 } },
         }}
         
+      onRowClick={onRowClick}
         hideFooterSelectedRowCount
         rowHeight={68}
         columns={columns}

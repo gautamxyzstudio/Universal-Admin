@@ -1,6 +1,6 @@
 // Icon
 import logo from './logo.png';
-import arrow from './arrow.svg';
+import arrow from './downArrow.svg';
 import building from './building.svg';
 import client from './client.svg';
 import people from './people.svg';
@@ -23,6 +23,12 @@ import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
 import excelfile from './excelApp.svg';
+import leftArrow from './leftArrow.svg';
+import callIcon from './callIcon.svg';
+import companyBuilding from './companyBuilding.svg';
+import emailIcon from './emailIcon.svg';
+import locationPin from './locationPin.svg';
+import externalLink from './externalLink.svg';
 
 // Icon Object
 export const Icons = {
@@ -50,6 +56,12 @@ export const Icons = {
   calender,
   cross,
   excelfile,
+  leftArrow,
+  callIcon,
+  companyBuilding,
+  emailIcon,
+  locationPin,
+  externalLink,
 };
 
 // Images

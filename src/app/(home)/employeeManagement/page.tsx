@@ -12,6 +12,7 @@ import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import CustomSelectInput from "@/components/molecules/InputTypes/SelectInput/CustomSelectInput";
 import ExportButton from "@/components/molecules/ButtonTypes/ExportButton/ExportButton";
+import { useRouter } from "next/navigation";
 
 const EmployeeManagement = () => {
   const [docStatusValue, setDocStatusValue] = useState(STRINGS.all);
@@ -309,9 +310,15 @@ const EmployeeManagement = () => {
     {
       value: STRINGS.partTime,
       label: STRINGS.partTime,
-    },
+    }, 
   ];
 
+  const router = useRouter()
+
+  const handleOnRowClick = (params)=>{
+    console.log("Row clicked", params.row.id);
+    router.push(`/employeeManagement/${params.row.id}`);
+  } 
   return (
     <div className="flex flex-col">
       <div className="flex justify-between items-center pt-4 mb-6">
@@ -379,7 +386,7 @@ const EmployeeManagement = () => {
           
           <ExportButton onClick={()=>console.log("Export as Excel")} />
         </div>
-        <DataTable columns={columns} rows={rows} />
+        <DataTable columns={columns} rows={rows} onRowClick={handleOnRowClick} />
       </div>
     </div>
   );

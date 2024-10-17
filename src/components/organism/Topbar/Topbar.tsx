@@ -28,7 +28,7 @@ const Topbar = () => {
             className="w-[36px] h-[36px] bg-black rounded-full"
           />
           <div className="flex items-center gap-x-1">
-            <span className="text-black text-[16px] leading-5">Admin Name</span>
+            <span className="text-Black text-[16px] leading-5">Admin Name</span>
             <Image src={Icons.arrow} alt="arrow" className="w-auto h-auto" />
           </div>
         </div>
