@@ -4,4 +4,5 @@ type IPageHeaderProps = {
   withSecondaryButton?: boolean;
   primaryButtonTitle?: string;
   secondaryButtonTitle?: string;
+  onPressPrimaryButton?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 };

@@ -22,6 +22,7 @@ import calender from './calender.svg';
 import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
+import crossDialog from './cross_dialog.svg';
 
 // Icon Object
 export const Icons = {
@@ -32,6 +33,7 @@ export const Icons = {
   building,
   client,
   people,
+  crossDialog,
   home,
   logout,
   notification,

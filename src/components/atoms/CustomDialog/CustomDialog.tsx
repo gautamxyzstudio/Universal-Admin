@@ -15,6 +15,11 @@ const CustomDialog: React.FC<ICustomDialogProps> = ({
     <Dialog
       sx={{
         '& .MuiDialog-paper': { width: width, height: height },
+        borderRadius: 50,
+        '.mui-1edu3kt-MuiPaper-root-MuiDialog-paper': {
+          borderRadius: 2,
+          boxShadow: 'none',
+        },
       }}
       open={open}
       onClose={onClose}

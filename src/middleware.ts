@@ -4,7 +4,13 @@ import { NextResponse } from 'next/server';
 export function middleware(req) {
   const url = req.nextUrl.clone();
   const userCookie = req.cookies.get('user');
-  const protectedPaths = ['/', '/employeeManagement']; // Define protected paths
+  const protectedPaths = [
+    '/',
+    '/employeeManagement',
+    '/clientManagement',
+    'company',
+    'subadminManagement',
+  ];
   // Check if the user is trying to access a protected route
   if (protectedPaths.some((path) => url.pathname.startsWith(path))) {
     // If the token is missing, redirect to the login page
@@ -18,5 +24,12 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/', '/login'],
+  matcher: [
+    '/',
+    '/login',
+    '/employeeManagement',
+    '/clientManagement',
+    '/company',
+    '/subadminManagement',
+  ],
 };

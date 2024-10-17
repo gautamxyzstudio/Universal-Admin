@@ -19,7 +19,7 @@ const config: Config = {
         yellow: '#FBC505',
         extraWhite: '#FAFAFA',
         borderGrey: '#EBEBEB',
-        Black: '#121212',
+        textBlack: '#121212',
       },
       borderRadius: {
         custom: '0px 16px 16px 0px',

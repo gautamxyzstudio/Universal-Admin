@@ -16,7 +16,8 @@ export interface ICustomButtonProps {
 export type IButtonType =
   | 'primary'
   | 'outline-small-red'
-  | 'outline-small-green';
+  | 'outline-small-green'
+  | 'primary-small';
 
 export const getStylesFromButtonType = (
   buttonType: IButtonType
@@ -39,6 +40,7 @@ export const getStylesFromButtonType = (
         lineHeight: '18px',
         borderColor: '#C11919',
         fontWeight: '400',
+        textTransform: 'capitalize',
         borderRadius: '4px',
         padding: '8px',
       };
@@ -49,8 +51,19 @@ export const getStylesFromButtonType = (
         fontSize: '14px',
         lineHeight: '18px',
         fontWeight: '400',
+        textTransform: 'capitalize',
         borderRadius: '4px',
         padding: '8px',
+      };
+    case 'primary-small':
+      return {
+        color: 'white',
+        fontSize: '16px',
+        lineHeight: '20px',
+        fontWeight: '400',
+        textTransform: 'capitalize',
+        borderRadius: '8px',
+        paddingY: '10px',
       };
   }
 };
