@@ -5,11 +5,12 @@ import { IFieldTypes } from '@/constant/enums';
 export type IAddSubAdminFormProps = {
   show: boolean;
   setGlobalModalState: (state: boolean) => void;
+  isNew: boolean;
   data: IDynamicFormField[];
 };
 
 export enum ApiKeys {
-  NAME = 'name',
+  NAME = 'UserNameFL',
   EMAIL = 'email',
   phoneNumber = 'phoneNumber',
   password = 'password',

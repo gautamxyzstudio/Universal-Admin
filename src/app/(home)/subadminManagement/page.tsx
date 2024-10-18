@@ -2,22 +2,146 @@
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import AddSubAdminForm from '@/components/templates/AddSubAdminForm/AddSubAdminForm';
-import { addNewSubAdminData } from '@/components/templates/AddSubAdminForm/AddSubAdminForm.types';
+import {
+  addNewSubAdminData,
+  ApiKeys,
+} from '@/components/templates/AddSubAdminForm/AddSubAdminForm.types';
 import { STRINGS } from '@/constant/en';
-import React, { useState } from 'react';
-import { subAdminDataColumn } from './types';
-import { Images } from '../../../../public/exporter';
+import React, { useEffect, useState } from 'react';
+import { Icons, Images } from '../../../../public/exporter';
 import { useGetSubAdminsQuery } from '@/api/fetures/SubAdmin/SubAdminApi';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
+import Image from 'next/image';
+import { IDynamicFormField } from '@/components/organism/AddNewForm/AddNewForm.types';
+import { ISubAdmin } from '@/api/fetures/SubAdmin/SubAdminApi.types';
+import { IFieldTypes } from '@/constant/enums';
+import { useSubAdminContext } from '@/contexts/SubAdminContext/SubAdminContext';
 
 const SubAdminManagement = () => {
   const [showFormModal, setShowFormModal] = useState(false);
-  const { error, isLoading, data } = useGetSubAdminsQuery(null);
+  const [subAdmins, updateSubAdmins] = useState<ISubAdmin[]>([]);
+  const [form, setFormData] = useState<IDynamicFormField[]>(addNewSubAdminData);
+  const [isNew, setIsNewState] = useState(true);
+  const {
+    error,
+    isLoading,
+    data: subAdminApiResult,
+  } = useGetSubAdminsQuery(null);
+  const { setSubAdmins, data } = useSubAdminContext();
+
+  useEffect(() => {
+    setSubAdmins(subAdminApiResult);
+  }, [subAdminApiResult]);
+
+  useEffect(() => {
+    updateSubAdmins(data);
+  }, [data]);
+
   const onPressPrimaryButton = () => {
-    setShowFormModal(true);
+    setFormData(addNewSubAdminData);
+    setIsNewState(true);
+    setTimeout(() => {
+      setShowFormModal(true);
+    }, 100);
+  };
+
+  const subAdminDataColumn: GridColDef[] = [
+    {
+      field: 'UserNameFL',
+      headerName: 'Name',
+      width: 280,
+      renderCell: (params: GridRenderCellParams) => (
+        <UserNameWithImage
+          image={null}
+          name={params?.row?.UserNameFL}
+          type={'green'}
+        />
+      ),
+    },
+    {
+      field: 'email',
+      headerName: 'E-Mail',
+      width: 287,
+    },
+    {
+      field: 'phoneNumber',
+      headerName: 'Contact Number',
+      width: 270,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 140,
+      renderCell: (params: GridRenderCellParams) => {
+        const color =
+          params.row.UserStatus === true ? 'text-green' : 'text-red';
+        return (
+          <div className="h-full w-full flex flex-col justify-center items-start">
+            <p className={color + '  text-sm'}>
+              {params.row.UserStatus ? STRINGS.active : STRINGS.inActive}
+            </p>
+          </div>
+        );
+      },
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 140,
+      renderCell: (params: GridRenderCellParams) => (
+        <div className="h-full w-full flex flex-col justify-center items-start">
+          <Image
+            className="cursor-pointer"
+            onClick={() => onPressEdit(params.row)}
+            src={Icons.pencil}
+            alt={'pencil'}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  const onPressEdit = (user: ISubAdmin) => {
+    setIsNewState(false);
+    const data: IDynamicFormField[] = [
+      {
+        id: 1,
+        displayName: STRINGS.name,
+        apiKey: ApiKeys.NAME,
+        value: user.UserNameFL,
+        type: IFieldTypes.SIMPLE,
+      },
+      {
+        id: 2,
+        displayName: STRINGS.email,
+        apiKey: ApiKeys.EMAIL,
+        value: user.email,
+        type: IFieldTypes.EMAIL,
+      },
+      {
+        id: 3,
+        displayName: STRINGS.contactNumber,
+        apiKey: ApiKeys.phoneNumber,
+        type: IFieldTypes.MOBILE,
+        value: user.phoneNumber,
+      },
+      {
+        id: 5,
+        displayName: STRINGS.status,
+        apiKey: 'status',
+        type: IFieldTypes.STATUS,
+        value: user.UserStatus === true ? 'true' : 'false',
+      },
+    ];
+    setFormData(data);
+    setTimeout(() => {
+      setShowFormModal(true);
+    }, 100);
   };
 
   return (
-    <div className="w-full h-[85%] mb-5 ">
+    <div className="w-full h-[85%] mb-5">
       <PageHeader
         primaryButtonTitle={STRINGS.addSubAdmin}
         title={STRINGS.subAdminManagement}
@@ -26,7 +150,7 @@ const SubAdminManagement = () => {
       <DataTable
         isLoading={isLoading}
         columns={subAdminDataColumn}
-        rows={data}
+        rows={subAdmins}
         emptyViewTitle={STRINGS.noSubAdmin}
         emptyViewSubTitle={STRINGS.noSubAdminDec}
         illustration={Images.noSubAdmin}
@@ -35,8 +159,9 @@ const SubAdminManagement = () => {
       />
       <AddSubAdminForm
         setGlobalModalState={(state) => setShowFormModal(state)}
-        data={addNewSubAdminData}
+        data={form}
         show={showFormModal}
+        isNew={isNew}
       />
     </div>
   );

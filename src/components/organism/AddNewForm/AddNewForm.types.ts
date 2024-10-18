@@ -5,6 +5,7 @@ import { IFieldTypes } from '@/constant/enums';
 export interface IAddNewFromProps extends IFormDialogProps {
   data: IDynamicFormField[];
   onPressSubmit: (formData: { [key: string]: any }) => void;
+  buttonTitle?: string;
 }
 
 export type IDynamicFormField = {

@@ -23,6 +23,7 @@ import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
 import crossDialog from './cross_dialog.svg';
+import pencil from './pensil.svg';
 
 // Icon Object
 export const Icons = {
@@ -49,6 +50,7 @@ export const Icons = {
   settingfill,
   subAdminfill,
   calender,
+  pencil,
   cross,
 };
 

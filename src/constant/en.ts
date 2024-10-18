@@ -19,6 +19,7 @@ export const STRINGS = {
   all: 'All',
   pending: 'Pending',
   addSubAdmin: 'Add Sub-admin',
+  updateSubAdmin: 'update SubAdmin',
   approved: 'Approved',
   declined: 'Declined',
   fullTime: 'Full Time',
@@ -35,4 +36,8 @@ export const STRINGS = {
   lastNameKey: 'lastName',
   noSubAdmin: 'No Sub-Admin Added Yet',
   noSubAdminDec: 'Click the add sub admin button to assign new sub admin',
+  active: 'Active',
+  inActive: 'InActive',
+  create: 'Create',
+  update: 'Update',
 };

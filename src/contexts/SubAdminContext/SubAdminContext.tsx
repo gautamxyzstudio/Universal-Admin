@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { useAddNewSubAdminMutation } from '@/api/fetures/SubAdmin/SubAdminApi';
-import { IAddNewSubAdminRequest } from '@/api/fetures/SubAdmin/SubAdminApi.types';
-import React from 'react';
+import {
+  IAddNewSubAdminRequest,
+  ISubAdmin,
+} from '@/api/fetures/SubAdmin/SubAdminApi.types';
+import React, { useState } from 'react';
 import { createContext } from 'react';
 import { ISubAdminContext } from './SubAdminContext.types';
 import { useShowLoaderContext } from '../LoaderContext/LoaderContext';
@@ -12,6 +15,8 @@ export const SubAdminContext = createContext<ISubAdminContext | null>(null);
 const SubAdminContextProvider = ({ children }) => {
   const [addNewSubAdmin, { isLoading, error, data }] =
     useAddNewSubAdminMutation();
+
+  const [subAdmins, setSubAdmins] = useState<ISubAdmin[]>([]);
 
   const { changeLoaderState } = useShowLoaderContext();
 
@@ -29,6 +34,10 @@ const SubAdminContextProvider = ({ children }) => {
     }
   };
 
+  const setSubAdminsHandler = (subAdmin: ISubAdmin[]) => {
+    setSubAdmins(subAdmin);
+  };
+
   const contextValue: ISubAdminContext = {
     addSubAdmin: addSubAdminHandler,
     addSubAdminState: {
@@ -36,6 +45,8 @@ const SubAdminContextProvider = ({ children }) => {
       data: data ?? null,
       error,
     },
+    data: subAdmins,
+    setSubAdmins: setSubAdminsHandler,
   };
 
   return (

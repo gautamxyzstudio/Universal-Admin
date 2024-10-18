@@ -11,6 +11,7 @@ import { generateUniqueUserName } from '@/utility/utils';
 
 const AddSubAdminForm: React.FC<IAddSubAdminFormProps> = ({
   show,
+  isNew,
   data,
   setGlobalModalState,
 }) => {
@@ -53,8 +54,9 @@ const AddSubAdminForm: React.FC<IAddSubAdminFormProps> = ({
   };
   return (
     <AddNewForm
+      buttonTitle={isNew ? STRINGS.create : STRINGS.update}
       data={data}
-      title={STRINGS.addSubAdmin}
+      title={isNew ? STRINGS.addSubAdmin : STRINGS.updateSubAdmin}
       open={displayFrom}
       handleClose={handleClickOutside}
       onPressSubmit={(data) => onSubmit(data)}

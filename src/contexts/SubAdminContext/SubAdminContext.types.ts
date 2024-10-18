@@ -12,4 +12,6 @@ export interface ISubAdminContext {
     data: ISubAdmin | null;
     error: ICustomErrorResponse;
   };
+  data: ISubAdmin[];
+  setSubAdmins: (subAdmins: ISubAdmin[]) => void;
 }

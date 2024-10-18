@@ -16,6 +16,8 @@ const config: Config = {
         disable: '#868686',
         red: '#C11919',
         green: '#469C73',
+        lightGreen: 'rgba(70, 156, 115, 0.20)',
+        lightRed: 'rgba(193, 25, 25, 0.20)',
         yellow: '#FBC505',
         extraWhite: '#FAFAFA',
         borderGrey: '#EBEBEB',

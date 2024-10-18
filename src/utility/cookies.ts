@@ -38,9 +38,16 @@ export const removeUserDetailsFromCookies = () => {
 export const extractFirstAndLastNameFromName = (
   name: string
 ): { firstName: string; lastName: string } => {
-  const nameParts = name.split(' ');
-  return {
-    firstName: nameParts[0],
-    lastName: nameParts.slice(1).join(' '),
-  };
+  if (name) {
+    const nameParts = name.split(' ');
+    return {
+      firstName: nameParts[0],
+      lastName: nameParts.slice(1).join(' '),
+    };
+  } else {
+    return {
+      firstName: ' ',
+      lastName: ' ',
+    };
+  }
 };

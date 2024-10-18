@@ -106,6 +106,7 @@ const FormRenderer = React.memo(
 const AddNewForm: React.FC<IAddNewFromProps> = ({
   data,
   onPressSubmit,
+  buttonTitle,
   ...props
 }) => {
   const [fields, setFields] = useState<{ [key: string]: string }>({});
@@ -182,7 +183,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
       .reduce((acc, key) => {
         acc[key] = fields[key]; // Add the filtered key-value pairs to the new object
         return acc;
-      }, {} as { [key: string]: any });
+      }, {} as { [key: string]: string });
     return cleanFields;
   };
 
@@ -212,7 +213,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
       <div className="flex my-6 flex-col gap-y-4">{renderedFields}</div>
       <CustomButton
         fullWidth
-        title={'Create'}
+        title={buttonTitle ?? 'Create'}
         onClick={validateFields}
         buttonType={'primary-small'}
       />

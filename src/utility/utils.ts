@@ -33,3 +33,7 @@ export const generateUniqueUserName = (email: string) => {
   const backPart = Math.random() * 10;
   return `${frontPart}${backPart.toFixed(0)}`;
 };
+
+export const getFirstLetterFromName = (name: string): string => {
+  return name.slice(0, 1).toUpperCase();
+};
