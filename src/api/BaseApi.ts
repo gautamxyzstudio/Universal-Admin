@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getUserDetailsFromCookies } from '@/utility/cookies';
 import {
   BaseQueryApi,
   FetchArgs,
@@ -12,12 +13,12 @@ const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.BASE_URL}`,
   credentials: 'include',
   prepareHeaders: (headers, api) => {
+    const token = getUserDetailsFromCookies()?.token;
     headers.set('Content-Type', 'application/json');
     headers.set('Accept', 'application/json');
-
-    //   if (token) {
-    //     headers.set('Authorization', `Bearer ${token}`);
-    //   }
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
     console.log(
       '############################## headers ######################################'
     );

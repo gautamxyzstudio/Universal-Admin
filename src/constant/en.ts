@@ -33,4 +33,6 @@ export const STRINGS = {
   firstNameKeyError: 'firstNameError',
   lastNameKeyError: 'lastNameError',
   lastNameKey: 'lastName',
+  noSubAdmin: 'No Sub-Admin Added Yet',
+  noSubAdminDec: 'Click the add sub admin button to assign new sub admin',
 };

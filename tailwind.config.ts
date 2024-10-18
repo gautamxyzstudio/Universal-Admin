@@ -24,6 +24,10 @@ const config: Config = {
       borderRadius: {
         custom: '0px 16px 16px 0px',
       },
+
+      boxShadow: {
+        'custom-shadow': '0px 0px 6px 0px rgba(18, 18, 18, 0.08)',
+      },
       fontSize: {
         'heading-40': [
           '2.5rem',

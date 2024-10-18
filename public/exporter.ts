@@ -54,8 +54,12 @@ export const Icons = {
 
 // Images
 import demoImg from './demoImage.png';
+import noSubAdmin from './noSubAdmin.png';
+import errorILLustration from './errorIllustration.png';
 
 // Image Object
 export const Images = {
   demoImg,
+  noSubAdmin,
+  errorILLustration,
 };

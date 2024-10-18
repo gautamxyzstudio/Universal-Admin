@@ -62,7 +62,7 @@ const EmployeeManagement = () => {
       width: 224,
 
       renderCell: (params: GridRenderCellParams) => (
-        <Employee name={params.value.name} imgsrc={params.value.imgsrc} />
+        <Employee name={params?.value?.name} imgsrc={params?.value?.imgsrc} />
       ),
     },
     {
@@ -71,8 +71,8 @@ const EmployeeManagement = () => {
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
         <ContactDetails
-          phone_number={params.value.phone_number}
-          email={params.value.email}
+          phone_number={params?.value?.phone_number}
+          email={params?.value?.email}
         />
       ),
     },
@@ -340,7 +340,7 @@ const EmployeeManagement = () => {
             buttonType={'primary'}
           />
         </div>
-        <DataTable columns={columns} rows={rows} />
+        <DataTable columns={columns} rows={rows} isLoading={true} />
       </div>
     </div>
   );

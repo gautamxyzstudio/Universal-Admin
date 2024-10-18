@@ -52,3 +52,12 @@ export const addNewSubAdminData: IDynamicFormField[] = [
     value: 'true',
   },
 ];
+
+export type IAddNewSubAdminFields = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  phoneNumber: string;
+  status: 'true' | 'false';
+};

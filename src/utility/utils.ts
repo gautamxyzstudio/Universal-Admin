@@ -27,3 +27,9 @@ export const withAsyncErrorHandlingPost = (
     }
   };
 };
+
+export const generateUniqueUserName = (email: string) => {
+  const frontPart = email.split('@')[0];
+  const backPart = Math.random() * 10;
+  return `${frontPart}${backPart.toFixed(0)}`;
+};

@@ -14,6 +14,5 @@ export interface IAdmin {
   email: string;
   user_type: 'SuperAdmin' | 'subAdmin' | null;
   name: string;
-  photo: string | null;
   phone: string | null;
 }
