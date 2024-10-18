@@ -29,6 +29,7 @@ import companyBuilding from './companyBuilding.svg';
 import emailIcon from './emailIcon.svg';
 import locationPin from './locationPin.svg';
 import externalLink from './externalLink.svg';
+import doc from "./doc.svg";
 
 // Icon Object
 export const Icons = {
@@ -62,6 +63,7 @@ export const Icons = {
   emailIcon,
   locationPin,
   externalLink,
+  doc,
 };
 
 // Images

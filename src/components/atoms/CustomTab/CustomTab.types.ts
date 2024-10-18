@@ -1,3 +1,6 @@
+import { StaticImageData } from "next/image";
+import { TabsProps } from "@mui/material";
+
 export interface ITabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -7,9 +10,11 @@ export interface ITabPanelProps {
 
 interface TabItemProps {
   label: string;
-  content: React.ReactNode;
+  content?: React.ReactNode;
+  icon?: StaticImageData;
+  status?: string;
 }
 
-export interface ICustomTabProps {
+export interface ICustomTabProps  extends TabsProps {
   tabs: TabItemProps[];
 }

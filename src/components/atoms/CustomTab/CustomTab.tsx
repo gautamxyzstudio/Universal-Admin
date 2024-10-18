@@ -24,7 +24,7 @@ function a11yProps(index: number) {
   };
 }
 
-const CustomTab: React.FC<ICustomTabProps> = ({ tabs }) => {
+const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
 
   const handleTabChange = (event: React.SyntheticEvent, tabIndex: number) => {
@@ -32,37 +32,13 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs }) => {
     setCurrentTabIndex(tabIndex);
   };
   return (
-    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-screen">
+    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-[416px]">
       <div className="border-b border-borderGrey">
-        <Tabs
+        <Tabs {...props}
           value={currentTabIndex}
           onChange={handleTabChange}
           variant="scrollable"
-          scrollButtons={false}
-          TabIndicatorProps={{
-            style: {
-              height: "3px",
-              borderTopRightRadius: "3px",
-              borderTopLeftRadius: "3px",
-            },
-          }}
-          sx={{
-            "&": {
-              paddingX: "12px",
-              paddingTop: "4px",
-            },
-            ".MuiButtonBase-root": {
-              fontSize: "16px",
-              lineHeight: "20px",
-              textTransform: "none",
-            },
-            ".MuiTabs-flexContainer": {
-              gap: "10px",
-            },
-            ".Mui-selected": {
-              fontWeight: "bold",
-            },
-          }}
+          scrollButtons={false} 
         >
           {tabs.map((tab, index) => (
             <Tab label={tab.label} key={index} {...a11yProps(index)} />
