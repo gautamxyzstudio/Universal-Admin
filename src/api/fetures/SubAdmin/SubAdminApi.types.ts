@@ -32,3 +32,13 @@ export interface IUpdateSubAdminRequestBody {
   subAdminId: number;
   body: Partial<IAddNewSubAdminRequest>;
 }
+
+export interface IGetSubAdminResponse {
+  results: ISubAdmin[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
+  };
+}

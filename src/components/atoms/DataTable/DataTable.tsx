@@ -27,7 +27,7 @@ const DataTable: React.FC<IDataTableProps> = ({
       {isLoading ? (
         <DataGrid
           sx={{
-            height: '95%',
+            height: '98%',
             border: 0,
             '& .MuiDataGrid-columnHeader': {
               backgroundColor: '#FAFAFA',

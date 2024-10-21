@@ -4,6 +4,7 @@ import { Endpoints } from '@/api/Endpoints';
 import {
   IAddNewSubAdminRequest,
   IAddNewSubAdminResponse,
+  IGetSubAdminResponse,
   ISubAdmin,
   IUpdateSubAdminRequestBody,
   IUpdateSubAdminResponse,
@@ -13,7 +14,7 @@ import { STRINGS } from '@/constant/en';
 
 const subAdminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSubAdmins: builder.query({
+    getSubAdmins: builder.query<IGetSubAdminResponse, null>({
       query: () => ({
         url: Endpoints.getSubAdmins,
         method: ApiMethodType.get,
