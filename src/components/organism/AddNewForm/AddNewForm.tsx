@@ -16,6 +16,8 @@ import { STRINGS } from '@/constant/en';
 import Switch from '@/components/atoms/Switch/Switch';
 import CustomButton from '@/components/atoms/CutomButton/CustomButton';
 import { extractFirstAndLastNameFromName } from '@/utility/cookies';
+import { validateEmail, validatePhoneNumber } from '@/utility/utils';
+import PasswordInput from '@/components/molecules/InputTypes/PasswordInput/PasswordInput';
 
 const FormRenderer = React.memo(
   ({
@@ -29,8 +31,14 @@ const FormRenderer = React.memo(
     onChangeField: (key: string, e: ChangeEvent<HTMLInputElement>) => void;
     switchChangeHandler: (value: string) => void;
   }) => {
+    const [showPassword, setShowPassword] = useState(false);
     const value = fields[item.apiKey] || '';
     const errorMessageValue = fields[`${item.apiKey}Error`] || '';
+
+    const onPressEye = () => {
+      setShowPassword(!showPassword);
+    };
+
     if (
       item.type === IFieldTypes.EMAIL ||
       (item.type === IFieldTypes.SIMPLE && item.displayName !== STRINGS.name)
@@ -89,13 +97,13 @@ const FormRenderer = React.memo(
       );
     } else if (item.type === IFieldTypes.PASSWORD) {
       return (
-        <FormTextInput
+        <PasswordInput
+          showPassword={showPassword}
+          handleClickShowPassword={onPressEye}
           value={value}
+          eyeColor="primary"
           onChange={(e) => onChangeField(item.apiKey, e)}
           errorMessage={errorMessageValue}
-          type="password"
-          maxLength={32}
-          label={item.displayName}
         />
       );
     }
@@ -107,6 +115,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
   data,
   onPressSubmit,
   buttonTitle,
+  isValid,
   ...props
 }) => {
   const [fields, setFields] = useState<{ [key: string]: string }>({});
@@ -131,9 +140,16 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
     setFields(localFields);
   }, [data]);
 
+  useEffect(() => {
+    if (isValid) {
+      clearForm();
+    }
+  }, [isValid]);
+
   const validateFields = () => {
     let isValid = true;
     const cleanedFields = sanitizeFields();
+    console.log(cleanedFields, 'cleanField');
     Object.keys(cleanedFields).forEach((key) => {
       if (!fields[key]) {
         setFields((prevFields) => ({
@@ -141,14 +157,31 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
           [`${key}Error`]: `This is a required field`,
         }));
         isValid = false;
+      } else if (key === 'email') {
+        if (!validateEmail(fields[key])) {
+          setFields((prevFields) => ({
+            ...prevFields,
+            [`${key}Error`]: `Please enter a valid email`,
+          }));
+          isValid = false;
+        }
+      } else if (key === 'phoneNumber') {
+        if (!validatePhoneNumber(fields[key])) {
+          setFields((prevFields) => ({
+            ...prevFields,
+            [`${key}Error`]: `Please enter a phoneNumber`,
+          }));
+          isValid = false;
+        }
       }
     });
 
     if (isValid) {
       onPressSubmit(cleanedFields);
-      clearForm();
     }
   };
+
+  console.log(fields, 'fields');
 
   const onChangeField = useCallback(
     (key: string, e: ChangeEvent<HTMLInputElement>) => {

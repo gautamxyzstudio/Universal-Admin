@@ -8,9 +8,11 @@ import { IUserCookies, saveUserDetailsInCookies } from '@/utility/cookies';
 import { withAsyncErrorHandlingPost } from '@/utility/utils';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import PasswordInput from '@/components/molecules/InputTypes/PasswordInput/PasswordInput';
 const LoginForm = () => {
   const [inputDetails, setInputDetails] = useState<{
     email: string;
@@ -23,11 +25,16 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { displaySnackbar } = useSnackBarContext();
   const [login, { isLoading }] = useLoginMutation();
+  const { changeLoaderState } = useShowLoaderContext();
   const router = useRouter();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    changeLoaderState(isLoading);
+  }, [isLoading]);
 
   const onChangeField = (value: string, key: 'email' | 'password') => {
     setInputDetails((prev) => ({ ...prev, [key]: value }));
@@ -71,33 +78,13 @@ const LoginForm = () => {
             color: 'white',
           },
         }}
+        slotProps={undefined}
       />
       <div className="h-9" />
-      <CustomInput
-        label={STRINGS.password}
+      <PasswordInput
         value={inputDetails.password}
         onChange={(e) => onChangeField(e.target.value, 'password')}
-        type={showPassword ? 'text' : 'password'}
         fullWidth
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  className="z-10"
-                  onClick={handleClickShowPassword}
-                  edge="start"
-                >
-                  {showPassword ? (
-                    <VisibilityOutlined color="secondary" />
-                  ) : (
-                    <VisibilityOffOutlined color="secondary" />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            ),
-          },
-        }}
         sx={{
           '& .MuiInputBase-input': {
             color: 'white',
@@ -106,11 +93,12 @@ const LoginForm = () => {
             color: 'white',
           },
         }}
+        showPassword={showPassword}
+        handleClickShowPassword={handleClickShowPassword}
       />
       <div className="h-14" />
       <CustomButton
         title={STRINGS.login}
-        isLoading={isLoading}
         variant="contained"
         onClick={loginHandler}
         fullWidth

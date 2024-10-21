@@ -1,6 +1,6 @@
 import React from 'react';
 import { ICustomInputProps } from './CustomInput.types';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 const CustomInput: React.FC<ICustomInputProps> = ({
   label,
@@ -10,8 +10,15 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   error,
   errorMessage,
   onChange,
+  slotProps,
   ...props
 }) => {
+  let CustomSlotProps = {
+    ...slotProps,
+    htmlInput: {
+      maxLength: maxLength,
+    },
+  };
   return (
     <div>
       <TextField
@@ -19,11 +26,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
         label={label}
         type={type}
         value={value}
-        slotProps={{
-          htmlInput: {
-            maxLength: maxLength,
-          },
-        }}
+        slotProps={CustomSlotProps}
         onChange={onChange}
         error={error}
         variant="outlined"

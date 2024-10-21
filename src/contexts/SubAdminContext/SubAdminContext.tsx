@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useAddNewSubAdminMutation } from '@/api/fetures/SubAdmin/SubAdminApi';
+import {
+  useAddNewSubAdminMutation,
+  useUpdateSubAdminMutation,
+} from '@/api/fetures/SubAdmin/SubAdminApi';
 import {
   IAddNewSubAdminRequest,
   ISubAdmin,
@@ -9,15 +12,18 @@ import React, { useState } from 'react';
 import { createContext } from 'react';
 import { ISubAdminContext } from './SubAdminContext.types';
 import { useShowLoaderContext } from '../LoaderContext/LoaderContext';
+import { ICustomErrorResponse } from '@/api/types';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { STRINGS } from '@/constant/en';
 
 export const SubAdminContext = createContext<ISubAdminContext | null>(null);
 
 const SubAdminContextProvider = ({ children }) => {
-  const [addNewSubAdmin, { isLoading, error, data }] =
-    useAddNewSubAdminMutation();
+  const [addNewSubAdmin] = useAddNewSubAdminMutation();
+  const [updateSubAdminReq] = useUpdateSubAdminMutation();
 
   const [subAdmins, setSubAdmins] = useState<ISubAdmin[]>([]);
-
+  const { displaySnackbar } = useSnackBarContext();
   const { changeLoaderState } = useShowLoaderContext();
 
   const addSubAdminHandler = async (params: IAddNewSubAdminRequest) => {
@@ -25,9 +31,12 @@ const SubAdminContextProvider = ({ children }) => {
       changeLoaderState(true);
       const createSubAdminResponse = await addNewSubAdmin(params).unwrap();
       if (createSubAdminResponse) {
-        console.log(createSubAdminResponse, 'Api REst');
+        setSubAdmins([...subAdmins, createSubAdminResponse]);
+        displaySnackbar('success', STRINGS.subAdminAdded);
       }
     } catch (err) {
+      const error = err as ICustomErrorResponse;
+      displaySnackbar('error', error.message);
       console.log(err);
     } finally {
       changeLoaderState(false);
@@ -38,15 +47,43 @@ const SubAdminContextProvider = ({ children }) => {
     setSubAdmins(subAdmin);
   };
 
+  const updateSubAdmin = async (body: {
+    subAdminId: number;
+    data: Partial<IAddNewSubAdminRequest>;
+  }) => {
+    try {
+      changeLoaderState(true);
+      const updateSubAdminResponse = await updateSubAdminReq({
+        subAdminId: body.subAdminId,
+        body: body.data,
+      }).unwrap();
+      if (updateSubAdminResponse) {
+        setSubAdmins((prev) => {
+          const prevAdmins = [...prev];
+          const index = prevAdmins.findIndex(
+            (admin) => admin.id === updateSubAdminResponse.id
+          );
+          if (index !== -1) {
+            displaySnackbar('success', STRINGS.subAdminUpdated);
+            prevAdmins[index] = { ...updateSubAdminResponse };
+          }
+          return prevAdmins;
+        });
+      }
+    } catch (err) {
+      const error = err as ICustomErrorResponse;
+      displaySnackbar('error', error.message);
+      console.log(err);
+    } finally {
+      changeLoaderState(false);
+    }
+  };
+
   const contextValue: ISubAdminContext = {
     addSubAdmin: addSubAdminHandler,
-    addSubAdminState: {
-      isLoading,
-      data: data ?? null,
-      error,
-    },
     data: subAdmins,
     setSubAdmins: setSubAdminsHandler,
+    updateSubAdmin: updateSubAdmin,
   };
 
   return (

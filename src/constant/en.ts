@@ -40,4 +40,7 @@ export const STRINGS = {
   inActive: 'InActive',
   create: 'Create',
   update: 'Update',
+  subAdminAdded: 'Sub-Admin Added Successfully!',
+  noUpdate: 'No Field Updated!!',
+  subAdminUpdated: 'Sub-Admin updated Successfully!',
 };

@@ -46,8 +46,8 @@ export const extractFirstAndLastNameFromName = (
     };
   } else {
     return {
-      firstName: ' ',
-      lastName: ' ',
+      firstName: '',
+      lastName: '',
     };
   }
 };

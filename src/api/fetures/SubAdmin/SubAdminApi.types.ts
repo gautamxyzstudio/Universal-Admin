@@ -1,5 +1,3 @@
-import { IAdmin } from '../Auth/types';
-
 export interface IAddNewSubAdminRequest {
   username: string;
   email: string;
@@ -24,4 +22,13 @@ export interface ISubAdmin {
 export interface IAddNewSubAdminResponse {
   jwt: string;
   user: ISubAdmin;
+}
+
+export interface IUpdateSubAdminResponse {
+  data: ISubAdmin;
+}
+
+export interface IUpdateSubAdminRequestBody {
+  subAdminId: number;
+  body: Partial<IAddNewSubAdminRequest>;
 }

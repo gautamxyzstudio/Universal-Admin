@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
@@ -22,7 +23,9 @@ const SubAdminManagement = () => {
   const [showFormModal, setShowFormModal] = useState(false);
   const [subAdmins, updateSubAdmins] = useState<ISubAdmin[]>([]);
   const [form, setFormData] = useState<IDynamicFormField[]>(addNewSubAdminData);
-  const [isNew, setIsNewState] = useState(true);
+  const [selectedSubAdmin, setSelectedSubAdmin] = useState<ISubAdmin | null>(
+    null
+  );
   const {
     error,
     isLoading,
@@ -40,7 +43,7 @@ const SubAdminManagement = () => {
 
   const onPressPrimaryButton = () => {
     setFormData(addNewSubAdminData);
-    setIsNewState(true);
+    setSelectedSubAdmin(null);
     setTimeout(() => {
       setShowFormModal(true);
     }, 100);
@@ -103,7 +106,7 @@ const SubAdminManagement = () => {
   ];
 
   const onPressEdit = (user: ISubAdmin) => {
-    setIsNewState(false);
+    setSelectedSubAdmin(user);
     const data: IDynamicFormField[] = [
       {
         id: 1,
@@ -111,13 +114,6 @@ const SubAdminManagement = () => {
         apiKey: ApiKeys.NAME,
         value: user.UserNameFL,
         type: IFieldTypes.SIMPLE,
-      },
-      {
-        id: 2,
-        displayName: STRINGS.email,
-        apiKey: ApiKeys.EMAIL,
-        value: user.email,
-        type: IFieldTypes.EMAIL,
       },
       {
         id: 3,
@@ -161,7 +157,7 @@ const SubAdminManagement = () => {
         setGlobalModalState={(state) => setShowFormModal(state)}
         data={form}
         show={showFormModal}
-        isNew={isNew}
+        subAdmin={selectedSubAdmin}
       />
     </div>
   );

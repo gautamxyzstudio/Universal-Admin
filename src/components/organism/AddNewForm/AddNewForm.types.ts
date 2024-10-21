@@ -6,6 +6,7 @@ export interface IAddNewFromProps extends IFormDialogProps {
   data: IDynamicFormField[];
   onPressSubmit: (formData: { [key: string]: any }) => void;
   buttonTitle?: string;
+  isValid: boolean;
 }
 
 export type IDynamicFormField = {
