@@ -19,6 +19,7 @@ export const STRINGS = {
   all: 'All',
   pending: 'Pending',
   approved: 'Approved',
+  deny: "Deny",
   declined: 'Declined',
   fullTime: 'Full Time',
   partTime: 'Part Time',

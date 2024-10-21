@@ -32,7 +32,7 @@ export default function RootLayout({
           <MaterialThemeProvider>
             <SnackBarProvider>
               <ReduxProvider>
-                <div className="flex flex-row max-h-screen h-screen">
+                <div className="flex flex-row max-h-screen h-screen overflow-y-scroll">
                   <div className="h-full w-[25%] max-w-[280px] bg-black">
                     <Sidebar />
                   </div>

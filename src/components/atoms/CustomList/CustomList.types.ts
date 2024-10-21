@@ -4,7 +4,7 @@ interface IListItemProps{
     label: string,
     icon?: StaticImageData,
     status?: string,
-    onClickAction? : () =>  void; 
+    onClick?: () => void; 
 }
 
 export interface ICustomListProps{

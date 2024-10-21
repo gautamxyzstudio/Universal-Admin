@@ -8,6 +8,7 @@ import ContactCard from "@/components/organism/ContactCard/ContactCard";
 import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import CustomList from "@/components/atoms/CustomList/CustomList";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
+import DocumentCard from "@/components/organism/DocumentCard/DocumentCard";
 
 const EmployeeDetails = ({
   params,
@@ -16,38 +17,38 @@ const EmployeeDetails = ({
 }) => {
   console.log(params);
   console.log("employeeDetails");
-  const [selectedItem, setSelectedItem] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<React.ReactNode>(
+    "All requested Document Content"
+  );
 
-  const BankContent = () => {
-    const bankData = [
-      {
-        label: "Bank Details",
-        onClickAction: () => {
-          console.log("Bank Details");
-          setSelectedItem("Bank Details Content");
-        },
+  // Bank Content
+  const bankData = [
+    {
+      label: "Bank Details",
+      onClick: () => {
+        console.log("Bank Details");
+        setSelectedItem("Bank Details Content");
       },
-    ];
-    return <CustomList items={bankData} />;
-  };
-  const ProfileContent = () => {
-    const profileData = [
-      {
-        label: "History",
-        onClickAction: () => {
-          setSelectedItem("Profile History Content");
-        },
-      },
-    ];
-    return <CustomList items={profileData} />;
-  };
+    },
+  ];
 
+  // Profile Content
+  const profileData = [
+    {
+      label: "History",
+      onClick: () => {
+        setSelectedItem("Profile History Content");
+      },
+    },
+  ];
+
+  // Document Content
   const itemsData = [
     {
       label: "All requested Document",
       icon: Icons.doc,
       status: "Approved",
-      onClickAction: () => {
+      onClick: () => {
         setSelectedItem("All requested Document Content");
       },
     },
@@ -55,7 +56,7 @@ const EmployeeDetails = ({
       label: "Sin Document",
       icon: Icons.doc,
       status: "Pending",
-      onClickAction: () => {
+      onClick: () => {
         setSelectedItem("Sin Document Content");
       },
     },
@@ -63,41 +64,118 @@ const EmployeeDetails = ({
       label: "Govt. IDs",
       icon: Icons.doc,
       status: "Pending",
-      onClickAction: () => {
-        setSelectedItem("Document (PR card, Permit) Content");
+      onClick: () => {
+        setSelectedItem("Govt. IDs Content");
       },
     },
     {
       label: "Document (PR card, Permit)",
       icon: Icons.doc,
       status: "Pending",
-      onClickAction: () => {
-        setSelectedItem("Licences/certifications Content");
+      onClick: () => {
+        setSelectedItem("Document (PR card, Permit) Content");
       },
     },
     {
       label: "Licences/certifications",
       icon: Icons.doc,
       status: "Pending",
-      onClickAction: () => {
-        setSelectedItem("Licences/certifications Content");
+      onClick: () => {
+        setSelectedItem(
+          <h2 className="text-green">Licences/certifications Content</h2>
+        );
       },
     },
   ];
+
   const DocumentContent = () => {
-    return <CustomList items={itemsData} />;
+    return (
+      <div>
+        <h2>All Document</h2>
+      </div>
+    );
+  };
+
+  const BankDetails = () => {
+    return (
+      <div className="flex flex-col gap-y-6 w-full">
+        <TextGroup
+          divStyle="flex flex-col gap-y-1"
+          title={"Bank account number"}
+          subTitle={"873957737549"}
+        />
+        <TextGroup
+          divStyle="flex flex-col gap-y-1"
+          title={"Institution number"}
+          subTitle={"3647838"}
+        />
+        <TextGroup
+          divStyle="flex flex-col gap-y-1"
+          title={"Branch code"}
+          subTitle={"3647838"}
+        />
+        <DocumentCard
+          label="Direct deposit/void cheque"
+          docImageSrc={Images.demoImg}
+          docImageName={"imageName.jpg"}
+        />
+      </div>
+    );
+  };
+  const ProfileDetails = () => {
+    return (
+      <div>
+        <h2>Profile Details Content</h2>
+      </div>
+    );
+  };
+  const WorkHistory = () => {
+    return (
+      <div>
+        <h2>Work History Content</h2>
+      </div>
+    );
   };
 
   const tabsData = [
-    { label: "Document", content: <DocumentContent /> },
-    { label: "Bank", content: <BankContent /> },
-    { label: "Profile", content: <ProfileContent /> },
-    { label: "Work history", content: <div>Work History Content</div> },
+    {
+      label: "Document",
+      content: <CustomList items={itemsData} />,
+      onClickAction: () => {
+        console.log("Document Content");
+        setSelectedItem(<DocumentContent />);
+      },
+    },
+    {
+      label: "Bank",
+      content: <CustomList items={bankData} />,
+      onClickAction: () => {
+        console.log("Bank Content");
+        setSelectedItem(<BankDetails />);
+      },
+    },
+    {
+      label: "Profile",
+      content: <CustomList items={profileData} />,
+      onClickAction: () => {
+        console.log("Profile Content");
+        setSelectedItem(<ProfileDetails />);
+      },
+    },
+    {
+      label: "Work history",
+      content: <div>Work History Content</div>,
+      onClickAction: () => {
+        console.log("Work Content");
+        setSelectedItem(<WorkHistory />);
+      },
+    },
   ];
 
   return (
     <>
       <PageSubHeader pageTitle={STRINGS.employeeManagement} name="Jhon" />
+      {/* Left Side */}
       <div className="flex gap-x-10 w-full h-screen mt-2">
         <div className="flex flex-col w-[36.4%]">
           <ProfileCard
@@ -155,8 +233,9 @@ const EmployeeDetails = ({
             }}
           />
         </div>
-        <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 pt-6 pl-6">
-          {selectedItem ? selectedItem : "onClickAction data show here"}
+        {/* Right Side */}
+        <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6">
+          {selectedItem}
         </div>
       </div>
     </>

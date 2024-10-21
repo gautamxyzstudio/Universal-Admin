@@ -13,6 +13,7 @@ interface TabItemProps {
   content?: React.ReactNode;
   icon?: StaticImageData;
   status?: string;
+  onClickAction? : () =>  void;  // Add onClick action if needed
 }
 
 export interface ICustomTabProps  extends TabsProps {

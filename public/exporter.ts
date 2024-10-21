@@ -30,6 +30,11 @@ import emailIcon from './emailIcon.svg';
 import locationPin from './locationPin.svg';
 import externalLink from './externalLink.svg';
 import doc from "./doc.svg";
+import crossmark from "./crossmark.svg";
+import accept from "./accept.svg";
+import circleCross from "./circleCross.svg";
+import dustbin from "./dustbin.svg";
+import hide from "./hide.svg";
 
 // Icon Object
 export const Icons = {
@@ -64,6 +69,11 @@ export const Icons = {
   locationPin,
   externalLink,
   doc,
+  crossmark,
+  accept,
+  circleCross,
+  dustbin,
+  hide,
 };
 
 // Images

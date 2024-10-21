@@ -10,8 +10,13 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
+    itemOnClick?: (event: React.MouseEvent<HTMLDivElement>) => void,
   ) => {
+    event.preventDefault();
     setSelectedIndex(index);
+    if (itemOnClick) {
+      itemOnClick(event); // Call the dynamic onClick function if provided
+    }
   };
 
   return (
@@ -22,8 +27,10 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
           flexDirection: "column",
           gap: "12px",
           overflow: "scroll",
-          height: "25vh",
+          height:"fit-content",
+          maxHeight:"31.3vh",
           scrollbarWidth: "none",
+          padding: 0,
         },
         "& .MuiListItemButton-root": {
           borderRadius: "8px",
@@ -51,7 +58,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
             },
           }}
           selected={selectedIndex === index}
-          onClick={(event) => handleListItemClick(event, index)}
+          onClick={(event) => handleListItemClick(event, index, item.onClick)}
         >
           <div className="flex items-center gap-x-2">
             {item.icon && (
