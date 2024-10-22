@@ -1,20 +1,19 @@
-"use client"
-import React, { useState } from "react";
-import Image from "next/image";
-import { Icons } from "../../../../../public/exporter";
-import CustomInput from "../../../atoms/CustomInput/CustomInput";
-import { IconButton, InputAdornment } from "@mui/material";
-import { ISearch, ISearchInputProps } from "./SearchInput.types";
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { Icons } from '../../../../../public/exporter';
+import CustomInput from '../../../atoms/CustomInput/CustomInput';
+import { IconButton, InputAdornment } from '@mui/material';
+import { ISearch, ISearchInputProps } from './SearchInput.types';
 
-
-const SearchField:React.FC<ISearchInputProps> = ({searchStyle}) => {
+const SearchField: React.FC<ISearchInputProps> = ({ searchStyle }) => {
   const [data, setData] = useState<ISearch>({
-    searchText: "",
+    searchText: '',
   });
   return (
-    <div className={ searchStyle  +" flex items-center justify-center"}>
+    <div className={searchStyle + ' flex items-center justify-center'}>
       <CustomInput
-        className="w-full"
+        className="w-full "
         type="search"
         value={data.searchText}
         onChange={(e) => {
@@ -24,10 +23,10 @@ const SearchField:React.FC<ISearchInputProps> = ({searchStyle}) => {
           });
         }}
         placeholder="Search"
-        size="small" 
+        size="small"
         sx={{
-          "& .MuiInputBase-input": {
-            width: "100%",
+          '& .MuiInputBase-input': {
+            width: '100%',
           },
         }}
         slotProps={{
@@ -35,11 +34,7 @@ const SearchField:React.FC<ISearchInputProps> = ({searchStyle}) => {
             startAdornment: (
               <InputAdornment position="start">
                 <IconButton className="z-10" edge="start">
-                  <Image
-                    src={Icons.search}
-                    alt="search"
-                    className="w-auto h-auto"
-                  />
+                  <Image src={Icons.search} alt="search" className="w-8 h-8" />
                 </IconButton>
               </InputAdornment>
             ),

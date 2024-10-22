@@ -21,6 +21,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   columns,
   isLoading,
   illustration,
+  headerView,
   onReachEnd,
   emptyViewSubTitle,
   emptyViewTitle,
@@ -131,7 +132,8 @@ const DataTable: React.FC<IDataTableProps> = ({
   );
 
   return (
-    <div className="flex p-4 h-[95%] w-full bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
+    <div className="p-4 h-[95%] w-full bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
+      <div className="w-full">{headerView}</div>
       {isLoading ? (
         <TableVirtuoso
           data={data.rows}

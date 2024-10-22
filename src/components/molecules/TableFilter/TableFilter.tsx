@@ -32,7 +32,9 @@ const TableFilter: React.FC<IMenuProps> = ({
         <MuiMenu className="bg-white min-w-24  drop-shadow ">
           {data.map((item) => {
             const isSelected = item.value === selectedItem;
-            const bgColor = isSelected ? 'bg-disable' : 'bg-white';
+            const bgColor = isSelected
+              ? 'bg-primaryLight text-primary'
+              : 'bg-white text-textBlack';
             return (
               <MenuItem
                 className={

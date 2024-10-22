@@ -45,4 +45,5 @@ export const STRINGS = {
   noUpdate: 'No Field Updated!!',
   subAdminUpdated: 'Sub-Admin updated Successfully!',
   documentStatus: 'Document Status',
+  workStatus: 'Work Status',
 };
