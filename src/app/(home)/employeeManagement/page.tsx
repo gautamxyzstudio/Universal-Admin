@@ -2,7 +2,6 @@
 import CustomButton from '@/components/atoms/CutomButton/CustomButton';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import { STRINGS } from '@/constant/en';
-import { Add } from '@mui/icons-material';
 import React, { useState } from 'react';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import { MenuItem } from '@mui/material';
@@ -11,15 +10,12 @@ import { Images } from '../../../../public/exporter';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import CustomSelectInput from '@/components/molecules/InputTypes/SelectInput/CustomSelectInput';
+import PageHeader from '@/components/organism/PageHeader/PageHeader';
+import TableFilter from '@/components/molecules/TableFilter/TableFilter';
 
 const EmployeeManagement = () => {
   const [docStatusValue, setDocStatusValue] = useState(STRINGS.all);
   const [workStatusValue, setWorkStatusValue] = useState(STRINGS.all);
-
-  const handleAddEmployee = () => {
-    console.log('Add Employee');
-    // TODO: Add logic to add employee here.
-  };
 
   const Employee = ({
     name,
@@ -103,149 +99,18 @@ const EmployeeManagement = () => {
     },
   ];
 
-  const rows = [
+  const docStatus = [
     {
       id: 1,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
+      value: STRINGS.all,
     },
     {
       id: 2,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
+      value: STRINGS.pending,
     },
     {
       id: 3,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
-    },
-    {
-      id: 4,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
-    },
-    {
-      id: 5,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
-    },
-    {
-      id: 6,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
-    },
-    {
-      id: 7,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
-    },
-    {
-      id: 8,
-      employee_name: {
-        name: 'John Doe',
-        imgsrc: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: 'Valid',
-    },
-  ];
-
-  const docStatus = [
-    {
-      value: STRINGS.all,
-      label: STRINGS.all,
-    },
-    {
-      value: STRINGS.pending,
-      label: STRINGS.pending,
-    },
-    {
       value: STRINGS.approved,
-      label: STRINGS.approved,
     },
   ];
   const workStatus = [
@@ -263,30 +128,20 @@ const EmployeeManagement = () => {
     },
   ];
 
+  const onPressPrimaryButton = () => {};
+
   return (
     <div className="items-center justify-items-center min-h-screen ">
-      <div className="flex justify-between items-center mt-4 mb-6">
-        <h1 className="text-Black font-bold text-[24px] leading-7">
-          {STRINGS.employeeManagement}
-        </h1>
-        <CustomButton
-          title="Add Employee"
-          icon={<Add />}
-          onClick={handleAddEmployee}
-          size="small"
-          customStyles={{
-            textAlign: 'center',
-            color: '#ffff',
-            gap: '4px',
-            fontSize: '16px',
-            lineHeight: '20px',
-            textTransform: 'capitalize',
-            padding: '10px 12px',
-            borderRadius: '8px',
-          }}
-          buttonType={'primary'}
-        />
-      </div>
+      <PageHeader
+        primaryButtonTitle={STRINGS.addEmployee}
+        title={STRINGS.employeeManagement}
+        onPressPrimaryButton={onPressPrimaryButton}
+      />
+      <TableFilter
+        data={docStatus}
+        initialSelectedOption={docStatus[0]}
+        title={STRINGS.documentStatus}
+      />
       <div className="p-4 border rounded-md bg-white flex flex-col gap-y-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-x-8">
@@ -340,7 +195,16 @@ const EmployeeManagement = () => {
             buttonType={'primary'}
           />
         </div>
-        <DataTable columns={columns} rows={rows} isLoading={true} />
+        <DataTable
+          columns={columns}
+          rows={[]}
+          isLoading={false}
+          emptyViewTitle={''}
+          emptyViewSubTitle={''}
+          illustration={Images.noSubAdmin}
+          error={undefined}
+          isDataEmpty={false}
+        />
       </div>
     </div>
   );

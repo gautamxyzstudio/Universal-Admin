@@ -16,7 +16,7 @@ const subAdminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSubAdmins: builder.query<IGetSubAdminResponse, null>({
       query: () => ({
-        url: Endpoints.getSubAdmins,
+        url: Endpoints.getSubAdmins(1),
         method: ApiMethodType.get,
       }),
       transformErrorResponse: (

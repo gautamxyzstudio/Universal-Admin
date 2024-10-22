@@ -93,7 +93,7 @@ const SubAdminManagement = () => {
     {
       field: 'action',
       headerName: 'Action',
-      width: 140,
+      width: 70,
       renderCell: (params: GridRenderCellParams) => (
         <div className="h-full w-full flex flex-col justify-center items-start">
           <Image

@@ -14,6 +14,7 @@ const config: Config = {
         primary: '#FF7312',
         secondary: `#CCD4F2`,
         disable: '#868686',
+        backgroundLight: '#F2F2F2',
         red: '#C11919',
         green: '#469C73',
         lightGreen: 'rgba(70, 156, 115, 0.20)',
@@ -42,6 +43,12 @@ const config: Config = {
           '1.5rem',
           {
             lineHeight: '1.75rem',
+          },
+        ],
+        'text-12': [
+          '0.75rem',
+          {
+            lineHeight: '1rem',
           },
         ],
       },

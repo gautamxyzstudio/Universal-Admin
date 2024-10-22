@@ -19,6 +19,7 @@ export const STRINGS = {
   all: 'All',
   pending: 'Pending',
   addSubAdmin: 'Add Sub-admin',
+  addEmployee: 'Add Employee',
   updateSubAdmin: 'update SubAdmin',
   approved: 'Approved',
   declined: 'Declined',
@@ -43,4 +44,5 @@ export const STRINGS = {
   subAdminAdded: 'Sub-Admin Added Successfully!',
   noUpdate: 'No Field Updated!!',
   subAdminUpdated: 'Sub-Admin updated Successfully!',
+  documentStatus: 'Document Status',
 };
