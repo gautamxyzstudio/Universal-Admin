@@ -153,7 +153,7 @@ const SubAdminManagement = () => {
         emptyViewSubTitle={STRINGS.noSubAdminDec}
         illustration={Images.noSubAdmin}
         error={error}
-        isDataEmpty={data && data?.length === 0}
+        isDataEmpty={true}
       />
       <AddSubAdminForm
         setGlobalModalState={(state) => setShowFormModal(state)}

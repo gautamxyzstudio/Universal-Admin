@@ -1,103 +1,161 @@
-'use client';
-import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
-import { DataGrid } from '@mui/x-data-grid';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/display-name */
+import React, { useCallback, useMemo } from 'react';
+import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material';
+import { GridRenderCellParams, GridValidRowModel } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
-import React from 'react';
 import { IDataTableProps } from './DataTable.types';
+import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
 
 const DataTable: React.FC<IDataTableProps> = ({
-  columns,
   rows,
+  columns,
   isLoading,
-  ...props
+  illustration,
+  onReachEnd,
+  emptyViewSubTitle,
+  emptyViewTitle,
+  isDataEmpty,
+  error,
 }) => {
   const { data } = useDemoData({
-    rowLength: 150,
+    rowLength: 10,
     maxColumns: 9,
     dataSet: 'Employee',
   });
 
-  console.log(isLoading);
+  const tableContainerStyles = useMemo(() => {
+    return {
+      boxShadow: 'none',
+      backgroundColor: '#fff',
+    };
+  }, []);
+  const tableStyles = useMemo(() => {
+    return {
+      boxShadow: 'none',
+      borderCollapse: 'separate',
+      tableLayout: 'fixed',
+    };
+  }, []);
+
+  const rowStyles = useMemo(() => {
+    return { border: 'none' };
+  }, []);
+
+  const tableCellStyles = useMemo(() => {
+    return {
+      backgroundColor: '#FAFAFA',
+      color: '#121212',
+      borderRight: '1px solid #EBEBEB',
+      borderBottomColor: '#EBEBEB',
+    };
+  }, []);
+  const VirtuosoTableComponents: TableComponents = {
+    Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
+      <TableContainer
+        component={Paper}
+        sx={tableContainerStyles}
+        {...props}
+        ref={ref}
+      />
+    )),
+    Table: (props) => <Table {...props} sx={tableStyles} />,
+    TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+      <TableHead {...props} ref={ref} />
+    )),
+    TableRow,
+    TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+      <TableBody {...props} ref={ref} />
+    )),
+  };
+
+  const rowContent = useCallback(
+    (_index: number, row: GridValidRowModel) => (
+      <>
+        {columns.map((column) => (
+          <TableCell key={column.field} sx={rowStyles} align="left">
+            {column.renderCell
+              ? column.renderCell({ row } as GridRenderCellParams)
+              : row[column.field]}
+          </TableCell>
+        ))}
+      </>
+    ),
+    [columns]
+  );
+
+  const rowContentLoading = useCallback(
+    () => (
+      <>
+        {columns.map((column) => (
+          <TableCell key={column.field} sx={rowStyles} align="left">
+            <div className="animate-pulse flex space-x-4">
+              <div
+                style={{ width: column.width }}
+                className="bg-slate-300 h-5"
+              />
+            </div>
+          </TableCell>
+        ))}
+      </>
+    ),
+    [columns]
+  );
+
+  const fixedHeaderContent = useCallback(
+    () => (
+      <TableRow>
+        {columns.map((column) => (
+          <TableCell
+            key={column.field}
+            variant="head"
+            align="left"
+            style={{ width: column.width }}
+            sx={tableCellStyles}
+          >
+            {column.headerName}
+          </TableCell>
+        ))}
+      </TableRow>
+    ),
+    [columns]
+  );
+
   return (
     <div className="flex p-4 h-[95%] w-full bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
-      {/* Show EmptyScreenView if there is an error or no rows */}
-      {!isLoading && (rows?.length === 0 || props.error) && (
-        <EmptyScreenView {...props} />
-      )}
       {isLoading ? (
-        <DataGrid
-          sx={{
-            height: '98%',
-            border: 0,
-            '& .MuiDataGrid-columnHeader': {
-              backgroundColor: '#FAFAFA',
-              color: '#868686',
-              fontSize: '12px',
-              lineHeight: '16px',
-            },
-            '& .MuiDataGrid-row': {
-              '--rowBorderColor': 'none',
-            },
-            '.mui-1xvmu89-MuiDataGrid-overlayWrapper': {
-              backgroundColor: '#FAFAFA',
-            },
-          }}
-          loading={isLoading}
-          slotProps={{
-            loadingOverlay: {
-              variant: 'skeleton',
-              noRowsVariant: 'skeleton',
-            },
-          }}
-          disableColumnMenu
-          disableColumnSorting
-          disableColumnResize
-          disableRowSelectionOnClick
-          disableColumnSelector
-          disableColumnFilter
-          hideFooter
-          rowHeight={68}
-          columns={columns}
-          rows={data.rows}
+        <TableVirtuoso
+          data={data.rows}
+          components={VirtuosoTableComponents as TableComponents}
+          fixedHeaderContent={fixedHeaderContent}
+          itemContent={rowContentLoading}
+        />
+      ) : rows.length === 0 ? (
+        <EmptyScreenView
+          emptyViewTitle={emptyViewTitle}
+          emptyViewSubTitle={emptyViewSubTitle}
+          illustration={illustration}
+          error={error}
+          isDataEmpty={isDataEmpty}
         />
       ) : (
-        rows?.length > 0 && (
-          <DataGrid
-            sx={{
-              height: '95%',
-              border: 0,
-              '& .MuiDataGrid-columnHeader': {
-                backgroundColor: '#FAFAFA',
-                color: '#868686',
-                fontSize: '12px',
-                lineHeight: '16px',
-              },
-              '& .MuiDataGrid-row': {
-                '--rowBorderColor': 'none',
-              },
-              '.mui-1xvmu89-MuiDataGrid-overlayWrapper': {
-                backgroundColor: '#FAFAFA',
-              },
-            }}
-            loading={isLoading}
-            slotProps={{
-              loadingOverlay: {
-                variant: 'skeleton',
-                noRowsVariant: 'skeleton',
-              },
-            }}
-            disableColumnMenu
-            disableColumnSorting
-            disableColumnResize
-            disableRowSelectionOnClick
-            disableColumnSelector
-            disableColumnFilter
-            hideFooter
-            rowHeight={68}
-            columns={columns}
-            rows={rows}
-          />
-        )
+        <TableVirtuoso
+          data={rows}
+          components={VirtuosoTableComponents as any}
+          atBottomThreshold={0.1}
+          endReached={onReachEnd}
+          fixedHeaderContent={fixedHeaderContent}
+          itemContent={rowContent}
+        />
       )}
     </div>
   );
