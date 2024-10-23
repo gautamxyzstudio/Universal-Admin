@@ -12,6 +12,7 @@ import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import TableFilter from '@/components/molecules/TableFilter/TableFilter';
 import { docStatus, workStatus } from './types';
 import { useGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
+import { useRouter } from 'next/router';
 
 const EmployeeManagement = () => {
   const { data } = useGetEmployeesQuery(null);
@@ -63,6 +64,12 @@ const EmployeeManagement = () => {
 
   const onPressPrimaryButton = () => {};
 
+  const router = useRouter();
+
+  const handleOnRowClick = (params) => {
+    console.log('Row clicked', params.row.id);
+    router.push(`/employeeManagement/${params.row.id}`);
+  };
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader

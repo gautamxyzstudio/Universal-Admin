@@ -22,6 +22,7 @@ export const STRINGS = {
   addEmployee: 'Add Employee',
   updateSubAdmin: 'update SubAdmin',
   approved: 'Approved',
+  deny: "Deny",
   declined: 'Declined',
   fullTime: 'Full Time',
   partTime: 'Part Time',

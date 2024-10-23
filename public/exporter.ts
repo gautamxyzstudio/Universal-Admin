@@ -1,6 +1,6 @@
 // Icon
 import logo from './logo.png';
-import arrow from './arrow.svg';
+import arrow from './downArrow.svg';
 import building from './building.svg';
 import client from './client.svg';
 import people from './people.svg';
@@ -24,6 +24,19 @@ import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
 import crossDialog from './cross_dialog.svg';
 import pencil from './pensil.svg';
+import excelfile from './excelApp.svg';
+import leftArrow from './leftArrow.svg';
+import callIcon from './callIcon.svg';
+import companyBuilding from './companyBuilding.svg';
+import emailIcon from './emailIcon.svg';
+import locationPin from './locationPin.svg';
+import externalLink from './externalLink.svg';
+import doc from './doc.svg';
+import crossmark from './crossmark.svg';
+import accept from './accept.svg';
+import circleCross from './circleCross.svg';
+import dustbin from './dustbin.svg';
+import hide from './hide.svg';
 
 // Icon Object
 export const Icons = {
@@ -52,6 +65,19 @@ export const Icons = {
   calender,
   pencil,
   cross,
+  excelfile,
+  leftArrow,
+  callIcon,
+  companyBuilding,
+  emailIcon,
+  locationPin,
+  externalLink,
+  doc,
+  crossmark,
+  accept,
+  circleCross,
+  dustbin,
+  hide,
 };
 
 // Images
