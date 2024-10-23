@@ -48,4 +48,5 @@ export const STRINGS = {
   documentStatus: 'Document Status',
   workStatus: 'Work Status',
   noEmployees: 'No Employees Available',
+  view: 'View',
 };

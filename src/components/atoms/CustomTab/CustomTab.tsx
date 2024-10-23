@@ -32,12 +32,11 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
     setCurrentTabIndex(tabIndex);
   };
   return (
-    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-[400px] max-h-[405px] overflow-hidden">
+    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-auto max-h-[405px] overflow-hidden">
       <div className="border-b border-borderGrey h-auto max-h-full ">
         <Tabs {...props}
           value={currentTabIndex}
           onChange={handleTabChange}
-          
           variant="scrollable"
           scrollButtons={false} 
         >

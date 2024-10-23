@@ -16,7 +16,6 @@ const EmployeeDetails = ({
   params: { employeeDetails: string };
 }) => {
   console.log(params);
-  console.log("employeeDetails");
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(
     'All requested Document'
   );
@@ -82,7 +81,7 @@ const EmployeeDetails = ({
       status: "Pending",
       onClick: () => {
         setSelectedItem(
-          <h2 className="text-green">Licences/certifications Content</h2>
+          <h2>Licences/certifications Content</h2>
         );
       },
     },

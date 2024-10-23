@@ -6,6 +6,7 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import React from "react";
 import { Icons } from "../../../../public/exporter";
+import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 
 interface IUploadedFileProps {
   fileName: string;
@@ -87,15 +88,14 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
         )}
         {status && (
           <>
-            <h2
-              className={`${
+            <TextWithBgColor
+              textStyle={`${
                 status === STRINGS.approved
                   ? "bg-lightGreen text-green"
                   : "bg-lightRed text-red"
-              } font-bold rounded-[40px] px-3 py-2`}
-            >
-              {status}
-            </h2>
+              }`}
+              textLabel={status}
+            />
             <IconButton
               id="openMenu"
               aria-controls={open ? "fade-menu" : undefined}

@@ -1,75 +1,170 @@
-'use client';
-import DataTable from '@/components/atoms/DataTable/DataTable';
-import { STRINGS } from '@/constant/en';
-import React, { useEffect } from 'react';
-import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
-
-import Image from 'next/image';
-import { Images } from '../../../../public/exporter';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import TableFilter from '@/components/molecules/TableFilter/TableFilter';
-import { docStatus, workStatus } from './types';
-import { useGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
-import { useRouter } from 'next/router';
+"use client";
+import DataTable from "@/components/atoms/DataTable/DataTable";
+import { STRINGS } from "@/constant/en";
+import React, { useEffect } from "react";
+import SearchField from "@/components/molecules/InputTypes/SearchInput/SearchInput";
+import { Images } from "../../../../public/exporter";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import PageHeader from "@/components/organism/PageHeader/PageHeader";
+import TableFilter from "@/components/molecules/TableFilter/TableFilter";
+import { docStatus, workStatus } from "./types";
+import { useGetEmployeesQuery } from "@/api/fetures/Employee/EmployeeApi";
+import ExportButton from "@/components/molecules/ButtonTypes/ExportButton/ExportButton";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 
 const EmployeeManagement = () => {
   const { data } = useGetEmployeesQuery(null);
 
   useEffect(() => {
-    console.log(data, 'EMPLOYEE DATA');
+    console.log(data, "EMPLOYEE DATA");
   }, [data]);
   const columns: GridColDef[] = [
     {
-      field: 'employee_name',
-      headerName: 'Employee Name',
+      field: "employee_name",
+      headerName: "Employee Name",
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
-        <Employee name={params?.value?.name} imgsrc={params?.value?.imgsrc} />
-      ),
-    },
-    {
-      field: 'contact_details',
-      headerName: 'Contact Details',
-      width: 224,
-      renderCell: (params: GridRenderCellParams) => (
-        <ContactDetails
-          phone_number={params?.value?.phone_number}
-          email={params?.value?.email}
+        <UserNameWithImage
+          type="green"
+          name={params.row.employee_name.name}
+          image={params.row.employee_name.image}
         />
       ),
     },
     {
-      field: 'sin_number',
-      headerName: 'SIN Number',
+      field: "contact_details",
+      headerName: "Contact Details",
+      width: 224,
+      renderCell: (params: GridRenderCellParams) => (
+        <ContactDetails
+          phone_number={params.row.contact_details.phone_number}
+          email={params.row.contact_details.email}
+        />
+      ),
+    },
+    {
+      field: "sin_number",
+      headerName: "SIN Number",
       width: 180,
     },
     {
-      field: 'gender',
-      headerName: 'Gender',
+      field: "gender",
+      headerName: "Gender",
       width: 104,
     },
     {
-      field: 'work_status',
-      headerName: 'Work Status',
+      field: "work_status",
+      headerName: "Work Status",
       width: 104,
     },
     {
-      field: 'document_status',
-      headerName: 'Document Status',
+      field: "document_status",
+      headerName: "Document Status",
       width: 130,
+      renderCell: (params: GridRenderCellParams) => {
+        const status =
+          params.row.document_status === STRINGS.approved
+            ? "text-green"
+            : "text-yellow";
+        return <span className={status}>{params.row.document_status}</span>;
+      },
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 104,
+      renderCell: (params: GridRenderCellParams) => {
+        const action = params.row.action = STRINGS.view
+        return <span className="text-primary">{action}</span>;
+      },
     },
   ];
-
+  const rows = [
+    {
+      id: 1,
+      employee_name: {
+        name: "John Doe",
+        image: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status:  STRINGS.approved,
+      
+    },
+    {
+      id: 2,
+      employee_name: {
+        name: "John Doe",
+        image: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status:  STRINGS.pending,
+      
+    },
+    {
+      id: 3,
+      employee_name: {
+        name: "John Doe",
+        image: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status: STRINGS.approved,
+      
+    },
+    {
+      id: 4,
+      employee_name: {
+        name: "John Doe",
+        image: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status:  STRINGS.pending,
+    },
+    {
+      id: 5,
+      employee_name: {
+        name: "John Doe",
+        image: Images.demoImg,
+      },
+      contact_details: {
+        phone_number: "123-456-7890",
+        email: "john.doe@example.com",
+      },
+      sin_number: "123456789",
+      license_number: "ABC123",
+      gender: "Male",
+      work_status: "Full-time",
+      document_status:  STRINGS.pending,
+    },
+  ];
   const onPressPrimaryButton = () => {};
-
-  const router = useRouter();
-
-  const handleOnRowClick = (params) => {
-    console.log('Row clicked', params.row.id);
-    router.push(`/employeeManagement/${params.row.id}`);
-  };
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
@@ -79,9 +174,9 @@ const EmployeeManagement = () => {
       />
       <DataTable
         columns={columns}
-        rows={[]}
+        rows={rows}
         headerView={
-          <div className="flex w-full  justify-between items-center">
+          <div className="flex w-full  justify-between items-center mb-4">
             <div className="flex items-center">
               <SearchField searchStyle="w-[288px]" />
             </div>
@@ -97,33 +192,21 @@ const EmployeeManagement = () => {
                 title={STRINGS.workStatus}
               />
             </div>
+            <ExportButton onClick={undefined} />
           </div>
         }
-        isLoading={true}
+        isLoading={false}
         emptyViewTitle={STRINGS.noEmployees}
-        emptyViewSubTitle={''}
+        emptyViewSubTitle={""}
         illustration={Images.noSubAdmin}
         error={undefined}
-        isDataEmpty={true}
+        isDataEmpty={false}
       />
     </div>
   );
 };
 
 export default EmployeeManagement;
-
-const Employee = ({ name, imgsrc }: { name: string; imgsrc: StaticImport }) => {
-  return (
-    <div className="inline-flex items-center gap-x-2 px-2">
-      <Image
-        src={imgsrc}
-        className="w-8 h-8 rounded-full"
-        alt="employee image"
-      />
-      <div className="flex">{name}</div>
-    </div>
-  );
-};
 
 const ContactDetails = ({
   phone_number,

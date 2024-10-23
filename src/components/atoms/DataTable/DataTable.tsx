@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/display-name */
-import React, { useCallback, useMemo } from 'react';
-import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import React, { useCallback, useMemo } from "react";
+import { TableVirtuoso, TableComponents } from "react-virtuoso";
 import {
   Table,
   TableBody,
@@ -10,11 +11,12 @@ import {
   TableHead,
   TableRow,
   Paper,
-} from '@mui/material';
-import { GridRenderCellParams, GridValidRowModel } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
-import { IDataTableProps } from './DataTable.types';
-import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
+} from "@mui/material";
+import { GridRenderCellParams, GridValidRowModel } from "@mui/x-data-grid";
+import { useDemoData } from "@mui/x-data-grid-generator";
+import { IDataTableProps } from "./DataTable.types";
+import EmptyScreenView from "@/components/templates/EmptyScreenView/EmptyScreenView";
+import { useRouter } from "next/navigation";
 
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
@@ -28,36 +30,40 @@ const DataTable: React.FC<IDataTableProps> = ({
   isDataEmpty,
   error,
 }) => {
+  const router = useRouter();
+  const handleOnRowClick = (id) => {
+    router.push(`/employeeManagement/${id}`);
+  };
   const { data } = useDemoData({
     rowLength: 10,
     maxColumns: 9,
-    dataSet: 'Employee',
+    dataSet: "Employee",
   });
 
   const tableContainerStyles = useMemo(() => {
     return {
-      boxShadow: 'none',
-      backgroundColor: '#fff',
+      boxShadow: "none",
+      backgroundColor: "#fff",
     };
   }, []);
   const tableStyles = useMemo(() => {
     return {
-      boxShadow: 'none',
-      borderCollapse: 'separate',
-      tableLayout: 'fixed',
+      boxShadow: "none",
+      borderCollapse: "separate",
+      tableLayout: "fixed",
     };
   }, []);
 
   const rowStyles = useMemo(() => {
-    return { border: 'none' };
+    return { border: "none", cursor: "pointer" };
   }, []);
 
   const tableCellStyles = useMemo(() => {
     return {
-      backgroundColor: '#FAFAFA',
-      color: '#121212',
-      borderRight: '1px solid #EBEBEB',
-      borderBottomColor: '#EBEBEB',
+      backgroundColor: "#FAFAFA",
+      color: "#121212",
+      borderRight: "1px solid #EBEBEB",
+      borderBottomColor: "#EBEBEB",
     };
   }, []);
   const VirtuosoTableComponents: TableComponents = {
@@ -74,6 +80,7 @@ const DataTable: React.FC<IDataTableProps> = ({
       <TableHead {...props} ref={ref} />
     )),
     TableRow,
+    
     TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
       <TableBody {...props} ref={ref} />
     )),
@@ -82,13 +89,23 @@ const DataTable: React.FC<IDataTableProps> = ({
   const rowContent = useCallback(
     (_index: number, row: GridValidRowModel) => (
       <>
-        {columns.map((column) => (
-          <TableCell key={column.field} sx={rowStyles} align="left">
-            {column.renderCell
-              ? column.renderCell({ row } as GridRenderCellParams)
-              : row[column.field]}
-          </TableCell>
-        ))}
+        {columns.map((column) => {
+          const id = row.id;
+          return (
+            (
+              <TableCell
+                onClick={()=>handleOnRowClick(id)}
+                key={id}
+                sx={rowStyles }
+                align="left"
+              >
+                {column.renderCell
+                  ? column.renderCell({ row } as GridRenderCellParams)
+                  : row[column.field]}
+              </TableCell>
+            )
+          );
+        })}
       </>
     ),
     [columns]

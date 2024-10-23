@@ -28,6 +28,7 @@ const config: Config = {
         externalLink: '#2048E0',
         lightPrimary: '#FFF8F4',
         lightGreenSecondary: '#F6FFFB',
+        lightRedSecondary: '#FFF4F4',
       },
       borderRadius: {
         custom: "0px 16px 16px 0px",
