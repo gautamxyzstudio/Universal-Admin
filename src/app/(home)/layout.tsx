@@ -3,11 +3,8 @@ import localFont from 'next/font/local';
 import '../globals.css';
 import Sidebar from '@/components/organism/Sidebar/Sidebar';
 
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
-import ReduxProvider from '@/providers/ReduxProvider';
-import SnackBarProvider from '@/providers/SnackbarProvider';
 import Topbar from '@/components/organism/Topbar/Topbar';
+import HomeProviders from './HomeProviders';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
@@ -28,29 +25,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${helveticaBold.variable} antialiased`}>
-        <AppRouterCacheProvider>
-          <MaterialThemeProvider>
-            <SnackBarProvider>
-              <ReduxProvider>
-                <div className="flex flex-row max-h-screen h-screen overflow-y-scroll">
-                  <div className="h-full w-[25%] max-w-[280px] bg-black">
-                    <Sidebar />
-                  </div>
-                  <div className=" w-screen bg-black overflow-hidden flex flex-row justify-center">
-                    <div className="max-w-screen-2xl h-full w-full">
-                      <div className="w-full h-full rounded-l-[40px] overflow-hidden">
-                        <Topbar />
-                        <div className="bg-extraWhite rounded-bl-lg px-10 pb-10 h-full">
-                          {children}
-                        </div>
-                      </div>
-                    </div>
+        <HomeProviders>
+          <div className="flex flex-row">
+            <div className="h-screen w-[25%] max-w-[280px] bg-black">
+              <Sidebar />
+            </div>
+            <div className=" w-screen bg-black overflow-hidden flex flex-row justify-center">
+              <div className="max-w-screen-2xl h-screen w-full">
+                <div className="w-full h-full rounded-l-[40px] overflow-hidden">
+                  <Topbar />
+                  <div className="bg-extraWhite rounded-bl-lg h-full w-full overflow-scroll px-10 pb-10">
+                    {children}
                   </div>
                 </div>
-              </ReduxProvider>
-            </SnackBarProvider>
-          </MaterialThemeProvider>
-        </AppRouterCacheProvider>
+              </div>
+            </div>
+          </div>
+        </HomeProviders>
       </body>
     </html>
   );

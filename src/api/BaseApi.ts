@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getUserDetailsFromCookies } from '@/utility/cookies';
 import {
   BaseQueryApi,
   FetchArgs,
@@ -12,17 +13,27 @@ const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.BASE_URL}`,
   credentials: 'include',
   prepareHeaders: (headers, api) => {
+    const token = getUserDetailsFromCookies()?.token;
     headers.set('Content-Type', 'application/json');
     headers.set('Accept', 'application/json');
-
-    //   if (token) {
-    //     headers.set('Authorization', `Bearer ${token}`);
-    //   }
+    if (api.endpoint === 'addNewSubAdmin') {
+      headers.delete('Authorization');
+    } else {
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+    console.log(
+      '############################## API DETAILS START######################################'
+    );
+    console.log('prepareHeaders', JSON.stringify(api));
+    console.log(
+      '############################## API DETAILS END ######################################'
+    );
     console.log(
       '############################## headers ######################################'
     );
-    console.log('prepareHeaders', api);
-    console.log('headers ------', headers);
+    console.log('headers ------', JSON.stringify(headers));
     console.log(
       '############################## headers end ######################################'
     );
@@ -52,7 +63,7 @@ const queryFetcher = async (
   const result = await baseQuery(args, api, extraOptions);
 
   console.log(
-    '\n############################## Result End ######################################'
+    '\n############################## Result START ######################################'
   );
   console.log(JSON.stringify(result));
   console.log(

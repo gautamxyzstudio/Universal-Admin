@@ -4,6 +4,7 @@ import '../globals.css';
 import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
 import ReduxProvider from '@/providers/ReduxProvider';
 import SnackBarProvider from '@/providers/SnackbarProvider';
+import AuthProviders from './authProviders';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
@@ -25,11 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${helveticaBold.variable} antialiased`}>
         <div className="w-screen bg-black h-screen">
-          <MaterialThemeProvider>
-            <ReduxProvider>
-              <SnackBarProvider>{children}</SnackBarProvider>
-            </ReduxProvider>
-          </MaterialThemeProvider>
+          <AuthProviders>{children}</AuthProviders>
         </div>
       </body>
     </html>

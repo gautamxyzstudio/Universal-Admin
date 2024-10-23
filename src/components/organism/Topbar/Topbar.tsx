@@ -1,14 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { IconButton } from '@mui/material';
-import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import { Icons, Images } from '../../../../public/exporter';
 
 const Topbar = () => {
   return (
     <div className="text-disable flex bg-white justify-between border-b rounded-tl-[40px] border-borderGrey px-10 h-auto">
       <p className="my-[18px] text-[16px] leading-5">Welcome, Admin</p>
-      <SearchField searchStyle=" w-[424px]" />
 
       <div className="flex items-center my-[10px] gap-x-4">
         <IconButton>

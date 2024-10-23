@@ -22,6 +22,8 @@ import calender from './calender.svg';
 import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
+import crossDialog from './cross_dialog.svg';
+import pencil from './pensil.svg';
 import excelfile from './excelApp.svg';
 import leftArrow from './leftArrow.svg';
 import callIcon from './callIcon.svg';
@@ -29,12 +31,12 @@ import companyBuilding from './companyBuilding.svg';
 import emailIcon from './emailIcon.svg';
 import locationPin from './locationPin.svg';
 import externalLink from './externalLink.svg';
-import doc from "./doc.svg";
-import crossmark from "./crossmark.svg";
-import accept from "./accept.svg";
-import circleCross from "./circleCross.svg";
-import dustbin from "./dustbin.svg";
-import hide from "./hide.svg";
+import doc from './doc.svg';
+import crossmark from './crossmark.svg';
+import accept from './accept.svg';
+import circleCross from './circleCross.svg';
+import dustbin from './dustbin.svg';
+import hide from './hide.svg';
 
 // Icon Object
 export const Icons = {
@@ -45,6 +47,7 @@ export const Icons = {
   building,
   client,
   people,
+  crossDialog,
   home,
   logout,
   notification,
@@ -60,6 +63,7 @@ export const Icons = {
   settingfill,
   subAdminfill,
   calender,
+  pencil,
   cross,
   excelfile,
   leftArrow,
@@ -78,8 +82,12 @@ export const Icons = {
 
 // Images
 import demoImg from './demoImage.png';
+import noSubAdmin from './noSubAdmin.png';
+import errorILLustration from './errorIllustration.png';
 
 // Image Object
 export const Images = {
   demoImg,
+  noSubAdmin,
+  errorILLustration,
 };

@@ -34,3 +34,20 @@ export const getUserDetailsFromCookies = (): IUserCookies | null => {
 export const removeUserDetailsFromCookies = () => {
   Cookies.remove('user');
 };
+
+export const extractFirstAndLastNameFromName = (
+  name: string
+): { firstName: string; lastName: string } => {
+  if (name) {
+    const nameParts = name.split(' ');
+    return {
+      firstName: nameParts[0],
+      lastName: nameParts.slice(1).join(' '),
+    };
+  } else {
+    return {
+      firstName: '',
+      lastName: '',
+    };
+  }
+};

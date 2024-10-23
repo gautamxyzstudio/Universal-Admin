@@ -27,3 +27,45 @@ export const withAsyncErrorHandlingPost = (
     }
   };
 };
+
+export const generateUniqueUserName = (email: string) => {
+  const frontPart = email.split('@')[0];
+  const backPart = Math.random() * 10;
+  return `${frontPart}${backPart.toFixed(0)}`;
+};
+
+export const getFirstLetterFromName = (name: string): string => {
+  return name.slice(0, 1).toUpperCase();
+};
+
+interface DiffResult<T> {
+  [key: string]: T;
+}
+
+export const findDifferenceBetweenObject = <T extends object>(
+  objOne: T,
+  objTwo: T
+): Partial<DiffResult<any>> => {
+  const differences: Partial<DiffResult<any>> = {};
+  for (const key in objOne) {
+    if (objOne.hasOwnProperty(key)) {
+      const value1 = objOne[key];
+      const value2 = objTwo[key];
+      if (value1 !== value2) {
+        differences[key] = value2;
+      }
+    }
+  }
+
+  return differences;
+};
+
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+};
+
+export const validatePhoneNumber = (number: string): boolean => {
+  const phoneRegex = /^[0-9]{10}$/;
+  return phoneRegex.test(number);
+};

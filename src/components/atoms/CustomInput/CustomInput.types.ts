@@ -6,4 +6,5 @@ export interface ICustomInputProps extends Omit<TextFieldProps, 'InputProps'> {
   type?: React.HTMLInputTypeAttribute | undefined;
   error?: boolean;
   errorMessage?: string;
+  maxLength?: number | undefined;
 }

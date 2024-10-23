@@ -4,28 +4,23 @@ import { STRINGS } from '@/constant/en';
 import { Add } from '@mui/icons-material';
 import React from 'react';
 
-const PageHeader = () => {
+const PageHeader: React.FC<IPageHeaderProps> = ({
+  primaryButtonTitle,
+  title,
+  secondaryButtonTitle,
+  withPrimaryButton,
+  onPressPrimaryButton,
+  withSecondaryButton,
+}) => {
   return (
-    <div className="flex justify-between items-center mt-4 mb-6">
-      <h1 className="text-Black font-bold text-[24px] leading-7">
-        {STRINGS.employeeManagement}
-      </h1>
+    <div className="flex justify-between items-center my-6">
+      <h1 className="text-Black font-bold text-[24px] leading-7">{title}</h1>
       <CustomButton
-        title="Add Employee"
+        title={primaryButtonTitle ?? ''}
         icon={<Add />}
-        onClick={() => console.log('employee')}
+        onClick={onPressPrimaryButton}
         size="small"
-        customStyles={{
-          textAlign: 'center',
-          color: '#ffff',
-          gap: '4px',
-          fontSize: '16px',
-          lineHeight: '20px',
-          textTransform: 'capitalize',
-          padding: '10px 12px',
-          borderRadius: '8px',
-        }}
-        buttonType={'primary'}
+        buttonType={'primary-small'}
       />
     </div>
   );
