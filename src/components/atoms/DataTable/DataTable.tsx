@@ -132,8 +132,9 @@ const DataTable: React.FC<IDataTableProps> = ({
   );
 
   return (
-    <div className="p-4 h-[95%] w-full bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
-      <div className="w-full">{headerView}</div>
+    <div className="p-4 h-[95%] w-full  bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
+      {rows.length > 0 && <div className="w-full">{headerView}</div>}
+
       {isLoading ? (
         <TableVirtuoso
           data={data.rows}
@@ -142,13 +143,15 @@ const DataTable: React.FC<IDataTableProps> = ({
           itemContent={rowContentLoading}
         />
       ) : rows.length === 0 ? (
-        <EmptyScreenView
-          emptyViewTitle={emptyViewTitle}
-          emptyViewSubTitle={emptyViewSubTitle}
-          illustration={illustration}
-          error={error}
-          isDataEmpty={isDataEmpty}
-        />
+        <div className="h-full flex justify-center items-center">
+          <EmptyScreenView
+            emptyViewTitle={emptyViewTitle}
+            emptyViewSubTitle={emptyViewSubTitle}
+            illustration={illustration}
+            error={error}
+            isDataEmpty={isDataEmpty}
+          />
+        </div>
       ) : (
         <TableVirtuoso
           data={rows}

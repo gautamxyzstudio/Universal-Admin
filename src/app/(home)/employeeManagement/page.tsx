@@ -1,7 +1,7 @@
 'use client';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import { STRINGS } from '@/constant/en';
-import React from 'react';
+import React, { useEffect } from 'react';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 
 import Image from 'next/image';
@@ -11,48 +11,19 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import TableFilter from '@/components/molecules/TableFilter/TableFilter';
 import { docStatus, workStatus } from './types';
+import { useGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
 
 const EmployeeManagement = () => {
-  const Employee = ({
-    name,
-    imgsrc,
-  }: {
-    name: string;
-    imgsrc: StaticImport;
-  }) => {
-    return (
-      <div className="inline-flex items-center gap-x-2 px-2">
-        <Image
-          src={imgsrc}
-          className="w-8 h-8 rounded-full"
-          alt="employee image"
-        />
-        <div className="flex">{name}</div>
-      </div>
-    );
-  };
+  const { data } = useGetEmployeesQuery(null);
 
-  const ContactDetails = ({
-    phone_number,
-    email,
-  }: {
-    phone_number: string;
-    email: string;
-  }) => {
-    return (
-      <div className="px-2 py-[14px] flex flex-col text-[14px] leading-[18px] justify-center h-full w-full">
-        {phone_number}
-        <span className="text-disable">{email}</span>
-      </div>
-    );
-  };
-
+  useEffect(() => {
+    console.log(data, 'EMPLOYEE DATA');
+  }, [data]);
   const columns: GridColDef[] = [
     {
       field: 'employee_name',
       headerName: 'Employee Name',
       width: 224,
-
       renderCell: (params: GridRenderCellParams) => (
         <Employee name={params?.value?.name} imgsrc={params?.value?.imgsrc} />
       ),
@@ -74,11 +45,6 @@ const EmployeeManagement = () => {
       width: 180,
     },
     {
-      field: 'license_number',
-      headerName: 'License Number',
-      width: 180,
-    },
-    {
       field: 'gender',
       headerName: 'Gender',
       width: 104,
@@ -91,14 +57,14 @@ const EmployeeManagement = () => {
     {
       field: 'document_status',
       headerName: 'Document Status',
-      width: 120,
+      width: 130,
     },
   ];
 
   const onPressPrimaryButton = () => {};
 
   return (
-    <div className="items-center justify-items-center min-h-screen ">
+    <div className="w-full h-[85%] mb-5">
       <PageHeader
         primaryButtonTitle={STRINGS.addEmployee}
         title={STRINGS.employeeManagement}
@@ -126,15 +92,43 @@ const EmployeeManagement = () => {
             </div>
           </div>
         }
-        isLoading={false}
-        emptyViewTitle={''}
+        isLoading={true}
+        emptyViewTitle={STRINGS.noEmployees}
         emptyViewSubTitle={''}
         illustration={Images.noSubAdmin}
         error={undefined}
-        isDataEmpty={false}
+        isDataEmpty={true}
       />
     </div>
   );
 };
 
 export default EmployeeManagement;
+
+const Employee = ({ name, imgsrc }: { name: string; imgsrc: StaticImport }) => {
+  return (
+    <div className="inline-flex items-center gap-x-2 px-2">
+      <Image
+        src={imgsrc}
+        className="w-8 h-8 rounded-full"
+        alt="employee image"
+      />
+      <div className="flex">{name}</div>
+    </div>
+  );
+};
+
+const ContactDetails = ({
+  phone_number,
+  email,
+}: {
+  phone_number: string;
+  email: string;
+}) => {
+  return (
+    <div className="px-2 py-[14px] flex flex-col text-[14px] leading-[18px] justify-center h-full w-full">
+      {phone_number}
+      <span className="text-disable">{email}</span>
+    </div>
+  );
+};

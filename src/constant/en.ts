@@ -46,4 +46,5 @@ export const STRINGS = {
   subAdminUpdated: 'Sub-Admin updated Successfully!',
   documentStatus: 'Document Status',
   workStatus: 'Work Status',
+  noEmployees: 'No Employees Available',
 };
