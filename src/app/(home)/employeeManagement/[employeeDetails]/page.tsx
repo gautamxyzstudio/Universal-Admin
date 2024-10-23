@@ -18,7 +18,7 @@ const EmployeeDetails = ({
   console.log(params);
   console.log("employeeDetails");
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(
-    "All requested Document Content"
+    'All requested Document'
   );
 
   // Bank Content
@@ -91,12 +91,12 @@ const EmployeeDetails = ({
   const DocumentContent = () => {
     return (
       <div>
-        <h2>All Document</h2>
+        <h2>All Request Document </h2>
       </div>
     );
   };
 
-  const BankDetails = () => {
+   const BankDetails = () => {
     return (
       <div className="flex flex-col gap-y-6 w-full">
         <TextGroup

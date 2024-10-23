@@ -1,7 +1,7 @@
 import CustomButton from "@/components/atoms/CutomButton/CustomButton";
 import { STRINGS } from "@/constant/en";
 import { MoreVertOutlined } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { Fade, IconButton, Menu, MenuItem } from "@mui/material";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import React from "react";
@@ -18,6 +18,25 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
   days,
   fileSrc,
 }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [status, setStatus] = React.useState<string | null>(null);
+  const [buttonsVisible, setButtonsVisible] = React.useState(true);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleApprove = () => {
+    setStatus(STRINGS.approved);
+    setButtonsVisible(false);
+  };
+
+  const handleDeny = () => {
+    setStatus(STRINGS.deny);
+    setButtonsVisible(false);
+  };
   return (
     <div className="bg-lightPrimary rounded p-3 flex items-center justify-between">
       <div className="flex items-center gap-x-3">
@@ -34,23 +53,94 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-x-3">
-        <CustomButton customStyles={{
-          display: 'flex',
-          alignItems: 'center',
-          gap:"4px"
-          
-
-        }}   buttonType="outline-small-red" variant="outlined" title={STRINGS.deny} onClick={undefined} icon ={<Image src={Icons.crossmark} alt='deny' className="w-4 h-4" />}/>
-        <CustomButton buttonType="outline-small-green" variant="outlined" title={STRINGS.approved} onClick={undefined} icon={<Image src={Icons.accept} alt='accept' className="w-4 h-4" />}/>
-        <h2 className="bg-lightGreen text-green font-bold rounded-[40px] px-3 py-2">
-          {STRINGS.approved}
-        </h2>
-        <IconButton
-          sx={{ padding: 0 }}
-          onClick={() => console.log("clicked the three dot button")}
-        >
-          <MoreVertOutlined />
-        </IconButton>
+        {buttonsVisible && (
+          <>
+            <CustomButton
+              customStyles={{
+                ".MuiLoadingButton-label": {
+                  gap: "4px",
+                },
+              }}
+              buttonType="outline-small-red"
+              variant="outlined"
+              title={STRINGS.deny}
+              onClick={handleDeny}
+              icon={
+                <Image src={Icons.crossmark} alt="deny" className="w-4 h-4" />
+              }
+            />
+            <CustomButton
+              customStyles={{
+                ".MuiLoadingButton-label": {
+                  gap: "4px",
+                },
+              }}
+              buttonType="outline-small-green"
+              variant="outlined"
+              title={STRINGS.approved}
+              onClick={handleApprove}
+              icon={
+                <Image src={Icons.accept} alt="accept" className="w-4 h-4" />
+              }
+            />
+          </>
+        )}
+        {status && (
+          <>
+            <h2
+              className={`${
+                status === STRINGS.approved
+                  ? "bg-lightGreen text-green"
+                  : "bg-lightRed text-red"
+              } font-bold rounded-[40px] px-3 py-2`}
+            >
+              {status}
+            </h2>
+            <IconButton
+              id="openMenu"
+              aria-controls={open ? "fade-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              sx={{ padding: 0 }}
+              onClick={handleClick}
+            >
+              <MoreVertOutlined />
+            </IconButton>
+            <Menu
+              open={open}
+              anchorEl={anchorEl}
+              MenuListProps={{
+                "aria-labelledby": "openMenu",
+              }}
+              sx={{
+                ".MuiList-root": {
+                  padding: "0px",
+                },
+                ".MuiMenuItem-root": {
+                  padding: "12px 6px 12px 12px",
+                  gap: "12px",
+                  fontSize: "12px",
+                  lineHeight: "16px",
+                },
+              }}
+              onClose={handleClose}
+              TransitionComponent={Fade}
+            >
+              <MenuItem onClick={handleClose}>
+                <Image src={Icons.hide} alt="hide" />
+                <span>Hide from employee side</span>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Image src={Icons.circleCross} alt="hide" />
+                <span>Deny</span>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Image src={Icons.dustbin} alt="hide" />
+                <span>Delete</span>
+              </MenuItem>
+            </Menu>
+          </>
+        )}
       </div>
     </div>
   );
