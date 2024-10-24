@@ -5,7 +5,7 @@ import { Icons, Images } from '../../../../public/exporter';
 
 const Topbar = () => {
   return (
-    <div className="text-disable flex bg-white justify-between border-b rounded-tl-[40px] border-borderGrey px-10 h-auto">
+    <div className="text-disable flex bg-white justify-between border-b rounded-tl-[40px] border-borderGrey px-10 h-[10%]">
       <p className="my-[18px] text-[16px] leading-5">Welcome, Admin</p>
 
       <div className="flex items-center my-[10px] gap-x-4">

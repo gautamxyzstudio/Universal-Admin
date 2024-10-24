@@ -9,7 +9,7 @@ const TextWithBgColor: React.FC<ITextWithBgColor> = ({
   textStyle,
 }) => {
   return (
-    <h2 className={textStyle + " font-bold rounded-[40px] px-3 py-2"}>
+    <h2 className={textStyle + " font-bold rounded-[40px] px-3 py-2 h-fit"}>
       {textLabel}
     </h2>
   );

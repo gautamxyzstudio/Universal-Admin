@@ -12,12 +12,14 @@ interface IUploadedFileProps {
   fileName: string;
   days?: string;
   fileSrc: StaticImport;
+  fileStyle?: string;
 }
 
 const UploadedFile: React.FC<IUploadedFileProps> = ({
   fileName,
   days,
   fileSrc,
+  fileStyle,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [status, setStatus] = React.useState<string | null>(null);
@@ -39,7 +41,7 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
     setButtonsVisible(false);
   };
   return (
-    <div className="bg-lightPrimary rounded p-3 flex items-center justify-between">
+    <div className={fileStyle +" rounded p-3 flex  items-center justify-between"}>
       <div className="flex items-center gap-x-3">
         <Image
           src={fileSrc}

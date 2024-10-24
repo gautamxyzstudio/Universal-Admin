@@ -7,6 +7,7 @@ interface IDocumentCardProps {
   uploadDays?: string;
   docImageSrc: StaticImport;
   docImageName: string;
+  fileStyle?: string; 
 }
 
 const DocumentCard: React.FC<IDocumentCardProps> = ({
@@ -14,6 +15,7 @@ const DocumentCard: React.FC<IDocumentCardProps> = ({
   uploadDays,
   docImageSrc,
   docImageName,
+  fileStyle,
 }) => {
   return (
     <div className="border border-borderGrey rounded p-3 w-full">
@@ -22,7 +24,7 @@ const DocumentCard: React.FC<IDocumentCardProps> = ({
           <h2 className="text-Black">{label}</h2>
           {uploadDays && <span className="text-disable">{uploadDays}</span>}
         </div>
-        <UploadedFile fileName={docImageName} fileSrc={docImageSrc} />
+        <UploadedFile fileName={docImageName} fileSrc={docImageSrc} fileStyle={fileStyle}/>
       </div>
     </div>
   );

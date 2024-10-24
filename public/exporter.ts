@@ -18,7 +18,6 @@ import homefill from './homefill.svg';
 import reportfill from './reportfill.svg';
 import settingfill from './settingfill.svg';
 import subAdminfill from './subAdminfill.svg';
-import calender from './calender.svg';
 import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
@@ -37,6 +36,11 @@ import accept from './accept.svg';
 import circleCross from './circleCross.svg';
 import dustbin from './dustbin.svg';
 import hide from './hide.svg';
+import dollar from './dollar.svg';
+import timeDate from './timeDate.svg';
+import event from './event.svg';
+import clock from './clock.svg';
+import calendar from './calendar.svg';
 
 // Icon Object
 export const Icons = {
@@ -62,7 +66,6 @@ export const Icons = {
   reportfill,
   settingfill,
   subAdminfill,
-  calender,
   pencil,
   cross,
   excelfile,
@@ -78,6 +81,11 @@ export const Icons = {
   circleCross,
   dustbin,
   hide,
+  dollar,
+  timeDate,
+  event,
+  clock,
+  calendar,
 };
 
 // Images

@@ -28,6 +28,7 @@ const EmployeeManagement = () => {
           type="green"
           name={params.row.employee_name.name}
           image={params.row.employee_name.image}
+          imageStyle="!w-8 !h-8"
         />
       ),
     },
@@ -45,6 +46,11 @@ const EmployeeManagement = () => {
     {
       field: "sin_number",
       headerName: "SIN Number",
+      width: 180,
+    },
+    {
+      field: "license_number",
+      headerName: "License Number",
       width: 180,
     },
     {
@@ -134,8 +140,8 @@ const EmployeeManagement = () => {
     {
       id: 4,
       employee_name: {
-        name: "John Doe",
-        image: Images.demoImg,
+        name: "Dohn Doe",
+        image: "",
       },
       contact_details: {
         phone_number: "123-456-7890",
@@ -166,7 +172,7 @@ const EmployeeManagement = () => {
   ];
   const onPressPrimaryButton = () => {};
   return (
-    <div className="w-full h-[85%] mb-5">
+    <div className="w-full h-[90%] mb-5">
       <PageHeader
         primaryButtonTitle={STRINGS.addEmployee}
         title={STRINGS.employeeManagement}

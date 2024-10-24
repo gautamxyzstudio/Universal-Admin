@@ -1,5 +1,4 @@
 "use client";
-import ProfileCard from "@/components/organism/ProfileCard/ProfileCard";
 import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
 import { STRINGS } from "@/constant/en";
 import React, { useState } from "react";
@@ -9,6 +8,9 @@ import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import CustomList from "@/components/atoms/CustomList/CustomList";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
 import DocumentCard from "@/components/organism/DocumentCard/DocumentCard";
+import WorkHistortyCard from "@/components/organism/WorkHistoryCard/WorkHistortyCard";
+import WorkDetails from "@/components/organism/WorkDetails/WorkDetails";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 
 const EmployeeDetails = ({
   params,
@@ -17,7 +19,7 @@ const EmployeeDetails = ({
 }) => {
   console.log(params);
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(
-    'All requested Document'
+    "All requested Document"
   );
 
   // Bank Content
@@ -26,7 +28,6 @@ const EmployeeDetails = ({
       label: "Bank Details",
       onClick: () => {
         console.log("Bank Details");
-        setSelectedItem("Bank Details Content");
       },
     },
   ];
@@ -80,13 +81,83 @@ const EmployeeDetails = ({
       icon: Icons.doc,
       status: "Pending",
       onClick: () => {
-        setSelectedItem(
-          <h2>Licences/certifications Content</h2>
-        );
+        setSelectedItem(<h2>Licences/certifications Content</h2>);
       },
     },
   ];
 
+  // Work History Contents
+  const workHistoryData = [
+    {
+      children: (
+        <WorkHistortyCard
+          companyName={"Cosmic Security"}
+          profileName={"Security Guard"}
+          image={Images.demoImg}
+          textLabel={STRINGS.applied}
+          textStyle={"text-darkBlue bg-white"}
+          iconWithTexts={[
+            { text: "20 /hr", icon: Icons.dollar },
+            { text: "2-06-2024", icon: Icons.timeDate },
+            {
+              text: "IPEX Oakville, 1425 North Service",
+              icon: Icons.locationPin,
+            },
+          ]}
+        />
+      ),
+      onClick: () => {
+        console.log("Clicked on Work card 1");
+        setSelectedItem(<WorkDetails />);
+      },
+    },
+    {
+      children: (
+        <WorkHistortyCard
+          companyName={"Cosmic Security"}
+          profileName={"Security Guard"}
+          image={Images.demoImg}
+          textLabel={STRINGS.completed}
+          textStyle={"text-skyBlue bg-lightSkyBlue"}
+          iconWithTexts={[
+            { text: "20 /hr", icon: Icons.dollar },
+            { text: "2-06-2024", icon: Icons.timeDate },
+            {
+              text: "IPEX Oakville, 1425 North Service",
+              icon: Icons.locationPin,
+            },
+          ]}
+        />
+      ),
+      onClick: () => {
+        console.log("Clicked on Work card 2");
+        setSelectedItem(<WorkDetails />);
+      },
+    },
+    {
+      children: (
+        <WorkHistortyCard
+          companyName={"Cosmic Security"}
+          profileName={"Security Guard"}
+          image={Images.demoImg}
+          textLabel={STRINGS.completed}
+          textStyle={"text-skyBlue bg-lightSkyBlue"}
+          iconWithTexts={[
+            { text: "20 /hr", icon: Icons.dollar },
+            { text: "2-06-2024", icon: Icons.timeDate },
+            {
+              text: "IPEX Oakville, 1425 North Service",
+              icon: Icons.locationPin,
+            },
+          ]}
+        />
+      ),
+      onClick: () => {
+        console.log("Clicked on Work card 3");
+        setSelectedItem(<WorkDetails />);
+      },
+    },
+  ];
   const DocumentContent = () => {
     return (
       <div>
@@ -95,21 +166,21 @@ const EmployeeDetails = ({
     );
   };
 
-   const BankDetails = () => {
+  const BankDetails = () => {
     return (
       <div className="flex flex-col gap-y-6 w-full">
         <TextGroup
-          divStyle="flex flex-col gap-y-1"
+          textgroupStyle="flex flex-col gap-y-1"
           title={"Bank account number"}
           subTitle={"873957737549"}
         />
         <TextGroup
-          divStyle="flex flex-col gap-y-1"
+          textgroupStyle="flex flex-col gap-y-1"
           title={"Institution number"}
           subTitle={"3647838"}
         />
         <TextGroup
-          divStyle="flex flex-col gap-y-1"
+          textgroupStyle="flex flex-col gap-y-1"
           title={"Branch code"}
           subTitle={"3647838"}
         />
@@ -117,6 +188,7 @@ const EmployeeDetails = ({
           label="Direct deposit/void cheque"
           docImageSrc={Images.demoImg}
           docImageName={"imageName.jpg"}
+          fileStyle="bg-lightPrimary"
         />
       </div>
     );
@@ -125,13 +197,6 @@ const EmployeeDetails = ({
     return (
       <div>
         <h2>Profile Details Content</h2>
-      </div>
-    );
-  };
-  const WorkHistory = () => {
-    return (
-      <div>
-        <h2>Work History Content</h2>
       </div>
     );
   };
@@ -163,38 +228,39 @@ const EmployeeDetails = ({
     },
     {
       label: "Work history",
-      content: <div>Work History Content</div>,
+      content: <CustomList items={workHistoryData} />,
       onClickAction: () => {
         console.log("Work Content");
-        setSelectedItem(<WorkHistory />);
+        setSelectedItem(<WorkDetails />);
       },
     },
   ];
 
   return (
-    <>
+    <div className="w-full h-[90%]">
       <PageSubHeader pageTitle={STRINGS.employeeManagement} name="Jhon" />
       {/* Left Side */}
-      <div className="flex gap-x-10 w-full h-screen mt-2">
+      <div className="flex gap-x-10 w-full h-full mt-2">
         <div className="flex flex-col w-[36.4%]">
-          <ProfileCard
-            profileName="Ashwani Kaur"
+          <UserNameWithImage
+            name={"Ashwani Kaur"}
+            image={Images.demoImg}
+            imageStyle="!w-14 !h-14"
             joinDate="30 may, 2024"
-            imageSrc={Images.demoImg}
           />
           <div className="inline-flex border border-borderGrey rounded-lg p-3 gap-x-[69px] text-[16px] leading-[20px] mt-6">
             <TextGroup
-              divStyle="flex flex-col gap-y-1"
+              textgroupStyle="flex flex-col gap-y-1"
               title="Date"
               subTitle="04/08/2000"
             />
             <TextGroup
-              divStyle="flex flex-col gap-y-1"
+              textgroupStyle="flex flex-col gap-y-1"
               title="Gender"
               subTitle="Female"
             />
             <TextGroup
-              divStyle="flex flex-col gap-y-1"
+              textgroupStyle="flex flex-col gap-y-1"
               title="Work status"
               subTitle={STRINGS.fullTime}
             />
@@ -233,11 +299,11 @@ const EmployeeDetails = ({
           />
         </div>
         {/* Right Side */}
-        <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6">
+        <div className="flex w-[63.6%] h-full bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
           {selectedItem}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

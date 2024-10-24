@@ -44,6 +44,8 @@ const DataTable: React.FC<IDataTableProps> = ({
     return {
       boxShadow: "none",
       backgroundColor: "#fff",
+      height: "91% !important",
+     
     };
   }, []);
   const tableStyles = useMemo(() => {
@@ -149,7 +151,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   );
 
   return (
-    <div className="p-4 h-[95%] w-full  bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
+    <div className="p-4 h-full w-full  bg-white shadow-custom-shadow rounded-[8px] justify-center items-center">
       {rows.length > 0 && <div className="w-full">{headerView}</div>}
 
       {isLoading ? (

@@ -11,7 +11,7 @@ const PageSubHeader = ({
   name: string;
 }) => {
   return (
-    <div className="flex items-center justify-start gap-x-3 text-base py-6">
+    <div className="flex items-center justify-start gap-x-3 text-base py-6 h-auto">
       <Link href={"/employeeManagement"}>
         <span className=" text-disable">{pageTitle}</span>
       </Link>

@@ -34,7 +34,7 @@ export default function RootLayout({
               <div className="max-w-screen-2xl h-screen w-full">
                 <div className="w-full h-full rounded-l-[40px] overflow-hidden">
                   <Topbar />
-                  <div className="bg-extraWhite rounded-bl-lg h-full w-full overflow-scroll px-10 pb-10">
+                  <div className="bg-extraWhite rounded-bl-lg h-[90%] w-full overflow-scroll px-10 pb-10 scrollbar-none">
                     {children}
                   </div>
                 </div>

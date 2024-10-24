@@ -1,15 +1,16 @@
-import React from 'react';
+import React from "react";
 import {
   getStylesAttributes,
   IUserImageRendererProps,
-} from './UserImageRenderer.types';
-import Image from 'next/image';
-import { getFirstLetterFromName } from '@/utility/utils';
+} from "./UserImageRenderer.types";
+import Image from "next/image";
+import { getFirstLetterFromName } from "@/utility/utils";
 
 const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   name,
   image,
   type,
+  imageStyle,
 }) => {
   const stylesAttributes = getStylesAttributes(type);
   const backgroundColor = `${stylesAttributes.backgroundColor}`;
@@ -17,16 +18,20 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   return (
     <div>
       {image && (
-        <Image className="w-8 h-8 rounded-full" src={image} alt={name} />
+        <Image
+          className={imageStyle + "w-auto h-auto rounded-full"}
+          src={image}
+          alt={name}
+        />
       )}
       {!image && name && (
         <div
           className={
             backgroundColor +
-            ' flex flex-row justify-center items-center w-8 h-8 rounded-full'
+            " flex flex-row justify-center items-center w-8 h-8 rounded-full"
           }
         >
-          <p className={textColor + ' text-sm'}>
+          <p className={textColor + " text-sm"}>
             {getFirstLetterFromName(name)}
           </p>
         </div>
