@@ -13,7 +13,7 @@ const PageHeader: React.FC<IPageHeaderProps> = ({
   withSecondaryButton,
 }) => {
   return (
-    <div className="flex justify-between items-center my-6">
+    <div className="flex w-full justify-between items-center my-6">
       <h1 className="text-Black font-bold text-[24px] leading-7">{title}</h1>
       <CustomButton
         title={primaryButtonTitle ?? ''}

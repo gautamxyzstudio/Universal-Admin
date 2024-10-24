@@ -1,6 +1,6 @@
 import { baseApi } from '@/api/BaseApi';
 import { Endpoints } from '@/api/Endpoints';
-import { ILoginApiResponse, ILoginArgs } from './types';
+import { IImageUploadResponse, ILoginApiResponse, ILoginArgs } from './types';
 import { ApiMethodType } from '@/api/ApiConstants';
 import { ICustomErrorResponse, IErrorResponse } from '@/api/types';
 import { STRINGS } from '@/constant/en';
@@ -16,17 +16,16 @@ const authApi = baseApi.injectEndpoints({
       transformResponse: (response: ILoginApiResponse) => {
         return response;
       },
-      transformErrorResponse: (
-        response: IErrorResponse
-      ): ICustomErrorResponse => {
-        return {
-          message:
-            response?.data?.error?.message ?? STRINGS.something_went_wrong,
-          statusCode: response?.status ?? 0,
-        };
-      },
+    }),
+    uploadFile: builder.mutation<IImageUploadResponse, FormData>({
+      query: (formData: FormData) => ({
+        url: Endpoints.uploadFiles,
+        method: ApiMethodType.post,
+        body: formData,
+        formData: true,
+      }),
     }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useUploadFileMutation } = authApi;

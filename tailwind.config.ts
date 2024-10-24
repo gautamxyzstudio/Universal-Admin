@@ -18,6 +18,7 @@ const config: Config = {
         backgroundLight: '#F2F2F2',
         red: '#C11919',
         green: '#469C73',
+        accentColor: '#182452',
         lightGreen: 'rgba(70, 156, 115, 0.20)',
         lightRed: 'rgba(193, 25, 25, 0.20)',
         yellow: '#FBC505',
@@ -25,6 +26,7 @@ const config: Config = {
         borderGrey: '#EBEBEB',
         textBlack: '#121212',
         Black: '#121212',
+        modal: 'rgba(0, 0, 0, 0.2)',
         externalLink: '#2048E0',
         lightPrimary: '#FFF8F4',
         lightGreen: '#F6FFFB',
@@ -54,6 +56,12 @@ const config: Config = {
           '0.75rem',
           {
             lineHeight: '1rem',
+          },
+        ],
+        'text-md': [
+          '1rem',
+          {
+            lineHeight: '1.25rem',
           },
         ],
       },

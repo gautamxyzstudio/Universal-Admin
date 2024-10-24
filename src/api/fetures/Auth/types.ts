@@ -16,3 +16,5 @@ export interface IAdmin {
   name: string;
   phone: string | null;
 }
+
+export type IImageUploadResponse = { id: number }[];

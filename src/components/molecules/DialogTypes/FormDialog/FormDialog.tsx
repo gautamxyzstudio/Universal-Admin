@@ -8,11 +8,17 @@ const FormDialog: React.FC<IFormDialogProps> = ({
   open,
   handleClose,
   title,
+  width,
   children,
   onPressCross,
 }) => {
   return (
-    <CustomDialog width={452} open={open} onClose={handleClose}>
+    <CustomDialog
+      width={width ?? 452}
+      open={open}
+      maxWidth={false}
+      onClose={handleClose}
+    >
       <div className="p-6">
         <h1 className="text-xl font-bold text-textBlack">{title}</h1>
         <Image

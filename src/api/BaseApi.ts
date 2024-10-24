@@ -8,6 +8,8 @@ import {
   QueryReturnValue,
 } from '@reduxjs/toolkit/query';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { transformErrorResponse } from './types';
+import { STRINGS } from '@/constant/en';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: `${process.env.BASE_URL}`,
@@ -16,6 +18,10 @@ const baseQuery = fetchBaseQuery({
     const token = getUserDetailsFromCookies()?.token;
     headers.set('Content-Type', 'application/json');
     headers.set('Accept', 'application/json');
+    if (api.endpoint === 'uploadFile') {
+      headers.delete('Content-Type');
+      headers.delete('Accept');
+    }
     if (api.endpoint === 'addNewSubAdmin') {
       headers.delete('Authorization');
     } else {
@@ -61,6 +67,23 @@ const queryFetcher = async (
     '\n############################## Request End ######################################'
   );
   const result = await baseQuery(args, api, extraOptions);
+
+  if (result.error) {
+    if (result.error.status === 'FETCH_ERROR') {
+      return {
+        error: {
+          message: STRINGS.your_internet_is_a_little_wonky_right_now,
+          statusCode: 0,
+        } as any,
+      };
+    } else if (result.error.status === 'PARSING_ERROR') {
+      const transformedError = transformErrorResponse(result.error.data as any);
+      return { error: transformedError as any };
+    } else {
+      const transformedError = transformErrorResponse(result.error.data as any);
+      return { error: transformedError as any };
+    }
+  }
 
   console.log(
     '\n############################## Result START ######################################'
