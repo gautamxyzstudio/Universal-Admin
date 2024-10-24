@@ -17,7 +17,13 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   return (
     <div>
       {image && (
-        <Image className="w-8 h-8 rounded-full" src={image} alt={name} />
+        <Image
+          width={32}
+          height={32}
+          className="w-8 h-8 rounded-full"
+          src={image}
+          alt={name}
+        />
       )}
       {!image && name && (
         <div

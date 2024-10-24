@@ -1,10 +1,13 @@
+import { ICompany } from '@/api/fetures/Company/Company.types';
+
 export type IAddCompanyFormProps = {
   show: boolean;
   setGlobalModalState: (state: boolean) => void;
+  onAddCompanyHandler: (company: ICompany) => void;
 };
 
 export type IAddCompanyState = {
-  logo: number | null;
+  logo: string;
   companyName: string;
   accRequestName: string;
   industry: string;

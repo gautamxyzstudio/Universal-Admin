@@ -62,4 +62,7 @@ export const STRINGS = {
   industry: 'Industry',
   your_internet_is_a_little_wonky_right_now:
     'Your internet is a little wonky right now. Please try switching to other networks',
+  required_field: 'This is required field',
+  valid_email: 'Please enter a valid email',
+  valid_phone_number: 'Please enter a valid phone number',
 };

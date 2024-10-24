@@ -20,7 +20,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
     },
   };
   return (
-    <>
+    <div>
       <TextField
         {...props}
         label={label}
@@ -32,7 +32,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
         variant="outlined"
       ></TextField>
       {errorMessage && <p className="text-xs mt-1 text-red">{errorMessage}</p>}
-    </>
+    </div>
   );
 };
 

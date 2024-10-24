@@ -7,6 +7,6 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${subAdminId}`,
   getEmployees: `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/emp?populate=*`,
   getCompanies: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details`,
-  addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details`,
+  addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
 };

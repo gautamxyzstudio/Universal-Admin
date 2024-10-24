@@ -9,34 +9,45 @@ import FormDialog from '@/components/molecules/DialogTypes/FormDialog/FormDialog
 import PhotoUpload from '@/components/atoms/PhotoUpload/PhotoUpload';
 import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
 import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import { validateEmail, validatePhoneNumber } from '@/utility/utils';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import { useAddCompanyMutation } from '@/api/fetures/Company/CompanyApi';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { ICustomErrorResponse } from '@/api/types';
 
 const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   show,
+  onAddCompanyHandler,
   setGlobalModalState,
 }) => {
   const [displayFrom, setDisplayFrom] = useState(show);
+  const [addCompany, { isLoading, error }] = useAddCompanyMutation();
+  const { displaySnackbar } = useSnackBarContext();
+  const { changeLoaderState } = useShowLoaderContext();
+
+  const initialState = {
+    logo: '',
+    companyName: '',
+    accRequestName: '',
+    industry: '',
+    email: '',
+    contactNumber: '',
+    address: '',
+    companyRegistrationNumber: '',
+    gstNumber: '',
+    websiteName: '',
+    companyNameError: '',
+    accRequestNameError: '',
+    industryError: '',
+    emailError: '',
+    contactNumberError: '',
+    addressError: '',
+    companyRegistrationNumberError: '',
+    gstNumberError: '',
+  };
   const [state, setState] = useReducer(
     (prev: IAddCompanyState, next: IAddCompanyState) => ({ ...prev, ...next }),
-    {
-      logo: null,
-      companyName: '',
-      accRequestName: '',
-      industry: '',
-      email: '',
-      contactNumber: '',
-      address: '',
-      companyRegistrationNumber: '',
-      gstNumber: '',
-      websiteName: '',
-      companyNameError: '',
-      accRequestNameError: '',
-      industryError: '',
-      emailError: '',
-      contactNumberError: '',
-      addressError: '',
-      companyRegistrationNumberError: '',
-      gstNumberError: '',
-    }
+    initialState
   );
 
   useEffect(() => {
@@ -57,10 +68,105 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   const onPressCross = () => {
     setDisplayFrom(false);
     setGlobalModalState(false);
+    setState(initialState);
   };
 
   const onChangeTextField = (e: string, fieldName: string) => {
     setState({ ...state, [fieldName]: e, [`${fieldName}Error`]: '' });
+  };
+
+  const onPressCreate = async () => {
+    let isValid = true;
+    const cName = state.companyName.trim();
+    const industry = state.industry.trim();
+    const accReqName = state.accRequestName.trim();
+    const email = state.email.trim();
+    const phoneNumber = state.contactNumber.trim();
+    const address = state.address.trim();
+    const companyRegistrationNumber = state.companyRegistrationNumber.trim();
+    const gstNumber = state.gstNumber.trim();
+    const websiteName = state.websiteName.trim();
+    if (!cName) {
+      isValid = false;
+      setState({ ...state, companyNameError: STRINGS.required_field });
+    }
+    if (!industry) {
+      isValid = false;
+      setState({ ...state, industryError: STRINGS.required_field });
+    }
+    if (!accReqName) {
+      isValid = false;
+      setState({ ...state, accRequestNameError: STRINGS.required_field });
+    }
+    if (!email) {
+      isValid = false;
+      setState({ ...state, emailError: STRINGS.required_field });
+    }
+    if (!validateEmail(email)) {
+      isValid = false;
+      setState({ ...state, emailError: STRINGS.valid_email });
+    }
+    if (!phoneNumber) {
+      isValid = false;
+      setState({ ...state, contactNumberError: STRINGS.required_field });
+    }
+    if (!validatePhoneNumber(phoneNumber)) {
+      isValid = false;
+      setState({ ...state, contactNumberError: STRINGS.valid_phone_number });
+    }
+    if (!address) {
+      isValid = false;
+      setState({ ...state, addressError: STRINGS.required_field });
+    }
+    if (!companyRegistrationNumber) {
+      isValid = false;
+      setState({
+        ...state,
+        companyRegistrationNumberError: STRINGS.required_field,
+      });
+    }
+    if (isValid) {
+      try {
+        changeLoaderState(true);
+        onPressCross();
+        const addCompRes = await addCompany({
+          data: {
+            companyname: cName,
+            companylogo: state.logo,
+            companyemail: email,
+            location: accReqName,
+            contactno: phoneNumber,
+            address: address,
+            Industry: industry,
+            Website: websiteName,
+            regNo: companyRegistrationNumber,
+            gstNo: gstNumber,
+          },
+        }).unwrap();
+        if (addCompRes) {
+          onAddCompanyHandler({
+            companyname: addCompRes.data?.attributes.companyname,
+            id: addCompRes.data.id,
+            sNum: addCompRes.data.id,
+            companyemail: addCompRes.data?.attributes?.companyemail,
+            location: addCompRes.data?.attributes?.location,
+            contactno: addCompRes.data?.attributes?.contactno,
+            address: addCompRes.data?.attributes?.address,
+            companylogo: undefined,
+            Industry: addCompRes.data?.attributes?.regNo,
+            Website: addCompRes.data?.attributes?.Website,
+            regNo: addCompRes.data?.attributes?.regNo,
+            gstNo: addCompRes.data?.attributes?.gstNo,
+          });
+          displaySnackbar('success', 'Company created successfully');
+        }
+      } catch (err) {
+        const error = err as ICustomErrorResponse;
+        displaySnackbar('error', error.message);
+      } finally {
+        changeLoaderState(false);
+      }
+    }
   };
 
   return (
@@ -199,7 +305,7 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
       <div className="mt-8" />
       <CustomButton
         title={STRINGS.create}
-        onClick={undefined}
+        onClick={onPressCreate}
         style={{ width: 156 }}
         buttonType={'primary-small'}
       />
