@@ -7,5 +7,7 @@ export interface IDataTableProps extends TableProps, IEmptyScreenViewProps {
   rows: GridRowsProp;
   isLoading: boolean;
   headerView?: React.ReactNode;
+  tableHeightPercent?: number;
+  onPressRow?: (row: unknown) => void;
   onReachEnd?: (index: number) => void;
 }
