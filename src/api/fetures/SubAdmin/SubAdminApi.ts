@@ -9,8 +9,6 @@ import {
   IUpdateSubAdminRequestBody,
   IUpdateSubAdminResponse,
 } from './SubAdminApi.types';
-import { IErrorResponse, ICustomErrorResponse } from '@/api/types';
-import { STRINGS } from '@/constant/en';
 
 const subAdminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,15 +17,6 @@ const subAdminApi = baseApi.injectEndpoints({
         url: Endpoints.getSubAdmins(1),
         method: ApiMethodType.get,
       }),
-      transformErrorResponse: (
-        response: IErrorResponse
-      ): ICustomErrorResponse => {
-        return {
-          message:
-            response?.data?.error?.message ?? STRINGS.something_went_wrong,
-          statusCode: response?.status ?? 0,
-        };
-      },
     }),
     addNewSubAdmin: builder.mutation<ISubAdmin, IAddNewSubAdminRequest>({
       query: (body: IAddNewSubAdminRequest) => ({
@@ -38,15 +27,6 @@ const subAdminApi = baseApi.injectEndpoints({
       transformResponse: (response: IAddNewSubAdminResponse): ISubAdmin => {
         return response.user;
       },
-      transformErrorResponse: (
-        response: IErrorResponse
-      ): ICustomErrorResponse => {
-        return {
-          message:
-            response?.data?.error?.message ?? STRINGS.something_went_wrong,
-          statusCode: response?.status ?? 0,
-        };
-      },
     }),
     updateSubAdmin: builder.mutation<ISubAdmin, IUpdateSubAdminRequestBody>({
       query: (body: IUpdateSubAdminRequestBody) => ({
@@ -56,15 +36,6 @@ const subAdminApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response: IUpdateSubAdminResponse) => {
         return response.data;
-      },
-      transformErrorResponse: (
-        response: IErrorResponse
-      ): ICustomErrorResponse => {
-        return {
-          message:
-            response?.data?.error?.message ?? STRINGS.something_went_wrong,
-          statusCode: response?.status ?? 0,
-        };
       },
     }),
   }),

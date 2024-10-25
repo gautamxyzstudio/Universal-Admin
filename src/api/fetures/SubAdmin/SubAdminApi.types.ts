@@ -34,7 +34,7 @@ export interface IUpdateSubAdminRequestBody {
 }
 
 export interface IGetSubAdminResponse {
-  results: ISubAdmin[];
+  data: ISubAdmin[];
   pagination: {
     page: number;
     pageSize: number;

@@ -34,8 +34,8 @@ const SubAdminManagement = () => {
   const { setSubAdmins, data } = useSubAdminContext();
 
   useEffect(() => {
-    if (subAdminApiResult?.results) {
-      setSubAdmins(subAdminApiResult?.results);
+    if (subAdminApiResult?.data) {
+      setSubAdmins(subAdminApiResult?.data);
     }
   }, [subAdminApiResult]);
 
