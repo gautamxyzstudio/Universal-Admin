@@ -26,10 +26,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
           display: "flex",
           flexDirection: "column",
           gap: "12px",
-          overflow: "scroll",
-          height: "20vh",
-          scrollbarWidth: "none",
-          padding: 0,
+          padding: "16px 12px",
         },
         "& .MuiListItemButton-root": {
           borderRadius: "8px",

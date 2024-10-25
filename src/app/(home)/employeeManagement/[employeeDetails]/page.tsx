@@ -240,7 +240,7 @@ const EmployeeDetails = ({
     <div className="w-full h-[90%]">
       <PageSubHeader pageTitle={STRINGS.employeeManagement} name="Jhon" />
       {/* Left Side */}
-      <div className="flex gap-x-10 w-full h-full mt-2">
+      <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
         <div className="flex flex-col w-[36.4%]">
           <UserNameWithImage
             name={"Ashwani Kaur"}
@@ -299,7 +299,7 @@ const EmployeeDetails = ({
           />
         </div>
         {/* Right Side */}
-        <div className="flex w-[63.6%] h-full bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
+        <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
           {selectedItem}
         </div>
       </div>

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Dropdown } from '@mui/base/Dropdown';
-import { MenuButton } from '@mui/base/MenuButton';
-import { Menu as MuiMenu } from '@mui/base/Menu';
-import Image from 'next/image';
-import { MenuItem } from '@mui/base/MenuItem';
-import { IMenuProps } from './TableFilter.types';
-import { Icons } from '../../../../public/exporter';
+import React, { useState } from "react";
+import { Dropdown } from "@mui/base/Dropdown";
+import { MenuButton } from "@mui/base/MenuButton";
+import { Menu as MuiMenu } from "@mui/base/Menu";
+import Image from "next/image";
+import { MenuItem } from "@mui/base/MenuItem";
+import { IMenuProps } from "./TableFilter.types";
+import { Icons } from "../../../../public/exporter";
 
 const TableFilter: React.FC<IMenuProps> = ({
   initialSelectedOption,
@@ -30,18 +30,18 @@ const TableFilter: React.FC<IMenuProps> = ({
           />
         </MenuButton>
         <MuiMenu className="bg-white min-w-24  drop-shadow z-10">
-          {data.map((item) => {
+          {data.map((item, index) => {
             const isSelected = item.value === selectedItem;
             const bgColor = isSelected
-              ? 'bg-primaryLight text-primary'
-              : 'bg-white text-textBlack';
+              ? "bg-primaryLight text-primary"
+              : "bg-white text-textBlack";
             return (
               <MenuItem
                 className={
                   bgColor +
                   ` px-4 cursor-pointer hover:bg-backgroundLight text-sm py-2`
                 }
-                key={item.id}
+                key={index}
                 onClick={() => createHandleMenuClick(item.value)}
               >
                 {item.value}

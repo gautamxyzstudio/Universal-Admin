@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex items-center gap-x-6">
           <div className=" bg-extraWhite rounded-full  w-9 h-9">
             <Image
-              src={Icons.calender}
+              src={Icons.calendar}
               alt="notification"
               className="w-full h-full"
             />
