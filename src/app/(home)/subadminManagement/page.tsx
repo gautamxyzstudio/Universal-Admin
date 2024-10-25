@@ -58,12 +58,13 @@ const SubAdminManagement = () => {
       width: 280,
       renderCell: (params: GridRenderCellParams) => (
         <UserNameWithImage
-          image={null}
+         image={null}
           name={params?.row?.UserNameFL}
           type={'green'}
         />
       ),
     },
+
     {
       field: 'email',
       headerName: 'E-Mail',

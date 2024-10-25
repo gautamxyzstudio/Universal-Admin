@@ -1,5 +1,4 @@
 import UserImageRenderer from "@/components/atoms/UserImageRenderer/UserImageRenderer";
-import { IUserImageRendererProps } from "@/components/atoms/UserImageRenderer/UserImageRenderer.types";
 import React from "react";
 import { IUserNameWithImageProps } from "./UserNameWithImage.types";
 

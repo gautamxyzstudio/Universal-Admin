@@ -8,7 +8,7 @@ import { useUploadFileMutation } from '@/api/fetures/Auth/AuthApis';
 import { IPhotoUploadProps } from './PhotoUpload.types';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { ICustomErrorResponse } from '@/api/types';
-import PropagateLoader from 'react-spinners/PropagateLoader';
+// import PropagateLoader from 'react-spinners/PropagateLoader';
 import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
 
 const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
@@ -94,6 +94,7 @@ const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
           accept="image/*"
         />
       </Button>
+      <span className='mt-2 text-accentColor text-md'>Upload Photo</span>
     </>
   );
 };

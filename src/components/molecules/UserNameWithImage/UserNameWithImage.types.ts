@@ -3,7 +3,7 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export interface IUserNameWithImageProps {
   name: string;
-  image: StaticImport;
+  image: StaticImport | null;
   imageStyle?: string;
   type?: IUserImageRendererTypes;
   nameStyle?: string;

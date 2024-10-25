@@ -20,7 +20,7 @@ export const STRINGS = {
   pending: 'Pending',
   addSubAdmin: 'Add Sub-admin',
   addEmployee: 'Add Employee',
-  updateSubAdmin: 'update SubAdmin',
+  updateSubAdmin: 'Update SubAdmin',
   approved: 'Approved',
   deny: 'Deny',
   declined: 'Declined',

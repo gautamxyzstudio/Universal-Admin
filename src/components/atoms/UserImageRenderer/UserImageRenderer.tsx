@@ -16,12 +16,12 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   const backgroundColor = `${stylesAttributes.backgroundColor}`;
   const textColor = `${stylesAttributes.textColor}`;
   return (
-    <div>
+    <>
       {image && (
         <Image
           width={32}
           height={32}
-          className={imageStyle + 'w-auto h-auto rounded-full'}
+          className={imageStyle + ' object-contain rounded-full'}
           src={image}
           alt={name}
         />
@@ -38,7 +38,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
