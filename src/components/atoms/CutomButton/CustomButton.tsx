@@ -1,23 +1,23 @@
-import React from 'react';
+import React from "react";
 
 // import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   getStylesFromButtonType,
   ICustomButtonProps,
-} from './CustomButton.types';
-import { CircularProgress } from '@mui/material';
+} from "./CustomButton.types";
+import { CircularProgress } from "@mui/material";
 
 const CustomButton: React.FC<ICustomButtonProps> = ({
   title,
   onClick,
   isLoading,
-  buttonType = 'primary',
+  buttonType = "primary",
   size,
   customStyles,
-  iconPosition = 'left',
+  iconPosition = "left",
   fullWidth,
-  variant = 'contained',
+  variant = "contained",
   icon,
   ...props
 }) => {
@@ -28,18 +28,18 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
   return (
     <LoadingButton
       loading={isLoading}
-      variant={isLoading ? 'outlined' : variant}
+      variant={isLoading ? "outlined" : variant}
       loadingPosition="start"
       loadingIndicator={<CircularProgress color="inherit" />}
       fullWidth={fullWidth}
       size={size}
-      sx={{ ...buttonStyles, cursor: 'pointer',}}
+      sx={{ ...buttonStyles, cursor: "pointer" }}
       onClick={onClick}
       {...props}
     >
-      {iconPosition === 'left' && icon} 
-      {title}
-      {iconPosition === 'right' && icon}
+      {iconPosition === "left" && <span>{icon}</span>}
+      <span>{title}</span>
+      {iconPosition === "right" && <span>{icon}</span>}
     </LoadingButton>
   );
 };

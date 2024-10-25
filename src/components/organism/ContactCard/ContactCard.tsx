@@ -1,6 +1,6 @@
-import Image from "next/image";
 import React from "react";
 import { Icons } from "../../../../public/exporter";
+import IconWithText from "@/components/molecules/IconWithText/IconWithText";
 
 export interface IContactCardProps {
   department?: string;
@@ -24,55 +24,14 @@ const ContactCard: React.FC<IContactCardProps> = ({
       </h2>
       <div className="flex flex-col gap-y-3 text-[14px] leading-[18px] text-Black">
         {department && (
-          <div className="inline-flex gap-x-2">
-            <Image
-              alt="department building"
-              src={Icons.companyBuilding}
-              className="w-auto h-auto"
-            />
-            {department}
-          </div>
+          <IconWithText text={department} icon={Icons.companyBuilding} />
         )}
-        {email && (
-          <div className="inline-flex gap-x-2">
-            <Image
-              alt="department building"
-              src={Icons.emailIcon}
-              className="w-5 h-5"
-            />
-            {email}
-          </div>
-        )}
+        {email && <IconWithText text={email} icon={Icons.emailIcon} />}
         {phoneNumber && (
-          <div className="inline-flex gap-x-2">
-            <Image
-              alt="department building"
-              src={Icons.callIcon}
-              className="w-5 h-5"
-            />
-            {phoneNumber}
-          </div>
+          <IconWithText text={phoneNumber} icon={Icons.callIcon} />
         )}
-        {address && (
-          <div className="inline-flex gap-x-2">
-            <Image
-              alt="department building"
-              src={Icons.locationPin}
-              className="w-5 h-5"
-            />
-            {address}
-          </div>
-        )}
-        {link && (
-          <div className="inline-flex gap-x-2 text-externalLink">
-            <Image
-              alt="department building"
-              src={Icons.externalLink}
-              className="w-5 h-5"
-            />
-            {link}
-          </div>
-        )}
+        {address && <IconWithText text={address} icon={Icons.locationPin} />}
+        {link && <IconWithText text={link} icon={Icons.externalLink} />}
       </div>
     </div>
   );

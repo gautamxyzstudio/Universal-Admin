@@ -10,6 +10,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   name,
   image,
   type,
+  imageStyle,
 }) => {
   const stylesAttributes = getStylesAttributes(type);
   const backgroundColor = `${stylesAttributes.backgroundColor}`;
@@ -20,7 +21,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
         <Image
           width={32}
           height={32}
-          className="w-8 h-8 rounded-full"
+          className={imageStyle + 'w-auto h-auto rounded-full'}
           src={image}
           alt={name}
         />

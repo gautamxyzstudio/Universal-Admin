@@ -10,7 +10,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
-    itemOnClick?: (event: React.MouseEvent<HTMLDivElement>) => void,
+    itemOnClick?: (event: React.MouseEvent<HTMLDivElement>) => void
   ) => {
     event.preventDefault();
     setSelectedIndex(index);
@@ -27,8 +27,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
           flexDirection: "column",
           gap: "12px",
           overflow: "scroll",
-          height:"fit-content",
-          maxHeight:"31.3vh",
+          height: "20vh",
           scrollbarWidth: "none",
           padding: 0,
         },
@@ -38,8 +37,8 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "12px",
-          height: "60px",
-          maxHeight: "60px",
+          height: "fit-content",
+          maxHeight: "fit-content",
           backgroundColor: "#FAFAFA",
           color: "#121212",
           fontSize: "16px",
@@ -60,26 +59,34 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
           selected={selectedIndex === index}
           onClick={(event) => handleListItemClick(event, index, item.onClick)}
         >
-          <div className="flex items-center gap-x-2">
-            {item.icon && (
-              <div className="w-9 h-9 rounded-full flex items-center justify-center">
-                <Image
-                  src={item.icon}
-                  alt="Document image"
-                  className="w-auto h-auto"
-                />
+          {(item.icon && item.label) ||
+          (item.status && item.label && item.label) ||
+          item.label ? (
+            <>
+              <div className="flex items-center gap-x-2">
+                {item.icon && (
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center">
+                    <Image
+                      src={item.icon}
+                      alt="Document image"
+                      className="w-auto h-auto"
+                    />
+                  </div>
+                )}
+                {item.label && <span>{item.label}</span>}
               </div>
-            )}
-            <span>{item.label}</span>
-          </div>
-          {item.status && (
-            <span
-              className={`text-[14px] leading-[18px] ${
-                item.status === "Approved" ? "text-green" : "text-yellow"
-              }`}
-            >
-              {item.status}
-            </span>
+              {item.status && (
+                <span
+                  className={`text-[14px] leading-[18px] ${
+                    item.status === "Approved" ? "text-green" : "text-yellow"
+                  }`}
+                >
+                  {item.status}
+                </span>
+              )}
+            </>
+          ) : (
+            item.children && item.children
           )}
         </ListItemButton>
       ))}

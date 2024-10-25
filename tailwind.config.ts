@@ -29,7 +29,12 @@ const config: Config = {
         modal: 'rgba(0, 0, 0, 0.2)',
         externalLink: '#2048E0',
         lightPrimary: '#FFF8F4',
-        lightGreen: '#F6FFFB',
+        lightGreenSecondary: '#F6FFFB',
+        lightRedSecondary: '#FFF4F4',
+        darkBlue: '#182452',
+        skyBlue: '#1985C1',
+        lightSkyBlue: '#F6FCFF',
+        secondaryShade: '#F1F4FF',
       },
       borderRadius: {
         custom: '0px 16px 16px 0px',

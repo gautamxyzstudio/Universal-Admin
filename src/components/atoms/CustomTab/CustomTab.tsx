@@ -32,12 +32,11 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
     setCurrentTabIndex(tabIndex);
   };
   return (
-    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-[400px] max-h-[405px] overflow-hidden">
-      <div className="border-b border-borderGrey h-auto max-h-full ">
+    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-auto overflow-hidden">
+      <div className="border-b border-borderGrey h-fit ">
         <Tabs {...props}
           value={currentTabIndex}
           onChange={handleTabChange}
-          
           variant="scrollable"
           scrollButtons={false} 
         >
@@ -48,7 +47,7 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
       </div>
       {tabs.map((tab, index) => (
         <TabPanel value={currentTabIndex} index={index} key={index}>
-          <div className="py-4 px-3 flex flex-col max-h-[34vh] w-full">{tab.content}</div>
+          <div className="py-4 px-3 flex flex-col h-auto w-full">{tab.content}</div>
         </TabPanel>
       ))}
     </div>
