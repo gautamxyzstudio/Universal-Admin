@@ -222,7 +222,7 @@ const ContactDetails = ({
   email: string;
 }) => {
   return (
-    <div className="px-2 py-[14px] flex flex-col text-[14px] leading-[18px] justify-center h-full w-full">
+    <div className="flex flex-col text-[14px] leading-[18px] justify-center h-fit w-full">
       {phone_number}
       <span className="text-disable">{email}</span>
     </div>

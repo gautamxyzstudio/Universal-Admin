@@ -7,7 +7,7 @@ import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserName
 
 const WorkDetails = () => {
   return (
-    <div className="w-full">
+    <div className="w-full h-fit">
       <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
         <UserNameWithImage
           image={Images.demoImg}

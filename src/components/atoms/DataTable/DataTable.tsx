@@ -91,13 +91,13 @@ const DataTable: React.FC<IDataTableProps> = ({
   const rowContent = useCallback(
     (_index: number, row: GridValidRowModel) => (
       <>
-        {columns.map((column) => {
+        {columns.map((column, _index) => {
           const id = row.id;
           return (
             (
               <TableCell
                 onClick={()=>handleOnRowClick(id)}
-                key={id}
+                key={_index}
                 sx={rowStyles }
                 align="left"
               >

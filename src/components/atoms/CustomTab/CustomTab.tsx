@@ -11,6 +11,7 @@ function TabPanel(props: ITabPanelProps) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
+      className="overflow-scroll scrollbar-none  max-h-[81%]"
       {...other}
     >
       {value === index && <>{children}</>}
@@ -32,7 +33,7 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
     setCurrentTabIndex(tabIndex);
   };
   return (
-    <div className="border-b border-borderGrey rounded-lg mt-3 bg-white h-auto overflow-hidden">
+    <div className="border border-borderGrey rounded-lg mt-3 bg-white h-[52%] overflow-hidden">
       <div className="border-b border-borderGrey h-fit ">
         <Tabs {...props}
           value={currentTabIndex}
@@ -47,7 +48,8 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
       </div>
       {tabs.map((tab, index) => (
         <TabPanel value={currentTabIndex} index={index} key={index}>
-          <div className="py-4 px-3 flex flex-col h-auto w-full">{tab.content}</div>
+          {tab.content}
+          {/* <div className="py-4 px-3 flex flex-col h-[32%] w-full">{tab.content}</div> */}
         </TabPanel>
       ))}
     </div>
