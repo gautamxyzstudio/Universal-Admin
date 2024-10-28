@@ -1,7 +1,6 @@
-import UserImageRenderer from "@/components/atoms/UserImageRenderer/UserImageRenderer";
-import { IUserImageRendererProps } from "@/components/atoms/UserImageRenderer/UserImageRenderer.types";
-import React from "react";
-import { IUserNameWithImageProps } from "./UserNameWithImage.types";
+import UserImageRenderer from '@/components/atoms/UserImageRenderer/UserImageRenderer';
+import React from 'react';
+import { IUserNameWithImageProps } from './UserNameWithImage.types';
 
 const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   image,
@@ -15,11 +14,17 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
 }) => {
   return (
     <div className="flex w-full gap-x-[10px] h-auto flex-row items-center justify-start">
-      <UserImageRenderer imageStyle={imageStyle} image={image} name={name} type={type} />
-      <div className={"flex flex-col gap-y-1"}>
+      <UserImageRenderer
+        imageStyle={imageStyle}
+        image={image}
+        name={name}
+        size={60}
+        type={type}
+      />
+      <div className={'flex flex-col gap-y-1'}>
         {name && (
           <span
-            className={nameStyle + " text-[16px] leading-[20px] text-Black"}
+            className={nameStyle + ' text-[16px] leading-[20px] text-Black'}
           >
             {name}
           </span>

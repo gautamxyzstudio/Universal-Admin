@@ -34,6 +34,7 @@ const Company = () => {
       renderCell: (params) => (
         <UserNameWithImage
           image={params?.row?.companylogo}
+          imageStyle="!w-8 !h-8"
           name={params?.row?.companyname ?? ''}
           type={'white'}
         />

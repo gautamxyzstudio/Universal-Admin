@@ -1,5 +1,4 @@
 import { STRINGS } from '@/constant/en';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 export interface ICustomErrorResponse {
   message: string;
@@ -26,4 +25,11 @@ export const transformErrorResponse = (
     message: response?.data?.error?.message ?? STRINGS.something_went_wrong,
     statusCode: response?.status ?? 0,
   };
+};
+
+export type IPagination = {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
 };

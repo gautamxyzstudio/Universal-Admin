@@ -2,7 +2,7 @@
 'use client';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import { STRINGS } from '@/constant/en';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import { Images } from '../../../../public/exporter';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
@@ -13,29 +13,36 @@ import { useGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
 import ExportButton from '@/components/molecules/ButtonTypes/ExportButton/ExportButton';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import { useRouter } from 'next/navigation';
+import { IEmployeeBasic } from '@/api/fetures/Employee/EmployeeApi.types';
 
 const EmployeeManagement = () => {
-  const { data } = useGetEmployeesQuery(null);
+  const { data, isLoading, error } = useGetEmployeesQuery(null);
   const router = useRouter();
+  const [employees, setEmployees] = useState<IEmployeeBasic[]>(
+    data?.employees ?? []
+  );
+
+  useEffect(() => {
+    if (data) {
+      setEmployees(data.employees);
+    }
+  }, [data]);
 
   const handleOnRowClick = (row: any) => {
     router.push(`/employeeManagement/${row.id}`);
   };
 
-  useEffect(() => {
-    console.log(data, 'EMPLOYEE DATA');
-  }, [data]);
   const columns: GridColDef[] = [
     {
-      field: 'employee_name',
+      field: 'name',
       headerName: 'Employee Name',
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
         <UserNameWithImage
-          type="green"
-          name={params.row.employee_name.name}
-          image={params.row.employee_name.image}
+          type={'white'}
           imageStyle="!w-8 !h-8"
+          name={params.row.name}
+          image={params.row.selfie}
         />
       ),
     },
@@ -45,19 +52,14 @@ const EmployeeManagement = () => {
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
         <ContactDetails
-          phone_number={params.row.contact_details.phone_number}
-          email={params.row.contact_details.email}
+          phone_number={params.row.phone}
+          email={params.row.email}
         />
       ),
     },
     {
-      field: 'sin_number',
+      field: 'sinNo',
       headerName: 'SIN Number',
-      width: 180,
-    },
-    {
-      field: 'license_number',
-      headerName: 'License Number',
       width: 180,
     },
     {
@@ -66,12 +68,12 @@ const EmployeeManagement = () => {
       width: 104,
     },
     {
-      field: 'work_status',
+      field: 'workStatus',
       headerName: 'Work Status',
       width: 104,
     },
     {
-      field: 'document_status',
+      field: 'docStatus',
       headerName: 'Document Status',
       width: 130,
       renderCell: (params: GridRenderCellParams) => {
@@ -79,7 +81,7 @@ const EmployeeManagement = () => {
           params.row.document_status === STRINGS.approved
             ? 'text-green'
             : 'text-yellow';
-        return <span className={status}>{params.row.document_status}</span>;
+        return <span className={status}>{params.row?.docStatus}</span>;
       },
     },
     {
@@ -87,91 +89,8 @@ const EmployeeManagement = () => {
       headerName: 'Action',
       width: 104,
       renderCell: (params: GridRenderCellParams) => {
-        const action = (params.row.action = STRINGS.view);
-        return <span className="text-primary">{action}</span>;
+        return <span className="text-primary">{STRINGS.view}</span>;
       },
-    },
-  ];
-  const rows = [
-    {
-      id: 1,
-      employee_name: {
-        name: 'John Doe',
-        image: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: STRINGS.approved,
-    },
-    {
-      id: 2,
-      employee_name: {
-        name: 'John Doe',
-        image: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: STRINGS.pending,
-    },
-    {
-      id: 3,
-      employee_name: {
-        name: 'John Doe',
-        image: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: STRINGS.approved,
-    },
-    {
-      id: 4,
-      employee_name: {
-        name: 'Dohn Doe',
-        image: '',
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: STRINGS.pending,
-    },
-    {
-      id: 5,
-      employee_name: {
-        name: 'John Doe',
-        image: Images.demoImg,
-      },
-      contact_details: {
-        phone_number: '123-456-7890',
-        email: 'john.doe@example.com',
-      },
-      sin_number: '123456789',
-      license_number: 'ABC123',
-      gender: 'Male',
-      work_status: 'Full-time',
-      document_status: STRINGS.pending,
     },
   ];
   const onPressPrimaryButton = () => {};
@@ -185,7 +104,7 @@ const EmployeeManagement = () => {
       <DataTable
         columns={columns}
         onPressRow={handleOnRowClick}
-        rows={rows}
+        rows={employees}
         headerView={
           <div className="flex w-full  justify-between items-center mb-4">
             <div className="flex items-center">
@@ -206,13 +125,13 @@ const EmployeeManagement = () => {
             <ExportButton onClick={undefined} />
           </div>
         }
-        isLoading={false}
+        isLoading={isLoading}
         tableHeightPercent={90}
         emptyViewTitle={STRINGS.noEmployees}
         emptyViewSubTitle={''}
         illustration={Images.noSubAdmin}
-        error={undefined}
-        isDataEmpty={false}
+        error={error}
+        isDataEmpty={employees.length === 0}
       />
     </div>
   );

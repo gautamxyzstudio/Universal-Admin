@@ -146,7 +146,6 @@ const DataTable: React.FC<IDataTableProps> = ({
   return (
     <div className="p-4  w-full h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
       {rows.length > 0 && <div className="w-full">{headerView}</div>}
-
       {isLoading ? (
         <TableVirtuoso
           data={data.rows}

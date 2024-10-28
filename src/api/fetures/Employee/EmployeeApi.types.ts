@@ -7,29 +7,43 @@ export interface IGetEmployeeApiResponse {
     euser_id: {
       id: number;
       name: string;
-      dob: Date;
       gender: string;
       email: string;
       phone: string;
-      city: string;
-      address: string;
       sinNo: string;
       workStatus: string;
-      bankAcNo: string;
-      institutionNumber: string;
-      trasitNumber: string;
-      createdAt: Date;
-      govtidStaus: IDocumentStatus;
-      directDepositVoidChequeStatus: IDocumentStatus;
-      sinDocumentStatus: IDocumentStatus;
-      securityDocBasicStatus: IDocumentStatus;
-      securityDocumentAdvStatus: IDocumentStatus;
+      selfie: {
+        url: string;
+      }[];
     };
-  };
+  }[];
   meta: {
     total: number;
     page: number;
     pageSize: number;
+    totalPages: number;
+  };
+}
+
+export interface IEmployeeBasic {
+  id: number;
+  name: string;
+  selfie: string;
+  detailsId: number;
+  gender: string;
+  email: string;
+  phone: string;
+  sinNo: string;
+  workStatus: string;
+  docStatus: IDocumentStatus;
+}
+
+export interface ICustomizedEmployeeApiResponse {
+  employees: IEmployeeBasic[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
     totalPages: number;
   };
 }
