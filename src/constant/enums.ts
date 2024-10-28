@@ -13,3 +13,9 @@ export enum IDocumentStatus {
   DENIED = 's2',
   UPDATE = 's3',
 }
+
+export enum IClientStatus {
+  PENDING = 's0',
+  ACTIVE = 's1',
+  INACTIVE = 's2',
+}

@@ -30,9 +30,8 @@ const Company = () => {
       field: 'companyname',
       renderCell: (params) => (
         <UserNameWithImage
-        imageStyle='!w-10 !h-10'
+          imageStyle="!w-10 !h-10"
           image={params?.row?.companylogo}
-          imageStyle="!w-8 !h-8"
           name={params?.row?.companyname ?? ''}
           type={'white'}
         />
@@ -73,6 +72,7 @@ const Company = () => {
     <div className="w-full h-[85%] mb-5">
       <PageHeader
         primaryButtonTitle={STRINGS.addCompany}
+        withPrimaryButton
         onPressButton={() => setShowFormModal(true)}
         title={STRINGS.company}
       />

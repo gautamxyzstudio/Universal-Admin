@@ -1,10 +1,15 @@
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
 import { useLazyGetClientsQuery } from '@/api/fetures/Client/ClientApi';
+import DataTable from '@/components/atoms/DataTable/DataTable';
+import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
 import { STRINGS } from '@/constant/en';
+import { GridColDef } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
+import { Images } from '../../../../public/exporter';
+import { getClientStatusAttributesFromType } from './types';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
@@ -24,6 +29,60 @@ const ClientManagement = () => {
     }
   };
 
+  const columns: GridColDef[] = [
+    {
+      field: 'joiningDate',
+      headerName: STRINGS.joiningDate,
+      width: 100,
+      renderCell: (params) =>
+        new Date(params.row.joiningDate).toLocaleDateString(),
+    },
+    {
+      field: 'clientDetails',
+      headerName: STRINGS.clientNameAndComp,
+      width: 256,
+      renderCell: (params) => (
+        <UserNameWithImage
+          type={'white'}
+          imageStyle="!w-8 !h-8"
+          divStyle="gap-y-0"
+          name={params.row.name}
+          image={params.row.selfie}
+          companyNameStyle=" text-disable "
+          companyName={params.row.companyName}
+        />
+      ),
+    },
+    {
+      field: 'contactDetails',
+      headerName: STRINGS.contactDetails,
+      width: 256,
+      renderCell: (params) => (
+        <ContactDetails phone={params.row.phone} email={params.row.email} />
+      ),
+    },
+    {
+      field: 'location',
+      headerName: STRINGS.location,
+      width: 180,
+    },
+    {
+      field: 'status',
+      headerName: STRINGS.status,
+      width: 180,
+      renderCell: (params) => {
+        const attributes = getClientStatusAttributesFromType(params.row.status);
+        return <span className={attributes.styles}>{attributes.text}</span>;
+      },
+    },
+    {
+      field: STRINGS.action,
+      headerName: 'Action',
+      width: 104,
+      renderCell: () => <span className="text-primary">{STRINGS.view}</span>,
+    },
+  ];
+
   useEffect(() => {
     getClientsHandler(true);
   }, []);
@@ -33,10 +92,21 @@ const ClientManagement = () => {
       <PageHeader
         title={STRINGS.clientManagement}
         withSecondaryButton
+        withPrimaryButton
+        primaryButtonTitle={STRINGS.addClient}
         secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
-        onPressButton={() => setListData(true)}
+        onPressButton={() => console.log('heloow roled')}
       />
-      {/* <AddCompanyList show={listData} handleClose={undefined}/> */}
+      <DataTable
+        columns={columns}
+        rows={clients}
+        isLoading={isLoading}
+        emptyViewTitle={STRINGS.noClients}
+        emptyViewSubTitle={STRINGS.noClientDec}
+        illustration={Images.noSubAdmin}
+        error={error}
+        isDataEmpty={clients.length === 0}
+      />
     </div>
   );
 };

@@ -42,7 +42,7 @@ const DataTable: React.FC<IDataTableProps> = ({
       boxShadow: 'none',
       backgroundColor: '#fff',
       height: `${tableHeightPercent}% !important`,
-      scrollbarWidth:"none",
+      scrollbarWidth: 'none',
     };
   }, []);
   const tableStyles = useMemo(() => {
@@ -60,7 +60,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   const tableCellStyles = useMemo(() => {
     return {
       backgroundColor: '#FAFAFA',
-      color: '#121212',
+      color: '#868686',
       borderRight: '1px solid #EBEBEB',
       borderBottomColor: '#EBEBEB',
     };
@@ -167,7 +167,6 @@ const DataTable: React.FC<IDataTableProps> = ({
       ) : (
         <TableVirtuoso
           data={rows}
-          
           components={VirtuosoTableComponents as any}
           atBottomThreshold={0.1}
           endReached={onReachEnd}

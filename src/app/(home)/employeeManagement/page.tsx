@@ -14,6 +14,7 @@ import ExportButton from '@/components/molecules/ButtonTypes/ExportButton/Export
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import { useRouter } from 'next/navigation';
 import { IEmployeeBasic } from '@/api/fetures/Employee/EmployeeApi.types';
+import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
 
 const EmployeeManagement = () => {
   const { data, isLoading, error } = useGetEmployeesQuery(null);
@@ -40,7 +41,7 @@ const EmployeeManagement = () => {
       renderCell: (params: GridRenderCellParams) => (
         <UserNameWithImage
           type={'white'}
-          imageStyle="!w-8 !h-8"
+          imageStyle="!w-8 !h-8 object-cover"
           name={params.row.name}
           image={params.row.selfie}
         />
@@ -51,10 +52,7 @@ const EmployeeManagement = () => {
       headerName: 'Contact Details',
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
-        <ContactDetails
-          phone_number={params.row.phone}
-          email={params.row.email}
-        />
+        <ContactDetails phone={params.row.phone} email={params.row.email} />
       ),
     },
     {
@@ -138,18 +136,3 @@ const EmployeeManagement = () => {
 };
 
 export default EmployeeManagement;
-
-const ContactDetails = ({
-  phone_number,
-  email,
-}: {
-  phone_number: string;
-  email: string;
-}) => {
-  return (
-    <div className="flex flex-col text-[14px] leading-[18px] justify-center h-fit w-full">
-      {phone_number}
-      <span className="text-disable">{email}</span>
-    </div>
-  );
-};

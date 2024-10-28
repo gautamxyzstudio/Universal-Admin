@@ -24,6 +24,7 @@ const clientApi = baseApi.injectEndpoints({
               name: client.cuser_id.Name,
               email: client.email,
               phone: client.cuser_id.contactno,
+              status: client.cuser_id.status,
               detailsId: client.cuser_id.id,
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,

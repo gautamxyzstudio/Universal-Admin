@@ -1,4 +1,5 @@
 import { IPagination } from '@/api/types';
+import { IClientStatus } from '@/constant/enums';
 
 export type IGetClientsResponse = {
   data: {
@@ -12,7 +13,7 @@ export type IGetClientsResponse = {
       companyname: string;
       contactno: string;
       Industry: string;
-      status: 'approved';
+      status: IClientStatus;
       location: string;
     } | null;
   }[];
@@ -22,6 +23,7 @@ export type IGetClientsResponse = {
 export interface IClient {
   id: number;
   name: string | null;
+  status: 's0' | 's1' | 's2';
   email: string;
   phone: string | null;
   detailsId: number;

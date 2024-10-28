@@ -11,6 +11,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   days,
   companyNameStyle,
   nameStyle,
+  divStyle,
   imageStyle,
 }) => {
   return (
@@ -21,7 +22,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         name={name}
         type={type}
       />
-      <div className={'flex flex-col gap-y-1'}>
+      <div className={divStyle + ' flex flex-col gap-y-1'}>
         {name && (
           <span
             className={nameStyle + ' text-[16px] leading-[20px] text-Black'}
