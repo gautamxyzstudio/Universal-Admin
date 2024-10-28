@@ -7,6 +7,7 @@ import { STRINGS } from '@/constant/en';
 import React, { useEffect, useState } from 'react';
 
 const ClientManagement = () => {
+  const [listData, setListData] = useState(false);
   const [clients, setClients] = useState<IClient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(true);
@@ -36,7 +37,7 @@ const ClientManagement = () => {
         secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
         onPressButton={() => setListData(true)}
       />
-      {/* <AddCompanyList show={listData} handleClose={undefined}/> */}
+      <AddCompanyList show={listData} handleClose={undefined} onPressCross={()=>setListData(false)} />
     </div>
   );
 };

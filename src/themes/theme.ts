@@ -57,10 +57,7 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
-          "--mui-palette-action-disabled": "#FF7312",
-          "--mui-palette-action-disabledBackground": "#FF7312",
-        },
+   
       },
     },
     MuiDialog: {

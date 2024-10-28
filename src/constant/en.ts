@@ -79,4 +79,5 @@ export const STRINGS = {
   reqCert: "Required Certificate",
   pendingReq: "Pending Request",
   selectComp: "Select the company",
+  confirm: "Confirm",
 };

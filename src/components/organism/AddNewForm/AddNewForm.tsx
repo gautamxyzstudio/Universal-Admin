@@ -247,13 +247,16 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
 
   return (
     <FormDrawer {...props} onPressCross={crossPressHandler}>
-      <div className="flex mb-6 flex-col gap-y-4">{renderedFields}</div>
-      <CustomButton
-        fullWidth
-        title={buttonTitle ?? "Create"}
-        onClick={validateFields}
-        buttonType={"primary-small"}
-      />
+      <div className="flex mb-6 flex-col gap-y-5 p-6">{renderedFields}</div>
+      <div className="px-6">
+        <CustomButton
+          fullWidth
+          title={buttonTitle ?? "Create"}
+          onClick={validateFields}
+          buttonType={"primary-small"}
+        />
+        <div className="mt-2 h-1"/>
+      </div>
     </FormDrawer>
   );
 };
