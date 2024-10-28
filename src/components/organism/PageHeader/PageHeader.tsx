@@ -9,6 +9,7 @@ const PageHeader: React.FC<IPageHeaderProps> = ({
   title,
   secondaryButtonTitle,
   withPrimaryButton,
+  onPressSecondaryButton,
   onPressButton,
   withSecondaryButton,
 }) => {
@@ -19,7 +20,7 @@ const PageHeader: React.FC<IPageHeaderProps> = ({
         {withSecondaryButton && (
           <CustomButton
             title={secondaryButtonTitle ?? ''}
-            onClick={onPressButton}
+            onClick={onPressSecondaryButton}
             size="small"
             variant="outlined"
             buttonType={'outline-primary-small'}

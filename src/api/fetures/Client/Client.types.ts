@@ -31,6 +31,7 @@ export interface IClient {
   location: string;
   selfie: string;
   companyName: string;
+  industry: string;
 }
 
 export type ICustomizedGetClientsResponse = {

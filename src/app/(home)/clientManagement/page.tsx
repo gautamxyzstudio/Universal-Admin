@@ -10,10 +10,15 @@ import { GridColDef } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { Images } from '../../../../public/exporter';
 import { getClientStatusAttributesFromType } from './types';
+import AddClientForm from '@/components/templates/AddClientForm/AddClientForm';
+import { useRouter } from 'next/navigation';
+import { routeNames } from '@/utility/routesName';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const [displayForm, setDisplayFrom] = useState(false);
   const [isLastPage, setIsLastPage] = useState(true);
   const [getClients, { isLoading, error }] = useLazyGetClientsQuery();
 
@@ -94,8 +99,9 @@ const ClientManagement = () => {
         withSecondaryButton
         withPrimaryButton
         primaryButtonTitle={STRINGS.addClient}
+        onPressSecondaryButton={() => router.push(routeNames.PendingRequests)}
         secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
-        onPressButton={() => console.log('heloow roled')}
+        onPressButton={() => setDisplayFrom(true)}
       />
       <DataTable
         columns={columns}
@@ -106,6 +112,10 @@ const ClientManagement = () => {
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={clients.length === 0}
+      />
+      <AddClientForm
+        setGlobalModalState={(val) => setDisplayFrom(val)}
+        show={displayForm}
       />
     </div>
   );

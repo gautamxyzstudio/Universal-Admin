@@ -87,4 +87,7 @@ export const STRINGS = {
   contactDetails: 'Contact Details',
   location: 'Location',
   action: 'Action',
+  no_pending: 'No pending request',
+  date: 'Date',
+  verify: 'Verify',
 };

@@ -4,5 +4,8 @@ export type IPageHeaderProps = {
   withSecondaryButton?: boolean;
   primaryButtonTitle?: string;
   secondaryButtonTitle?: string;
+  onPressSecondaryButton?:
+    | React.MouseEventHandler<HTMLButtonElement>
+    | undefined;
   onPressButton?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 };

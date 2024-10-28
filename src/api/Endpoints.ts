@@ -11,4 +11,6 @@ export const Endpoints = {
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
   getClients: (page: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=10`,
+  getPendingRequests: (page: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findPendingClients?page=${page}&pageSize=10`,
 };

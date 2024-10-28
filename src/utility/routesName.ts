@@ -6,6 +6,7 @@ export interface routeNames {
   SubAdmin: '/subadminManagement';
   Activity: '/activityLogs';
   Settings: `/settings`;
+  PendingRequests: '/clientManagement/pendingRequests';
   Login: '/login';
 }
 export const routeNames: routeNames = {
@@ -17,4 +18,5 @@ export const routeNames: routeNames = {
   Activity: '/activityLogs',
   Settings: `/settings`,
   Login: '/login',
+  PendingRequests: '/clientManagement/pendingRequests',
 };
