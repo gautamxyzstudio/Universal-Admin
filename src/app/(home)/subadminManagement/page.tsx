@@ -144,7 +144,7 @@ const SubAdminManagement = () => {
       <PageHeader
         primaryButtonTitle={STRINGS.addSubAdmin}
         title={STRINGS.subAdminManagement}
-        onPressPrimaryButton={onPressPrimaryButton}
+        onPressButton={onPressPrimaryButton}
       />
       <DataTable
         isLoading={isLoading}

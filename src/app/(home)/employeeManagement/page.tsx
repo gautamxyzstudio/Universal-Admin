@@ -180,7 +180,7 @@ const EmployeeManagement = () => {
       <PageHeader
         primaryButtonTitle={STRINGS.addEmployee}
         title={STRINGS.employeeManagement}
-        onPressPrimaryButton={onPressPrimaryButton}
+        onPressButton={onPressPrimaryButton}
       />
       <DataTable
         columns={columns}

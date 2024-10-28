@@ -72,7 +72,7 @@ const Company = () => {
     <div className="w-full h-[85%] mb-5">
       <PageHeader
         primaryButtonTitle={STRINGS.addCompany}
-        onPressPrimaryButton={() => setShowFormModal(true)}
+        onPressButton={() => setShowFormModal(true)}
         title={STRINGS.company}
       />
       <DataTable
