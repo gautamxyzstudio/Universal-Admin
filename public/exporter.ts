@@ -42,6 +42,7 @@ import timeDate from './timeDate.svg';
 import event from './event.svg';
 import clock from './clock.svg';
 import calendar from './calendar.svg';
+import add from './add.svg';
 
 // Icon Object
 export const Icons = {
@@ -88,6 +89,7 @@ export const Icons = {
   event,
   clock,
   calendar,
+  add,
 };
 
 // Images

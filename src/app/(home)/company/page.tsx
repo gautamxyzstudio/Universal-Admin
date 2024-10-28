@@ -71,6 +71,7 @@ const Company = () => {
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
+        withPrimaryButton
         primaryButtonTitle={STRINGS.addCompany}
         withPrimaryButton
         onPressButton={() => setShowFormModal(true)}

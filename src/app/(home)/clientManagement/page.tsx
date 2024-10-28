@@ -13,8 +13,10 @@ import { getClientStatusAttributesFromType } from './types';
 import AddClientForm from '@/components/templates/AddClientForm/AddClientForm';
 import { useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';
+import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
 
 const ClientManagement = () => {
+  const [listData, setListData] = useState(false);
   const [clients, setClients] = useState<IClient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
@@ -116,6 +118,11 @@ const ClientManagement = () => {
       <AddClientForm
         setGlobalModalState={(val) => setDisplayFrom(val)}
         show={displayForm}
+      />
+      <AddCompanyList
+        show={listData}
+        handleClose={undefined}
+        onPressCross={() => setListData(false)}
       />
     </div>
   );

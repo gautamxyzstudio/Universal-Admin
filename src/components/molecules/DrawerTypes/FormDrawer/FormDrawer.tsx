@@ -22,7 +22,9 @@ const FormDrawer: React.FC<IFormDrawerProps> = ({
           src={Icons.crossForm}
         />
       </div>
-      <div className="p-6 flex flex-col h-screen justify-between">{children}</div>
+      <div className="flex flex-col h-screen justify-between">{children}
+        
+      </div>
     </CustomDrawer>
   );
 };
