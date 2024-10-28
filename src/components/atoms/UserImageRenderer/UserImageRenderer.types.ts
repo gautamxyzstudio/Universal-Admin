@@ -1,5 +1,7 @@
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+
 export type IUserImageRendererProps = {
-  image: string | null;
+  image: StaticImport | null;
   name: string;
   type?: IUserImageRendererTypes;
   imageStyle?: string;
