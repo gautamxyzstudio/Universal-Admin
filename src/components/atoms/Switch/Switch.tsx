@@ -1,6 +1,6 @@
-import React from 'react';
-import { Switch as MuiSwitch } from '@mui/material';
-import { ISwitchProps } from './Switch.types';
+import React from "react";
+import { Switch as MuiSwitch } from "@mui/material";
+import { ISwitchProps } from "./Switch.types";
 
 const Switch: React.FC<ISwitchProps> = ({
   checked,
@@ -9,19 +9,19 @@ const Switch: React.FC<ISwitchProps> = ({
   className,
 }) => {
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center w-full">
       <MuiSwitch
+        focusVisibleClassName="."
         sx={{
-          '.mui-xp9bp0-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked': {
-            color: 'white',
+          ".MuiSwitch-thumb": {
+            color: "white",
           },
-          '.mui-xp9bp0-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track':
-            {
-              backgroundColor: '#469C73',
-              opacity: 1,
-            },
-          '.mui-h3l5n8-MuiSwitch-track': {
-            backgroundColor: 'red',
+          ".MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track": {
+            backgroundColor: "#469C73",
+            opacity: 1,
+          },
+          ".MuiSwitch-track": {
+            backgroundColor: "red",
             opacity: 1,
           },
         }}

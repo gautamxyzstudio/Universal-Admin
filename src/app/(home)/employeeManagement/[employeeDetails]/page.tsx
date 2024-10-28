@@ -8,7 +8,7 @@ import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import CustomList from "@/components/atoms/CustomList/CustomList";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
 import DocumentCard from "@/components/organism/DocumentCard/DocumentCard";
-import WorkHistortyCard from "@/components/organism/WorkHistoryCard/WorkHistortyCard";
+import WorkHistortyCard from "@/components/organism/WorkHistoryCard/WorkHistoryCard";
 import WorkDetails from "@/components/organism/WorkDetails/WorkDetails";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 
@@ -98,13 +98,16 @@ const EmployeeDetails = ({
           textStyle={"text-darkBlue bg-white"}
           iconWithTexts={[
             { text: "20 /hr", icon: Icons.dollar },
-            { text: "2-06-2024", icon: Icons.timeDate },
+            {
+              text: "2-06-2024",
+              subText: "7:00 PM - 2:00 AM ",
+              icon: Icons.timeDate,
+            },
             {
               text: "IPEX Oakville, 1425 North Service",
               icon: Icons.locationPin,
             },
-          ]}
-        />
+          ]} days={"3d ago"}        />
       ),
       onClick: () => {
         console.log("Clicked on Work card 1");
@@ -121,13 +124,16 @@ const EmployeeDetails = ({
           textStyle={"text-skyBlue bg-lightSkyBlue"}
           iconWithTexts={[
             { text: "20 /hr", icon: Icons.dollar },
-            { text: "2-06-2024", icon: Icons.timeDate },
+            {
+              text: "2-06-2024",
+              subText: "7:00 PM - 2:00 AM ",
+              icon: Icons.timeDate,
+            },
             {
               text: "IPEX Oakville, 1425 North Service",
               icon: Icons.locationPin,
             },
-          ]}
-        />
+          ]} days={"3d ago"}        />
       ),
       onClick: () => {
         console.log("Clicked on Work card 2");
@@ -138,19 +144,23 @@ const EmployeeDetails = ({
       children: (
         <WorkHistortyCard
           companyName={"Cosmic Security"}
+
           profileName={"Security Guard"}
           image={Images.demoImg}
           textLabel={STRINGS.completed}
           textStyle={"text-skyBlue bg-lightSkyBlue"}
           iconWithTexts={[
             { text: "20 /hr", icon: Icons.dollar },
-            { text: "2-06-2024", icon: Icons.timeDate },
+            {
+              text: "2-06-2024",
+              subText: "7:00 PM - 2:00 AM ",
+              icon: Icons.timeDate,
+            },
             {
               text: "IPEX Oakville, 1425 North Service",
               icon: Icons.locationPin,
             },
-          ]}
-        />
+          ]} days={"3d ago"}        />
       ),
       onClick: () => {
         console.log("Clicked on Work card 3");

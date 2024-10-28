@@ -8,6 +8,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   type,
   joinDate,
   companyName,
+  days,
   companyNameStyle,
   nameStyle,
   imageStyle,
@@ -18,7 +19,6 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         imageStyle={imageStyle}
         image={image}
         name={name}
-        size={60}
         type={type}
       />
       <div className={'flex flex-col gap-y-1'}>
@@ -29,7 +29,26 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
             {name}
           </span>
         )}
-        {companyName && <span className={companyNameStyle}>{companyName}</span>}
+        {companyName && (
+          <div className={companyNameStyle + ' flex gap-x-2 items-center'}>
+            {' '}
+            <span>{companyName}</span>{' '}
+            {days && (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="4"
+                  height="4"
+                  viewBox="0 0 4 4"
+                  fill="none"
+                >
+                  <circle cx="2" cy="2" r="2" fill="#D9D9D9" />
+                </svg>{' '}
+                <span>{days}</span>
+              </>
+            )}
+          </div>
+        )}
         {joinDate && (
           <span className="text-[14px] leading-[18px] text-disable">
             Joined - {joinDate}

@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-'use client';
+"use client";
 
 import React, {
   ChangeEvent,
@@ -7,17 +7,18 @@ import React, {
   useState,
   useCallback,
   useMemo,
-} from 'react';
-import FormDialog from '@/components/molecules/DialogTypes/FormDialog/FormDialog';
-import { IAddNewFromProps, IDynamicFormField } from './AddNewForm.types';
-import { IFieldTypes } from '@/constant/enums';
-import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
-import { STRINGS } from '@/constant/en';
-import Switch from '@/components/atoms/Switch/Switch';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
-import { extractFirstAndLastNameFromName } from '@/utility/cookies';
-import { validateEmail, validatePhoneNumber } from '@/utility/utils';
-import PasswordInput from '@/components/molecules/InputTypes/PasswordInput/PasswordInput';
+} from "react";
+
+import { IAddNewFromProps, IDynamicFormField } from "./AddNewForm.types";
+import { IFieldTypes } from "@/constant/enums";
+import FormTextInput from "@/components/molecules/InputTypes/FormTextInput/FormTextInput";
+import { STRINGS } from "@/constant/en";
+import Switch from "@/components/atoms/Switch/Switch";
+import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import { extractFirstAndLastNameFromName } from "@/utility/cookies";
+import { validateEmail, validatePhoneNumber } from "@/utility/utils";
+import PasswordInput from "@/components/molecules/InputTypes/PasswordInput/PasswordInput";
+import FormDrawer from "@/components/molecules/DrawerTypes/FormDrawer/FormDrawer";
 
 const FormRenderer = React.memo(
   ({
@@ -32,8 +33,8 @@ const FormRenderer = React.memo(
     switchChangeHandler: (value: string) => void;
   }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const value = fields[item.apiKey] || '';
-    const errorMessageValue = fields[`${item.apiKey}Error`] || '';
+    const value = fields[item.apiKey] || "";
+    const errorMessageValue = fields[`${item.apiKey}Error`] || "";
 
     const onPressEye = () => {
       setShowPassword(!showPassword);
@@ -59,13 +60,13 @@ const FormRenderer = React.memo(
       return (
         <div className="flex flex-row gap-x-4">
           <FormTextInput
-            value={fields[STRINGS.firstNameKey] || ''}
+            value={fields[STRINGS.firstNameKey] || ""}
             onChange={(e) => onChangeField(STRINGS.firstNameKey, e)}
             errorMessage={fields[STRINGS.firstNameKeyError]}
             label={STRINGS.firstName}
           />
           <FormTextInput
-            value={fields[STRINGS.lastNameKey] || ''}
+            value={fields[STRINGS.lastNameKey] || ""}
             onChange={(e) => onChangeField(STRINGS.lastNameKey, e)}
             errorMessage={fields[STRINGS.lastNameKeyError]}
             label={STRINGS.lastName}
@@ -83,17 +84,20 @@ const FormRenderer = React.memo(
         />
       );
     } else if (item.type === IFieldTypes.STATUS) {
-      const isTrue = fields[item.apiKey] === 'true';
-      const styles = isTrue ? 'text-sm text-green' : 'text-sm text-red';
+      const isTrue = fields[item.apiKey] === "true";
+      const styles = isTrue ? "text-sm text-green" : "text-sm text-red";
       return (
-        <Switch
-          checked={isTrue}
-          onChange={(event, isChecked) =>
-            switchChangeHandler(isChecked ? 'true' : 'false')
-          }
-          label={isTrue ? 'Active' : 'InActive'}
-          className={styles}
-        />
+        <div className="flex flex-col">
+          {STRINGS.status}
+          <Switch
+            checked={isTrue}
+            onChange={(event, isChecked) =>
+              switchChangeHandler(isChecked ? "true" : "false")
+            }
+            label={isTrue ? "Active" : "InActive"}
+            className={styles}
+          />
+        </div>
       );
     } else if (item.type === IFieldTypes.PASSWORD) {
       return (
@@ -149,7 +153,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
   const validateFields = () => {
     let isValid = true;
     const cleanedFields = sanitizeFields();
-    console.log(cleanedFields, 'cleanField');
+    console.log(cleanedFields, "cleanField");
     Object.keys(cleanedFields).forEach((key) => {
       if (!fields[key]) {
         setFields((prevFields) => ({
@@ -157,7 +161,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
           [`${key}Error`]: `This is a required field`,
         }));
         isValid = false;
-      } else if (key === 'email') {
+      } else if (key === "email") {
         if (!validateEmail(fields[key])) {
           setFields((prevFields) => ({
             ...prevFields,
@@ -165,7 +169,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
           }));
           isValid = false;
         }
-      } else if (key === 'phoneNumber') {
+      } else if (key === "phoneNumber") {
         if (!validatePhoneNumber(fields[key])) {
           setFields((prevFields) => ({
             ...prevFields,
@@ -181,14 +185,14 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
     }
   };
 
-  console.log(fields, 'fields');
+  console.log(fields, "fields");
 
   const onChangeField = useCallback(
     (key: string, e: ChangeEvent<HTMLInputElement>) => {
       setFields((prevFields) => ({
         ...prevFields,
         [key]: e.target.value,
-        [`${key}Error`]: '',
+        [`${key}Error`]: "",
       }));
     },
     []
@@ -202,8 +206,8 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
   const clearForm = () => {
     setFields((prev) => {
       Object.keys(prev).forEach((key) => {
-        if (key !== 'status') {
-          prev[key] = '';
+        if (key !== "status") {
+          prev[key] = "";
         }
       });
       return prev;
@@ -212,7 +216,7 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
 
   const sanitizeFields = () => {
     const cleanFields = Object.keys(fields)
-      .filter((key) => !key.endsWith('Error'))
+      .filter((key) => !key.endsWith("Error"))
       .reduce((acc, key) => {
         acc[key] = fields[key]; // Add the filtered key-value pairs to the new object
         return acc;
@@ -242,15 +246,15 @@ const AddNewForm: React.FC<IAddNewFromProps> = ({
   );
 
   return (
-    <FormDialog {...props} onPressCross={crossPressHandler}>
-      <div className="flex my-6 flex-col gap-y-4">{renderedFields}</div>
+    <FormDrawer {...props} onPressCross={crossPressHandler}>
+      <div className="flex mb-6 flex-col gap-y-4">{renderedFields}</div>
       <CustomButton
         fullWidth
-        title={buttonTitle ?? 'Create'}
+        title={buttonTitle ?? "Create"}
         onClick={validateFields}
-        buttonType={'primary-small'}
+        buttonType={"primary-small"}
       />
-    </FormDialog>
+    </FormDrawer>
   );
 };
 

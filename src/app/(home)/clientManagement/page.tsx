@@ -1,6 +1,8 @@
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
 import { useLazyGetClientsQuery } from '@/api/fetures/Client/ClientApi';
+import PageHeader from '@/components/organism/PageHeader/PageHeader';
+import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
 import { STRINGS } from '@/constant/en';
 import React, { useEffect, useState } from 'react';
 
@@ -27,13 +29,14 @@ const ClientManagement = () => {
   }, []);
 
   return (
-    <div className="items-center px-10 justify-items-center min-h-screen bg-">
-      <div className="flex justify-between items-center mt-4 mb-6">
-        <h1 className="text-Black font-bold text-[24px] leading-7">
-          {STRINGS.clientManagement}
-        </h1>
-        <div className="flex items-center gap-x-6"></div>
-      </div>
+    <div className="w-full h-[85%] mb-5">
+      <PageHeader
+        title={STRINGS.clientManagement}
+        withSecondaryButton
+        secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
+        onPressButton={() => setListData(true)}
+      />
+      {/* <AddCompanyList show={listData} handleClose={undefined}/> */}
     </div>
   );
 };

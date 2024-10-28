@@ -1,26 +1,13 @@
 import React from "react";
 import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 import IconWithText from "@/components/molecules/IconWithText/IconWithText";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import { IWorkHistoryCardProps } from "./WorkHIstoryCard.types";
 
-export interface IconWithTextProps {
-  text: string;
-  icon: StaticImport;
-}
-
-interface IWorkHistoryCardProps {
-  companyName: string;
-  profileName: string;
-  image: StaticImport;
-  textLabel: string;
-  textStyle: string;
-  iconWithTexts: IconWithTextProps[];
-}
-
-const WorkHistortyCard: React.FC<IWorkHistoryCardProps> = ({
+const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
   companyName,
   profileName,
+  days,
   image,
   textLabel,
   textStyle,
@@ -35,6 +22,7 @@ const WorkHistortyCard: React.FC<IWorkHistoryCardProps> = ({
           nameStyle="font-bold"
           imageStyle="!w-9 !h-9"
           companyName={companyName}
+          days={days}
           companyNameStyle="text-disable text-[14px] leading-[18px]"
         />
         <TextWithBgColor
@@ -47,6 +35,7 @@ const WorkHistortyCard: React.FC<IWorkHistoryCardProps> = ({
           <IconWithText
             key={index}
             text={item.text}
+            subText={item.subText}
             icon={item.icon}
           />
         ))}
@@ -55,4 +44,4 @@ const WorkHistortyCard: React.FC<IWorkHistoryCardProps> = ({
   );
 };
 
-export default WorkHistortyCard;
+export default WorkHistoryCard;

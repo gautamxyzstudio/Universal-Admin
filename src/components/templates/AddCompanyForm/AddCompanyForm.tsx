@@ -5,7 +5,6 @@ import {
   IAddCompanyFormProps,
   IAddCompanyState,
 } from './AddCompany.types';
-import FormDialog from '@/components/molecules/DialogTypes/FormDialog/FormDialog';
 import PhotoUpload from '@/components/atoms/PhotoUpload/PhotoUpload';
 import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
 import CustomButton from '@/components/atoms/CutomButton/CustomButton';
@@ -14,6 +13,7 @@ import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import { useAddCompanyMutation } from '@/api/fetures/Company/CompanyApi';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { ICustomErrorResponse } from '@/api/types';
+import FormDrawer from '@/components/molecules/DrawerTypes/FormDrawer/FormDrawer';
 
 const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   show,
@@ -21,7 +21,7 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   setGlobalModalState,
 }) => {
   const [displayFrom, setDisplayFrom] = useState(show);
-  const [addCompany, { isLoading, error }] = useAddCompanyMutation();
+  const [addCompany] = useAddCompanyMutation();
   const { displaySnackbar } = useSnackBarContext();
   const { changeLoaderState } = useShowLoaderContext();
 
@@ -170,13 +170,12 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   };
 
   return (
-    <FormDialog
-      width={824}
+    <FormDrawer
       onPressCross={onPressCross}
       title={STRINGS.addCompany}
       open={displayFrom}
       handleClose={handleClickOutside}
-    >
+    ><div>
       <div className="flex flex-col  items-center">
         <PhotoUpload
           getUploadedImageId={(id) =>
@@ -301,15 +300,16 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
             />
           </div>
         </div>
-      </div>
-      <div className="mt-8" />
+      </div></div>
+      {/* <div className="mt-8" /> */}
       <CustomButton
         title={STRINGS.create}
         onClick={onPressCreate}
-        style={{ width: 156 }}
+        // style={{ width: 156 }}
+        fullWidth
         buttonType={'primary-small'}
       />
-    </FormDialog>
+    </FormDrawer>
   );
 };
 

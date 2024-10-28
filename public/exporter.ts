@@ -22,6 +22,7 @@ import cross from './cross.svg';
 import logoutSecondary from './logout_secondary.svg';
 import success from './success.svg';
 import crossDialog from './cross_dialog.svg';
+import crossForm from './cross_form.svg';
 import pencil from './pensil.svg';
 import excelfile from './excelApp.svg';
 import leftArrow from './leftArrow.svg';
@@ -52,6 +53,7 @@ export const Icons = {
   client,
   people,
   crossDialog,
+  crossForm,
   home,
   logout,
   notification,

@@ -20,7 +20,7 @@ export type IButtonType =
   | 'outline-small-green'
   | 'primary-small'
   | 'outline-small-disabled'
-  | 'outline-primary';
+  | 'outline-primary-small';
 
 export const getStylesFromButtonType = (
   buttonType: IButtonType
@@ -78,18 +78,15 @@ export const getStylesFromButtonType = (
         borderRadius: '4px',
         padding: '8px',
       };
-    case 'outline-primary':
+    case 'outline-primary-small':
       return {
         color: '#FF7312',
-        borderColor: '#FF7312',
-        padding: '20px 12px',
         fontSize: '16px',
-        textTransform: 'none',
         lineHeight: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'start',
+        fontWeight: '400',
+        textTransform: 'capitalize',
         borderRadius: '8px',
+        paddingY: '10px',
       };
   }
 };

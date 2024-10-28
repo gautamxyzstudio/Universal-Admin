@@ -20,9 +20,9 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
     <>
       {image && (
         <Image
-          width={100}
-          height={100}
-          className={imageStyle + ' object-cover  h-auto w-auto rounded-full'}
+          width={32}
+          height={32}
+          className={imageStyle + ' object-contain rounded-full'}
           src={image}
           alt={name}
         />

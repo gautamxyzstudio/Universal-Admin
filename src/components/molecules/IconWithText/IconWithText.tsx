@@ -1,16 +1,33 @@
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import React from "react";
+import { IIconWithTextProps } from "./IconWithText.types";
 
-const IconWithText = ({ text, icon }: { text: string; icon: StaticImport }) => {
+const IconWithText: React.FC<IIconWithTextProps> = ({
+  text,
+  subText,
+  icon,
+}) => {
   return (
-    <div className="inline-flex gap-x-2 text-Black">
-      <Image
-        alt={text}
-        src={icon}
-        className="w-6 h-6"
-      />
+    <div className="flex items-center gap-x-1 text-Black">
+      <Image alt={text} src={icon} className="w-6 h-6" />
+      <div className="flex gap-x-2 items-center">
       {text}
+      {subText && (
+        <>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="2"
+            height="22"
+            viewBox="0 0 2 22"
+            fill="none"
+          >
+            <path d="M1 1V21" stroke="#DBDBDB" stroke-linecap="round" />
+          </svg>
+          {subText}
+        </>
+      )}
+
+      </div>
     </div>
   );
 };
