@@ -9,10 +9,16 @@ import { STRINGS } from '@/constant/en';
 import { GridColDef } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { Images } from '../../../../../public/exporter';
+import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
+import { ICompany } from '@/api/fetures/Company/Company.types';
+import LinkOrAddClientFrom from '@/components/templates/LinkOrAddClientForm/LinkOrAddClientForm';
 
 const PendingRequests = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [verifyClientModal, setVerifyClientModal] = useState(false);
+  const [showCompanyList, setShowCompanyList] = useState(false);
   const [isLastPage, setIsLastPage] = useState(true);
+  const [selectedClient, setSelectedClient] = useState<IClient | null>(null);
   const { data, isLoading, error } = useGetPendingRequestsQuery({
     page: currentPage,
   });
@@ -79,6 +85,16 @@ const PendingRequests = () => {
     },
   ];
 
+  const handleSelectClient = (client: IClient) => {
+    setSelectedClient(client);
+    setVerifyClientModal(true);
+  };
+
+  const onSelectCompany = (company) => {
+    console.log(company);
+    setShowCompanyList(false);
+  };
+
   return (
     <div className="w-full h-[85%] mb-5">
       <PageSubHeader
@@ -89,11 +105,23 @@ const PendingRequests = () => {
         columns={columns}
         illustration={Images.noSubAdmin}
         rows={pendingRequests}
+        onPressRow={(row) => handleSelectClient(row as IClient)}
         isLoading={isLoading}
         emptyViewTitle={STRINGS.no_pending}
         emptyViewSubTitle={''}
         error={error}
         isDataEmpty={pendingRequests?.length === 0}
+      />
+      <AddCompanyList
+        show={showCompanyList}
+        setGlobalModalState={(state) => setShowCompanyList(state)}
+        onSelectCompany={onSelectCompany}
+      />
+      <LinkOrAddClientFrom
+        show={verifyClientModal}
+        setGlobalModalState={(state) => setVerifyClientModal(state)}
+        selectedClient={selectedClient}
+        onPressLink={() => setShowCompanyList(true)}
       />
     </div>
   );

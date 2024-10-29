@@ -20,7 +20,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
     },
   };
   return (
-    <div>
+    <div className="w-full">
       <TextField
         {...props}
         label={label}

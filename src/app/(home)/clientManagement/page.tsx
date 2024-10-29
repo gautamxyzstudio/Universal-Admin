@@ -119,11 +119,6 @@ const ClientManagement = () => {
         setGlobalModalState={(val) => setDisplayFrom(val)}
         show={displayForm}
       />
-      <AddCompanyList
-        show={listData}
-        handleClose={undefined}
-        onPressCross={() => setListData(false)}
-      />
     </div>
   );
 };

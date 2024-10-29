@@ -27,6 +27,7 @@ const config: Config = {
         textBlack: '#121212',
         Black: '#121212',
         modal: 'rgba(0, 0, 0, 0.2)',
+        borderGreySecondary: '#dbdbdb',
         externalLink: '#2048E0',
         lightPrimary: '#FFF8F4',
         lightGreenSecondary: '#F6FFFB',

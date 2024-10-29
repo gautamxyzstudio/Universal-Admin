@@ -14,7 +14,7 @@ export const STRINGS = {
   email: 'Email',
   password: 'Password',
   signUp: 'Sign Up',
-  something_went_wrong: 'OOPS!! Something went wrong. please try again later',
+  something_went_wrong: 'OOPS!! Something went wrong',
   logout_message: 'Are you sure you want to logout this account?',
   all: 'All',
   pending: 'Pending',
@@ -82,6 +82,7 @@ export const STRINGS = {
   pendingReq: 'Pending Request',
   selectComp: 'Select the company',
   addClient: 'Add Client',
+
   joiningDate: 'Join Date',
   clientNameAndComp: 'Client Name & Company',
   contactDetails: 'Contact Details',
@@ -91,4 +92,6 @@ export const STRINGS = {
   date: 'Date',
   verify: 'Verify',
   confirm: 'Confirm',
+  no_companies: 'No Companies Available',
+  clientName: 'Client Name',
 };

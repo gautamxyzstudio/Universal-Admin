@@ -10,11 +10,14 @@ import {
 } from './Company.types';
 import { createImageUrl } from '@/utility/cookies';
 
-const subAdminApi = baseApi.injectEndpoints({
+const companiesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCompany: builder.query<IGetCompaniesCustomizedResponse, null>({
-      query: () => ({
-        url: Endpoints.getCompanies,
+    getCompany: builder.query<
+      IGetCompaniesCustomizedResponse,
+      { page: number }
+    >({
+      query: (body: { page: number }) => ({
+        url: Endpoints.getCompanies(body.page),
         method: ApiMethodType.get,
       }),
       transformResponse: (
@@ -58,4 +61,8 @@ const subAdminApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetCompanyQuery, useAddCompanyMutation } = subAdminApi;
+export const {
+  useLazyGetCompanyQuery,
+  useGetCompanyQuery,
+  useAddCompanyMutation,
+} = companiesApi;

@@ -2,6 +2,7 @@
 const nextConfig = {
     images: {
         domains: ['universalapp.xyz.studio'], // Add your external domain here
+    
       },
 };
 

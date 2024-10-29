@@ -8,7 +8,7 @@ import {
   QueryReturnValue,
 } from '@reduxjs/toolkit/query';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { transformErrorResponse } from './types';
+import { IErrorResponse, transformErrorResponse } from './types';
 import { STRINGS } from '@/constant/en';
 
 const baseQuery = fetchBaseQuery({
@@ -69,6 +69,13 @@ const queryFetcher = async (
   const result = await baseQuery(args, api, extraOptions);
 
   if (result.error) {
+    console.log(
+      '############################## Error START ######################################'
+    );
+    console.log('Error ------', JSON.stringify(result.error));
+    console.log(
+      '############################## Error End ######################################'
+    );
     if (result.error.status === 'FETCH_ERROR') {
       return {
         error: {
@@ -76,11 +83,10 @@ const queryFetcher = async (
           statusCode: 0,
         } as any,
       };
-    } else if (result.error.status === 'PARSING_ERROR') {
-      const transformedError = transformErrorResponse(result.error.data as any);
-      return { error: transformedError as any };
     } else {
-      const transformedError = transformErrorResponse(result.error.data as any);
+      const transformedError = transformErrorResponse(
+        result?.error as IErrorResponse
+      );
       return { error: transformedError as any };
     }
   }

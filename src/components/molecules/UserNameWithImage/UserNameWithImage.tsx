@@ -32,7 +32,6 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         )}
         {companyName && (
           <div className={companyNameStyle + ' flex gap-x-2 items-center'}>
-            {' '}
             <span>{companyName}</span>{' '}
             {days && (
               <>

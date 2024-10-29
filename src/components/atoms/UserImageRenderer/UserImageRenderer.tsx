@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import {
   getStylesAttributes,
   IUserImageRendererProps,
 } from './UserImageRenderer.types';
 import { getFirstLetterFromName } from '@/utility/utils';
 import Image from 'next/image';
+import { Icons } from '../../../../public/exporter';
 
 const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   name,
@@ -14,6 +16,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   imageStyle,
 }) => {
   const stylesAttributes = getStylesAttributes(type);
+  const [isLoading, setIsLoading] = useState(true);
   const backgroundColor = `${stylesAttributes.backgroundColor}`;
   const textColor = `${stylesAttributes.textColor}`;
   return (
@@ -22,6 +25,8 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
         <Image
           width={100}
           height={100}
+          loading="lazy"
+          onLoadingComplete={() => setIsLoading(false)}
           className={imageStyle + ' object-contain w-auto h-auto rounded-full'}
           src={image}
           alt={name}

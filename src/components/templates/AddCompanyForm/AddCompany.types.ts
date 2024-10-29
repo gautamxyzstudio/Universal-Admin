@@ -38,4 +38,6 @@ export enum CompanyStateFields {
   companyRegistrationNumber = 'companyRegistrationNumber',
   gstNumber = 'gstNumber',
   websiteName = 'websiteName',
+  clientName = 'clientName',
+  location = 'location',
 }

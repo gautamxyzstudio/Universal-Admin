@@ -1,8 +1,8 @@
-import React from "react";
-import { IFormDrawerProps } from "./FormDrawer.types";
-import Image from "next/image";
-import { Icons } from "../../../../../public/exporter";
-import CustomDrawer from "@/components/atoms/CustomDrawer/CustomDrawer";
+import React from 'react';
+import { IFormDrawerProps } from './FormDrawer.types';
+import Image from 'next/image';
+import { Icons } from '../../../../../public/exporter';
+import CustomDrawer from '@/components/atoms/CustomDrawer/CustomDrawer';
 
 const FormDrawer: React.FC<IFormDrawerProps> = ({
   open,
@@ -10,9 +10,10 @@ const FormDrawer: React.FC<IFormDrawerProps> = ({
   title,
   children,
   onPressCross,
+  styles,
 }) => {
   return (
-    <CustomDrawer open={open} onClose={handleClose}>
+    <CustomDrawer styles={styles} open={open} onClose={handleClose}>
       <div className="flex w-full h-fit justify-between items-center px-6 pb-2 pt-6 border-b border-borderGrey">
         <h1 className="text-xl font-bold text-textBlack">{title}</h1>
         <Image
@@ -22,9 +23,7 @@ const FormDrawer: React.FC<IFormDrawerProps> = ({
           src={Icons.crossForm}
         />
       </div>
-      <div className="flex flex-col h-screen justify-between">{children}
-        
-      </div>
+      <div className="flex flex-col h-screen justify-between">{children}</div>
     </CustomDrawer>
   );
 };

@@ -1,19 +1,20 @@
-import { STRINGS } from "@/constant/en";
-import React, { useEffect, useReducer, useState } from "react";
+import { STRINGS } from '@/constant/en';
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   CompanyStateFields,
   IAddCompanyFormProps,
   IAddCompanyState,
-} from "./AddCompany.types";
-import PhotoUpload from "@/components/atoms/PhotoUpload/PhotoUpload";
-import FormTextInput from "@/components/molecules/InputTypes/FormTextInput/FormTextInput";
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
-import { validateEmail, validatePhoneNumber } from "@/utility/utils";
-import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
-import { useAddCompanyMutation } from "@/api/fetures/Company/CompanyApi";
-import { useSnackBarContext } from "@/providers/SnackbarProvider";
-import { ICustomErrorResponse } from "@/api/types";
-import FormDrawer from "@/components/molecules/DrawerTypes/FormDrawer/FormDrawer";
+} from './AddCompany.types';
+import PhotoUpload from '@/components/atoms/PhotoUpload/PhotoUpload';
+import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
+import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import { validateEmail, validatePhoneNumber } from '@/utility/utils';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import { useAddCompanyMutation } from '@/api/fetures/Company/CompanyApi';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { ICustomErrorResponse } from '@/api/types';
+import FormDrawer from '@/components/molecules/DrawerTypes/FormDrawer/FormDrawer';
+import { createImageUrl } from '@/utility/cookies';
 
 const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   show,
@@ -26,24 +27,24 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   const { changeLoaderState } = useShowLoaderContext();
 
   const initialState = {
-    logo: "",
-    companyName: "",
-    accRequestName: "",
-    industry: "",
-    email: "",
-    contactNumber: "",
-    address: "",
-    companyRegistrationNumber: "",
-    gstNumber: "",
-    websiteName: "",
-    companyNameError: "",
-    accRequestNameError: "",
-    industryError: "",
-    emailError: "",
-    contactNumberError: "",
-    addressError: "",
-    companyRegistrationNumberError: "",
-    gstNumberError: "",
+    logo: '',
+    companyName: '',
+    accRequestName: '',
+    industry: '',
+    email: '',
+    contactNumber: '',
+    address: '',
+    companyRegistrationNumber: '',
+    gstNumber: '',
+    websiteName: '',
+    companyNameError: '',
+    accRequestNameError: '',
+    industryError: '',
+    emailError: '',
+    contactNumberError: '',
+    addressError: '',
+    companyRegistrationNumberError: '',
+    gstNumberError: '',
   };
   const [state, setState] = useReducer(
     (prev: IAddCompanyState, next: IAddCompanyState) => ({ ...prev, ...next }),
@@ -56,9 +57,9 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
 
   const handleClickOutside = (
     event: object,
-    reason: "backdropClick" | "escapeKeyDown"
+    reason: 'backdropClick' | 'escapeKeyDown'
   ) => {
-    if (reason == "backdropClick") {
+    if (reason == 'backdropClick') {
       return;
     }
     setDisplayFrom(false);
@@ -72,7 +73,7 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
   };
 
   const onChangeTextField = (e: string, fieldName: string) => {
-    setState({ ...state, [fieldName]: e, [`${fieldName}Error`]: "" });
+    setState({ ...state, [fieldName]: e, [`${fieldName}Error`]: '' });
   };
 
   const onPressCreate = async () => {
@@ -152,17 +153,22 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
             location: addCompRes.data?.attributes?.location,
             contactno: addCompRes.data?.attributes?.contactno,
             address: addCompRes.data?.attributes?.address,
-            companylogo: undefined,
+            companylogo: addCompRes.data.attributes.companylogo?.data
+              ?.attributes?.url
+              ? createImageUrl(
+                  addCompRes.data.attributes.companylogo?.data.attributes.url
+                )
+              : undefined,
             Industry: addCompRes.data?.attributes?.regNo,
             Website: addCompRes.data?.attributes?.Website,
             regNo: addCompRes.data?.attributes?.regNo,
             gstNo: addCompRes.data?.attributes?.gstNo,
           });
-          displaySnackbar("success", "Company created successfully");
+          displaySnackbar('success', 'Company created successfully');
         }
       } catch (err) {
         const error = err as ICustomErrorResponse;
-        displaySnackbar("error", error.message);
+        displaySnackbar('error', error.message);
       } finally {
         changeLoaderState(false);
       }
@@ -285,7 +291,7 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
                     CompanyStateFields.websiteName
                   )
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.websiteLink}
               />
             </div>
@@ -308,14 +314,13 @@ const AddCompanyForm: React.FC<IAddCompanyFormProps> = ({
       </div>
       {/* <div className="mt-8" /> */}
       <div className="px-6">
-
-      <CustomButton
-        title={STRINGS.create}
-        onClick={onPressCreate}
-        fullWidth
-        buttonType={"primary-small"}
-      />
-      <div className="mt-2 h-1"/>
+        <CustomButton
+          title={STRINGS.create}
+          onClick={onPressCreate}
+          fullWidth
+          buttonType={'primary-small'}
+        />
+        <div className="mt-2 h-1" />
       </div>
     </FormDrawer>
   );

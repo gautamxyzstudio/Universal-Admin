@@ -6,7 +6,8 @@ export const Endpoints = {
   updateSubAdmin: (subAdminId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${subAdminId}`,
   getEmployees: `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/emp?populate=*`,
-  getCompanies: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details`,
+  getCompanies: (page: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?pagination[page]=${page}&pagination[pageSize]=15`,
   addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
   getClients: (page: number) =>
