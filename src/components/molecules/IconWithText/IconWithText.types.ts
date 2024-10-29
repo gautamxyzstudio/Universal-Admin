@@ -4,4 +4,6 @@ export interface IIconWithTextProps {
     text: string;
     subText?: string;
     icon: StaticImport;
+    iconStyle?: string;
+    textStyle?: string;
   }

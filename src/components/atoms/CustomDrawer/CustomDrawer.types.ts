@@ -6,4 +6,5 @@ export interface ICustomDrawerProps {
   onClose:
     | ((event: object, reason: 'backdropClick' | 'escapeKeyDown') => void)
     | undefined;
+  width?: string | number | null;
 }

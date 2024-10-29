@@ -1,22 +1,20 @@
-'use client';
-import { IClient } from '@/api/fetures/Client/Client.types';
-import { useLazyGetClientsQuery } from '@/api/fetures/Client/ClientApi';
-import DataTable from '@/components/atoms/DataTable/DataTable';
-import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
-import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import { STRINGS } from '@/constant/en';
-import { GridColDef } from '@mui/x-data-grid';
-import React, { useEffect, useState } from 'react';
-import { Images } from '../../../../public/exporter';
-import { getClientStatusAttributesFromType } from './types';
-import AddClientForm from '@/components/templates/AddClientForm/AddClientForm';
-import { useRouter } from 'next/navigation';
-import { routeNames } from '@/utility/routesName';
-import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
+"use client";
+import { IClient } from "@/api/fetures/Client/Client.types";
+import { useLazyGetClientsQuery } from "@/api/fetures/Client/ClientApi";
+import DataTable from "@/components/atoms/DataTable/DataTable";
+import ContactDetails from "@/components/molecules/ContactDetails/ContactDetails";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import PageHeader from "@/components/organism/PageHeader/PageHeader";
+import { STRINGS } from "@/constant/en";
+import { GridColDef } from "@mui/x-data-grid";
+import React, { useEffect, useState } from "react";
+import { Images } from "../../../../public/exporter";
+import { getClientStatusAttributesFromType } from "./types";
+import AddClientForm from "@/components/templates/AddClientForm/AddClientForm";
+import { useRouter } from "next/navigation";
+import { routeNames } from "@/utility/routesName";
 
 const ClientManagement = () => {
-  const [listData, setListData] = useState(false);
   const [clients, setClients] = useState<IClient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
@@ -38,19 +36,19 @@ const ClientManagement = () => {
 
   const columns: GridColDef[] = [
     {
-      field: 'joiningDate',
+      field: "joiningDate",
       headerName: STRINGS.joiningDate,
       width: 100,
       renderCell: (params) =>
         new Date(params.row.joiningDate).toLocaleDateString(),
     },
     {
-      field: 'clientDetails',
+      field: "clientDetails",
       headerName: STRINGS.clientNameAndComp,
       width: 256,
       renderCell: (params) => (
         <UserNameWithImage
-          type={'white'}
+          type={"white"}
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name}
@@ -61,7 +59,7 @@ const ClientManagement = () => {
       ),
     },
     {
-      field: 'contactDetails',
+      field: "contactDetails",
       headerName: STRINGS.contactDetails,
       width: 256,
       renderCell: (params) => (
@@ -69,12 +67,12 @@ const ClientManagement = () => {
       ),
     },
     {
-      field: 'location',
+      field: "location",
       headerName: STRINGS.location,
       width: 180,
     },
     {
-      field: 'status',
+      field: "status",
       headerName: STRINGS.status,
       width: 180,
       renderCell: (params) => {
@@ -84,7 +82,7 @@ const ClientManagement = () => {
     },
     {
       field: STRINGS.action,
-      headerName: 'Action',
+      headerName: "Action",
       width: 104,
       renderCell: () => <span className="text-primary">{STRINGS.view}</span>,
     },
@@ -102,7 +100,7 @@ const ClientManagement = () => {
         withPrimaryButton
         primaryButtonTitle={STRINGS.addClient}
         onPressSecondaryButton={() => router.push(routeNames.PendingRequests)}
-        secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
+        secondaryButtonTitle={STRINGS.pendingReq + " (48)"}
         onPressButton={() => setDisplayFrom(true)}
       />
       <DataTable
@@ -118,11 +116,6 @@ const ClientManagement = () => {
       <AddClientForm
         setGlobalModalState={(val) => setDisplayFrom(val)}
         show={displayForm}
-      />
-      <AddCompanyList
-        show={listData}
-        handleClose={undefined}
-        onPressCross={() => setListData(false)}
       />
     </div>
   );

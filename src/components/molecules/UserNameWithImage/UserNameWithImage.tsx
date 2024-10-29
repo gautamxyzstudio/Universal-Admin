@@ -22,7 +22,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         name={name}
         type={type}
       />
-      <div className={divStyle + ' flex flex-col gap-y-1'}>
+      <div className={divStyle + ' flex flex-col gap-y-1 w-full'}>
         {name && (
           <span
             className={nameStyle + ' text-[16px] leading-[20px] text-Black'}

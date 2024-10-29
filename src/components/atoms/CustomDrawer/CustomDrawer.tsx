@@ -6,11 +6,13 @@ const CustomDrawer: React.FC<ICustomDrawerProps> = ({
   open,
   onClose,
   children,
+  width,
 }) => {
   return (
-    <Drawer PaperProps={{
+    <Drawer  PaperProps={{
         sx:{
             borderRadius:"8px 0 0 8px",
+            width: width
         }
     }} anchor="right" open={open} onClose={onClose}>
       {children}

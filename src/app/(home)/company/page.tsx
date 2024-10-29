@@ -73,7 +73,6 @@ const Company = () => {
       <PageHeader
         withPrimaryButton
         primaryButtonTitle={STRINGS.addCompany}
-        withPrimaryButton
         onPressButton={() => setShowFormModal(true)}
         title={STRINGS.company}
       />

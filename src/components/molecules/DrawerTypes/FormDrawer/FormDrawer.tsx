@@ -9,10 +9,11 @@ const FormDrawer: React.FC<IFormDrawerProps> = ({
   handleClose,
   title,
   children,
+  width,
   onPressCross,
 }) => {
   return (
-    <CustomDrawer open={open} onClose={handleClose}>
+    <CustomDrawer width={width} open={open} onClose={handleClose}>
       <div className="flex w-full h-fit justify-between items-center px-6 pb-2 pt-6 border-b border-borderGrey">
         <h1 className="text-xl font-bold text-textBlack">{title}</h1>
         <Image

@@ -14,7 +14,7 @@ const EmptyScreenView: React.FC<IEmptyScreenViewProps> = ({
   return (
     <div>
       {isDataEmpty && !error && (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center p-6">
           <Image
             className="w-[297px] h-[187px]"
             alt="noSubAdmin"
@@ -27,7 +27,7 @@ const EmptyScreenView: React.FC<IEmptyScreenViewProps> = ({
         </div>
       )}
       {error && (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center p-6">
           <Image
             className="w-[297px] h-[187px]"
             alt="noSubAdmin"

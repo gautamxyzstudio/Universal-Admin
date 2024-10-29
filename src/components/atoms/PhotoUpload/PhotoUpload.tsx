@@ -39,7 +39,7 @@ const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
         getUploadedImageId(uploadedImage[0].id);
       } catch (e) {
         console.log(e, 'ERROR');
-        let error = e as ICustomErrorResponse;
+        const error = e as ICustomErrorResponse;
         displaySnackbar('error', error.message);
       }
     }

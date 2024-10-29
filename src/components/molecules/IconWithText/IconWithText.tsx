@@ -6,11 +6,13 @@ const IconWithText: React.FC<IIconWithTextProps> = ({
   text,
   subText,
   icon,
+  iconStyle,
+  textStyle,  
 }) => {
   return (
     <div className="flex items-center gap-x-1 text-Black">
-      <Image alt={text} src={icon} className="w-6 h-6" />
-      <div className="flex gap-x-2 items-center">
+      <Image alt={text} src={icon} className={"w-6 h-6 " + iconStyle} />
+      <div className={"flex gap-x-2 items-center " + textStyle}>
       {text}
       {subText && (
         <>
