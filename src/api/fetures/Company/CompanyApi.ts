@@ -14,10 +14,10 @@ const companiesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCompany: builder.query<
       IGetCompaniesCustomizedResponse,
-      { page: number }
+      { page: number; search: string }
     >({
-      query: (body: { page: number }) => ({
-        url: Endpoints.getCompanies(body.page),
+      query: (body: { page: number; search: string }) => ({
+        url: Endpoints.getCompanies(body.page, body.search),
         method: ApiMethodType.get,
       }),
       transformResponse: (

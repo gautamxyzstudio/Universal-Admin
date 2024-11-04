@@ -6,6 +6,8 @@ import {
   IClient,
   ICustomizedGetClientsResponse,
   IGetClientsResponse,
+  ILinkClientRequest,
+  IRegisterClientReq,
 } from './Client.types';
 
 const clientApi = baseApi.injectEndpoints({
@@ -83,7 +85,32 @@ const clientApi = baseApi.injectEndpoints({
         };
       },
     }),
+    linkClient: builder.mutation<
+      IClient,
+      { clientDetails: ILinkClientRequest; clientId: number }
+    >({
+      query: (body: {
+        clientDetails: ILinkClientRequest;
+        clientId: number;
+      }) => ({
+        url: Endpoints.linkClient(body.clientId),
+        method: ApiMethodType.patch,
+        body: body.clientDetails,
+      }),
+    }),
+    registerClient: builder.mutation<any, IRegisterClientReq>({
+      query: (body: IRegisterClientReq) => ({
+        url: Endpoints.registerClient,
+        method: ApiMethodType.post,
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetClientsQuery, useGetPendingRequestsQuery } = clientApi;
+export const {
+  useLazyGetClientsQuery,
+  useGetPendingRequestsQuery,
+  useLinkClientMutation,
+  useRegisterClientMutation,
+} = clientApi;

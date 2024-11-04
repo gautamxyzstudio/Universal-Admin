@@ -1,6 +1,9 @@
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
-import { useLazyGetClientsQuery } from '@/api/fetures/Client/ClientApi';
+import {
+  useLazyGetClientsQuery,
+  useRegisterClientMutation,
+} from '@/api/fetures/Client/ClientApi';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
@@ -10,19 +13,24 @@ import { GridColDef } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { Images } from '../../../../public/exporter';
 import { getClientStatusAttributesFromType } from './types';
-import AddClientForm from '@/components/templates/AddClientForm/AddClientForm';
 import { useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';
 import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
+import LinkOrAddClientFrom from '@/components/templates/LinkOrAddClientForm/LinkOrAddClientForm';
+import { ICompany } from '@/api/fetures/Company/Company.types';
+import { IAddEmployeeClientArgs } from './[pendingRequests]/types';
+import { generateUniqueUserName } from '@/utility/utils';
 
 const ClientManagement = () => {
-  const [listData, setListData] = useState(false);
   const [clients, setClients] = useState<IClient[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
+  const [showCompanyList, setShowCompanyList] = useState(false);
   const router = useRouter();
-  const [displayForm, setDisplayFrom] = useState(false);
+  const [registerClient] = useRegisterClientMutation();
+  const [addClientModal, setAddClientModal] = useState(false);
   const [isLastPage, setIsLastPage] = useState(true);
-  const [getClients, { isLoading, error }] = useLazyGetClientsQuery();
+  const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
 
   const getClientsHandler = async (isFirstPage?: boolean) => {
     const page = isFirstPage ? 1 : currentPage + 1;
@@ -94,6 +102,52 @@ const ClientManagement = () => {
     getClientsHandler(true);
   }, []);
 
+  const onSelectCompany = (company) => {
+    setShowCompanyList(false);
+    setSelectedCompany(company);
+  };
+
+  const modalStateChangeHandler = (state) => {
+    setAddClientModal(state);
+  };
+
+  const addClientHandler = async (details: {
+    company: ICompany | null;
+    client: IAddEmployeeClientArgs;
+  }) => {
+    try {
+      const isRegisteredClient = await registerNewClient({
+        email: details.client.email,
+        password: details.client.password,
+      });
+    } catch (error) {}
+  };
+
+  const registerNewClient = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const registerClientRes = await registerClient({
+        email: email,
+        password: password,
+        user_type: 'client',
+        role: 'ClientUser',
+        username: generateUniqueUserName(email),
+      }).unwrap();
+      if (registerClientRes) {
+        console.log(registerClientRes);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      return false;
+    }
+  };
+
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
@@ -103,21 +157,32 @@ const ClientManagement = () => {
         primaryButtonTitle={STRINGS.addClient}
         onPressSecondaryButton={() => router.push(routeNames.PendingRequests)}
         secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
-        onPressButton={() => setDisplayFrom(true)}
+        onPressButton={() => setAddClientModal(true)}
       />
       <DataTable
         columns={columns}
         rows={clients}
-        isLoading={isLoading}
+        isLoading={isFetching}
         emptyViewTitle={STRINGS.noClients}
         emptyViewSubTitle={STRINGS.noClientDec}
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={clients.length === 0}
       />
-      <AddClientForm
-        setGlobalModalState={(val) => setDisplayFrom(val)}
-        show={displayForm}
+      <AddCompanyList
+        show={showCompanyList}
+        setGlobalModalState={(state) => setShowCompanyList(state)}
+        onSelectCompany={onSelectCompany}
+      />
+      <LinkOrAddClientFrom
+        selectedCompany={selectedCompany}
+        show={addClientModal}
+        type="add"
+        setGlobalModalState={modalStateChangeHandler}
+        selectedClient={null}
+        onPressLink={() => setShowCompanyList(true)}
+        onDeselectCompany={() => setSelectedCompany(null)}
+        onPressAddEmployee={addClientHandler}
       />
     </div>
   );

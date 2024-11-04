@@ -92,6 +92,7 @@ export const STRINGS = {
   date: 'Date',
   verify: 'Verify',
   confirm: 'Confirm',
-  no_companies: 'No Companies Available',
+  no_companies: 'No Companies Found',
   clientName: 'Client Name',
+  clientAdded: 'Client Added Successfully!!',
 };

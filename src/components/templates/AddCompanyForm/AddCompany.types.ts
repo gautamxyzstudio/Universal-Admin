@@ -40,4 +40,5 @@ export enum CompanyStateFields {
   websiteName = 'websiteName',
   clientName = 'clientName',
   location = 'location',
+  password = 'password',
 }

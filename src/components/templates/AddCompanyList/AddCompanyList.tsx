@@ -1,13 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import FormDrawer from '@/components/molecules/DrawerTypes/FormDrawer/FormDrawer';
 import { STRINGS } from '@/constant/en';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ICompany } from '@/api/fetures/Company/Company.types';
-import {
-  useGetCompanyQuery,
-  useLazyGetCompanyQuery,
-} from '@/api/fetures/Company/CompanyApi';
+import { useLazyGetCompanyQuery } from '@/api/fetures/Company/CompanyApi';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import { Icons, Images } from '../../../../public/exporter';
 import Image from 'next/image';
@@ -15,7 +13,7 @@ import { useDemoData } from '@mui/x-data-grid-generator';
 import VirtualList from '@/components/molecules/VirtualList/VirtualList';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import CustomButton from '@/components/atoms/CutomButton/CustomButton';
-
+import _ from 'lodash';
 import IconWithText from '@/components/molecules/IconWithText/IconWithText';
 import { IAddCompanyListProps } from './AddCompanyList.types';
 
@@ -25,41 +23,49 @@ const AddCompanyList: React.FC<IAddCompanyListProps> = ({
   onSelectCompany,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [fetchCompanies, { isLoading, error }] = useLazyGetCompanyQuery();
+  const [fetchCompanies, { error }] = useLazyGetCompanyQuery();
   const [isLastPage, setIsLastPage] = useState(true);
+  const [searchVal, setSearchVal] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
+    'idle'
+  );
   const [companies, setCompanies] = useState<ICompany[]>([]);
   const [displayFrom, setDisplayFrom] = useState(show);
   const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
-
-  const loadMore = () => {
-    if (!isLastPage) {
-      fetchCompaniesHandler();
-    }
-  };
-
-  useEffect(() => {
-    if (displayFrom) {
-      fetchCompaniesHandler(true);
-    }
-  }, [displayFrom]);
 
   useEffect(() => {
     setDisplayFrom(show);
   }, [show]);
 
-  const fetchCompaniesHandler = async (isFirstPage?: boolean) => {
-    let page = isFirstPage ? 1 : currentPage + 1;
+  const fetchCompaniesHandler = async (
+    characters: string,
+    isFirstPage?: boolean
+  ) => {
+    setSelectedCompany(null);
+    const page = isFirstPage ? 1 : currentPage + 1;
     try {
-      const response = await fetchCompanies({ page: page }).unwrap();
+      const response = await fetchCompanies({
+        page: page,
+        search: characters,
+      }).unwrap();
       if (response) {
-        setCompanies((prev) => [...prev, ...response.data]);
+        setIsLoading(false);
+        if (page === 1) {
+          setCompanies(response.data);
+        } else {
+          setCompanies((prev) => [...prev, ...response.data]);
+        }
         setCurrentPage(response.meta.pagination.page);
+        updateSearchState('idle');
         setIsLastPage(
           response?.data.length === 0 ||
             currentPage === response?.meta.pagination.pageCount
         );
       }
     } catch (error) {
+      setIsLoading(false);
+      updateSearchState('idle');
       console.log('Error fetching companies', error);
     }
   };
@@ -74,11 +80,39 @@ const AddCompanyList: React.FC<IAddCompanyListProps> = ({
     setSelectedCompany(company);
   };
 
+  const loadMore = () => {
+    if (!isLastPage) {
+      fetchCompaniesHandler(searchVal);
+    }
+  };
+
   const onPressCross = () => {
     setDisplayFrom(false);
     setSelectedCompany(null);
     setGlobalModalState(false);
   };
+
+  useEffect(() => {
+    if (displayFrom) {
+      if (searchVal.length > 0) {
+        updateSearchState('searching');
+        handleSearch(searchVal, true);
+        setIsLastPage(true);
+      } else {
+        fetchCompaniesHandler(searchVal, true);
+        setIsLastPage(true);
+      }
+    }
+  }, [searchVal, displayFrom]);
+
+  const handleSearch = useCallback(
+    _.debounce((query) => {
+      if (query) {
+        fetchCompaniesHandler(query, true);
+      }
+    }, 1000),
+    []
+  );
 
   const handleClickOutside = (
     event: object,
@@ -113,7 +147,7 @@ const AddCompanyList: React.FC<IAddCompanyListProps> = ({
       return (
         <div
           key={company.id}
-          className={'px-6 py-3  ' + bgColor}
+          className={'px-6 py-3 cursor-pointer  ' + bgColor}
           onClick={() => onTabCompanyHandler(company)}
         >
           <UserNameWithImage
@@ -141,7 +175,7 @@ const AddCompanyList: React.FC<IAddCompanyListProps> = ({
         </div>
       );
     },
-    [selectedCompany]
+    [selectedCompany, companies]
   );
 
   return (
@@ -152,43 +186,47 @@ const AddCompanyList: React.FC<IAddCompanyListProps> = ({
       handleClose={handleClickOutside}
       onPressCross={onPressCross}
     >
+      <div className="flex  w-full  flex-col gap-y-7 px-6 pt-6 pb-3">
+        <SearchField
+          onPressCross={() => setSearchVal('')}
+          onChangeText={(e) => setSearchVal(e.target.value)}
+          value={searchVal}
+          isLoading={searchState === 'searching'}
+        />
+        <div className="flex    gap-x-3 items-center text-[16px] leading-5 text-Black cursor-pointer">
+          <div
+            className="border border-primary w-8 h-8 rounded-full cursor-pointer p-[9px]"
+            onClick={() => console.log('Div clicked')}
+          >
+            <Image src={Icons.add} alt="Add company" />
+          </div>
+          Add
+        </div>
+      </div>
       <VirtualList
         isLoading={isLoading}
         data={isLoading ? dummyData.rows : companies}
         onReachEnd={loadMore}
         isLastPage={isLastPage}
         renderItem={isLoading ? renderLoadingItem : (renderItemContent as any)}
-        headerView={
-          <div className="flex  w-full  flex-col gap-y-7 px-6 pt-6 pb-3">
-            <SearchField />
-            <div className="flex gap-x-3 items-center text-[16px] leading-5 text-Black cursor-pointer">
-              <div
-                className="border border-primary w-8 h-8 rounded-full cursor-pointer p-[9px]"
-                onClick={() => console.log('Div clicked')}
-              >
-                <Image src={Icons.add} alt="Add company" />
-              </div>
-              Add
-            </div>
-          </div>
-        }
         illustration={Images.noSubAdmin}
         emptyViewTitle={STRINGS.no_companies}
         emptyViewSubTitle={''}
         error={error}
         isDataEmpty={companies.length === 0}
       />
-
-      <div className="bg-white px-6 pt-4 pb-6">
-        <CustomButton
-          fullWidth
-          disabled={!selectedCompany}
-          title={STRINGS.confirm}
-          onClick={() => selectedCompany && onSelectCompany(selectedCompany)}
-          buttonType={'primary-small'}
-          variant={'contained'}
-        />
-      </div>
+      {searchState === 'idle' && companies.length > 0 && (
+        <div className="bg-white px-6 pt-4 pb-6">
+          <CustomButton
+            fullWidth
+            disabled={!selectedCompany}
+            title={STRINGS.confirm}
+            onClick={() => selectedCompany && onSelectCompany(selectedCompany)}
+            buttonType={'primary-small'}
+            variant={'contained'}
+          />
+        </div>
+      )}
     </FormDrawer>
   );
 };

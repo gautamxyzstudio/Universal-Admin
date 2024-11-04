@@ -38,3 +38,22 @@ export type ICustomizedGetClientsResponse = {
   data: IClient[];
   pagination: IPagination;
 };
+
+export interface ILinkClientRequest {
+  status: IClientStatus.ACTIVE;
+  Name: string;
+
+  companyname: string;
+
+  location: string;
+  Industry: string;
+  company_detail: number;
+}
+
+export type IRegisterClientReq = {
+  username: string;
+  email: string;
+  password: string;
+  role: 'ClientUser';
+  user_type: 'client';
+};
