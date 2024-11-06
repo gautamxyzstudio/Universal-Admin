@@ -5,6 +5,7 @@ import Sidebar from '@/components/organism/Sidebar/Sidebar';
 
 import Topbar from '@/components/organism/Topbar/Topbar';
 import HomeProviders from './HomeProviders';
+import RouteChangeTopLoader from '@/components/atoms/RouteChangeTopLoader/RouteChangeTopLoader';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${helveticaBold.variable} antialiased`}>
         <HomeProviders>
+          <RouteChangeTopLoader />
           <div className="flex flex-row">
             <div className="h-screen w-[25%] max-w-[280px] bg-black">
               <Sidebar />

@@ -12,13 +12,21 @@ import React, { useCallback, useEffect, useState } from 'react';
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(true);
-  const { data, isLoading, error } = useGetCompanyQuery({ page: currentPage });
+  const { data, isLoading, error } = useGetCompanyQuery({
+    page: 1,
+    search: '',
+    perPage: 100,
+  });
   const [showFormModal, setShowFormModal] = useState(false);
   const [companies, setCompanies] = useState<ICompany[]>([]);
 
   useEffect(() => {
     if (data) {
-      setCompanies((prev) => [...prev, ...data?.data]);
+      if (data.meta.pagination.page === 1) {
+        setCompanies(data?.data);
+      } else {
+        setCompanies((prev) => [...prev, ...data?.data]);
+      }
       setIsLastPage(
         data?.data.length === 0 ||
           currentPage === data?.meta.pagination.pageCount

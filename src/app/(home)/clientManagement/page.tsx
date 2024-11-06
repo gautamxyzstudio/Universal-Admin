@@ -141,6 +141,12 @@ const ClientManagement = () => {
               joiningDate: new Date(),
               location: clientDetails.data.attributes?.location ?? '',
               selfie: '',
+              company: {
+                id: details.company.id,
+                companyname: details.company.companyname ?? '',
+                companyemail: details.company.companyemail ?? '',
+                companylogo: details.company.companylogo ?? '',
+              },
               companyName: clientDetails.data.attributes?.companyname ?? '',
               industry: clientDetails.data.attributes?.Industry ?? '',
             },
@@ -174,7 +180,7 @@ const ClientManagement = () => {
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name}
-          image={params.row.selfie}
+          image={params.row.company_details}
           companyNameStyle=" text-disable "
           companyName={params.row.companyName}
         />

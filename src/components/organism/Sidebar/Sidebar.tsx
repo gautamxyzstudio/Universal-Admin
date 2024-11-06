@@ -9,6 +9,7 @@ import ConfirmationDialog from '../../molecules/DialogTypes/ComfirmationDialog/C
 import { removeUserDetailsFromCookies } from '@/utility/cookies';
 import { usePathname, useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';
+import { splitRoute } from '@/utility/utils';
 
 const Sidebar = () => {
   const [translateY, setTranslateValue] = useState(0);
@@ -87,7 +88,7 @@ const Sidebar = () => {
             style={{ transform: `translateY(${translateY}px)` }} // Use inline style for translation
           />
           {quickLink.map((data, index) => {
-            const isActive = currentPathName === data.path;
+            const isActive = `/${splitRoute(currentPathName)}` === data.path;
             return SideBarTab(data, index, isActive);
           })}
         </div>

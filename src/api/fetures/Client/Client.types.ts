@@ -15,6 +15,14 @@ export type IGetClientsResponse = {
       Industry: string;
       status: IClientStatus;
       location: string;
+      company_detail: {
+        id: number;
+        companyname: string;
+        companyemail: string;
+        companylogo: {
+          url: string;
+        } | null;
+      } | null;
     } | null;
   }[];
   meta: IPagination;
@@ -29,6 +37,12 @@ export interface IClient {
   detailsId: number;
   joiningDate: Date;
   location: string;
+  company: {
+    id: number;
+    companyname: string;
+    companyemail: string;
+    companylogo: string | null;
+  } | null;
   selfie: string;
   companyName: string;
   industry: string;

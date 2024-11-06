@@ -34,6 +34,14 @@ const clientApi = baseApi.injectEndpoints({
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,
               selfie: '',
+              company: {
+                id: client.cuser_id.company_detail?.id ?? 0,
+                companyname: client.cuser_id.company_detail?.companyname ?? '',
+                companyemail:
+                  client.cuser_id.company_detail?.companyemail ?? '',
+                companylogo:
+                  client.cuser_id.company_detail?.companylogo?.url ?? null,
+              },
               companyName: client.cuser_id.companyname,
               industry: client.cuser_id?.Industry,
             });
@@ -72,6 +80,7 @@ const clientApi = baseApi.injectEndpoints({
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,
               selfie: '',
+              company: null,
               companyName: client.cuser_id.companyname,
               industry: client.cuser_id?.Industry,
             });
