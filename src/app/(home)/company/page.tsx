@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { ICompany } from '@/api/fetures/Company/Company.types';
 import { useGetCompanyQuery } from '@/api/fetures/Company/CompanyApi';

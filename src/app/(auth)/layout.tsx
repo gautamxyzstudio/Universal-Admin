@@ -21,8 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${helveticaBold.variable} antialiased`}>
-        <div className="w-screen bg-black h-screen">
+      <body className={`${helveticaBold.variable} antialiased overflow-hidden`}>
+        <div className="w-screen bg-Black h-screen">
           <AuthProviders>{children}</AuthProviders>
         </div>
       </body>

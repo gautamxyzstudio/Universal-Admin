@@ -13,6 +13,7 @@ const CustomDrawer: React.FC<ICustomDrawerProps> = ({
       PaperProps={{
         sx: {
           borderRadius: '8px 0 0 8px',
+          scrollbarWidth: 'none',
           ...styles,
         },
       }}

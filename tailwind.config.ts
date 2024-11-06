@@ -27,6 +27,7 @@ const config: Config = {
                 borderGrey: '#EBEBEB',
                 textBlack: '#121212',
                 Black: '#121212',
+                loginBgcolor: '#0E0E0E',
                 modal: 'rgba(0, 0, 0, 0.2)',
                 borderGreySecondary: '#dbdbdb',
                 externalLink: '#2048E0',

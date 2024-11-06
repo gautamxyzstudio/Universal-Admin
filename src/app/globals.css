@@ -31,3 +31,29 @@ body {
 .scrollbar-none{
   scrollbar-width: none;
 }
+ .swiper{
+  display: flex !important;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.swiper-wrapper{
+  padding-bottom: 52px !important;
+}
+
+.mySwiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: #383838;
+  opacity: 1;
+}
+
+/* Change the color of the active pagination bullet */
+.mySwiper .swiper-pagination-bullet-active {
+  background-color: #ff6600; /* Set the color for the active bullet */
+  width: 10px ;
+  height: 10px ;
+  border-radius: 10px;
+}

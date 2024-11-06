@@ -45,6 +45,7 @@ import calendar from './calendar.svg';
 import add from './add.svg';
 import animatedSpinner from './animatedSpinner.svg';
 
+
 // Icon Object
 export const Icons = {
   logo,
@@ -98,10 +99,16 @@ export const Icons = {
 import demoImg from './demoImage.png';
 import noSubAdmin from './noSubAdmin.png';
 import errorILLustration from './errorIllustration.png';
+import mobileLogin from './mobileLogin.svg';
+import tabLogin from './tabLogin.svg';
+import webLogin from './webLogin.svg';
 
 // Image Object
 export const Images = {
   demoImg,
   noSubAdmin,
   errorILLustration,
+  mobileLogin,
+  tabLogin,
+  webLogin,
 };
