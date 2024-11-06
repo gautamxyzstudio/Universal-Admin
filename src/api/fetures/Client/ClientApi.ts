@@ -12,6 +12,7 @@ import {
   IUpdateClientDetailsRequest,
   IUpdateClientDetailsResponse,
 } from './Client.types';
+import { createImageUrl } from '@/utility/cookies';
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -39,8 +40,11 @@ const clientApi = baseApi.injectEndpoints({
                 companyname: client.cuser_id.company_detail?.companyname ?? '',
                 companyemail:
                   client.cuser_id.company_detail?.companyemail ?? '',
-                companylogo:
-                  client.cuser_id.company_detail?.companylogo?.url ?? null,
+                companylogo: client.cuser_id.company_detail?.companylogo?.url
+                  ? createImageUrl(
+                      client.cuser_id.company_detail?.companylogo?.url
+                    )
+                  : null,
               },
               companyName: client.cuser_id.companyname,
               industry: client.cuser_id?.Industry,

@@ -28,7 +28,7 @@ import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
   const [showCompanyList, setShowCompanyList] = useState(false);
   const router = useRouter();
@@ -37,13 +37,13 @@ const ClientManagement = () => {
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [addClientModal, setAddClientModal] = useState(false);
-  const [isLastPage, setIsLastPage] = useState(true);
+  // const [isLastPage, setIsLastPage] = useState(true);
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
 
   //====================================================Apis start====================
   //get Clients list
-  const getClientsHandler = async (isFirstPage?: boolean) => {
-    const page = isFirstPage ? 1 : currentPage + 1;
+  const getClientsHandler = async () => {
+    const page = 1;
     try {
       const clientResponse = await getClients({ page }).unwrap();
       if (clientResponse) {
@@ -174,15 +174,17 @@ const ClientManagement = () => {
       field: 'clientDetails',
       headerName: STRINGS.clientNameAndComp,
       width: 256,
-      renderCell: (params) => (
+      renderCell: (params: { row: IClient }) => (
         <UserNameWithImage
           type={'white'}
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
-          name={params.row.name}
-          image={params.row.company_details}
+          name={params.row.name ?? ''}
+          image={params.row.company?.companylogo}
           companyNameStyle=" text-disable "
-          companyName={params.row.companyName}
+          companyName={
+            params.row.company?.companyname ?? params.row.companyName
+          }
         />
       ),
     },
@@ -217,7 +219,7 @@ const ClientManagement = () => {
   ];
 
   useEffect(() => {
-    getClientsHandler(true);
+    getClientsHandler();
   }, []);
 
   const onSelectCompany = (company) => {

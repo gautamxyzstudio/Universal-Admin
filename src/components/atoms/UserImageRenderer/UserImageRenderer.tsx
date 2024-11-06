@@ -19,15 +19,25 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const backgroundColor = `${stylesAttributes.backgroundColor}`;
   const textColor = `${stylesAttributes.textColor}`;
+
   return (
     <>
+      {isLoading && image && (
+        <div className="flex absolute flex-row justify-center items-center bg-white z-10  rounded-full">
+          <Image width={50} height={50} src={Icons.animatedSpinner} alt={''} />
+        </div>
+      )}
+
       {image && (
         <Image
           width={100}
           height={100}
           loading="lazy"
           onLoadingComplete={() => setIsLoading(false)}
-          className={imageStyle + ' object-contain w-auto h-auto rounded-full'}
+          className={
+            imageStyle +
+            ' object-contain relative  top-0 left-0 w-auto h-auto rounded-full'
+          }
           src={image}
           alt={name}
         />

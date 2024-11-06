@@ -39,7 +39,7 @@ const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
         getUploadedImageId(uploadedImage[0].id);
       } catch (e) {
         console.log(e, 'ERROR');
-        let error = e as ICustomErrorResponse;
+        const error = e as ICustomErrorResponse;
         displaySnackbar('error', error.message);
       }
     }
@@ -94,7 +94,7 @@ const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
           accept="image/*"
         />
       </Button>
-      <span className='mt-2 text-accentColor text-md'>Upload Photo</span>
+      <span className="mt-2 text-accentColor text-md">Upload Photo</span>
     </>
   );
 };

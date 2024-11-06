@@ -142,10 +142,9 @@ const SubAdminManagement = () => {
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
-      withPrimaryButton
+        withPrimaryButton
         primaryButtonTitle={STRINGS.addSubAdmin}
         title={STRINGS.subAdminManagement}
-        withPrimaryButton
         onPressButton={onPressPrimaryButton}
       />
       <DataTable

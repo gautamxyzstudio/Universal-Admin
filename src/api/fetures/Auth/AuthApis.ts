@@ -2,8 +2,6 @@ import { baseApi } from '@/api/BaseApi';
 import { Endpoints } from '@/api/Endpoints';
 import { IImageUploadResponse, ILoginApiResponse, ILoginArgs } from './types';
 import { ApiMethodType } from '@/api/ApiConstants';
-import { ICustomErrorResponse, IErrorResponse } from '@/api/types';
-import { STRINGS } from '@/constant/en';
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
