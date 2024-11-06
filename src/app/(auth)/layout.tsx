@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '../globals.css';
-import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
-import ReduxProvider from '@/providers/ReduxProvider';
-import SnackBarProvider from '@/providers/SnackbarProvider';
-import AuthProviders from './authProviders';
+import AuthProviders from './AuthProviders';
 
 const helveticaBold = localFont({
   src: '../../fonts/Helvetica-Bold.ttf',

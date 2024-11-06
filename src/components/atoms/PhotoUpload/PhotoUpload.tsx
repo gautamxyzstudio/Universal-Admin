@@ -94,7 +94,7 @@ const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
           accept="image/*"
         />
       </Button>
-      <span className='mt-2 text-accentColor text-md'>Upload Photo</span>
+      <span className="mt-2 text-accentColor text-md">Upload Photo</span>
     </>
   );
 };

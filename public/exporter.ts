@@ -43,6 +43,7 @@ import event from './event.svg';
 import clock from './clock.svg';
 import calendar from './calendar.svg';
 import add from './add.svg';
+import animatedSpinner from './animatedSpinner.svg';
 
 // Icon Object
 export const Icons = {
@@ -55,6 +56,7 @@ export const Icons = {
   people,
   crossDialog,
   crossForm,
+  animatedSpinner,
   home,
   logout,
   notification,

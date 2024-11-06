@@ -7,20 +7,37 @@ import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import AddCompanyForm from '@/components/templates/AddCompanyForm/AddCompanyForm';
 import { STRINGS } from '@/constant/en';
 import { GridColDef } from '@mui/x-data-grid';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const Company = () => {
-  const { data, isLoading, error } = useGetCompanyQuery(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLastPage, setIsLastPage] = useState(true);
+  const { data, isLoading, error } = useGetCompanyQuery({
+    page: 1,
+    search: '',
+    perPage: 100,
+  });
   const [showFormModal, setShowFormModal] = useState(false);
   const [companies, setCompanies] = useState<ICompany[]>([]);
 
   useEffect(() => {
-    setCompanies(data?.data ?? []);
+    if (data) {
+      if (data.meta.pagination.page === 1) {
+        setCompanies(data?.data);
+      } else {
+        setCompanies((prev) => [...prev, ...data?.data]);
+      }
+      setIsLastPage(
+        data?.data.length === 0 ||
+          currentPage === data?.meta.pagination.pageCount
+      );
+    }
   }, [data]);
 
   const columns: GridColDef[] = [
     {
       headerName: 'S.no',
+
       width: 48,
       field: 'sNum',
     },
@@ -28,13 +45,16 @@ const Company = () => {
       headerName: 'Company Name',
       width: 240,
       field: 'companyname',
-      renderCell: (params) => (
-        <UserNameWithImage
-          imageStyle="!w-10 !h-10"
-          image={params?.row?.companylogo}
-          name={params?.row?.companyname ?? ''}
-          type={'white'}
-        />
+      renderCell: useCallback(
+        (params) => (
+          <UserNameWithImage
+            imageStyle="!w-10 !h-10"
+            image={params?.row?.companylogo}
+            name={params?.row?.companyname ?? ''}
+            type={'white'}
+          />
+        ),
+        []
       ),
     },
     {
@@ -56,11 +76,18 @@ const Company = () => {
       headerName: 'Action',
       width: 80,
       field: '',
-      renderCell: () => (
-        <h1 className="text-sm cursor-pointer text-primary">View</h1>
+      renderCell: useCallback(
+        () => <h1 className="text-sm cursor-pointer text-primary">View</h1>,
+        []
       ),
     },
   ];
+
+  const onReachEnd = () => {
+    if (!isLastPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   const companyAddHandler = (comp: ICompany) => {
     setCompanies((prev) => {
@@ -80,6 +107,7 @@ const Company = () => {
         columns={columns}
         rows={companies}
         isLoading={isLoading}
+        onReachEnd={onReachEnd}
         emptyViewTitle={''}
         emptyViewSubTitle={''}
         illustration={undefined}

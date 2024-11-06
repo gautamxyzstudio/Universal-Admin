@@ -3,7 +3,6 @@
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import { STRINGS } from '@/constant/en';
 import React, { useEffect, useState } from 'react';
-import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import { Images } from '../../../../public/exporter';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
@@ -86,7 +85,7 @@ const EmployeeManagement = () => {
       field: 'action',
       headerName: 'Action',
       width: 104,
-      renderCell: (params: GridRenderCellParams) => {
+      renderCell: () => {
         return <span className="text-primary">{STRINGS.view}</span>;
       },
     },
@@ -106,7 +105,19 @@ const EmployeeManagement = () => {
         headerView={
           <div className="flex w-full  justify-between items-center mb-4">
             <div className="flex items-center">
-              <SearchField searchStyle="w-[288px]" />
+              {/* <SearchField
+                searchStyle="w-[288px]"
+                onChangeText={function (
+                  event: React.ChangeEvent<HTMLInputElement>
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+                value={''}
+                isLoading={false}
+                onPressCross={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              /> */}
             </div>
             <div className="flex flex-row gap-x-8">
               <TableFilter

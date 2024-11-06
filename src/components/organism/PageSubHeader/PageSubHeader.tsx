@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import React, { memo } from 'react';
 import { Icons } from '../../../../public/exporter';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IPageSubHeaderTypes } from './PageSubHeader.types';
 

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/display-name */
-import React, { useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
 import {
   Table,
@@ -86,7 +86,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   };
 
   const rowContent = useCallback(
-    (_index: number, row: GridValidRowModel) => (
+    (index: number, row: GridValidRowModel) => (
       <>
         {columns.map((column, _index) => {
           return (
@@ -96,9 +96,15 @@ const DataTable: React.FC<IDataTableProps> = ({
               sx={rowStyles}
               align="left"
             >
-              {column.renderCell
-                ? column.renderCell({ row } as GridRenderCellParams)
-                : row[column.field]}
+              {column.field === 'sNum' ? (
+                <span>{index + 1}</span>
+              ) : (
+                <>
+                  {column.renderCell
+                    ? column.renderCell({ row } as GridRenderCellParams)
+                    : row[column.field]}
+                </>
+              )}
             </TableCell>
           );
         })}
@@ -168,7 +174,7 @@ const DataTable: React.FC<IDataTableProps> = ({
         <TableVirtuoso
           data={rows}
           components={VirtuosoTableComponents as any}
-          atBottomThreshold={0.1}
+          defaultItemHeight={70}
           endReached={onReachEnd}
           fixedHeaderContent={fixedHeaderContent}
           itemContent={rowContent}
@@ -178,4 +184,4 @@ const DataTable: React.FC<IDataTableProps> = ({
   );
 };
 
-export default DataTable;
+export default memo(DataTable);

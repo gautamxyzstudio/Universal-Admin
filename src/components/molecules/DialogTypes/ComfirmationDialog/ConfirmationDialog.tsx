@@ -10,9 +10,7 @@ import CustomButton from "@/components/atoms/CutomButton/CustomButton";
 
 const ConfirmationDialog: React.FC<IConfirmationDialogProps> = ({
   type,
-  title,
   onPressLogout,
-  description,
   onClose,
   open,
 }) => {

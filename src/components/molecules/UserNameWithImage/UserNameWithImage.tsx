@@ -17,7 +17,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   return (
     <div className="flex w-full gap-x-[10px] h-auto flex-row items-center justify-start">
       <UserImageRenderer
-        imageStyle={imageStyle}
+        imageStyle={imageStyle + ' !w-10 !h-10'}
         image={image}
         name={name}
         type={type}
@@ -32,7 +32,6 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         )}
         {companyName && (
           <div className={companyNameStyle + ' flex gap-x-2 items-center'}>
-            {' '}
             <span>{companyName}</span>{' '}
             {days && (
               <>

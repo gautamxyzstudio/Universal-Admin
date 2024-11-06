@@ -1,9 +1,7 @@
-
-export type ISearch = {
-    searchText: string;
-  };
-  
-  export interface ISearchInputProps {
-    searchStyle? : string
-  }
-  
+export interface ISearchInputProps {
+  onChangeText: React.ChangeEventHandler<HTMLInputElement>;
+  value: string;
+  searchStyle?: string;
+  isLoading: boolean;
+  onPressCross: () => void;
+}

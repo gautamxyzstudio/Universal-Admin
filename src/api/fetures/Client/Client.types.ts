@@ -15,6 +15,14 @@ export type IGetClientsResponse = {
       Industry: string;
       status: IClientStatus;
       location: string;
+      company_detail: {
+        id: number;
+        companyname: string;
+        companyemail: string;
+        companylogo: {
+          url: string;
+        } | null;
+      } | null;
     } | null;
   }[];
   meta: IPagination;
@@ -29,6 +37,12 @@ export interface IClient {
   detailsId: number;
   joiningDate: Date;
   location: string;
+  company: {
+    id: number;
+    companyname: string;
+    companyemail: string;
+    companylogo: string | null;
+  } | null;
   selfie: string;
   companyName: string;
   industry: string;
@@ -37,4 +51,66 @@ export interface IClient {
 export type ICustomizedGetClientsResponse = {
   data: IClient[];
   pagination: IPagination;
+};
+
+export interface ILinkClientRequest {
+  status: IClientStatus.ACTIVE;
+  Name: string;
+
+  companyname: string;
+
+  location: string;
+  Industry: string;
+  company_detail: number;
+}
+
+export type IRegisterClientReq = {
+  username: string;
+  email: string;
+  password: string;
+  role: 'ClientUser';
+  user_type: 'client';
+};
+
+export type IRegisterClientResponse = {
+  jwt: string;
+  user:
+    | {
+        id: number;
+        username: string;
+        email: string;
+        user_type: 'emp' | 'client';
+      }
+    | null
+    | undefined;
+};
+
+export type IUpdateClientDetailsRequest = {
+  data: {
+    Name: string;
+    companyname: string;
+    contactno: string;
+    Industry: string;
+    Email: string;
+    location: string;
+    jobs: [];
+    company_detail: number;
+    clien_id: number;
+    status: IClientStatus;
+  };
+};
+
+export type IUpdateClientDetailsResponse = {
+  data: {
+    id: number;
+    attributes: {
+      Name: string;
+      companyname: string;
+      contactno: string;
+      Industry: string;
+      location: string;
+      Email: string;
+      status: IClientStatus;
+    } | null;
+  };
 };

@@ -18,7 +18,7 @@ const EmptyScreenView: React.FC<IEmptyScreenViewProps> = ({
           <Image
             className="w-[297px] h-[187px]"
             alt="noSubAdmin"
-            src={illustration}
+            src={illustration ?? Images.errorILLustration}
           />
           <h1 className="mt-6 text-textBlack text-xl font-bold ">
             {emptyViewTitle}

@@ -26,6 +26,13 @@ export interface IAddNewCompanyResponse {
       Website: string;
       regNo: string;
       gstNo: string;
+      companylogo: {
+        data: {
+          attributes: {
+            url: string;
+          };
+        };
+      } | null;
     };
   };
 }

@@ -1,7 +1,7 @@
-export interface IAddCompanyListProps{
+import { ICompany } from '@/api/fetures/Company/Company.types';
+
+export interface IAddCompanyListProps {
   show: boolean;
-  handleClose:
-    | ((event: object, reason: "backdropClick" | "escapeKeyDown") => void)
-    | undefined;
-  onPressCross: () => void;
+  setGlobalModalState: (state: boolean) => void;
+  onSelectCompany: (company: ICompany) => void;
 }

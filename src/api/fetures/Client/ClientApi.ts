@@ -6,7 +6,13 @@ import {
   IClient,
   ICustomizedGetClientsResponse,
   IGetClientsResponse,
+  ILinkClientRequest,
+  IRegisterClientReq,
+  IRegisterClientResponse,
+  IUpdateClientDetailsRequest,
+  IUpdateClientDetailsResponse,
 } from './Client.types';
+import { createImageUrl } from '@/utility/cookies';
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -29,6 +35,17 @@ const clientApi = baseApi.injectEndpoints({
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,
               selfie: '',
+              company: {
+                id: client.cuser_id.company_detail?.id ?? 0,
+                companyname: client.cuser_id.company_detail?.companyname ?? '',
+                companyemail:
+                  client.cuser_id.company_detail?.companyemail ?? '',
+                companylogo: client.cuser_id.company_detail?.companylogo?.url
+                  ? createImageUrl(
+                      client.cuser_id.company_detail?.companylogo?.url
+                    )
+                  : null,
+              },
               companyName: client.cuser_id.companyname,
               industry: client.cuser_id?.Industry,
             });
@@ -67,6 +84,7 @@ const clientApi = baseApi.injectEndpoints({
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,
               selfie: '',
+              company: null,
               companyName: client.cuser_id.companyname,
               industry: client.cuser_id?.Industry,
             });
@@ -83,7 +101,48 @@ const clientApi = baseApi.injectEndpoints({
         };
       },
     }),
+    linkClient: builder.mutation<
+      IClient,
+      { clientDetails: ILinkClientRequest; clientId: number }
+    >({
+      query: (body: {
+        clientDetails: ILinkClientRequest;
+        clientId: number;
+      }) => ({
+        url: Endpoints.linkClient(body.clientId),
+        method: ApiMethodType.patch,
+        body: body.clientDetails,
+      }),
+    }),
+    registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
+      query: (body: IRegisterClientReq) => ({
+        url: Endpoints.registerClient,
+        method: ApiMethodType.post,
+        body,
+      }),
+      transformResponse: (response: IRegisterClientResponse) => {
+        return {
+          clientId: response.user?.id ?? 0,
+        };
+      },
+    }),
+    addClientDetails: builder.mutation<
+      IUpdateClientDetailsResponse,
+      IUpdateClientDetailsRequest
+    >({
+      query: (body) => ({
+        url: Endpoints.addClientDetails,
+        method: ApiMethodType.post,
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetClientsQuery, useGetPendingRequestsQuery } = clientApi;
+export const {
+  useLazyGetClientsQuery,
+  useGetPendingRequestsQuery,
+  useLinkClientMutation,
+  useAddClientDetailsMutation,
+  useRegisterClientMutation,
+} = clientApi;

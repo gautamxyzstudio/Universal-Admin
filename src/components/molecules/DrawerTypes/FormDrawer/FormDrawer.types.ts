@@ -1,4 +1,6 @@
-export interface IFormDrawerProps{
+import { SxProps, Theme } from '@mui/material';
+
+export interface IFormDrawerProps {
   title: string;
   open: boolean;
   handleClose:
@@ -7,4 +9,5 @@ export interface IFormDrawerProps{
   onPressCross: () => void;
   width?: string | number | null;
   children?: React.ReactNode | undefined;
+  styles?: SxProps<Theme> | undefined;
 }
