@@ -8,6 +8,9 @@ import {
   IGetClientsResponse,
   ILinkClientRequest,
   IRegisterClientReq,
+  IRegisterClientResponse,
+  IUpdateClientDetailsRequest,
+  IUpdateClientDetailsResponse,
 } from './Client.types';
 
 const clientApi = baseApi.injectEndpoints({
@@ -98,11 +101,26 @@ const clientApi = baseApi.injectEndpoints({
         body: body.clientDetails,
       }),
     }),
-    registerClient: builder.mutation<any, IRegisterClientReq>({
+    registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
       query: (body: IRegisterClientReq) => ({
         url: Endpoints.registerClient,
         method: ApiMethodType.post,
         body,
+      }),
+      transformResponse: (response: IRegisterClientResponse) => {
+        return {
+          clientId: response.user?.id ?? 0,
+        };
+      },
+    }),
+    addClientDetails: builder.mutation<
+      IUpdateClientDetailsResponse,
+      IUpdateClientDetailsRequest
+    >({
+      query: (body) => ({
+        url: Endpoints.addClientDetails,
+        method: ApiMethodType.post,
+        body: body,
       }),
     }),
   }),
@@ -112,5 +130,6 @@ export const {
   useLazyGetClientsQuery,
   useGetPendingRequestsQuery,
   useLinkClientMutation,
+  useAddClientDetailsMutation,
   useRegisterClientMutation,
 } = clientApi;

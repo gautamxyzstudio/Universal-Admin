@@ -57,3 +57,46 @@ export type IRegisterClientReq = {
   role: 'ClientUser';
   user_type: 'client';
 };
+
+export type IRegisterClientResponse = {
+  jwt: string;
+  user:
+    | {
+        id: number;
+        username: string;
+        email: string;
+        user_type: 'emp' | 'client';
+      }
+    | null
+    | undefined;
+};
+
+export type IUpdateClientDetailsRequest = {
+  data: {
+    Name: string;
+    companyname: string;
+    contactno: string;
+    Industry: string;
+    Email: string;
+    location: string;
+    jobs: [];
+    company_detail: number;
+    clien_id: number;
+    status: IClientStatus;
+  };
+};
+
+export type IUpdateClientDetailsResponse = {
+  data: {
+    id: number;
+    attributes: {
+      Name: string;
+      companyname: string;
+      contactno: string;
+      Industry: string;
+      location: string;
+      Email: string;
+      status: IClientStatus;
+    } | null;
+  };
+};

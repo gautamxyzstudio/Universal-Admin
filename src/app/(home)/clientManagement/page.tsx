@@ -1,6 +1,7 @@
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
 import {
+  useAddClientDetailsMutation,
   useLazyGetClientsQuery,
   useRegisterClientMutation,
 } from '@/api/fetures/Client/ClientApi';
@@ -20,6 +21,10 @@ import LinkOrAddClientFrom from '@/components/templates/LinkOrAddClientForm/Link
 import { ICompany } from '@/api/fetures/Company/Company.types';
 import { IAddEmployeeClientArgs } from './[pendingRequests]/types';
 import { generateUniqueUserName } from '@/utility/utils';
+import { ICustomErrorResponse } from '@/api/types';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { IClientStatus } from '@/constant/enums';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
@@ -28,10 +33,15 @@ const ClientManagement = () => {
   const [showCompanyList, setShowCompanyList] = useState(false);
   const router = useRouter();
   const [registerClient] = useRegisterClientMutation();
+  const [addClientDetails] = useAddClientDetailsMutation();
+  const { changeLoaderState } = useShowLoaderContext();
+  const { displaySnackbar } = useSnackBarContext();
   const [addClientModal, setAddClientModal] = useState(false);
   const [isLastPage, setIsLastPage] = useState(true);
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
 
+  //====================================================Apis start====================
+  //get Clients list
   const getClientsHandler = async (isFirstPage?: boolean) => {
     const page = isFirstPage ? 1 : currentPage + 1;
     try {
@@ -41,6 +51,108 @@ const ClientManagement = () => {
       }
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  // register new client user
+  const registerNewClient = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const registerClientRes = await registerClient({
+        email: email,
+        password: password,
+        user_type: 'client',
+        role: 'ClientUser',
+        username: generateUniqueUserName(email),
+      }).unwrap();
+      if (registerClientRes) {
+        return registerClientRes.clientId;
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //Add registered client details
+  const addRegisteredClientDetails = async (
+    userId: number,
+    client: IAddEmployeeClientArgs,
+    companyId: number
+  ) => {
+    try {
+      const addClientDetailsResp = await addClientDetails({
+        data: {
+          Name: client.name,
+          companyname: client.compName,
+          contactno: client.phone,
+          Industry: client.industry,
+          Email: client.email,
+          location: client.location,
+          jobs: [],
+          company_detail: companyId,
+          clien_id: userId,
+          status: IClientStatus.ACTIVE,
+        },
+      }).unwrap();
+      if (addClientDetailsResp) {
+        return addClientDetailsResp;
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  //====================================================Apis end====================
+
+  // Add new client function
+  const addClientHandler = async (details: {
+    company: ICompany | null;
+    client: IAddEmployeeClientArgs;
+  }) => {
+    try {
+      modalStateChangeHandler(false);
+      changeLoaderState(true);
+      const registeredClientResponse = await registerNewClient({
+        email: details.client.email,
+        password: details.client.password,
+      });
+      if (registeredClientResponse && details?.company?.id) {
+        const clientDetails = await addRegisteredClientDetails(
+          registeredClientResponse,
+          details.client,
+          details.company?.id
+        );
+        if (clientDetails) {
+          displaySnackbar('success', STRINGS.clientAdded);
+          const newClient: IClient[] = [
+            {
+              id: clientDetails.data.id,
+              name: clientDetails.data.attributes?.Name ?? '',
+              status:
+                clientDetails.data.attributes?.status ?? IClientStatus.ACTIVE,
+              email: clientDetails.data.attributes?.Email ?? '',
+              phone: clientDetails.data.attributes?.contactno ?? '',
+              detailsId: clientDetails.data.id,
+              joiningDate: new Date(),
+              location: clientDetails.data.attributes?.location ?? '',
+              selfie: '',
+              companyName: clientDetails.data.attributes?.companyname ?? '',
+              industry: clientDetails.data.attributes?.Industry ?? '',
+            },
+          ];
+          setClients((prev) => [...newClient, ...prev]);
+        }
+      }
+    } catch (error) {
+      const customError = error as ICustomErrorResponse;
+      displaySnackbar('error', customError.message);
+    } finally {
+      changeLoaderState(false);
     }
   };
 
@@ -109,42 +221,8 @@ const ClientManagement = () => {
 
   const modalStateChangeHandler = (state) => {
     setAddClientModal(state);
-  };
-
-  const addClientHandler = async (details: {
-    company: ICompany | null;
-    client: IAddEmployeeClientArgs;
-  }) => {
-    try {
-      const isRegisteredClient = await registerNewClient({
-        email: details.client.email,
-        password: details.client.password,
-      });
-    } catch (error) {}
-  };
-
-  const registerNewClient = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
-    try {
-      const registerClientRes = await registerClient({
-        email: email,
-        password: password,
-        user_type: 'client',
-        role: 'ClientUser',
-        username: generateUniqueUserName(email),
-      }).unwrap();
-      if (registerClientRes) {
-        console.log(registerClientRes);
-        return true;
-      }
-      return false;
-    } catch (err) {
-      return false;
+    if (state === false) {
+      setSelectedCompany(null);
     }
   };
 

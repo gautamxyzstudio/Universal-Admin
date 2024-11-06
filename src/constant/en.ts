@@ -94,5 +94,6 @@ export const STRINGS = {
   confirm: 'Confirm',
   no_companies: 'No Companies Found',
   clientName: 'Client Name',
-  clientAdded: 'Client Added Successfully!!',
+  clientAdded: 'Client added successfully!!',
+  clientCreated: 'Client created successfully!!',
 };

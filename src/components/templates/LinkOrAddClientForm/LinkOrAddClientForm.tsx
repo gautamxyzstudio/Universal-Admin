@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useReducer, useState } from 'react';
 import {
@@ -101,13 +102,13 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
   };
 
   const validateForm = () => {
-    let name = state.clientName.trim();
-    let email = state.email.trim();
-    let phone = state.contactNumber.trim();
-    let companyName = state.companyName.trim();
-    let location = state.location.trim();
-    let industry = state.industry.trim();
-    let password = state.password?.trim();
+    const name = state.clientName.trim();
+    const email = state.email.trim();
+    const phone = state.contactNumber.trim();
+    const companyName = state.companyName.trim();
+    const location = state.location.trim();
+    const industry = state.industry.trim();
+    const password = state.password?.trim();
 
     if (type === 'add') {
       let isValid = true;
@@ -164,6 +165,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
               password: state.password ?? '',
             },
           });
+        setState(initialState);
       }
     }
     if (type === 'link') {
@@ -186,6 +188,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
             company: linkedCompany,
             client: selectedClient,
           });
+        setState(initialState);
       }
     }
   };

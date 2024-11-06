@@ -12,9 +12,10 @@ export const Endpoints = {
   addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
   getClients: (page: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=10&populate=*`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=20&populate=*`,
   getPendingRequests: (page: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findPendingClients?page=${page}&pageSize=10`,
   linkClient: (userId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${userId}`,
+  addClientDetails: `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details`,
 };
