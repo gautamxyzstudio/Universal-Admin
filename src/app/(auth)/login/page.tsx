@@ -7,9 +7,8 @@ import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
 import LoginForm from "@/components/templates/loginForm/LoginForm";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { Autoplay, Pagination, EffectFade } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css/effect-fade";
-import "swiper/css/pagination";
 
 const Login = () => {
   return (
@@ -19,20 +18,22 @@ const Login = () => {
           <Image width={144} height={56} src={Icons.logo} alt="logo" />
           <div className="mb-[90px] flex gap-x-[194px] items-center">
             <LoginForm />
-            <div className="w-[438px] h-[485px]">
+            {/* Silde Fade Effect */}
               <Swiper
                 slidesPerView={1}
+                fadeEffect={{
+                  crossFade: true,
+                }}
+                speed={4000}
+                spaceBetween={30}
                 effect={"fade"}
                 loop={true}
                 centeredSlides={true}
                 autoplay={{
-                  delay: 2500,
+                  delay: 1500,
                   disableOnInteraction: false,
                 }}
-                pagination={{
-                  clickable: true,
-                }}
-                modules={[Autoplay, Pagination, EffectFade]}
+                modules={[Autoplay, EffectFade]}
                 className="mySwiper"
               >
                 <SwiperSlide>
@@ -45,15 +46,11 @@ const Login = () => {
                   <Image src={Images.mobileLogin} alt="Mobile Login" />
                 </SwiperSlide>
               </Swiper>
-            </div>
           </div>
         </div>
       </div>
-      <div className="absolute h-screen overflow-hidden -top-[2%] -right-[4%]">
+      <div className="absolute h-screen overflow-hidden -top-[1%] -right-[3%]">
         <SVGComponent svg={SVGS.loginBg} />
-      </div>
-      <div className="absolute  h-screen overflow-hidden   top-0 right-[20%]">
-        {/* <SVGComponent svg={SVGS.svgTwoLogin} /> */}
       </div>
     </div>
   );

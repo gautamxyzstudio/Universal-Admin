@@ -44,7 +44,8 @@ const config: Config = {
             },
 
             boxShadow: {
-                'custom-shadow': '0px 0px 6px 0px rgba(18, 18, 18, 0.08)'
+                'custom-shadow': '0px 0px 6px 0px rgba(18, 18, 18, 0.08)',
+                'loginForm': '0px 0px 8px 0px rgba(255,255,255, 0.07)'
             },
             fontSize: {
                 'heading-40': [
