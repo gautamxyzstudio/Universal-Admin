@@ -11,11 +11,13 @@ import {
   TableHead,
   TableRow,
   Paper,
+  TableFooter,
 } from "@mui/material";
 import { GridRenderCellParams, GridValidRowModel } from "@mui/x-data-grid";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import { IDataTableProps } from "./DataTable.types";
 import EmptyScreenView from "@/components/templates/EmptyScreenView/EmptyScreenView";
+import ActivityIndicator from "../ActivityIndicator/ActivityIndicator";
 
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
@@ -30,6 +32,8 @@ const DataTable: React.FC<IDataTableProps> = ({
   emptyViewTitle,
   isDataEmpty,
   error,
+  isLastPage,
+  footerComponent,
 }) => {
   const { data } = useDemoData({
     rowLength: 10,
@@ -82,6 +86,19 @@ const DataTable: React.FC<IDataTableProps> = ({
 
     TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
       <TableBody {...props} ref={ref} />
+    )),
+    TableFoot: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+      <TableFooter
+        sx={{
+          position: "relative !important",
+          display: "flex !important",
+          width: "74.5vw",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        {...props}
+        ref={ref}
+      />
     )),
   };
 
@@ -150,9 +167,18 @@ const DataTable: React.FC<IDataTableProps> = ({
     [columns]
   );
 
+  const fixedFooterContent = () => {
+    return (
+      <div className="w-full mt-2 flex justify-center items-center">
+        <ActivityIndicator size={36} />
+      </div>
+    );
+  };
   return (
     <div className="p-4  w-full h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
-      {rows.length > 0 && <div className="w-full">{headerView}</div>}
+      {rows.length > 0 && headerView && (
+        <div className="w-full">{headerView}</div>
+      )}
       {isLoading ? (
         <TableVirtuoso
           data={data.rows}
@@ -175,6 +201,9 @@ const DataTable: React.FC<IDataTableProps> = ({
           data={rows}
           components={VirtuosoTableComponents as any}
           defaultItemHeight={70}
+          fixedFooterContent={
+            footerComponent ?? !isLastPage ? fixedFooterContent : undefined
+          }
           endReached={onReachEnd}
           fixedHeaderContent={fixedHeaderContent}
           itemContent={rowContent}

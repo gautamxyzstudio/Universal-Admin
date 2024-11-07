@@ -14,5 +14,5 @@ export interface IDataTableProps extends TableProps, IEmptyScreenViewProps {
   isLastPage?: boolean;
   footerComponent?: React.ComponentType<{
     context?: any;
-}> | undefined
+}> | undefined;
 }

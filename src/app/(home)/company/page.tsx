@@ -1,82 +1,122 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { ICompany } from '@/api/fetures/Company/Company.types';
-import { useGetCompanyQuery } from '@/api/fetures/Company/CompanyApi';
-import DataTable from '@/components/atoms/DataTable/DataTable';
-import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import AddCompanyForm from '@/components/templates/AddCompanyForm/AddCompanyForm';
-import { STRINGS } from '@/constant/en';
-import { GridColDef } from '@mui/x-data-grid';
-import React, { useCallback, useEffect, useState } from 'react';
+"use client";
+import { ICompany } from "@/api/fetures/Company/Company.types";
+import {
+  useLazyGetCompanyQuery,
+} from "@/api/fetures/Company/CompanyApi";
+import DataTable from "@/components/atoms/DataTable/DataTable";
+import SearchField from "@/components/molecules/InputTypes/SearchInput/SearchInput";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import PageHeader from "@/components/organism/PageHeader/PageHeader";
+import AddCompanyForm from "@/components/templates/AddCompanyForm/AddCompanyForm";
+import { STRINGS } from "@/constant/en";
+import { GridColDef } from "@mui/x-data-grid";
+import React, { useCallback, useEffect, useState } from "react";
+import _ from "lodash";
 
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(true);
-  const { data, isLoading, error } = useGetCompanyQuery({
-    page: 1,
-    search: '',
-    perPage: 100,
-  });
+  const [fetchCompanies, { error }] = useLazyGetCompanyQuery();
   const [showFormModal, setShowFormModal] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
+  const [searchState, updateSearchState] = useState<"idle" | "searching">(
+    "idle"
+  );
+  const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<ICompany[]>([]);
 
-  useEffect(() => {
-    if (data) {
-      if (data.meta.pagination.page === 1) {
-        setCompanies(data?.data);
-      } else {
-        setCompanies((prev) => [...prev, ...data?.data]);
+  const fetchCompaniesHandler = async (
+    characters: string,
+    isFirstPage?: boolean
+  ) => {
+    const page = isFirstPage ? 1 : currentPage + 1;
+    try {
+      const response = await fetchCompanies({
+        page: page,
+        search: characters,
+      }).unwrap();
+      if (response) {
+        setIsLoading(false);
+        if (page === 1) {
+          setCompanies(response.data);
+        } else {
+          setCompanies((prev) => [...prev, ...response.data]);
+        }
+        setCurrentPage(response.meta.pagination.page);
+        updateSearchState("idle");
+        setIsLastPage(
+          response?.data.length === 0 ||
+            currentPage === response?.meta.pagination.pageCount
+        );
       }
-      setIsLastPage(
-        data?.data.length === 0 ||
-          currentPage === data?.meta.pagination.pageCount
-      );
+    } catch (error) {
+      setIsLoading(false);
+      updateSearchState("idle");
+      console.log("Error fetching companies", error);
     }
-  }, [data]);
+  };
+  useEffect(() => {
+    if (searchVal.length > 0) {
+      updateSearchState("searching");
+      handleSearch(searchVal);
+      setIsLastPage(true);
+    } else {
+      fetchCompaniesHandler(searchVal, true);
+      setIsLastPage(true);
+    }
+  }, [searchVal]);
+
+  const handleSearch = useCallback(
+    _.debounce((query) => {
+      if (query) {
+        fetchCompaniesHandler(query, true);
+      }
+    }, 1000),
+    []
+  );
 
   const columns: GridColDef[] = [
     {
-      headerName: 'S.no',
-
+      headerName: "S.no",
       width: 48,
-      field: 'sNum',
+      field: "sNum",
     },
     {
-      headerName: 'Company Name',
+      headerName: "Company Name",
       width: 240,
-      field: 'companyname',
+      field: "companyname",
       renderCell: useCallback(
         (params) => (
           <UserNameWithImage
             imageStyle="!w-10 !h-10"
             image={params?.row?.companylogo}
-            name={params?.row?.companyname ?? ''}
-            type={'white'}
+            name={params?.row?.companyname ?? ""}
+            type={"white"}
           />
         ),
         []
       ),
     },
     {
-      headerName: 'E-mail',
+      headerName: "E-mail",
       width: 240,
-      field: 'companyemail',
+      field: "companyemail",
     },
     {
-      headerName: 'Co. registered number',
+      headerName: "Co. registered number",
       width: 220,
-      field: 'regNo',
+      field: "regNo",
     },
     {
-      headerName: 'Account creation',
+      headerName: "Account creation",
       width: 220,
-      field: 'location',
+      field: "location",
     },
     {
-      headerName: 'Action',
+      headerName: "Action",
       width: 80,
-      field: '',
+      field: "",
       renderCell: useCallback(
         () => <h1 className="text-sm cursor-pointer text-primary">View</h1>,
         []
@@ -107,10 +147,22 @@ const Company = () => {
       <DataTable
         columns={columns}
         rows={companies}
+        headerView={
+          <div className="flex w-full  justify-start items-start pb-6">
+            <SearchField
+              onPressCross={() => setSearchVal("")}
+              onChangeText={(e) => setSearchVal(e.target.value)}
+              value={searchVal}
+              isLoading={searchState === "searching"}
+            />
+          </div>
+        }
         isLoading={isLoading}
         onReachEnd={onReachEnd}
-        emptyViewTitle={''}
-        emptyViewSubTitle={''}
+        isLastPage={isLastPage}
+        tableHeightPercent={90}
+        emptyViewTitle={""}
+        emptyViewSubTitle={""}
         illustration={undefined}
         error={error}
         isDataEmpty={companies.length === 0}
