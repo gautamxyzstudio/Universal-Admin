@@ -11,13 +11,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  TableFooter,
 } from "@mui/material";
 import { GridRenderCellParams, GridValidRowModel } from "@mui/x-data-grid";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import { IDataTableProps } from "./DataTable.types";
 import EmptyScreenView from "@/components/templates/EmptyScreenView/EmptyScreenView";
-import ActivityIndicator from "../ActivityIndicator/ActivityIndicator";
 
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
@@ -152,14 +150,6 @@ const DataTable: React.FC<IDataTableProps> = ({
     [columns]
   );
 
-  const fixedFooterContent = useCallback(
-    () => (
-      <div className="w-full mt-2 flex justify-center items-center">
-        <ActivityIndicator size={36} />
-      </div>
-    ),
-    []
-  );
   return (
     <div className="p-4  w-full h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
       {rows.length > 0 && <div className="w-full">{headerView}</div>}
@@ -186,7 +176,6 @@ const DataTable: React.FC<IDataTableProps> = ({
           components={VirtuosoTableComponents as any}
           defaultItemHeight={70}
           endReached={onReachEnd}
-          fixedFooterContent={fixedFooterContent}
           fixedHeaderContent={fixedHeaderContent}
           itemContent={rowContent}
         />
