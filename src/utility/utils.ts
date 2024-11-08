@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { ICustomErrorResponse } from '@/api/types';
+import moment from "moment"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getCurrentYear = () => {
@@ -74,3 +75,15 @@ export const splitRoute = (route: string) => {
   const parts = route.split('/');
   return parts[1] ?? '';
 };
+
+export const formatDateFromNow = (date: string | Date) => {
+  return moment(date).fromNow();
+};
+
+export const dateFormat = (date: string | Date)=>{
+  return moment(date).format('D-MM-YYYY');
+}
+
+export const TimeFormat = (date: string | Date)=>{
+  return moment(date).format('h:mm A');
+}

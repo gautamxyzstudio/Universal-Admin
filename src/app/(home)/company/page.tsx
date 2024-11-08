@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { ICompany } from "@/api/fetures/Company/Company.types";
-import {
-  useLazyGetCompanyQuery,
-} from "@/api/fetures/Company/CompanyApi";
+import { useLazyGetCompanyQuery } from "@/api/fetures/Company/CompanyApi";
 import DataTable from "@/components/atoms/DataTable/DataTable";
 import SearchField from "@/components/molecules/InputTypes/SearchInput/SearchInput";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
@@ -13,6 +12,8 @@ import { STRINGS } from "@/constant/en";
 import { GridColDef } from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
+import { Images } from "../../../../public/exporter";
+import { useRouter } from "next/navigation";
 
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +33,7 @@ const Company = () => {
   ) => {
     const page = isFirstPage ? 1 : currentPage + 1;
     try {
+      console.log(page, "pagenumber");
       const response = await fetchCompanies({
         page: page,
         search: characters,
@@ -76,6 +78,10 @@ const Company = () => {
     []
   );
 
+  const router = useRouter();
+  const handleOnRowClick = (row: any) => {
+    router.push(`/company/${row.id}`);
+  };
   const columns: GridColDef[] = [
     {
       headerName: "S.no",
@@ -125,8 +131,9 @@ const Company = () => {
   ];
 
   const onReachEnd = () => {
+    console.log("onReachEnd called");
     if (!isLastPage) {
-      setCurrentPage((prev) => prev + 1);
+      fetchCompaniesHandler(searchVal);
     }
   };
 
@@ -144,26 +151,28 @@ const Company = () => {
         onPressButton={() => setShowFormModal(true)}
         title={STRINGS.company}
       />
+
+      {companies && !isLoading && (
+        <div className="flex w-full  justify-start items-start pb-6">
+          <SearchField
+            onPressCross={() => setSearchVal("")}
+            onChangeText={(e) => setSearchVal(e.target.value)}
+            value={searchVal}
+            isLoading={searchState === "searching"}
+          />
+        </div>
+      )}
       <DataTable
         columns={columns}
         rows={companies}
-        headerView={
-          <div className="flex w-full  justify-start items-start pb-6">
-            <SearchField
-              onPressCross={() => setSearchVal("")}
-              onChangeText={(e) => setSearchVal(e.target.value)}
-              value={searchVal}
-              isLoading={searchState === "searching"}
-            />
-          </div>
-        }
+        onPressRow={handleOnRowClick}
         isLoading={isLoading}
         onReachEnd={onReachEnd}
         isLastPage={isLastPage}
         tableHeightPercent={90}
-        emptyViewTitle={""}
+        emptyViewTitle={STRINGS.no_companies}
         emptyViewSubTitle={""}
-        illustration={undefined}
+        illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={companies.length === 0}
       />

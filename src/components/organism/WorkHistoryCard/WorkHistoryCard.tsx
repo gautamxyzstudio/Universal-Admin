@@ -27,10 +27,10 @@ const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
         />
         <TextWithBgColor
           textLabel={textLabel}
-          textStyle={textStyle + " h-fit text-[12px] leading-4"}
+          textStyle={textStyle + " absolute right-[8px] top-[4px]"}
         />
       </div>
-      <div className="flex flex-col pl-2 gap-y-2">
+      <div className="flex flex-col pl-2 gap-y-2 w-full">
         {iconWithTexts.map((item, index) => (
           <IconWithText
             key={index}

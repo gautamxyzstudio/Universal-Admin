@@ -19,3 +19,14 @@ export enum IClientStatus {
   ACTIVE = 's1',
   INACTIVE = 's2',
 }
+
+export enum IJobPostStatus {
+  OPEN = 's0',
+  CLOSED = 's1',
+  APPLIED = 's2',
+  DECLINED = 's3',
+  CONFIRMED = 's4',
+  NO_SHOW = 's5',
+  COMPLETED = 's6',
+  CANCELED = 's7',
+}

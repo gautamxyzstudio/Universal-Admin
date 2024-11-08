@@ -44,6 +44,9 @@ import clock from './clock.svg';
 import calendar from './calendar.svg';
 import add from './add.svg';
 import animatedSpinner from './animatedSpinner.svg';
+import jobId from './jobId.svg';
+import location_Pin from './location_Pin.svg';
+import time_Date from './time_Date.svg';
 
 
 // Icon Object
@@ -93,6 +96,9 @@ export const Icons = {
   clock,
   calendar,
   add,
+  jobId,
+  location_Pin,
+  time_Date,
 };
 
 // Images

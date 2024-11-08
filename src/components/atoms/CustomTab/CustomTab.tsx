@@ -49,7 +49,6 @@ const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
       {tabs.map((tab, index) => (
         <TabPanel value={currentTabIndex} index={index} key={index}>
           {tab.content}
-          {/* <div className="py-4 px-3 flex flex-col h-[32%] w-full">{tab.content}</div> */}
         </TabPanel>
       ))}
     </div>

@@ -114,7 +114,7 @@ const EmployeeDetails = ({
               textStyle: "",
             },
           ]}
-          days={"3d ago"}
+          days={new Date(23/3/2001)}
         />
       ),
       onClick: () => {
@@ -148,7 +148,7 @@ const EmployeeDetails = ({
               textStyle: "",
             },
           ]}
-          days={"3d ago"}
+          days={new Date(23/3/2001)}
         />
       ),
       onClick: () => {
@@ -182,7 +182,7 @@ const EmployeeDetails = ({
               textStyle: "",
             },
           ]}
-          days={"3d ago"}
+          days={new Date(23/3/2001)}
         />
       ),
       onClick: () => {
@@ -272,8 +272,8 @@ const EmployeeDetails = ({
   return (
     <div className="w-full h-[90%]">
       <PageSubHeader pageTitle={STRINGS.employeeManagement} name="Jhon" />
-      {/* Left Side */}
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
+      {/* Left Side */}
         <div className="flex flex-col w-[36.4%]">
           <UserNameWithImage
             name={"Ashwani Kaur"}

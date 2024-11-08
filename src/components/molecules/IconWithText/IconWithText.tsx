@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import { IIconWithTextProps } from './IconWithText.types';
 
-const IconWithText: React.FC<IIconWithTextProps> = ({
+const  IconWithText: React.FC<IIconWithTextProps> = ({
   text,
   subText,
   icon,

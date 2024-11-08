@@ -31,7 +31,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
           <IconWithText text={phoneNumber} icon={Icons.callIcon} />
         )}
         {address && <IconWithText text={address} icon={Icons.locationPin} />}
-        {link && <IconWithText text={link} icon={Icons.externalLink} />}
+        {link && <IconWithText textStyle="text-externalLink" text={link} icon={Icons.externalLink} />}
       </div>
     </div>
   );

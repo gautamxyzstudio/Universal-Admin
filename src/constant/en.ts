@@ -59,7 +59,8 @@ export const STRINGS = {
   address: 'Address',
   otherInformation: 'Other Information',
   companyRegisteredNumber: 'Company registered number',
-  gstHSTNumber: 'GST/HST number',
+  coRegisteredNumber: 'Co. Registered Number',
+  gstHSTNumber: 'GST/HST Number',
   websiteLink: 'Website link',
   industry: 'Industry',
   your_internet_is_a_little_wonky_right_now:
@@ -96,4 +97,7 @@ export const STRINGS = {
   clientName: 'Client Name',
   clientAdded: 'Client added successfully!!',
   clientCreated: 'Client created successfully!!',
+  allClient: 'All Clients',
+  openJob: 'Open jobs',
+  closeJob: 'Closed jobs',
 };

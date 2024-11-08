@@ -1,6 +1,7 @@
 import UserImageRenderer from '@/components/atoms/UserImageRenderer/UserImageRenderer';
 import React from 'react';
 import { IUserNameWithImageProps } from './UserNameWithImage.types';
+import { formatDateFromNow } from '@/utility/utils';
 
 const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   image,
@@ -9,13 +10,14 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   joinDate,
   companyName,
   days,
+  containorStyle,
   companyNameStyle,
   nameStyle,
   divStyle,
   imageStyle,
 }) => {
   return (
-    <div className="flex w-full gap-x-[10px] h-auto flex-row items-center justify-start">
+    <div className={"flex w-full gap-x-[10px] h-auto flex-row items-center justify-start " + containorStyle }>
       <UserImageRenderer
         imageStyle={imageStyle + ' !w-10 !h-10'}
         image={image}
@@ -31,8 +33,8 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           </span>
         )}
         {companyName && (
-          <div className={companyNameStyle + ' flex gap-x-2 items-center'}>
-            <span>{companyName}</span>{' '}
+          <div className={companyNameStyle + ' flex gap-x-2 items-center w-full'}>
+            <span>Posted by {companyName}</span>{' '}
             {days && (
               <>
                 <svg
@@ -44,7 +46,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
                 >
                   <circle cx="2" cy="2" r="2" fill="#D9D9D9" />
                 </svg>{' '}
-                <span>{days}</span>
+                <span>{formatDateFromNow(days)}</span>
               </>
             )}
           </div>
