@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useLoginMutation } from '@/api/fetures/Auth/AuthApis';
 import CustomInput from '@/components/atoms/CustomInput/CustomInput';
