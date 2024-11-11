@@ -76,7 +76,7 @@ export const splitRoute = (route: string) => {
   return parts[1] ?? '';
 };
 
-export const formatDateFromNow = (date: string | Date) => {
+export const formatDateFromNow = (date: string | Date |undefined) => {
   return moment(date).fromNow();
 };
 
@@ -84,6 +84,6 @@ export const dateFormat = (date: string | Date)=>{
   return moment(date).format('D-MM-YYYY');
 }
 
-export const TimeFormat = (date: string | Date)=>{
+export const timeFormat = (date: string | Date)=>{
   return moment(date).format('h:mm A');
 }

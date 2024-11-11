@@ -1,3 +1,5 @@
+import { IJobPostStatus } from "@/constant/enums";
+
 export interface IAddANewCompanyRequest {
   data: {
     companyname: string;
@@ -113,7 +115,7 @@ export interface IJobPostTypes {
   eventDate: Date;
   endShift: Date;
   requiredEmployee?: number;
-  status: string;
+  status: IJobPostStatus;
   startShift: Date;
   client_details?: {
     id: number;
@@ -163,7 +165,7 @@ export type IPostedJobsResponse = {
     createdAt: Date;
     notAccepting: boolean;
     updatedAt: Date;
-    status: string;
+    status: IJobPostStatus;
     publishedAt: Date;
     jobDuties: string;
     job_type: string;

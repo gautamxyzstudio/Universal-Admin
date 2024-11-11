@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import {
-  ICompany,
   IJobPostCustomizedResponse,
 } from "@/api/fetures/Company/Company.types";
 import {
-  useLazyGetCompanyQuery,
   useLazyGetPostedJobQuery,
 } from "@/api/fetures/Company/CompanyApi";
 import CustomList from "@/components/atoms/CustomList/CustomList";
@@ -18,39 +16,20 @@ import WorkHistoryCard from "@/components/organism/WorkHistoryCard/WorkHistoryCa
 import { STRINGS } from "@/constant/en";
 import React, { useEffect, useState } from "react";
 import { Icons } from "../../../../../public/exporter";
-import { dateFormat, TimeFormat } from "@/utility/utils";
+import { dateFormat, timeFormat } from "@/utility/utils";
 import JobDetails from "@/components/organism/JobDetails/JobDetails";
+import { useGetCompanyDetailsContext } from "@/contexts/CompanyDetailsContext/CompanyDetailsContext";
 
-const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
-  const [fetchCompanies, { error }] = useLazyGetCompanyQuery();
-  const [companyData, setCompanyData] = useState<ICompany | null>(null);
-  const [fetchOpenJobs] = useLazyGetPostedJobQuery();
+const CompanyDetails = ({ params }: { params: { companyDetails: string; } }) => {
+  console.log(params)
+  const [fetchOpenJobs,{error}] = useLazyGetPostedJobQuery();
   const [openJob, setOpenJob] = useState<IJobPostCustomizedResponse | null>(
     null
   );
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(
     "All requested Document"
   );
-
-  const fetchData = async () => {
-    const response = await fetchCompanies({
-      page: 1,
-      search: "",
-    }).unwrap();
-    if (response && response.data) {
-      const filteredCompanyData = response.data.find(
-        (companyData: ICompany) =>
-          companyData.id.toString() === params.companyDetails
-      );
-      console.log(filteredCompanyData);
-      if (filteredCompanyData) {
-        setCompanyData(filteredCompanyData);
-      } else {
-        console.log("Company data not found", error);
-        setCompanyData(null);
-      }
-    }
-  };
+  const {companyDetail} = useGetCompanyDetailsContext() 
   const fetchJobs = async () => {
     const response = await fetchOpenJobs(params.companyDetails).unwrap();
     if (response && response.data) {
@@ -63,7 +42,6 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
   };
   useEffect(() => {
     if (params.companyDetails) {
-      fetchData();
       // Fetch open jobs for the company here, if needed. You can add it in useEffect hook or in a separate function.
       fetchJobs();
     }
@@ -87,7 +65,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
             },
             {
               text: `${dateFormat(data.eventDate)}`,
-              subText: `${TimeFormat(data.startShift)} - ${TimeFormat(
+              subText: `${timeFormat(data.startShift)} - ${timeFormat(
                 data.endShift
               )}`,
               icon: Icons.time_Date,
@@ -103,7 +81,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
       ),
       onClick: () => {
         console.log("Clicked on Work card", data.id);
-        setSelectedItem(<JobDetails />);
+        setSelectedItem(<JobDetails data={data} />);
       },
     };
   });
@@ -114,7 +92,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     },
     {
       label: STRINGS.openJob,
-      content: <CustomList items={openJobData} />,
+      content: <CustomList items={openJobData ? openJobData : []} />,
     },
     {
       label: STRINGS.closeJob,
@@ -126,29 +104,29 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     <div className="w-full h-[90%]">
       <PageSubHeader
         pageTitle={STRINGS.company}
-        name={companyData?.companyname || ""}
+        name={companyDetail?.companyname || ""}
       />
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
         {/* Left Side */}
         <div className="flex flex-col w-[36.4%]">
           <UserNameWithImage
-            name={companyData?.companyname || ""}
-            image={companyData?.companylogo}
+            name={companyDetail?.companyname || ""}
+            image={companyDetail?.companylogo}
             imageStyle="!w-14 !h-14"
             nameStyle="!text-[24px] !leading-[28px]"
           />
           <div className="w-full h-3" />
           <ContactCard
-            email={companyData?.companyemail || ""}
-            phoneNumber={companyData?.contactno || ""}
-            address={companyData?.address || ""}
-            link={companyData?.Website || ""}
+            email={companyDetail?.companyemail || ""}
+            phoneNumber={companyDetail?.contactno || ""}
+            address={companyDetail?.address || ""}
+            link={companyDetail?.Website || ""}
           />
 
           <div className="flex gap-x-[13px] border border-borderGrey rounded-lg p-3 text-[16px] leading-[20px] mt-3 w-full">
             <TextGroup
               title={STRINGS.coRegisteredNumber}
-              subTitle={companyData?.regNo || ""}
+              subTitle={companyDetail?.regNo || ""}
               textgroupStyle="flex flex-col gap-y-1"
             />
             <svg
@@ -162,7 +140,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
             </svg>
             <TextGroup
               title={STRINGS.gstHSTNumber}
-              subTitle={companyData?.gstNo || ""}
+              subTitle={companyDetail?.gstNo || ""}
               textgroupStyle="flex flex-col gap-y-1"
             />
           </div>

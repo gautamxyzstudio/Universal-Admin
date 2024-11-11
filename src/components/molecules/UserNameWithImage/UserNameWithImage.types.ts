@@ -10,7 +10,8 @@ export interface IUserNameWithImageProps {
   joinDate?: string | undefined;
   companyName?: string | undefined;
   containorStyle? : string | undefined;
-  days? : string | Date;
+  days? : string | Date ;
+subText?: string;
   companyNameStyle?: string;
   divStyle?: string | undefined;
   profileNameStyle?: string;

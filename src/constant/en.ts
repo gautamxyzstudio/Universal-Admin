@@ -72,6 +72,7 @@ export const STRINGS = {
   applied: 'Applied',
   completed: 'Completed',
   event: 'Event',
+  post_ID: 'Post ID',
   reqcandidate: 'Required candidates',
   yoe: 'Years of Experience',
   gender: 'Gender',
@@ -83,7 +84,6 @@ export const STRINGS = {
   pendingReq: 'Pending Request',
   selectComp: 'Select the company',
   addClient: 'Add Client',
-
   joiningDate: 'Join Date',
   clientNameAndComp: 'Client Name & Company',
   contactDetails: 'Contact Details',
@@ -100,4 +100,9 @@ export const STRINGS = {
   allClient: 'All Clients',
   openJob: 'Open jobs',
   closeJob: 'Closed jobs',
+  notAccept: 'Not accepting',
+  viewCheckin: 'View checkin report',
+  shiftTime: 'Shift time',
+  wageRate: 'Wages rate',
+  jobType: 'Job type',
 };

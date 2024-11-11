@@ -14,6 +14,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import { Images } from "../../../../public/exporter";
 import { useRouter } from "next/navigation";
+import { useGetCompanyDetailsContext } from "@/contexts/CompanyDetailsContext/CompanyDetailsContext";
 
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +27,7 @@ const Company = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<ICompany[]>([]);
+  const { onClickRow } = useGetCompanyDetailsContext();
 
   const fetchCompaniesHandler = async (
     characters: string,
@@ -78,9 +80,12 @@ const Company = () => {
     []
   );
 
+
   const router = useRouter();
   const handleOnRowClick = (row: any) => {
+
     router.push(`/company/${row.id}`);
+    onClickRow(row );
   };
   const columns: GridColDef[] = [
     {
@@ -165,8 +170,8 @@ const Company = () => {
       <DataTable
         columns={columns}
         rows={companies}
-        onPressRow={handleOnRowClick}
         isLoading={isLoading}
+        onPressRow={handleOnRowClick}
         onReachEnd={onReachEnd}
         isLastPage={isLastPage}
         tableHeightPercent={90}

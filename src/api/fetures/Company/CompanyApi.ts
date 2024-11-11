@@ -73,7 +73,6 @@ const companiesApi = baseApi.injectEndpoints({
         const data: IJobPostTypes[] = [];
         if (response.data) {
           response.data.forEach((job) => {
-            console.log(job, "JOOBS");
             if (job.id) {
               data.push({
                 ...job,

@@ -1,7 +1,7 @@
-import UserImageRenderer from '@/components/atoms/UserImageRenderer/UserImageRenderer';
-import React from 'react';
-import { IUserNameWithImageProps } from './UserNameWithImage.types';
-import { formatDateFromNow } from '@/utility/utils';
+import UserImageRenderer from "@/components/atoms/UserImageRenderer/UserImageRenderer";
+import React from "react";
+import { IUserNameWithImageProps } from "./UserNameWithImage.types";
+import { formatDateFromNow } from "@/utility/utils";
 
 const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   image,
@@ -15,26 +15,48 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   nameStyle,
   divStyle,
   imageStyle,
+  subText,
 }) => {
   return (
-    <div className={"flex w-full gap-x-[10px] h-auto flex-row items-center justify-start " + containorStyle }>
+    <div
+      className={
+        "flex w-full gap-x-[10px] h-auto flex-row items-center justify-start " +
+        containorStyle
+      }
+    >
       <UserImageRenderer
-        imageStyle={imageStyle + ' !w-10 !h-10'}
+        imageStyle={imageStyle + " !w-10 !h-10"}
         image={image}
         name={name}
         type={type}
       />
-      <div className={divStyle + ' flex flex-col gap-y-1 w-full'}>
+      <div className={divStyle + " flex flex-col gap-y-1 w-full"}>
         {name && (
           <span
-            className={nameStyle + ' text-[16px] leading-[20px] text-Black'}
+            className={nameStyle + " text-[16px] leading-[20px] text-Black"}
           >
             {name}
           </span>
         )}
         {companyName && (
-          <div className={companyNameStyle + ' flex gap-x-2 items-center w-full'}>
-            <span>Posted by {companyName}</span>{' '}
+          <div
+            className={companyNameStyle + " flex gap-x-2 items-center w-full"}
+          >
+            <span>Posted by {companyName}</span>{" "}
+            {subText && (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="4"
+                  height="4"
+                  viewBox="0 0 4 4"
+                  fill="none"
+                >
+                  <circle cx="2" cy="2" r="2" fill="#D9D9D9" />
+                </svg>
+                <span className="text-[12px] leading-4 font-bold text-red">{subText} </span>
+              </>
+            )}
             {days && (
               <>
                 <svg
@@ -45,8 +67,8 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
                   fill="none"
                 >
                   <circle cx="2" cy="2" r="2" fill="#D9D9D9" />
-                </svg>{' '}
-                <span>{formatDateFromNow(days)}</span>
+                </svg>{" "}
+                <span>{formatDateFromNow(days)} </span>
               </>
             )}
           </div>

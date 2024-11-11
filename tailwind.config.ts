@@ -38,6 +38,7 @@ const config: Config = {
                 skyBlue: '#1985C1',
                 lightSkyBlue: '#F6FCFF',
                 secondaryShade: '#F1F4FF'
+                
             },
             borderRadius: {
                 custom: '0px 16px 16px 0px'
