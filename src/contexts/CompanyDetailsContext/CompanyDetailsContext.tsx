@@ -14,9 +14,7 @@ const CompanyDetailsContextProvider: React.FC<
 > = ({ children }) => {
   const [companyData, setCompanyData] = React.useState<ICompany | null>(null);
 
-  const onClickRowHandler = (
-    companyDetail?: ICompany | null
-  ) => {
+  const onClickRowHandler = (companyDetail?: ICompany) => {
     if (companyDetail) {
       setCompanyData(companyDetail);
     }

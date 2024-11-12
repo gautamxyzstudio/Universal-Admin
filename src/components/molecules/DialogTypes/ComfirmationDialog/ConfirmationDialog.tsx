@@ -13,6 +13,8 @@ const ConfirmationDialog: React.FC<IConfirmationDialogProps> = ({
   onPressLogout,
   onClose,
   open,
+  title,
+  description,
 }) => {
   const dialogAttributes = getDialogAttributes(type);
   const buttonStyles = useMemo(() => {

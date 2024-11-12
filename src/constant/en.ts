@@ -92,6 +92,8 @@ export const STRINGS = {
   no_pending: 'No pending request',
   date: 'Date',
   verify: 'Verify',
+  verified: 'Verified',
+  verifiedClient:'You have successfully verified the new client request',
   confirm: 'Confirm',
   no_companies: 'No Companies Found',
   clientName: 'Client Name',

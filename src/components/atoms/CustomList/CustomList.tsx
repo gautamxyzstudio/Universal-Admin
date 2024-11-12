@@ -43,7 +43,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items }) => {
         },
       }}
     >
-      {items.map((item, index) => (
+      {items?.map((item, index) => (
         <ListItemButton
           key={index}
           sx={{

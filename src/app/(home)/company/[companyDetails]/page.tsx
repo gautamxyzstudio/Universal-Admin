@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import { IJobPostCustomizedResponse } from "@/api/fetures/Company/Company.types";
 import {
-  IJobPostCustomizedResponse,
-} from "@/api/fetures/Company/Company.types";
-import {
+  useLazyGetClosedJobsQuery,
   useLazyGetPostedJobQuery,
 } from "@/api/fetures/Company/CompanyApi";
 import CustomList from "@/components/atoms/CustomList/CustomList";
@@ -19,72 +19,95 @@ import { Icons } from "../../../../../public/exporter";
 import { dateFormat, timeFormat } from "@/utility/utils";
 import JobDetails from "@/components/organism/JobDetails/JobDetails";
 import { useGetCompanyDetailsContext } from "@/contexts/CompanyDetailsContext/CompanyDetailsContext";
+import { getJobType } from "@/constant/constant";
+// import { getUserDetailsFromCookies } from "@/utility/cookies";
 
-const CompanyDetails = ({ params }: { params: { companyDetails: string; } }) => {
-  console.log(params)
-  const [fetchOpenJobs,{error}] = useLazyGetPostedJobQuery();
+const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
+  // console.log(getUserDetailsFromCookies());
+  console.log(params);
+  const [fetchOpenJobs, { error }] = useLazyGetPostedJobQuery();
+  const [fetchClosedJobs] = useLazyGetClosedJobsQuery();
   const [openJob, setOpenJob] = useState<IJobPostCustomizedResponse | null>(
+    null
+  );
+  const [closedJob, setClosedJob] = useState<IJobPostCustomizedResponse | null>(
     null
   );
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(
     "All requested Document"
   );
-  const {companyDetail} = useGetCompanyDetailsContext() 
-  const fetchJobs = async () => {
+  const { companyDetail } = useGetCompanyDetailsContext();
+  const getOpenJobs = async () => {
     const response = await fetchOpenJobs(params.companyDetails).unwrap();
     if (response && response.data) {
-      console.log(response.data, "success");
       setOpenJob(response);
     } else {
       console.log("Fetch open jobs failed", error);
       setOpenJob(null);
     }
   };
+
+  const getClosedJob = async () => {
+    const response = await fetchClosedJobs(params.companyDetails).unwrap();
+    if (response && response.data) {
+      setClosedJob(response);
+    } else {
+      console.log("Fetch closed jobs failed", error);
+      setClosedJob(null);
+    }
+  };
   useEffect(() => {
     if (params.companyDetails) {
       // Fetch open jobs for the company here, if needed. You can add it in useEffect hook or in a separate function.
-      fetchJobs();
+      getOpenJobs();
+      // Fetch closed jobs for the company here, if needed. You can add it in useEffect hook or in a separate function.
+      getClosedJob();
     }
   }, [params.companyDetails]);
 
-  const openJobData = openJob?.data?.map((data) => {
-    return {
-      children: (
-        <WorkHistoryCard
-          companyName={data.client_details?.Name || ""}
-          profileName={data.job_name}
-          days={data.eventDate}
-          image={data.client_details?.company_detail?.companylogo?.url}
-          textLabel={data.job_type}
-          textStyle={"text-darkBlue bg-white"}
-          iconWithTexts={[
-            {
-              text: `${data.id}`,
-              icon: Icons.jobId,
-              textStyle: "",
-            },
-            {
-              text: `${dateFormat(data.eventDate)}`,
-              subText: `${timeFormat(data.startShift)} - ${timeFormat(
-                data.endShift
-              )}`,
-              icon: Icons.time_Date,
-              textStyle: "",
-            },
-            {
-              text: `${data.location}`,
-              icon: Icons.location_Pin,
-              textStyle: "",
-            },
-          ]}
-        />
-      ),
-      onClick: () => {
-        console.log("Clicked on Work card", data.id);
-        setSelectedItem(<JobDetails data={data} />);
-      },
-    };
-  });
+  const mapJobData = (jobData: any[]) => {
+    return jobData?.map((data) => {
+      return {
+        children: (
+          <WorkHistoryCard
+            companyName={data?.client_details?.Name || ""}
+            profileName={data.job_name}
+            days={data.eventDate}
+            image={data.client_details?.company_detail?.companylogo?.url}
+            textLabel={getJobType(data.job_type)}
+            textStyle={"text-darkBlue bg-white"}
+            iconWithTexts={[
+              {
+                text: `${data.id}`,
+                icon: Icons.jobId,
+                textStyle: "",
+              },
+              {
+                text: `${dateFormat(data.eventDate)}`,
+                subText: `${timeFormat(data.startShift)} - ${timeFormat(
+                  data.endShift
+                )}`,
+                icon: Icons.time_Date,
+                textStyle: "",
+              },
+              {
+                text: `${data.location}`,
+                icon: Icons.location_Pin,
+                textStyle: "",
+              },
+            ]}
+          />
+        ),
+        onClick: () => {
+          console.log("Clicked on Work card", data.id);
+          setSelectedItem(<JobDetails data={data} />);
+        },
+      };
+    });
+  };
+
+  const openJobData = mapJobData(openJob?.data || []);
+  const closedJobData = mapJobData(closedJob?.data || []);
 
   const tabsData = [
     {
@@ -92,14 +115,31 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string; } }) => 
     },
     {
       label: STRINGS.openJob,
-      content: <CustomList items={openJobData ? openJobData : []} />,
+      content: openJobData ? (
+        <CustomList items={openJobData} />
+      ) : (
+        <CustomList items={[]} />
+      ),
     },
     {
       label: STRINGS.closeJob,
-      // content : <CustomList items={}/>
+      content: closedJobData ? (
+        <CustomList items={closedJobData} />
+      ) : (
+        <CustomList items={[]} />
+      ),
     },
   ];
 
+  // const handleTabChange = (event: React.SyntheticEvent, newTabIndex: number) => {
+  //   const tabContent = tabsData[newTabIndex]?.content;
+  //   if (tabContent) {
+  //     const items = tabContent.props.items || [];
+  //     if (items.length > 0) {
+  //       setSelectedItem(items[0].children); // Set the first item's children as the selectedItem
+  //     }
+  //   }
+  // };
   return (
     <div className="w-full h-[90%]">
       <PageSubHeader
@@ -126,7 +166,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string; } }) => 
           <div className="flex gap-x-[13px] border border-borderGrey rounded-lg p-3 text-[16px] leading-[20px] mt-3 w-full">
             <TextGroup
               title={STRINGS.coRegisteredNumber}
-              subTitle={companyDetail?.regNo || ""}
+              text={companyDetail?.regNo || ""}
               textgroupStyle="flex flex-col gap-y-1"
             />
             <svg
@@ -136,16 +176,17 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string; } }) => 
               viewBox="0 0 2 52"
               fill="none"
             >
-              <path d="M1 0V52" stroke="#EBEBEB" />
+              <path d="M1 1V51" stroke="#DBDBDB" stroke-linecap="round" />
             </svg>
             <TextGroup
               title={STRINGS.gstHSTNumber}
-              subTitle={companyDetail?.gstNo || ""}
+              text={companyDetail?.gstNo || ""}
               textgroupStyle="flex flex-col gap-y-1"
             />
           </div>
           <CustomTab
             tabs={tabsData}
+            // onTabChange={handleTabChange}
             TabIndicatorProps={{
               style: {
                 height: "3px",

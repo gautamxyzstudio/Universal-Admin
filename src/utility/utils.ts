@@ -83,6 +83,9 @@ export const formatDateFromNow = (date: string | Date |undefined) => {
 export const dateFormat = (date: string | Date)=>{
   return moment(date).format('D-MM-YYYY');
 }
+export const dateMonthFormat = (date: string | Date)=>{
+  return moment(date).format('D MMM YY');
+}
 
 export const timeFormat = (date: string | Date)=>{
   return moment(date).format('h:mm A');

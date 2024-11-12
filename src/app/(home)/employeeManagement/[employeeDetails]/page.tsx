@@ -205,17 +205,17 @@ const EmployeeDetails = ({
         <TextGroup
           textgroupStyle="flex flex-col gap-y-1"
           title={"Bank account number"}
-          subTitle={"873957737549"}
+          text={"873957737549"}
         />
         <TextGroup
           textgroupStyle="flex flex-col gap-y-1"
           title={"Institution number"}
-          subTitle={"3647838"}
+          text={"3647838"}
         />
         <TextGroup
           textgroupStyle="flex flex-col gap-y-1"
           title={"Branch code"}
-          subTitle={"3647838"}
+          text={"3647838"}
         />
         <DocumentCard
           label="Direct deposit/void cheque"
@@ -285,17 +285,17 @@ const EmployeeDetails = ({
             <TextGroup
               textgroupStyle="flex flex-col gap-y-1"
               title="Date"
-              subTitle="04/08/2000"
+              text="04/08/2000"
             />
             <TextGroup
               textgroupStyle="flex flex-col gap-y-1"
               title="Gender"
-              subTitle="Female"
+              text="Female"
             />
             <TextGroup
               textgroupStyle="flex flex-col gap-y-1"
               title="Work status"
-              subTitle={STRINGS.fullTime}
+              text={STRINGS.fullTime}
             />
           </div>
           <ContactCard

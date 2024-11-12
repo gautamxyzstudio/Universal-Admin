@@ -4,9 +4,11 @@ import Image from "next/image";
 
 const TextGroup: React.FC<ITextGroupProps> = ({
   title,
-  titleStyle,
   subTitle,
-  subTitleStyle,
+  titleStyle,
+  text,
+  subText,
+  textStyle,
   divStyle,
   textgroupStyle,
   icon,
@@ -15,8 +17,40 @@ const TextGroup: React.FC<ITextGroupProps> = ({
     <div className={"flex items-center gap-x-1 h-fit " + divStyle}>
       {icon && <Image src={icon} alt={title} className="w-6 h-6" />}
       <div className={textgroupStyle}>
-        <span className={titleStyle + " text-disable"}>{title}</span>
-        <span className={subTitleStyle + " text-Black"}>{subTitle}</span>
+        <div className={"flex gap-x-3 items-center text-disable " + titleStyle}>
+          {title}
+          {subTitle && (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="2"
+                height="14"
+                viewBox="0 0 2 14"
+                fill="none"
+              >
+                <path d="M1 1V13" stroke="#DBDBDB" stroke-linecap="round" />
+              </svg>
+              {subTitle}
+            </>
+          )}
+        </div>
+        <div className={"flex gap-x-3 items-center  text-Black" + textStyle}>
+          {text}
+          {subText && (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="2"
+                height="14"
+                viewBox="0 0 2 14"
+                fill="none"
+              >
+                <path d="M1 1V13" stroke="#DBDBDB" stroke-linecap="round" />
+              </svg>
+              {subText}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { IJobPostStatus } from "@/constant/enums";
+import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
 
 export interface IAddANewCompanyRequest {
   data: {
@@ -108,7 +108,7 @@ export interface IJobPostTypes {
   salary: string;
   notAccepting?: boolean;
   jobDuties: string;
-  job_type: string;
+  job_type: IJobTypesEnum;
   publishedAt: Date;
   location: string;
   description: string;
@@ -168,7 +168,7 @@ export type IPostedJobsResponse = {
     status: IJobPostStatus;
     publishedAt: Date;
     jobDuties: string;
-    job_type: string;
+    job_type: IJobTypesEnum;
     location: string;
     requiredEmployee: number;
     startShift: Date;

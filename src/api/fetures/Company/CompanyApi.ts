@@ -147,7 +147,41 @@ const companiesApi = baseApi.injectEndpoints({
                 id: job.id,
                 status: IJobPostStatus.CLOSED,
                 notAccepting: job?.notAccepting ?? false,
-                client_details: null,
+                client_details: job.client_details
+                  ? {
+                      id: job.client_details[0].id,
+                      Name: job.client_details[0].Name,
+                      companyname: job.client_details[0].companyname,
+                      Industry: job.client_details[0].Industry,
+                      Email: job.client_details[0].Email,
+                      location: job.client_details[0].location,
+                      company_detail: job.client_details[0].company_detail
+                        ? {
+                            companyname:
+                              job.client_details[0].company_detail
+                                ?.companyname ?? "",
+                            id: job.client_details[0].company_detail?.id ?? 0,
+                            companylogo: job.client_details[0].company_detail
+                              ?.companylogo
+                              ? {
+                                  url: createImageUrl(
+                                    job.client_details[0].company_detail
+                                      ?.companylogo.url || ""
+                                  ),
+                                  mime: job.client_details[0].company_detail
+                                    ?.companylogo.mime,
+                                  id: job.client_details[0].company_detail
+                                    ?.companylogo.id,
+                                  name: job.client_details[0].company_detail
+                                    ?.companylogo.name,
+                                  size: job.client_details[0].company_detail
+                                    ?.companylogo.size,
+                                }
+                              : null,
+                          }
+                        : null,
+                    }
+                  : null,
               });
             }
           });

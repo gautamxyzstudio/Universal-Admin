@@ -2,6 +2,8 @@ import UserImageRenderer from "@/components/atoms/UserImageRenderer/UserImageRen
 import React from "react";
 import { IUserNameWithImageProps } from "./UserNameWithImage.types";
 import { formatDateFromNow } from "@/utility/utils";
+import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
+import { SVGS } from "@/constant/staticSvgs";
 
 const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   image,
@@ -45,29 +47,15 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
             <span>Posted by {companyName}</span>{" "}
             {subText && (
               <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="4"
-                  height="4"
-                  viewBox="0 0 4 4"
-                  fill="none"
-                >
-                  <circle cx="2" cy="2" r="2" fill="#D9D9D9" />
-                </svg>
-                <span className="text-[12px] leading-4 font-bold text-red">{subText} </span>
+                <SVGComponent svg={SVGS.circleDot} />
+                <span className="text-[12px] leading-4 font-bold text-red">
+                  {subText}{" "}
+                </span>
               </>
             )}
             {days && (
               <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="4"
-                  height="4"
-                  viewBox="0 0 4 4"
-                  fill="none"
-                >
-                  <circle cx="2" cy="2" r="2" fill="#D9D9D9" />
-                </svg>{" "}
+                <SVGComponent svg={SVGS.circleDot} />
                 <span>{formatDateFromNow(days)} </span>
               </>
             )}

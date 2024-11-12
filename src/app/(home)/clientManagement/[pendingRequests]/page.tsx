@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
 import {
