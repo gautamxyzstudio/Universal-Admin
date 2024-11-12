@@ -23,9 +23,11 @@ const authApi = baseApi.injectEndpoints({
         const employees: IEmployeeBasic[] = response.data.map((employee) => ({
           id: employee.id,
           name: employee.euser_id?.name,
-          selfie: employee.euser_id?.selfie[0]?.url
-            ? createImageUrl(employee.euser_id?.selfie[0]?.url)
-            : '',
+          selfie: employee?.euser_id
+              ? employee?.euser_id?.selfie
+                ? createImageUrl(employee.euser_id.selfie[0].url)
+                : ""
+              : "",
           detailsId: employee.euser_id?.id,
           gender: employee.euser_id?.gender,
           email: employee.euser_id?.email,

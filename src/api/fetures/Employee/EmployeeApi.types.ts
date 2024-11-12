@@ -14,7 +14,7 @@ export interface IGetEmployeeApiResponse {
       workStatus: string;
       selfie: {
         url: string;
-      }[];
+      }[] | null;
     };
   }[];
   meta: {

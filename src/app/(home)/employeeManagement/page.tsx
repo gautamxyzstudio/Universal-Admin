@@ -22,9 +22,11 @@ const EmployeeManagement = () => {
     data?.employees ?? []
   );
 
+  console.log(data,'EMPLOYEE DETAILS')
+
   useEffect(() => {
     if (data) {
-      setEmployees(data.employees);
+      setEmployees(data?.employees);
     }
   }, [data]);
 

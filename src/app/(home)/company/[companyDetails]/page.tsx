@@ -148,7 +148,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
       />
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
         {/* Left Side */}
-        <div className="flex flex-col w-[36.4%]">
+        <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
           <UserNameWithImage
             name={companyDetail?.companyname || ""}
             image={companyDetail?.companylogo}
