@@ -11,7 +11,7 @@ function TabPanel(props: ITabPanelProps) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      className="overflow-scroll scrollbar-none max-h-[81%]"
+      className="overflow-scroll scrollbar-none"
       {...other}
     >
       {value === index && <>{children}</>}
@@ -43,7 +43,7 @@ const CustomTab: React.FC<ICustomTabProps> = ({
   };
 
   return (
-    <div className="border border-borderGrey rounded-lg mt-3 bg-white h-[52%] overflow-hidden">
+    <div className="border border-borderGrey rounded-lg mt-3 bg-white h-fit">
       <div className="border-b border-borderGrey h-fit">
         <Tabs
           {...props}
