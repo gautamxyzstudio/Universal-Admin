@@ -4,7 +4,7 @@ import React from 'react';
 export interface ICustomDialogProps {
   open: boolean;
   maxWidth?: false | Breakpoint | undefined;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   width?: number;
   height?: number;
   onClose:

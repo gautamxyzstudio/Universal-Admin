@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import React from 'react';
 import { IIconWithTextProps } from './IconWithText.types';
+import { SVGS } from '@/constant/staticSvgs';
+import SVGComponent from '@/components/atoms/SvgComponent/SVGComponent';
 
-const IconWithText: React.FC<IIconWithTextProps> = ({
+const  IconWithText: React.FC<IIconWithTextProps> = ({
   text,
   subText,
   icon,
@@ -16,15 +18,7 @@ const IconWithText: React.FC<IIconWithTextProps> = ({
         {text}
         {subText && (
           <>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="2"
-              height="22"
-              viewBox="0 0 2 22"
-              fill="none"
-            >
-              <path d="M1 1V21" stroke="#DBDBDB" stroke-linecap="round" />
-            </svg>
+            <SVGComponent svg={SVGS.horizontalLine} />
             {subText}
           </>
         )}

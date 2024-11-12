@@ -1,14 +1,18 @@
-import { ApiMethodType } from '@/api/ApiConstants';
-import { baseApi } from '@/api/BaseApi';
-import { Endpoints } from '@/api/Endpoints';
+import { ApiMethodType } from "@/api/ApiConstants";
+import { baseApi } from "@/api/BaseApi";
+import { Endpoints } from "@/api/Endpoints";
 import {
   IAddANewCompanyRequest,
   IAddNewCompanyResponse,
   ICompany,
   IGetCompaniesCustomizedResponse,
   IGetCompaniesResponse,
-} from './Company.types';
-import { createImageUrl } from '@/utility/cookies';
+  IJobPostCustomizedResponse,
+  IJobPostTypes,
+  IPostedJobsResponse,
+} from "./Company.types";
+import { createImageUrl } from "@/utility/cookies";
+import { IJobPostStatus } from "@/constant/enums";
 
 const companiesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -58,6 +62,142 @@ const companiesApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    getPostedJob: builder.query({
+      query: (company_id) => ({
+        url: Endpoints.getOpenJobPost(company_id),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (
+        response: IPostedJobsResponse
+      ): IJobPostCustomizedResponse => {
+        const data: IJobPostTypes[] = [];
+        if (response.data) {
+          response.data.forEach((job) => {
+            if (job.id) {
+              data.push({
+                ...job,
+                id: job.id,
+                status: IJobPostStatus.OPEN,
+                notAccepting: job?.notAccepting ?? false,
+                client_details: job.client_details
+                  ? {
+                      id: job.client_details[0].id,
+                      Name: job.client_details[0].Name,
+                      companyname: job.client_details[0].companyname,
+                      Industry: job.client_details[0].Industry,
+                      Email: job.client_details[0].Email,
+                      location: job.client_details[0].location,
+                      company_detail: job.client_details[0].company_detail
+                        ? {
+                            companyname:
+                              job.client_details[0].company_detail
+                                ?.companyname ?? "",
+                            id: job.client_details[0].company_detail?.id ?? 0,
+                            companylogo: job.client_details[0].company_detail
+                              ?.companylogo
+                              ? {
+                                  url: createImageUrl(
+                                    job.client_details[0].company_detail
+                                      ?.companylogo.url || ""
+                                  ),
+                                  mime: job.client_details[0].company_detail
+                                    ?.companylogo.mime,
+                                  id: job.client_details[0].company_detail
+                                    ?.companylogo.id,
+                                  name: job.client_details[0].company_detail
+                                    ?.companylogo.name,
+                                  size: job.client_details[0].company_detail
+                                    ?.companylogo.size,
+                                }
+                              : null,
+                          }
+                        : null,
+                    }
+                  : null,
+              });
+            }
+          });
+        }
+
+        return {
+          data: data,
+          pagination: response?.meta && {
+            page: response.meta?.page ?? 1,
+            pageSize: response?.meta.pageSize ?? 1,
+            pageCount: response?.meta.total ?? 1,
+            total: response?.meta.totalPages ?? 1,
+          },
+        };
+      },
+    }),
+    getClosedJobs: builder.query({
+      query: (company_id) => ({
+        url: Endpoints.getClosedJobPost(company_id),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (
+        response: IPostedJobsResponse
+      ): IJobPostCustomizedResponse => {
+        const data: IJobPostTypes[] = [];
+        if (response.data) {
+          response.data.forEach((job) => {
+            if (job.id) {
+              data.push({
+                ...job,
+                id: job.id,
+                status: IJobPostStatus.CLOSED,
+                notAccepting: job?.notAccepting ?? false,
+                client_details: job.client_details
+                  ? {
+                      id: job.client_details[0].id,
+                      Name: job.client_details[0].Name,
+                      companyname: job.client_details[0].companyname,
+                      Industry: job.client_details[0].Industry,
+                      Email: job.client_details[0].Email,
+                      location: job.client_details[0].location,
+                      company_detail: job.client_details[0].company_detail
+                        ? {
+                            companyname:
+                              job.client_details[0].company_detail
+                                ?.companyname ?? "",
+                            id: job.client_details[0].company_detail?.id ?? 0,
+                            companylogo: job.client_details[0].company_detail
+                              ?.companylogo
+                              ? {
+                                  url: createImageUrl(
+                                    job.client_details[0].company_detail
+                                      ?.companylogo.url || ""
+                                  ),
+                                  mime: job.client_details[0].company_detail
+                                    ?.companylogo.mime,
+                                  id: job.client_details[0].company_detail
+                                    ?.companylogo.id,
+                                  name: job.client_details[0].company_detail
+                                    ?.companylogo.name,
+                                  size: job.client_details[0].company_detail
+                                    ?.companylogo.size,
+                                }
+                              : null,
+                          }
+                        : null,
+                    }
+                  : null,
+              });
+            }
+          });
+        }
+
+        return {
+          data: data,
+          pagination: response?.meta && {
+            page: response.meta?.page ?? 1,
+            pageSize: response?.meta.pageSize ?? 1,
+            pageCount: response?.meta.total ?? 1,
+            total: response?.meta.totalPages ?? 1,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -65,4 +205,8 @@ export const {
   useLazyGetCompanyQuery,
   useGetCompanyQuery,
   useAddCompanyMutation,
+  useGetPostedJobQuery,
+  useLazyGetPostedJobQuery,
+  useGetClosedJobsQuery,
+  useLazyGetClosedJobsQuery,
 } = companiesApi;

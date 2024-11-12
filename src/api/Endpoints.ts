@@ -22,4 +22,8 @@ export const Endpoints = {
   linkClient: (userId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${userId}`,
   addClientDetails: `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details`,
+  getOpenJobPost: (detailsId: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Openjob/${detailsId}`,
+  getClosedJobPost: (detailsId: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}`,
 };

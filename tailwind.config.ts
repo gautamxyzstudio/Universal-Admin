@@ -27,6 +27,7 @@ const config: Config = {
                 borderGrey: '#EBEBEB',
                 textBlack: '#121212',
                 Black: '#121212',
+                loginBgcolor: '#0E0E0E',
                 modal: 'rgba(0, 0, 0, 0.2)',
                 borderGreySecondary: '#dbdbdb',
                 externalLink: '#2048E0',
@@ -37,13 +38,15 @@ const config: Config = {
                 skyBlue: '#1985C1',
                 lightSkyBlue: '#F6FCFF',
                 secondaryShade: '#F1F4FF'
+                
             },
             borderRadius: {
                 custom: '0px 16px 16px 0px'
             },
 
             boxShadow: {
-                'custom-shadow': '0px 0px 6px 0px rgba(18, 18, 18, 0.08)'
+                'custom-shadow': '0px 0px 6px 0px rgba(18, 18, 18, 0.08)',
+                'loginForm': '0px 0px 8px 0px rgba(255,255,255, 0.07)'
             },
             fontSize: {
                 'heading-40': [

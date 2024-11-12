@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/display-name */
-import React, { memo, useCallback, useMemo } from 'react';
-import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import React, { memo, useCallback, useMemo } from "react";
+import { TableVirtuoso, TableComponents } from "react-virtuoso";
 import {
   Table,
   TableBody,
@@ -11,11 +11,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-} from '@mui/material';
-import { GridRenderCellParams, GridValidRowModel } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
-import { IDataTableProps } from './DataTable.types';
-import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
+  TableFooter,
+} from "@mui/material";
+import { GridRenderCellParams, GridValidRowModel } from "@mui/x-data-grid";
+import { useDemoData } from "@mui/x-data-grid-generator";
+import { IDataTableProps } from "./DataTable.types";
+import EmptyScreenView from "@/components/templates/EmptyScreenView/EmptyScreenView";
+import ActivityIndicator from "../ActivityIndicator/ActivityIndicator";
 
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
@@ -30,39 +32,41 @@ const DataTable: React.FC<IDataTableProps> = ({
   emptyViewTitle,
   isDataEmpty,
   error,
+  isLastPage,
+  footerComponent,
 }) => {
   const { data } = useDemoData({
     rowLength: 10,
     maxColumns: 9,
-    dataSet: 'Employee',
+    dataSet: "Employee",
   });
 
   const tableContainerStyles = useMemo(() => {
     return {
-      boxShadow: 'none',
-      backgroundColor: '#fff',
+      boxShadow: "none",
+      backgroundColor: "#fff",
       height: `${tableHeightPercent}% !important`,
-      scrollbarWidth: 'none',
+      scrollbarWidth: "none",
     };
   }, []);
   const tableStyles = useMemo(() => {
     return {
-      boxShadow: 'none',
-      borderCollapse: 'separate',
-      tableLayout: 'fixed',
+      boxShadow: "none",
+      borderCollapse: "separate",
+      tableLayout: "fixed",
     };
   }, []);
 
   const rowStyles = useMemo(() => {
-    return { border: 'none', cursor: 'pointer' };
+    return { border: "none", cursor: "pointer" };
   }, []);
 
   const tableCellStyles = useMemo(() => {
     return {
-      backgroundColor: '#FAFAFA',
-      color: '#868686',
-      borderRight: '1px solid #EBEBEB',
-      borderBottomColor: '#EBEBEB',
+      backgroundColor: "#FAFAFA",
+      color: "#868686",
+      borderRight: "1px solid #EBEBEB",
+      borderBottomColor: "#EBEBEB",
     };
   }, []);
   const VirtuosoTableComponents: TableComponents = {
@@ -83,6 +87,19 @@ const DataTable: React.FC<IDataTableProps> = ({
     TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
       <TableBody {...props} ref={ref} />
     )),
+    TableFoot: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+      <TableFooter
+        sx={{
+          position: "relative !important",
+          display: "flex !important",
+          width: "74.5vw",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        {...props}
+        ref={ref}
+      />
+    )),
   };
 
   const rowContent = useCallback(
@@ -96,7 +113,7 @@ const DataTable: React.FC<IDataTableProps> = ({
               sx={rowStyles}
               align="left"
             >
-              {column.field === 'sNum' ? (
+              {column.field === "sNum" ? (
                 <span>{index + 1}</span>
               ) : (
                 <>
@@ -150,9 +167,18 @@ const DataTable: React.FC<IDataTableProps> = ({
     [columns]
   );
 
+  const fixedFooterContent = () => {
+    return (
+      <div className="w-full mt-2 flex justify-center items-center">
+        <ActivityIndicator size={36} />
+      </div>
+    );
+  };
   return (
     <div className="p-4  w-full h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
-      {rows.length > 0 && <div className="w-full">{headerView}</div>}
+      {rows.length > 0 && headerView && (
+        <div className="w-full">{headerView}</div>
+      )}
       {isLoading ? (
         <TableVirtuoso
           data={data.rows}
@@ -175,6 +201,9 @@ const DataTable: React.FC<IDataTableProps> = ({
           data={rows}
           components={VirtuosoTableComponents as any}
           defaultItemHeight={70}
+          fixedFooterContent={
+            footerComponent ?? !isLastPage ? fixedFooterContent : undefined
+          }
           endReached={onReachEnd}
           fixedHeaderContent={fixedHeaderContent}
           itemContent={rowContent}

@@ -12,7 +12,6 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    
   }
 }
 
@@ -28,6 +27,14 @@ body {
   }
 }
 
-.scrollbar-none{
+.scrollbar-none {
   scrollbar-width: none;
+}
+
+.swiper {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  width: 438px;
+  height: 485px;
 }

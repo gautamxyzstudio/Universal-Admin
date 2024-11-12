@@ -201,7 +201,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
       handleClose={handleClickOutside}
       onPressCross={onPressCross}
     >
-      <div className="px-6 flex h-[88%] overflow-scroll flex-col gap-y-4 pt-6">
+      <div className="px-6 flex h-[88%] overflow-scroll flex-col gap-y-4 pt-6 scrollbar-none">
         <FormTextInput
           value={state.clientName}
           size="medium"

@@ -32,28 +32,28 @@ const WorkDetails = () => {
         <TextGroup
           icon={Icons.event}
           title={"Job type"}
-          subTitle={"Event"}
+          text={"Event"}
           divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-[136px]"
           textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
         />
         <TextGroup
           icon={Icons.dollar}
           title={"Wage rate"}
-          subTitle={"20$ /hr"}
+          text={"20$ /hr"}
           divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-[136px]"
           textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
         />
         <TextGroup
           icon={Icons.clock}
           title={"Shift time"}
-          subTitle={"7 pm - 2 am"}
+          text={"7 pm - 2 am"}
           divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-[136px]"
           textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
         />
         <TextGroup
           icon={Icons.calendar}
           title={"Date"}
-          subTitle={"2 Jun - 3 Jun"}
+          text={"2 Jun - 3 Jun"}
           divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-[136px]"
           textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
         />
@@ -63,19 +63,19 @@ const WorkDetails = () => {
           title={STRINGS.reqcandidate}
           titleStyle="!text-Black font-bold"
           textgroupStyle="flex justify-between w-full"
-          subTitle={"12"}
+          text={"12"}
         />
         <TextGroup
           title={STRINGS.yoe}
           titleStyle="!text-Black font-bold"
           textgroupStyle="flex justify-between w-full"
-          subTitle={"0-1"}
+          text={"0-1"}
         />
         <TextGroup
           title={STRINGS.gender}
           titleStyle="!text-Black font-bold"
           textgroupStyle="flex justify-between w-full"
-          subTitle={STRINGS.male}
+          text={STRINGS.male}
         />
       </div>
       <div className="flex flex-col gap-y-4 text-[14px] leading-[18px] mt-6">

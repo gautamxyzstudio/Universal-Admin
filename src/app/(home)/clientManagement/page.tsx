@@ -165,19 +165,19 @@ const ClientManagement = () => {
 
   const columns: GridColDef[] = [
     {
-      field: 'joiningDate',
+      field: "joiningDate",
       headerName: STRINGS.joiningDate,
       width: 100,
       renderCell: (params) =>
         new Date(params.row.joiningDate).toLocaleDateString(),
     },
     {
-      field: 'clientDetails',
+      field: "clientDetails",
       headerName: STRINGS.clientNameAndComp,
       width: 256,
       renderCell: (params: { row: IClient }) => (
         <UserNameWithImage
-          type={'white'}
+          type={"white"}
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name ?? ''}
@@ -190,7 +190,7 @@ const ClientManagement = () => {
       ),
     },
     {
-      field: 'contactDetails',
+      field: "contactDetails",
       headerName: STRINGS.contactDetails,
       width: 256,
       renderCell: (params) => (
@@ -198,12 +198,12 @@ const ClientManagement = () => {
       ),
     },
     {
-      field: 'location',
+      field: "location",
       headerName: STRINGS.location,
       width: 180,
     },
     {
-      field: 'status',
+      field: "status",
       headerName: STRINGS.status,
       width: 180,
       renderCell: (params) => {
@@ -213,7 +213,7 @@ const ClientManagement = () => {
     },
     {
       field: STRINGS.action,
-      headerName: 'Action',
+      headerName: "Action",
       width: 104,
       renderCell: () => <span className="text-primary">{STRINGS.view}</span>,
     },

@@ -7,6 +7,7 @@ export interface IFormDrawerProps {
     | ((event: object, reason: 'backdropClick' | 'escapeKeyDown') => void)
     | undefined;
   onPressCross: () => void;
+  width?: string | number | null;
   children?: React.ReactNode | undefined;
   styles?: SxProps<Theme> | undefined;
 }

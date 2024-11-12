@@ -9,5 +9,5 @@ interface IListItemProps{
 }
 
 export interface ICustomListProps{
-    items: IListItemProps[],
+    items?: IListItemProps[] ;
 }

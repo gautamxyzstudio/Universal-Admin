@@ -56,7 +56,7 @@ const LoginForm = () => {
     }, displaySnackbar);
 
     return (
-        <div className="w-[532px]">
+        <div className="w-[604px] bg-loginBgcolor p-9 shadow-loginForm">
             <h1 className="text-heading-40 text-white">{STRINGS.login}</h1>
             <div className="h-9" />
             <h1 className="text-subHeading-24 text-white">{STRINGS.pleaseEnterYour}</h1>

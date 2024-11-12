@@ -1,3 +1,5 @@
+import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
+
 export interface IAddANewCompanyRequest {
   data: {
     companyname: string;
@@ -94,3 +96,112 @@ export interface IGetCompaniesCustomizedResponse {
     };
   };
 }
+export interface IJobPostTypes {
+  id: number;
+  job_name: string;
+  required_certificates: string[] | null;
+  city: string;
+  address: string;
+  postalCode: string;
+  postID?: number | null;
+  gender: string;
+  salary: string;
+  notAccepting?: boolean;
+  jobDuties: string;
+  job_type: IJobTypesEnum;
+  publishedAt: Date;
+  location: string;
+  description: string;
+  eventDate: Date;
+  endShift: Date;
+  requiredEmployee?: number;
+  status: IJobPostStatus;
+  startShift: Date;
+  client_details?: {
+    id: number;
+    Name: string;
+    companyname: string;
+    Industry: string;
+    Email: string;
+    location: string;
+    company_detail?: {
+      companyname: string;
+      id: number;
+      companylogo:
+        | {
+            url: string | null;
+            mime: string | null;
+            id: number;
+            name: string;
+            size: number | null;
+          }
+        | null
+        | undefined;
+    } | null;
+  } | null;
+}
+
+export interface IJobPostCustomizedResponse {
+  data: IJobPostTypes[] | null;
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
+  } | null;
+}
+
+export type IPostedJobsResponse = {
+  data: {
+    id: number;
+    job_name: string;
+    required_certificates: string[] | null;
+    city: string;
+    address: string;
+    postalCode: string;
+    gender: string;
+    eventDate: Date;
+    salary: string;
+    createdAt: Date;
+    notAccepting: boolean;
+    updatedAt: Date;
+    status: IJobPostStatus;
+    publishedAt: Date;
+    jobDuties: string;
+    job_type: IJobTypesEnum;
+    location: string;
+    requiredEmployee: number;
+    startShift: Date;
+    endShift: Date;
+    description: string;
+    client_details?: {
+      id: number;
+      Name: string;
+      companyname: string;
+      Industry: string;
+      Email: string;
+      location: string;
+      company_detail?: {
+        companyname: string;
+        id: number;
+        companylogo:
+          | {
+              url: string | null;
+              mime: string | null;
+              id: number;
+              name: string;
+              size: number | null;
+            }
+          | null
+          | undefined;
+      } | null;
+    }[];
+  }[];
+
+  meta: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  } | null;
+};
