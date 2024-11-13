@@ -22,8 +22,10 @@ export const Endpoints = {
   linkClient: (userId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${userId}`,
   addClientDetails: `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details`,
+  getCompanyDetails: (companyId: number) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}?populate=*`,
   getOpenJobPost: (detailsId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Openjob/${detailsId}`,
   getClosedJobPost: (detailsId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}`,
+  getCompanyClients : (companyId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*`,
 };

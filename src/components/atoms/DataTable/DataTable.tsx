@@ -32,7 +32,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   emptyViewTitle,
   isDataEmpty,
   error,
-  isLastPage,
+  // isLastPage,
   footerComponent,
 }) => {
   const { data } = useDemoData({
@@ -169,9 +169,13 @@ const DataTable: React.FC<IDataTableProps> = ({
 
   const fixedFooterContent = () => {
     return (
-      <div className="w-full mt-2 flex justify-center items-center">
-        <ActivityIndicator size={36} />
-      </div>
+      // <>
+      //   {is && (
+          <div className="w-full mt-2 flex justify-center items-center">
+            <ActivityIndicator size={36} />
+          </div>
+      //   )}
+      // </>
     );
   };
   return (
@@ -202,7 +206,7 @@ const DataTable: React.FC<IDataTableProps> = ({
           components={VirtuosoTableComponents as any}
           defaultItemHeight={70}
           fixedFooterContent={
-            footerComponent ?? !isLastPage ? fixedFooterContent : undefined
+            footerComponent ?? isLoading ? fixedFooterContent :  null
           }
           endReached={onReachEnd}
           fixedHeaderContent={fixedHeaderContent}

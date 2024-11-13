@@ -17,7 +17,7 @@ const JobDetails = ({ data }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const statusStyle = getJobStatus(data.status) === 'Open' ? "text-green bg-statusLightGreen" : 'text-red bg-lightRedSecondary'
   return (
     <div className="w-full h-fit">
       <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
@@ -104,7 +104,7 @@ const JobDetails = ({ data }) => {
           <div className="flex gap-x-1 w-full justify-end">
             <TextWithBgColor
               textLabel={getJobStatus(data.status)}
-              textStyle={"text-red bg-lightRedSecondary"}
+              textStyle={statusStyle}
             />
             <TextWithBgColor
               textLabel={STRINGS.viewCheckin}

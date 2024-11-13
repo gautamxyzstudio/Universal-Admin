@@ -1,4 +1,3 @@
-import CompanyDetailsContextProvider from "@/contexts/CompanyDetailsContext/CompanyDetailsContext";
 import LoaderContextProvider from "@/contexts/LoaderContext/LoaderContext";
 import SubAdminContextProvider from "@/contexts/SubAdminContext/SubAdminContext";
 import MaterialThemeProvider from "@/providers/MaterialThemeProvider";
@@ -14,11 +13,7 @@ const HomeProviders = ({ children }: { children: React.ReactNode }) => {
         <SnackBarProvider>
           <ReduxProvider>
             <LoaderContextProvider>
-              <SubAdminContextProvider>
-                <CompanyDetailsContextProvider>
-                  {children}
-                </CompanyDetailsContextProvider>
-              </SubAdminContextProvider>
+              <SubAdminContextProvider>{children}</SubAdminContextProvider>
             </LoaderContextProvider>
           </ReduxProvider>
         </SnackBarProvider>

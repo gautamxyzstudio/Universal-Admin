@@ -56,9 +56,7 @@ export type ICustomizedGetClientsResponse = {
 export interface ILinkClientRequest {
   status: IClientStatus.ACTIVE;
   Name: string;
-
   companyname: string;
-
   location: string;
   Industry: string;
   company_detail: number;

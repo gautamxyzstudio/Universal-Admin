@@ -107,4 +107,7 @@ export const STRINGS = {
   shiftTime: 'Shift time',
   wageRate: 'Wages rate',
   jobType: 'Job type',
+  noOpenJob : 'Company not available open job',
+  noClosedJob : 'Company not available close job',
+  noClient: 'Company not available any client',
 };
