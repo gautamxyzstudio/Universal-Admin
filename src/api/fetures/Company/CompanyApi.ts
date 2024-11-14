@@ -5,8 +5,11 @@ import {
   IAddANewCompanyRequest,
   IAddNewCompanyResponse,
   ICompany,
+  ICompanyDetails,
   IGetCompaniesCustomizedResponse,
   IGetCompaniesResponse,
+  IGetCompanyClientResponse,
+  IGetCompanyDetailsResponse,
   IJobPostCustomizedResponse,
   IJobPostTypes,
   IPostedJobsResponse,
@@ -61,6 +64,31 @@ const companiesApi = baseApi.injectEndpoints({
         method: ApiMethodType.post,
         body,
       }),
+    }),
+    getCompanyDetails: builder.query({
+      query: (company_id) => ({
+        url: Endpoints.getCompanyDetails(company_id),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (
+        response: IGetCompanyDetailsResponse
+      ): ICompanyDetails => {
+        return {
+          id: response.id,
+          companyname: response.companyname,
+          companyemail: response.companyemail,
+          location: response.location,
+          contactno: response.contactno,
+          address: response.address,
+          companylogo: response.companylogo?.url
+            ? createImageUrl(response.companylogo?.url)
+            : null,
+          Industry: response.Industry,
+          Website: response.Website,
+          regNo: response.regNo,
+          gstNo: response.gstNo,
+        };
+      },
     }),
     getPostedJob: builder.query({
       query: (company_id) => ({
@@ -198,6 +226,19 @@ const companiesApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getCompanyClientDetails: builder.query({
+      query: (company_id) => ({
+        url: Endpoints.getCompanyClients(company_id),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (response: IGetCompanyClientResponse) => {
+        const data = response.map((client) => {
+          return client;
+        });
+        console.log(data);
+        return data
+      },
+    }),
   }),
 });
 
@@ -209,4 +250,8 @@ export const {
   useLazyGetPostedJobQuery,
   useGetClosedJobsQuery,
   useLazyGetClosedJobsQuery,
+  useGetCompanyDetailsQuery,
+  useLazyGetCompanyDetailsQuery,
+  useGetCompanyClientDetailsQuery,
+  useLazyGetCompanyClientDetailsQuery,
 } = companiesApi;

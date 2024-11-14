@@ -53,6 +53,37 @@ export interface ICompany {
   regNo: string | null | undefined;
   gstNo: string | null | undefined;
 }
+
+export interface IGetCompanyDetailsResponse {
+  id: number;
+  companyname: string;
+  companyemail: string;
+  location: string;
+  contactno: string;
+  address: string;
+  Industry: string;
+  Website: string;
+  regNo: string;
+  gstNo: string;
+  companylogo: {
+    url: string;
+  } | null;
+}
+
+export interface ICompanyDetails {
+  id: number;
+  companyname: string | null | undefined;
+  companyemail: string | null | undefined;
+  location: string | null | undefined;
+  contactno: string | null | undefined;
+  address: string | null | undefined;
+  companylogo: string | null | undefined;
+  Industry: string | null | undefined;
+  Website: string | null | undefined;
+  regNo: string | null | undefined;
+  gstNo: string | null | undefined;
+}
+
 export interface IGetCompaniesResponse {
   data: {
     id: number;
@@ -205,3 +236,16 @@ export type IPostedJobsResponse = {
     totalPages: number;
   } | null;
 };
+
+export type IGetCompanyClientResponse = {
+  id: number;
+  Name: string | null | undefined;
+  Email: string | null | undefined;
+  location: string | null | undefined;
+  contactno: string | null | undefined;
+  publishedAt: Date | null | undefined;
+  company_details: {
+    Industry: string | null | undefined;
+    companyname: string | null | undefined;
+  }
+}[];

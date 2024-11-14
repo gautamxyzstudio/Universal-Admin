@@ -1,6 +1,7 @@
 import React from "react";
 import { Icons } from "../../../../public/exporter";
 import IconWithText from "@/components/molecules/IconWithText/IconWithText";
+import Link from "next/link";
 
 export interface IContactCardProps {
   department?: string;
@@ -10,7 +11,7 @@ export interface IContactCardProps {
   link?: string;
 }
 
-const ContactCard: React.FC<IContactCardProps> = ({
+const ContactDetailCard: React.FC<IContactCardProps> = ({
   department,
   email,
   phoneNumber,
@@ -31,10 +32,18 @@ const ContactCard: React.FC<IContactCardProps> = ({
           <IconWithText text={phoneNumber} icon={Icons.callIcon} />
         )}
         {address && <IconWithText text={address} icon={Icons.locationPin} />}
-        {link && <IconWithText textStyle="text-externalLink" text={link} icon={Icons.externalLink} />}
+        {link && (
+          <Link href={link} target="__blank">
+            <IconWithText
+              textStyle="text-externalLink"
+              text={link}
+              icon={Icons.externalLink}
+            />
+          </Link>
+        )}
       </div>
     </div>
   );
 };
 
-export default ContactCard;
+export default ContactDetailCard;

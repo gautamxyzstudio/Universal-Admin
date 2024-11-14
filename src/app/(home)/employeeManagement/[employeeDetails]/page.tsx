@@ -3,7 +3,7 @@ import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
 import { STRINGS } from "@/constant/en";
 import React, { useState } from "react";
 import { Icons, Images } from "../../../../../public/exporter";
-import ContactCard from "@/components/organism/ContactCard/ContactCard";
+import ContactCard from "@/components/organism/ContactDetailCard/ContactDetailCard";
 import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import CustomList from "@/components/atoms/CustomList/CustomList";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
@@ -274,7 +274,7 @@ const EmployeeDetails = ({
       <PageSubHeader pageTitle={STRINGS.employeeManagement} name="Jhon" />
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
       {/* Left Side */}
-        <div className="flex flex-col w-[36.4%]">
+        <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
           <UserNameWithImage
             name={"Ashwani Kaur"}
             image={Images.demoImg}

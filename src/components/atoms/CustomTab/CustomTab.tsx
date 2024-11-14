@@ -28,7 +28,6 @@ function a11yProps(index: number) {
 
 const CustomTab: React.FC<ICustomTabProps> = ({
   tabs,
-  onTabChange,
   ...props
 }) => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
@@ -36,10 +35,6 @@ const CustomTab: React.FC<ICustomTabProps> = ({
   const handleTabChange = (event: React.SyntheticEvent, tabIndex: number) => {
     setCurrentTabIndex(tabIndex);
     console.log(tabIndex);
-    if (onTabChange) {
-      onTabChange(event, tabIndex);
-    } else {
-    }
   };
 
   return (

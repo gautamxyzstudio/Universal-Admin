@@ -38,7 +38,7 @@ const ClientManagement = () => {
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [addClientModal, setAddClientModal] = useState(false);
-  // const [isLastPage, setIsLastPage] = useState(true);
+  const [isLastPage, setIsLastPage] = useState(false);
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
 
   //====================================================Apis start====================
@@ -49,6 +49,7 @@ const ClientManagement = () => {
       const clientResponse = await getClients({ page }).unwrap();
       if (clientResponse) {
         setClients(clientResponse.data);
+        setIsLastPage(clientResponse.pagination.pageSize === page);
       }
     } catch (e) {
       console.log(e);
@@ -250,6 +251,7 @@ const ClientManagement = () => {
         columns={columns}
         rows={clients}
         isLoading={isFetching}
+        isLastPage={isLastPage}
         emptyViewTitle={STRINGS.noClients}
         emptyViewSubTitle={STRINGS.noClientDec}
         illustration={Images.noSubAdmin}

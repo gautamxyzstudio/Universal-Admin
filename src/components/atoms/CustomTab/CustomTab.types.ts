@@ -18,5 +18,4 @@ interface TabItemProps {
 
 export interface ICustomTabProps  extends TabsProps {
   tabs: TabItemProps[];
-  onTabChange?: (event: React.SyntheticEvent, newTabIndex: number) => void;
 }

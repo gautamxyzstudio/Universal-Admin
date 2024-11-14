@@ -14,7 +14,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import { Images } from "../../../../public/exporter";
 import { useRouter } from "next/navigation";
-import { useGetCompanyDetailsContext } from "@/contexts/CompanyDetailsContext/CompanyDetailsContext";
 
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,13 +26,12 @@ const Company = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<ICompany[]>([]);
-  const { onClickRow } = useGetCompanyDetailsContext();
 
   const fetchCompaniesHandler = async (
     characters: string,
     isFirstPage?: boolean
   ) => {
-    const page = isFirstPage ? 1 : currentPage + 1;
+    const page = isFirstPage ? currentPage : currentPage + 1;
     try {
       console.log(page, "pagenumber");
       const response = await fetchCompanies({
@@ -49,10 +47,7 @@ const Company = () => {
         }
         setCurrentPage(response.meta.pagination.page);
         updateSearchState("idle");
-        setIsLastPage(
-          response?.data.length === 0 ||
-            currentPage === response?.meta.pagination.pageCount
-        );
+        setIsLastPage(response.meta.pagination.pageCount === page);
       }
     } catch (error) {
       setIsLoading(false);
@@ -83,9 +78,7 @@ const Company = () => {
 
   const router = useRouter();
   const handleOnRowClick = (row: any) => {
-
     router.push(`/company/${row.id}`);
-    onClickRow(row );
   };
   const columns: GridColDef[] = [
     {
