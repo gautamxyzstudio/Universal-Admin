@@ -240,20 +240,12 @@ export type IPostedJobsResponse = {
 export type IGetCompanyClientResponse = {
   id: number;
   Name: string | null | undefined;
-  companyname: string | null | undefined;
-  Industry: string | null | undefined;
   Email: string | null | undefined;
   location: string | null | undefined;
   contactno: string | null | undefined;
   publishedAt: Date | null | undefined;
+  company_details: {
+    Industry: string | null | undefined;
+    companyname: string | null | undefined;
+  }
 }[];
-export interface ICompanyClientResponse {
-  id: string;
-  Name: string | null | undefined;
-  companyname: string | null | undefined;
-  Industry: string | null | undefined;
-  Email: string | null | undefined;
-  location: string | null | undefined;
-  contactno: string | null | undefined;
-  publishedAt: Date | null | undefined;
-}

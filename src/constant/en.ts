@@ -39,6 +39,7 @@ export const STRINGS = {
   lastNameKey: 'lastName',
   noSubAdmin: 'No Sub-Admin Added Yet',
   noClients: 'No Clients Added Yet',
+  noJobs: 'No Jobs Added Yet',
   noClientDec: 'Click the add client button to add a new client',
   noSubAdminDec: 'Click the add sub admin button to assign new sub admin',
   active: 'Active',
@@ -110,4 +111,5 @@ export const STRINGS = {
   noOpenJob : 'Company not available open job',
   noClosedJob : 'Company not available close job',
   noClient: 'Company not available any client',
+  clientAddress: 'Client address'
 };

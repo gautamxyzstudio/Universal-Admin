@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import {
-  ICompanyClientResponse,
   ICompanyDetails,
   IGetCompanyClientResponse,
   IJobPostCustomizedResponse,
@@ -85,15 +85,6 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     }
   };
 
-  useEffect(() => {
-    if (params.companyDetails) {
-      getCompanyDetails();
-      getCompanyClients();
-      getOpenJobs();
-      getClosedJob();
-    }
-  }, [params.companyDetails]);
-
   // Map the job data to CustomList items
   const mapJobData = (jobData) => {
     return jobData?.map((data) => {
@@ -125,17 +116,29 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
       };
     });
   };
-
+  // All Open Jobs
   const openJobData = mapJobData(openJob?.data);
+  // All Closed Jobs
   const closedJobData = mapJobData(closedJob?.data);
-  const allClients = clientDetails?.map((client) => {
+  // All Clients Data
+  const allClients: any = clientDetails?.map((client) => {
+    const client_details = client;
     return {
       children: (
-        <UserNameWithImage name={client.Name ?? ""} image={companyData?.companylogo} />
+        <UserNameWithImage
+          name={client.Name ?? ""}
+          image={companyData?.companylogo}
+        />
       ),
       onClick: () => {
-        setSelectedItem(<CompanyClientDetails data={client} image={companyData?.companylogo} />);
-      }
+        setSelectedItem(
+          <CompanyClientDetails
+            data={client}
+            image={companyData?.companylogo}
+          />
+        );
+      },
+      client_details,
     };
   });
 
@@ -143,35 +146,44 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
   const tabsData = [
     {
       label: STRINGS.allClient,
-      content: (
-        <CustomList
-          items={allClients}
-          noList={<div className="text-center">{STRINGS.noClient}</div>}
-        />
-      ),
+      content:
+        allClients && allClients.length !== 0 ? (
+          <CustomList items={allClients} />
+        ) : (
+          <CustomList
+            noList={<div className="text-center">{STRINGS.noClient}</div>}
+          />
+        ),
+      onClickAction: () => {
+        setSelectedItem(
+          allClients && allClients.length > 0 ? allClients[0].onClick : null
+        ); // Select first client when tab is clicked
+      },
     },
     {
       label: STRINGS.openJob,
-      content: openJobData ? (
-        <CustomList items={openJobData} />
-      ) : (
-        <CustomList
-          noList={<div className="text-center">{STRINGS.noOpenJob}</div>}
-        />
-      ),
+      content:
+        openJobData && openJobData.length !== 0 ? (
+          <CustomList items={openJobData} />
+        ) : (
+          <CustomList
+            noList={<div className="text-center">{STRINGS.noOpenJob}</div>}
+          />
+        ),
       onClickAction: () => {
         setSelectedItem(openJobData.length > 0 ? openJobData[0].onClick : null); // Select first job
       },
     },
     {
       label: STRINGS.closeJob,
-      content: closedJobData ? (
-        <CustomList items={closedJobData} />
-      ) : (
-        <CustomList
-          noList={<div className="text-center">{STRINGS.noClosedJob}</div>}
-        />
-      ),
+      content:
+        closedJobData && closedJobData.length !== 0 ? (
+          <CustomList items={closedJobData} />
+        ) : (
+          <CustomList
+            noList={<div className="text-center">{STRINGS.noClosedJob}</div>}
+          />
+        ),
       onClickAction: () => {
         setSelectedItem(
           closedJobData.length > 0 ? closedJobData[0].onClick : null
@@ -179,6 +191,14 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
       },
     },
   ];
+  useEffect(() => {
+    if (params.companyDetails) {
+      getCompanyDetails();
+      getCompanyClients();
+      getOpenJobs();
+      getClosedJob();
+    }
+  }, [params.companyDetails]);
 
   return (
     <div className="w-full h-[90%]">
@@ -263,8 +283,13 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
           {selectedItem ? (
             selectedItem
+          ) : clientDetails ? (
+            <CompanyClientDetails
+              data={clientDetails?.length > 0 ? clientDetails[0] : null}
+              image={companyData?.companylogo}
+            />
           ) : (
-            <Skeleton variant="rectangular" width="100%" height={400} />
+            <Skeleton variant="rectangular" width="100%" height={500} />
           )}
         </div>
       </div>

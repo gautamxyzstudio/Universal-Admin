@@ -5,7 +5,6 @@ import {
   IAddANewCompanyRequest,
   IAddNewCompanyResponse,
   ICompany,
-  ICompanyClientResponse,
   ICompanyDetails,
   IGetCompaniesCustomizedResponse,
   IGetCompaniesResponse,

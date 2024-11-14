@@ -12,7 +12,7 @@ export const Endpoints = {
       process.env.NEXT_PUBLIC_BASE_URL
     }/api/company-details?pagination[page]=${page}&pagination[pageSize]=${
       perPage ? perPage : 15
-    }&search=${search}`,
+    }&search=${search}&sort=id:desc`,
   addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
   getClients: (page: number) =>
