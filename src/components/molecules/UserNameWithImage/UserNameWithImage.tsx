@@ -17,8 +17,9 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   nameStyle,
   divStyle,
   imageStyle,
- 
+ postby,
   subText,
+  postbyStyle,
 }) => {
   return (
     <div
@@ -33,10 +34,10 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         name={name}
         type={type}
       />
-      <div className={divStyle + " flex flex-col gap-y-1 w-full"}>
+      <div className={divStyle + " flex flex-col gap-y-1 w-full capitalize"}>
         {name && (
           <span
-            className={nameStyle + " text-[16px] leading-[20px] text-Black"}
+            className={nameStyle + " text-[16px] leading-[20px] text-Black capitalize"}
           >
             {name}
           </span>
@@ -45,12 +46,26 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           <div
             className={companyNameStyle + " flex gap-x-2 items-center w-full"}
           >
-            <span>Posted by {companyName}</span>{" "}
+            <span>{companyName}</span>{" "}
+            
+            {days && (
+              <>
+                <SVGComponent svg={SVGS.circleDot} />
+                <span>{formatDateFromNow(days)} </span>
+              </>
+            )}
+          </div>
+        )}
+        {postby && (
+          <div
+            className={postbyStyle + " flex gap-x-2 items-center w-full"}
+          >
+            <span>Posted by {postby}</span>{" "}
             {subText && (
               <>
                 <SVGComponent svg={SVGS.circleDot} />
                 <span className="text-[12px] leading-4 font-bold text-red">
-                  {subText}{" "}
+                  {subText}
                 </span>
               </>
             )}

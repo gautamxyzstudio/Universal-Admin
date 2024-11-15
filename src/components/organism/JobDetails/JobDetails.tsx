@@ -32,8 +32,8 @@ const JobDetails = ({ data }) => {
               name={data.job_name}
               imageStyle="!w-10 !h-10"
               nameStyle="font-bold !text-[24px] !leading-[28px]"
-              companyName={data.client_details?.Name}
-              companyNameStyle="text-disable !text-[16px] !leading-[20px]"
+              postby={data.client_details?.Name}
+              postbyStyle="text-disable !text-[16px] !leading-[20px]"
               subText={data.notAccepting === false ? "" : STRINGS.notAccept}
             />
             <div className="flex flex-col justify-between items-end text-[12px] leading-4 w-full">

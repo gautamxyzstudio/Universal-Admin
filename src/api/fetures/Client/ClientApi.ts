@@ -15,6 +15,7 @@ import {
   IUpdateClientDetailsResponse,
 } from "./Client.types";
 import { createImageUrl } from "@/utility/cookies";
+import { IClientStatus } from "@/constant/enums";
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,7 +25,6 @@ const clientApi = baseApi.injectEndpoints({
         method: ApiMethodType.get,
       }),
       transformResponse: (res: IGetClientsResponse) => {
-        console.log(res, "response api client");
         const clients: IClient[] = [];
         res.data.forEach((client) => {
           if (client.cuser_id) {
@@ -117,6 +117,18 @@ const clientApi = baseApi.injectEndpoints({
         body: body.clientDetails,
       }),
     }),
+    changeClientStatus: builder.mutation<
+      IClientDetailsResposne,
+      { clientId: number; status: IClientStatus }
+    >({
+      query: (body: { clientId: number; status: IClientStatus }) => ({
+        url: Endpoints.getClientDetails(body.clientId),
+        method: ApiMethodType.patch,
+        body:{
+          status:body.status
+        }
+      }),
+    }),
     registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
       query: (body: IRegisterClientReq) => ({
         url: Endpoints.registerClient,
@@ -147,7 +159,6 @@ const clientApi = baseApi.injectEndpoints({
       transformResponse: (
         res: IGetClientDetailsResponse
       ): IClientDetailsResposne => {
-        console.log(res, "client details api response");
         return {
           id: res.data?.id,
           name: res.data?.attributes?.Name,
@@ -158,14 +169,26 @@ const clientApi = baseApi.injectEndpoints({
           createdAt: res.data?.attributes?.createdAt,
           companyName:
             res.data.attributes.company_detail?.data?.attributes.companyname,
-          industry: res.data.attributes.company_detail?.data?.attributes.Industry,
+          industry:
+            res.data.attributes.company_detail?.data?.attributes.Industry,
           companyLogo: res.data.attributes.company_detail?.data?.attributes
             .companylogo?.data?.attributes
             ? createImageUrl(
-                res.data.attributes.company_detail.data.attributes.companylogo.data.attributes.url
+                res.data.attributes.company_detail.data.attributes.companylogo
+                  .data.attributes.url
               )
             : null,
         };
+      },
+    }),
+    getPostedJobByClient: builder.query({
+      query: ({ clientId, page }: { clientId:number; page: number }) => ({
+        url: Endpoints.getPostJobsByClient(clientId, page),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (response) => {
+        console.log(response, "api response of post job by client");
+        return response;
       },
     }),
   }),
@@ -179,4 +202,7 @@ export const {
   useRegisterClientMutation,
   useGetClientDetailsQuery,
   useLazyGetClientDetailsQuery,
+  useChangeClientStatusMutation,
+  useGetPostedJobByClientQuery,
+  useLazyGetPendingRequestsQuery,
 } = clientApi;

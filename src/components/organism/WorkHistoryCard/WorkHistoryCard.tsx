@@ -7,6 +7,7 @@ import { IWorkHistoryCardProps } from "./WorkHIstoryCard.types";
 const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
   companyName,
   profileName,
+  postbyName,
   days,
   image,
   textLabel,
@@ -22,8 +23,10 @@ const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
           nameStyle="font-bold"
           imageStyle="!w-9 !h-9"
           companyName={companyName}
+          postby={postbyName}
           days={days}
           companyNameStyle="text-disable text-[14px] leading-[18px]"
+          postbyStyle="text-disable text-[14px] leading-[18px]"
         />
         <TextWithBgColor
           textLabel={textLabel}

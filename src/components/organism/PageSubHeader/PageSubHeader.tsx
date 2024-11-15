@@ -17,7 +17,7 @@ const PageSubHeader: React.FC<IPageSubHeaderTypes> = ({ pageTitle, name }) => {
         <span className="cursor-pointer text-disable">{pageTitle}</span>
       </div>
       <Image src={Icons.leftArrow} className="w-auto h-auto" alt="Left Arrow" />
-      <span className="font-bold text-primary">{name}</span>
+      <span className="font-bold text-primary capitalize">{name}</span>
     </div>
   );
 };

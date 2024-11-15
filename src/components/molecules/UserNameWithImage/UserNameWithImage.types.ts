@@ -15,4 +15,6 @@ export interface IUserNameWithImageProps {
   companyNameStyle?: string;
   divStyle?: string | undefined;
   profileNameStyle?: string;
+  postby? : string | undefined,
+  postbyStyle? : string | undefined,
 }

@@ -111,5 +111,6 @@ export const STRINGS = {
   noOpenJob : 'Company not available open job',
   noClosedJob : 'Company not available close job',
   noClient: 'Company not available any client',
-  clientAddress: 'Client address'
+  clientAddress: 'Client address',
+  postJobs: 'Posted Jobs',
 };

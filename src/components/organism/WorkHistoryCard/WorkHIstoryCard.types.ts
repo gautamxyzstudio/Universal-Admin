@@ -2,7 +2,8 @@ import { IIconWithTextProps } from "@/components/molecules/IconWithText/IconWith
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export interface IWorkHistoryCardProps {
-  companyName: string;
+  companyName?: string;
+  postbyName? : string;
   profileName: string;
   days: Date;
   image: StaticImport | string | null | undefined;

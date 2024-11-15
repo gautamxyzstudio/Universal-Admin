@@ -27,10 +27,10 @@ const ContactDetailCard: React.FC<IContactCardProps> = ({
         {department && (
           <IconWithText text={department} icon={Icons.companyBuilding} />
         )}
-        {email && <IconWithText text={email} icon={Icons.emailIcon} />}
         {phoneNumber && (
           <IconWithText text={phoneNumber} icon={Icons.callIcon} />
         )}
+        {email && <IconWithText text={email} icon={Icons.emailIcon} />}
         {address && <IconWithText text={address} icon={Icons.locationPin} />}
         {link && (
           <Link href={link} target="__blank">

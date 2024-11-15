@@ -15,7 +15,6 @@ import {
 import CustomList from "@/components/atoms/CustomList/CustomList";
 import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import ContactCard from "@/components/organism/ContactDetailCard/ContactDetailCard";
 import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
 import WorkHistoryCard from "@/components/organism/WorkHistoryCard/WorkHistoryCard";
@@ -27,6 +26,7 @@ import JobDetails from "@/components/organism/JobDetails/JobDetails";
 import { getJobType } from "@/constant/constant";
 import Skeleton from "@mui/material/Skeleton"; // Importing Skeleton component
 import CompanyClientDetails from "@/components/organism/CompanyClientDetails/CompanyClientDetails";
+import ContactDetailCard from "@/components/organism/ContactDetailCard/ContactDetailCard";
 
 const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
   const [fetchOpenJobs, { error }] = useLazyGetPostedJobQuery();
@@ -91,7 +91,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
       return {
         children: (
           <WorkHistoryCard
-            companyName={data.client_details?.Name || ""}
+            postbyName={data.client_details?.Name || ""}
             profileName={data.job_name}
             days={data.eventDate}
             image={data.client_details?.company_detail?.companylogo?.url}
@@ -232,7 +232,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
                 nameStyle="!text-[24px] !leading-[28px]"
               />
               <div className="w-full h-3" />
-              <ContactCard
+              <ContactDetailCard
                 email={companyData?.companyemail || ""}
                 phoneNumber={companyData?.contactno || ""}
                 address={companyData?.address || ""}
