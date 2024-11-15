@@ -84,7 +84,7 @@ export const dateFormat = (date: string | Date)=>{
   return moment(date).format('D-MM-YYYY');
 }
 export const dateMonthFormat = (date: string | Date)=>{
-  return moment(date).format('D MMM,YYYY');
+  return moment(date).format('D MMM, YYYY');
 }
 
 export const timeFormat = (date: string | Date)=>{

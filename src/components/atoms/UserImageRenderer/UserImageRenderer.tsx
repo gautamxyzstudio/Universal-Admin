@@ -23,7 +23,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   return (
     <>
       {isLoading && image && (
-        <div className="flex absolute flex-row justify-center items-center bg-white z-10 rounded-full border border-borderGrey">
+        <div className="flex absolute flex-row justify-center items-center bg-white z-10  rounded-full">
           <Image width={50} height={50} src={Icons.animatedSpinner} alt={''} />
         </div>
       )}
@@ -36,7 +36,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
           onLoadingComplete={() => setIsLoading(false)}
           className={
             imageStyle +
-            ' object-contain relative  top-0 left-0 w-auto h-auto rounded-full border border-borderGrey'
+            ' object-contain relative  top-0 left-0 w-auto h-auto rounded-full'
           }
           src={image}
           alt={name}
@@ -46,7 +46,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
         <div
           className={
             backgroundColor +
-            ' flex flex-row justify-center items-center w-8 h-8 rounded-full border border-borderGrey'
+            ' flex flex-row justify-center items-center w-8 h-8 rounded-full'
           }
         >
           <p className={textColor + ' text-sm'}>

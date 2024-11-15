@@ -171,9 +171,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
           />
         ),
       onClickAction: () => {
-        setSelectedItem(
-          openJobData && openJobData.length > 0 ? openJobData[0].onClick : null
-        ); // Select first job
+        setSelectedItem(openJobData.length > 0 ? openJobData[0].onClick : null); // Select first job
       },
     },
     {
@@ -188,9 +186,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         ),
       onClickAction: () => {
         setSelectedItem(
-          closedJobData && closedJobData.length > 0
-            ? closedJobData[0].onClick
-            : null
+          closedJobData.length > 0 ? closedJobData[0].onClick : null
         ); // Select first job
       },
     },

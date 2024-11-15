@@ -7,10 +7,9 @@ const Switch: React.FC<ISwitchProps> = ({
   onChange,
   label,
   className,
-  switchClassName,
 }) => {
   return (
-    <div className={"flex flex-row items-center w-full h-fit " + switchClassName} >
+    <div className="flex flex-row items-center w-full">
       <MuiSwitch
         focusVisibleClassName="."
         sx={{

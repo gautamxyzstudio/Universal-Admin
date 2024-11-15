@@ -1,6 +1,6 @@
 import { IClient } from '@/api/fetures/Client/Client.types';
 import { ICompany } from '@/api/fetures/Company/Company.types';
-import { IAddEmployeeClientArgs } from '@/app/(home)/clientManagement/pendingRequests/types';
+import { IAddEmployeeClientArgs } from '@/app/(home)/clientManagement/[pendingRequests]/types';
 import { IClientStatus } from '@/constant/enums';
 
 export type ILinkClientFrom = {
