@@ -5,5 +5,6 @@ export type ISwitchProps = {
     isChecked: boolean
   ) => void;
   label: string;
-  className: string | undefined;
+  className?: string | undefined;
+  switchClassName?: string | undefined;
 };

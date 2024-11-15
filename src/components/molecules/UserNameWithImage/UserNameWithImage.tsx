@@ -17,6 +17,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   nameStyle,
   divStyle,
   imageStyle,
+ 
   subText,
 }) => {
   return (
@@ -62,7 +63,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           </div>
         )}
         {joinDate && (
-          <span className="text-[14px] leading-[18px] text-disable">
+          <span className={"text-[14px] leading-[18px] w-full text-disable " }>
             Joined - {joinDate}
           </span>
         )}

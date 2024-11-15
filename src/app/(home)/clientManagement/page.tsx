@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
@@ -20,7 +21,7 @@ import { routeNames } from '@/utility/routesName';
 import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
 import LinkOrAddClientFrom from '@/components/templates/LinkOrAddClientForm/LinkOrAddClientForm';
 import { ICompany } from '@/api/fetures/Company/Company.types';
-import { IAddEmployeeClientArgs } from './[pendingRequests]/types';
+import { IAddEmployeeClientArgs } from './pendingRequests/types';
 import { generateUniqueUserName } from '@/utility/utils';
 import { ICustomErrorResponse } from '@/api/types';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
@@ -220,6 +221,10 @@ const ClientManagement = () => {
     },
   ];
 
+  const handleOnRowClick = (row: any) => {
+    router.push(`/clientManagement/${row.detailsId}`);
+  }; 
+
   useEffect(() => {
     getClientsHandler();
   }, []);
@@ -250,6 +255,7 @@ const ClientManagement = () => {
       <DataTable
         columns={columns}
         rows={clients}
+        onPressRow={handleOnRowClick}
         isLoading={isFetching}
         isLastPage={isLastPage}
         emptyViewTitle={STRINGS.noClients}
