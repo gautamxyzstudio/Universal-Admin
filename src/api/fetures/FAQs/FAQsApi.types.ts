@@ -4,7 +4,7 @@ export interface IAddANewFAQRequest {
     Title: string;
   };
 }
-export interface IAddNewFAQRespone {
+export interface IAddNewFAQResponse {
   data: {
     id: number;
     attributes: {
@@ -14,7 +14,7 @@ export interface IAddNewFAQRespone {
   };
 }
 
-export interface IGetFAQsRespone {
+export interface IGetFAQsResponse {
   data: {
     id: number;
     attributes: {
@@ -32,13 +32,13 @@ export interface IGetFAQsRespone {
   };
 }
 
-export interface IFAQs {
+export interface IFaqs {
   id: number;
-  FaqDsrc: string | null | undefined;
-  Title: string | null | undefined;
+  description: string | null | undefined;
+  title: string | null | undefined;
 }
 export interface IGetFAQsCustomizeResponse {
-  data: IFAQs[] | null;
+  data: IFaqs[] ;
   meta: {
     pagination: {
       page: number;

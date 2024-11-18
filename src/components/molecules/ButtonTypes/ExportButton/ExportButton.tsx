@@ -1,4 +1,4 @@
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import React from "react";
 import { Icons } from "../../../../../public/exporter";
 import Image from "next/image";

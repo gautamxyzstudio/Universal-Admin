@@ -6,7 +6,7 @@ import {
 import CustomDialog from "@/components/atoms/CustomDialog/CustomDialog";
 import Image from "next/image";
 import { STRINGS } from "@/constant/en";
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 
 const ConfirmationDialog: React.FC<IConfirmationDialogProps> = ({
   type,

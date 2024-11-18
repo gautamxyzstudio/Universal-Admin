@@ -1,4 +1,4 @@
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import { STRINGS } from "@/constant/en";
 import { MoreVertOutlined } from "@mui/icons-material";
 import { Fade, IconButton, Menu, MenuItem } from "@mui/material";

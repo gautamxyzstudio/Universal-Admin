@@ -3,28 +3,28 @@ import { baseApi } from "@/api/BaseApi";
 import { Endpoints } from "@/api/Endpoints";
 import {
   IAddANewFAQRequest,
-  IAddNewFAQRespone,
-  IFAQs,
+  IAddNewFAQResponse,
+  IFaqs,
   IGetFAQsCustomizeResponse,
-  IGetFAQsRespone,
+  IGetFAQsResponse,
 } from "./FAQsApi.types";
 
 const FAQsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getFaqs: builder.query({
+    getFaqs: builder.query<IGetFAQsCustomizeResponse, { page: number }>({
       query: () => ({
         url: Endpoints.getFaqs,
         method: ApiMethodType.get,
       }),
       transformResponse: (
-        response: IGetFAQsRespone
+        response: IGetFAQsResponse
       ): IGetFAQsCustomizeResponse => {
-        const faqs: IFAQs[] = [];
+        const faqs: IFaqs[] = [];
         response.data.forEach((faq) => {
           faqs.push({
             id: faq.id,
-            FaqDsrc: faq.attributes.FaqDsrc,
-            Title: faq.attributes.Title,
+            description: faq.attributes.FaqDsrc,
+            title: faq.attributes.Title,
           });
         });
         return {
@@ -33,24 +33,35 @@ const FAQsApi = baseApi.injectEndpoints({
         };
       },
     }),
-    addFaq: builder.mutation<IAddNewFAQRespone, IAddANewFAQRequest>({
+    addFaq: builder.mutation<IAddNewFAQResponse, IAddANewFAQRequest>({
       query: (body: IAddANewFAQRequest) => ({
         url: Endpoints.addFaq,
         method: ApiMethodType.post,
         body,
       }),
     }),
-    editFaq: builder.mutation<IFAQs, {faqDetails: IAddANewFAQRequest, faqId:number}>({
-        query: (body:{
-            faqDetails: IAddANewFAQRequest,
-            faqId: number
-        })=> ({
-            url: Endpoints.editFaq(body.faqId),
-            method: ApiMethodType.PUT,
-            body: body.faqDetails
-        })
+    editFaq: builder.mutation<
+      IFaqs,
+      { faqDetails: IAddANewFAQRequest; faqId: number }
+    >({
+      query: (body: { faqDetails: IAddANewFAQRequest; faqId: number }) => ({
+        url: Endpoints.editFaq(body.faqId),
+        method: ApiMethodType.PUT,
+        body: body.faqDetails,
+      }),
     }),
-    
+    deleteFaq: builder.mutation<IFaqs, { faqId: number }>({
+      query: (body: { faqId: number }) => ({
+        url: Endpoints.deleteFaq(body.faqId),
+        method: ApiMethodType.delete,
+      }),
+    }),
   }),
 });
-export const { useGetFaqsQuery, useLazyGetFaqsQuery } = FAQsApi;
+export const {
+  useGetFaqsQuery,
+  useLazyGetFaqsQuery,
+  useAddFaqMutation,
+  useEditFaqMutation,
+  useDeleteFaqMutation,
+} = FAQsApi;

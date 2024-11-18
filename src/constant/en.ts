@@ -113,4 +113,13 @@ export const STRINGS = {
   noClient: 'Company not available any client',
   clientAddress: 'Client address',
   postJobs: 'Posted Jobs',
+  saveChange: 'Save Changes',
+  myacc: 'My Account',
+  faq: 'FAQs',
+  addFaq : 'Add FAQs',
+  faqs: 'Frequently Asked Questions',
+  notification: 'Notification',
+  edit: 'Edit',
+  delete: 'Delete',
+
 };

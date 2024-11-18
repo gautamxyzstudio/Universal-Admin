@@ -42,19 +42,23 @@ export const getStylesFromButtonType = (
         fontSize: '14px',
         lineHeight: '18px',
         borderColor: '#C11919',
+        backgroundColor: '#FFF4F4',
         fontWeight: '400',
         textTransform: 'capitalize',
         borderRadius: '4px',
+        border: '1px solid',
         padding: '8px',
       };
     case 'outline-small-green':
       return {
         color: '#469C73',
         borderColor: '#469C73',
+        backgroundColor: '#F6FFFB',
         fontSize: '14px',
         lineHeight: '18px',
         fontWeight: '400',
         textTransform: 'capitalize',
+        border: '1px solid',
         borderRadius: '4px',
         padding: '8px',
       };

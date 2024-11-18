@@ -9,7 +9,7 @@ import FormDrawer from '@/components/molecules/DrawerTypes/FormDrawer/FormDrawer
 import { STRINGS } from '@/constant/en';
 import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
 import { CompanyStateFields } from '../AddCompanyForm/AddCompany.types';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { ICompany } from '@/api/fetures/Company/Company.types';
 import LinkedCompanyCard from '@/components/organism/LinkedCompanyCard/LinkedCompanyCard';
 

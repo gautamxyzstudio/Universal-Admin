@@ -16,21 +16,21 @@ export const Endpoints = {
   addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
   getClients: (page: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=20&populate=*`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=20&populate=*&sort=id:desc`,
   getPendingRequests: (page: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findPendingClients?page=${page}&pageSize=20`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findPendingClients?page=${page}&pageSize=20&sort=id:desc`,
   linkClient: (userId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${userId}`,
   addClientDetails: `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details`,
-  getCompanyDetails: (companyId: number) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}?populate=*`,
+  getCompanyDetails: (companyId: number) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}?populate=*&sort=id:desc`,
   getOpenJobPost: (detailsId: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Openjob/${detailsId}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Openjob/${detailsId}?sort=id:desc`,
   getClosedJobPost: (detailsId: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}`,
-  getCompanyClients : (companyId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*`,
-  getClientDetails: (client_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}`,
-  getPostJobsByClient: (client_id: number, page:number ) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?page=${page}&pageSize=5&populate=*`,
-  getFaqs: `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}?sort=id:desc`,
+  getCompanyClients : (companyId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*&sort=id:desc`,
+  getClientDetails: (client_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}?sort=id:desc`,
+  getPostJobsByClient: (client_id: number, page:number ) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?page=${page}&pageSize=5&populate=*&sort=id:desc`,
+  getFaqs: `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs?sort=id:desc`,
   addFaq: `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs`,
   editFaq: (faq_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs/${faq_id}`,
   deleteFaq: (faq_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs/${faq_id}`,

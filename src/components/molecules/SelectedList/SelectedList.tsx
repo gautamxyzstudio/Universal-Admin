@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import { STRINGS } from "@/constant/en";
 import React, { useCallback, useState } from "react";
 import { Virtuoso } from "react-virtuoso";

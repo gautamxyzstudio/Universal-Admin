@@ -14,7 +14,7 @@ import { IFieldTypes } from '@/constant/enums';
 import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
 import { STRINGS } from '@/constant/en';
 import Switch from '@/components/atoms/Switch/Switch';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { extractFirstAndLastNameFromName } from '@/utility/cookies';
 import { validateEmail, validatePhoneNumber } from '@/utility/utils';
 import PasswordInput from '@/components/molecules/InputTypes/PasswordInput/PasswordInput';
