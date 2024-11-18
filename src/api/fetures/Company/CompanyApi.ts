@@ -236,7 +236,7 @@ const companiesApi = baseApi.injectEndpoints({
           return client;
         });
         console.log(data);
-        return data;
+        return data
       },
     }),
   }),
