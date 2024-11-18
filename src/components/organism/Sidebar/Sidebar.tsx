@@ -1,18 +1,19 @@
-'use client';
-import { Icons } from '../../../../public/exporter';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { IQuickLinkData, quickLink } from '@/api/mockData/data';
-import Link from 'next/link';
-import { STRINGS } from '@/constant/en';
-import ConfirmationDialog from '../../molecules/DialogTypes/ComfirmationDialog/ConfirmationDialog';
-import { removeUserDetailsFromCookies } from '@/utility/cookies';
-import { usePathname, useRouter } from 'next/navigation';
-import { routeNames } from '@/utility/routesName';
-import { splitRoute } from '@/utility/utils';
+"use client";
+import { Icons } from "../../../../public/exporter";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { IQuickLinkData, quickLink } from "@/api/mockData/data";
+import Link from "next/link";
+import { STRINGS } from "@/constant/en";
+import ConfirmationDialog from "../../molecules/DialogTypes/ComfirmationDialog/ConfirmationDialog";
+import { removeUserDetailsFromCookies } from "@/utility/cookies";
+import { usePathname, useRouter } from "next/navigation";
+import { routeNames } from "@/utility/routesName";
+import { splitRoute } from "@/utility/utils";
 
 const Sidebar = () => {
   const [translateY, setTranslateValue] = useState(0);
+  const [active, setActive] = useState(false);
 
   const currentPathName = usePathname();
 
@@ -23,6 +24,7 @@ const Sidebar = () => {
       );
       if (index !== -1) {
         setTranslateValue(index * 72); // Set translateY based on the current path
+        setActive(false);
       }
     }
   }, [currentPathName]); // Ensure the useEffect depends on currentPathName
@@ -37,7 +39,11 @@ const Sidebar = () => {
   const onPressLogout = () => {
     setShowDialog(true);
   };
-
+  const onPressSettings = () => {
+    route.push(routeNames.Settings);
+    setTranslateValue(-1);
+    setActive(true);
+  };
   const logoutHandler = () => {
     setShowDialog(false);
     removeUserDetailsFromCookies();
@@ -62,7 +68,7 @@ const Sidebar = () => {
         />
         <span
           className={`text-md ${
-            isActive ? 'font-bold text-primary' : 'text-disable'
+            isActive ? "font-bold text-primary" : "text-disable"
           }`}
         >
           {data.title}
@@ -83,32 +89,45 @@ const Sidebar = () => {
       <div className="w-full h-full mt-16 flex flex-col justify-between">
         <div className="flex justify-between flex-col relative">
           {/* Vertical indicator */}
-          <div
-            className={`h-[72px] w-1 bg-primary rounded-custom absolute transition-transform duration-300 ease-in-out`}
-            style={{ transform: `translateY(${translateY}px)` }} // Use inline style for translation
-          />
+          {translateY >= 0 ? (
+            <div
+              className={`h-[72px] w-1 bg-primary rounded-custom absolute transition-transform duration-300 ease-in-out`}
+              style={{ transform: `translateY(${translateY}px)` }} // Use inline style for translation
+            />
+          ) : null}
+
           {quickLink.map((data, index) => {
             const isActive = `/${splitRoute(currentPathName)}` === data.path;
+
             return SideBarTab(data, index, isActive);
           })}
         </div>
         <div>
           <div
+            onClick={onPressSettings}
             className={`flex cursor-pointer flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
           >
-            <Image src={Icons.setting} alt={'settings'} className="w-6 h-6" />
-            <span className={'text-md text-disable'}>{STRINGS.settings}</span>
+            <Image
+              src={active ? Icons.settingfill : Icons.setting}
+              alt={"settings"}
+              className="w-6 h-6"
+            />
+            <span
+              className={`text-md ${active ? "text-primary" : "text-disable"}`}
+            >
+              {STRINGS.settings}
+            </span>
           </div>
           <div
             onClick={onPressLogout}
             className={`flex cursor-pointer flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
           >
-            <Image src={Icons.logout} alt={'logout'} className="w-6 h-6" />
-            <span className={'text-md text-disable'}>{STRINGS.logout}</span>
+            <Image src={Icons.logout} alt={"logout"} className="w-6 h-6" />
+            <span className={"text-md text-disable"}>{STRINGS.logout}</span>
           </div>
         </div>
         <ConfirmationDialog
-          type={'logout'}
+          type={"logout"}
           onPressLogout={logoutHandler}
           onClose={onPressClose}
           open={showDialog}

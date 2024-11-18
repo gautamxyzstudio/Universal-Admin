@@ -68,7 +68,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
                       <div className="w-9 h-9 rounded-full flex items-center justify-center">
                         <Image
                           src={item.icon}
-                          alt="Document image"
+                          alt={item.label}
                           className="w-auto h-auto"
                         />
                       </div>

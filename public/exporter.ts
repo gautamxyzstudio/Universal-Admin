@@ -47,6 +47,10 @@ import animatedSpinner from './animatedSpinner.svg';
 import jobId from './jobId.svg';
 import location_Pin from './location_Pin.svg';
 import time_Date from './time_Date.svg';
+import user from './user.svg';
+import notify from './notify.svg';
+import faq from './faq.svg';
+import faqs from './faqs.svg';
 
 
 // Icon Object
@@ -99,6 +103,10 @@ export const Icons = {
   jobId,
   location_Pin,
   time_Date,
+  user,
+  notify,
+  faq,
+  faqs,
 };
 
 // Images
