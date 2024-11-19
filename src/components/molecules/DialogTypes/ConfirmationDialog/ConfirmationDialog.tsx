@@ -10,7 +10,7 @@ import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 
 const ConfirmationDialog: React.FC<IConfirmationDialogProps> = ({
   type,
-  onPressLogout,
+  onPressButton,
   onClose,
   open,
   title,
@@ -37,7 +37,11 @@ const ConfirmationDialog: React.FC<IConfirmationDialogProps> = ({
               <p className="text-center text-Black font-bold text-[20px] leading-6">{title}</p>
               <p className="text-center text-disable mt-4 text-[14px] leading-[18px]">{description}</p>
             </>
-          )}
+          )}{
+            type === "delete" && (
+              <p className="text-center">{STRINGS.delete_message}</p>
+            )
+          }
         </div>
         <div className="mt-3" />
         {type === "logout" && (
@@ -45,10 +49,21 @@ const ConfirmationDialog: React.FC<IConfirmationDialogProps> = ({
             customStyles={buttonStyles}
             variant="outlined"
             title={STRINGS.logout}
-            onClick={onPressLogout}
+            onClick={onPressButton}
             buttonType={"outline-small-red"}
           />
         )}
+        { type === "delete" && (
+          <CustomButton
+            customStyles={buttonStyles}
+            variant="outlined"
+            title={STRINGS.delete}
+            onClick={onPressButton}
+            buttonType={"outline-small-red"}
+          />
+        )
+
+        }
       </div>
     </CustomDialog>
   );

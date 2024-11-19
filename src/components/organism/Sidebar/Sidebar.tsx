@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { IQuickLinkData, quickLink } from "@/api/mockData/data";
 import Link from "next/link";
 import { STRINGS } from "@/constant/en";
-import ConfirmationDialog from "../../molecules/DialogTypes/ComfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../../molecules/DialogTypes/ConfirmationDialog/ConfirmationDialog";
 import { removeUserDetailsFromCookies } from "@/utility/cookies";
 import { usePathname, useRouter } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
@@ -128,7 +128,7 @@ const Sidebar = () => {
         </div>
         <ConfirmationDialog
           type={"logout"}
-          onPressLogout={logoutHandler}
+          onPressButton={logoutHandler}
           onClose={onPressClose}
           open={showDialog}
         />

@@ -7,4 +7,5 @@ export interface ICustomInputProps extends Omit<TextFieldProps, 'InputProps'> {
   error?: boolean;
   errorMessage?: string;
   maxLength?: number | undefined;
+  variant?: 'outlined' | 'standard' | 'filled'
 }

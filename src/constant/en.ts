@@ -121,5 +121,6 @@ export const STRINGS = {
   notification: 'Notification',
   edit: 'Edit',
   delete: 'Delete',
+  delete_message: 'Are you sure you want to delete this question?'
 
 };

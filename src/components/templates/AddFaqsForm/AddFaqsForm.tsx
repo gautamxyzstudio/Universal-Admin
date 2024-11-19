@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import FormDrawer from "@/components/molecules/DrawerTypes/FormDrawer/FormDrawer";
 import React, { useEffect, useReducer } from "react";
 import {
@@ -57,8 +58,15 @@ const AddFaqsForm: React.FC<IAddFaqsFormProps> = ({
     }
   }, [currentSelectFaq]);
 
-  // press on cross button
-  const onPressCross = () => {
+  // press on Add cross button
+  const onPressAddCross = () => {
+    setDisplayFrom(false);
+    setGlobalModalState(false);
+    setState(initialState);
+  };
+
+  //press edit cross the existing faqs
+  const onPressEditCross = () => {
     setDisplayFrom(false);
     setGlobalModalState(false);
     setState(initialState);
@@ -75,39 +83,54 @@ const AddFaqsForm: React.FC<IAddFaqsFormProps> = ({
     setGlobalModalState(false);
   };
 
+  // create the new faqs
   const onPressCreate = async () => {
-    try {
-      changeLoaderState(true);
-      onPressCross();
-      const addFaqRes = await addFaq({
-        data: {
-          FaqDsrc: state.faqDescription,
-          Title: state.faqTitle,
-        },
-      }).unwrap();
-      if (addFaqRes) {
-        onAddFaqHandler({
-          id: addFaqRes.data.id,
-          description: addFaqRes.data.attributes.FaqDsrc,
-          title: addFaqRes.data.attributes.Title,
-        });
-        displaySnackbar("success", "FAQs created successfully");
+    let isValid = true;
+    const question = state.faqTitle.trim();
+    const answer = state.faqDescription.trim();
+    if (!question) {
+      isValid = false;
+      setState({ ...state, faqTitleError: STRINGS.required_field });
+    }
+    if (!answer) {
+      isValid = false;
+      setState({ ...state, faqDescriptionError: STRINGS.required_field });
+    }
+    if (isValid) {
+      try {
+        changeLoaderState(true);
+        onPressAddCross();
+        const addFaqRes = await addFaq({
+          data: {
+            FaqDsrc: state.faqDescription,
+            Title: state.faqTitle,
+          },
+        }).unwrap();
+        if (addFaqRes) {
+          onAddFaqHandler({
+            id: addFaqRes.data.id,
+            description: addFaqRes.data.attributes.FaqDsrc,
+            title: addFaqRes.data.attributes.Title,
+          });
+          displaySnackbar("success", "FAQs created successfully");
+        }
+      } catch (err) {
+        const error = err as ICustomErrorResponse;
+        displaySnackbar("error", error.message);
+      } finally {
+        changeLoaderState(false);
       }
-    } catch (err) {
-      const error = err as ICustomErrorResponse;
-      displaySnackbar("error", error.message);
-    } finally {
-      changeLoaderState(false);
     }
   };
 
+  // update the faqs
   const onPressUpdate = async () => {
     if (currentSelectFaq) {
       const { id } = currentSelectFaq;
       if (id) {
         try {
           changeLoaderState(true);
-          onPressCross();
+          onPressEditCross();
           const editFaqRes = await editFaq({
             faqDetails: {
               data: {
@@ -143,27 +166,32 @@ const AddFaqsForm: React.FC<IAddFaqsFormProps> = ({
   return (
     <FormDrawer
       styles={{ width: "28%" }}
-      title={STRINGS.faqs}
+      title={
+        currentSelectFaq ? STRINGS.edit + " " + STRINGS.faq : STRINGS.addFaq
+      }
       open={displayFrom}
       handleClose={handleClickOutside}
-      onPressCross={onPressCross}
+      onPressCross={currentSelectFaq ? onPressEditCross : onPressAddCross}
     >
       <div className="p-6 flex w-full flex-col gap-y-6">
         <FormTextInput
+          variant="standard"
           value={state.faqTitle}
           onChange={(e) =>
             onChangeTextField(e.target.value, FaqsStateFields.FAQ_TITLE)
           }
           errorMessage={state.faqTitleError}
           label={"Question"}
+          multiline
         />
         <FormTextInput
+          variant="standard"
           value={state.faqDescription}
           onChange={(e) =>
             onChangeTextField(e.target.value, FaqsStateFields.FAQ_DESCRIPTION)
           }
           errorMessage={state.faqDescriptionError}
-          label={"Shot answer"}
+          label={"Short answer"}
           multiline
         />
       </div>

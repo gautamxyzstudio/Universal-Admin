@@ -11,6 +11,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   errorMessage,
   onChange,
   slotProps,
+  variant = "outlined",
   ...props
 }) => {
   const CustomSlotProps = {
@@ -29,7 +30,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
         slotProps={CustomSlotProps}
         onChange={onChange}
         error={error}
-        variant="outlined"
+        variant={variant}
       ></TextField>
       {errorMessage && <p className="text-xs mt-1 text-red">{errorMessage}</p>}
     </div>

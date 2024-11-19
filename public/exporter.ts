@@ -51,6 +51,8 @@ import user from './user.svg';
 import notify from './notify.svg';
 import faq from './faq.svg';
 import faqs from './faqs.svg';
+import dropdownFill from './dropdownFill.svg';
+import deleteIcon from './deleteIcon.svg';
 
 // Icon Object
 export const Icons = {
@@ -106,6 +108,8 @@ export const Icons = {
   notify,
   faq,
   faqs,
+  dropdownFill,
+  deleteIcon,
 };
 
 // Images

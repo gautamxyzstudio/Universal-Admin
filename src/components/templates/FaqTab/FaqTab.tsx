@@ -1,16 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import React, { useEffect, useState } from "react";
 import { STRINGS } from "@/constant/en";
-import {
-  Add,
-  DeleteForeverOutlined,
-  EditOutlined,
-  ExpandMore,
-} from "@mui/icons-material";
+import { Add, ArrowDropDown } from "@mui/icons-material";
 import {
   useDeleteFaqMutation,
-  useGetFaqsQuery,
   useLazyGetFaqsQuery,
 } from "@/api/fetures/FAQs/FAQsApi";
 import {
@@ -18,10 +13,14 @@ import {
   AccordionSummary,
   AccordionDetails,
   AccordionActions,
+  Skeleton,
 } from "@mui/material";
 import AddFaqsForm from "../AddFaqsForm/AddFaqsForm";
 import { IFaqs } from "@/api/fetures/FAQs/FAQsApi.types";
-import ConfirmationDialog from "@/components/molecules/DialogTypes/ComfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "@/components/molecules/DialogTypes/ConfirmationDialog/ConfirmationDialog";
+import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
+import { useSnackBarContext } from "@/providers/SnackbarProvider";
+import { ICustomErrorResponse } from "@/api/types";
 
 const FaqTab = () => {
   const [fetchFAQs] = useLazyGetFaqsQuery();
@@ -34,6 +33,8 @@ const FaqTab = () => {
     null
   );
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  const { changeLoaderState } = useShowLoaderContext();
+  const { displaySnackbar } = useSnackBarContext();
 
   const fetchFAQsHandler = async () => {
     try {
@@ -41,7 +42,6 @@ const FaqTab = () => {
         page: 1,
       }).unwrap();
       if (res) {
-        console.log(res.data, "updated page: ");
         setIsLoading(false);
         setFAQsData(res?.data);
       }
@@ -70,33 +70,56 @@ const FaqTab = () => {
   const onPressEditHandler = (card: IFaqs) => {
     setCurrentSelectedCard(card);
     setShowFormModal(true);
+    setShowDialog(false);
   };
 
-  const onPressClose =() =>{
-    setShowFormModal(false);
-    setCurrentSelectedCard(null);
-  }
+  // for Dialog box
+  const onPressClose = () => {
+    setShowDialog(false);
+  };
 
-  const onPressDelete = (id: number) => {
+  const onPressDelete = (value: IFaqs) => {
+    setCurrentSelectedCard(value);
+    setShowDialog(true);
+  };
+
+  const faqDeleteHandler = async (id: number) => {
     if (id) {
-      setShowDialog(true);
-      deleteHandler();
-    }
-  };
-  const deleteHandler = async () => {
-    if (currentSelectedCard && currentSelectedCard.id)
       try {
+        changeLoaderState(true);
         const res = await deleteFAQs({
-          faqId: currentSelectedCard.id,
+          faqId: id,
         }).unwrap();
         if (res) {
-          console.log("deleted FAQ: ");
+          displaySnackbar("success", "FAQs successfully deleted");
+          setFAQsData((prevData) => prevData.filter((faq) => faq.id !== id));
         }
       } catch (err) {
-        console.log("Error deleting FAQ", err);
+        const error = err as ICustomErrorResponse;
+        displaySnackbar("error", error.message);
       } finally {
+        changeLoaderState(false);
       }
+    }
   };
+
+  // handle delete button
+  const deleteHandler = () => {
+    setShowDialog(false);
+    if (currentSelectedCard) {
+      faqDeleteHandler(currentSelectedCard?.id);
+    }
+  };
+
+  // handle set global state for press cross button
+  const modalStateChangeHandler = (state: boolean) => {
+    setShowFormModal(state);
+    setShowDialog(state);
+    if (state === false) {
+      setCurrentSelectedCard(null);
+    }
+  };
+
   return (
     <>
       <div className="w-full h-[44px] flex justify-end items-center my-6 ">
@@ -112,56 +135,89 @@ const FaqTab = () => {
           {STRINGS.faqs}
         </h3>
         <div className="flex flex-col w-full gap-y-4 h-[76%] overflow-scroll scrollbar-none ">
-          {faqData.map((faq, index) => {
-            return (
-              <Accordion
-                key={index}
-                expanded={expanded === `panel${index + 1}`}
-                onChange={handleChange(`panel${index + 1}`)}
-                sx={{}}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls={`panel${index + 1}-content`}
-                  id={`panel${index + 1}-header`}
-                >
-                  {faq.title}
-                </AccordionSummary>
-                <AccordionDetails>{faq.description}</AccordionDetails>
-                <AccordionActions
-                  sx={{
-                    "&": {
-                      padding: "8px 16px",
-                    },
-                  }}
-                >
-                  <CustomButton
-                    title={STRINGS.delete}
-                    onClick={() => onPressDelete(faq.id)}
-                    buttonType={"outline-small-red"}
-                    icon={<DeleteForeverOutlined />}
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, index) => {
+                return (
+                  <Skeleton
+                    key={index}
+                    variant="rounded"
+                    width="100%"
+                    height={60}
                   />
-                  <CustomButton
-                    title={STRINGS.edit}
-                    onClick={() => onPressEditHandler(faq)}
-                    buttonType={"outline-small-green"}
-                    icon={<EditOutlined />}
-                  />
-                </AccordionActions>
-              </Accordion>
-            );
-          })}
+                );
+              })
+            : faqData.map((faq, index) => {
+                return (
+                  <Accordion
+                    key={index}
+                    expanded={expanded === `panel${index + 1}`}
+                    onChange={handleChange(`panel${index + 1}`)}
+                    sx={{
+                      boxShadow: "none",
+                      border: "1px solid",
+                      borderRadius: "8px",
+                      borderColor: "#DBDBDB",
+                      "&::before": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ArrowDropDown />}
+                      aria-controls={`panel${index + 1}-content`}
+                      id={`panel${index + 1}-header`}
+                      className="text-Black text-[16px] leading-5"
+                      sx={{
+                        minHeight: "fit-content",
+                        "&.Mui-expanded": {
+                          minHeight: "fit-content",
+                        },
+                      }}
+                    >
+                      {faq.title}
+                    </AccordionSummary>
+                    <AccordionDetails
+                      sx={{
+                        "&": {
+                          padding: "0 16px",
+                        },
+                      }}
+                      className="text-disable"
+                    >
+                      {faq.description}
+                    </AccordionDetails>
+                    <AccordionActions
+                      sx={{
+                        "&": {
+                          padding: "12px 16px",
+                        },
+                      }}
+                    >
+                      <CustomButton
+                        title={STRINGS.delete}
+                        onClick={() => onPressDelete(faq)}
+                        buttonType={"outline-gray-red"}
+                      />
+                      <CustomButton
+                        title={STRINGS.edit}
+                        onClick={() => onPressEditHandler(faq)}
+                        buttonType={"primary-small"}
+                      />
+                    </AccordionActions>
+                  </Accordion>
+                );
+              })}
         </div>
       </div>
       <AddFaqsForm
         currentSelectFaq={currentSelectedCard}
         show={showFormModal}
-        setGlobalModalState={(state) => setShowFormModal(state)}
+        setGlobalModalState={(state) => modalStateChangeHandler(state)}
         onAddFaqHandler={faqsAddHandler}
       />
       <ConfirmationDialog
-        type={"logout"}
-        onPressLogout={deleteHandler}
+        type={"delete"}
+        onPressButton={deleteHandler}
         onClose={onPressClose}
         open={showDialog}
       />
