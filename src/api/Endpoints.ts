@@ -6,7 +6,8 @@ export const Endpoints = {
   registerClient: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/local/register`,
   updateSubAdmin: (subAdminId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${subAdminId}`,
-  getEmployees: `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/emp?populate=*`,
+  getEmployees: (page: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/emp?page=${page}&pageSize=10&populate=*`,
   getCompanies: (page: number, search: string, perPage?: number) =>
     `${
       process.env.NEXT_PUBLIC_BASE_URL
@@ -16,19 +17,22 @@ export const Endpoints = {
   addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
   getClients: (page: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=20&populate=*`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=10&populate=*`,
   getPendingRequests: (page: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findPendingClients?page=${page}&pageSize=20`,
   linkClient: (userId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${userId}`,
   addClientDetails: `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details`,
-  getCompanyDetails: (companyId: number) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}?populate=*`,
+  getCompanyDetails: (companyId: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}?populate=*`,
   getOpenJobPost: (detailsId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Openjob/${detailsId}`,
   getClosedJobPost: (detailsId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}`,
-  getCompanyClients : (companyId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*`,
-  getClientDetails: (client_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}`,
-  getPostJobsByClient: (client_id: number, page:number ) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?page=${page}&pageSize=5&populate=*`,
+  getCompanyClients: (companyId: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*`,
+  getClientDetails: (client_id: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}`,
+  getPostJobsByClient: (client_id: number, page: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?page=${page}&pageSize=5&populate=*`,
 };
-

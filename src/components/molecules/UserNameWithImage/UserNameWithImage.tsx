@@ -1,9 +1,9 @@
-import UserImageRenderer from "@/components/atoms/UserImageRenderer/UserImageRenderer";
-import React from "react";
-import { IUserNameWithImageProps } from "./UserNameWithImage.types";
-import { formatDateFromNow } from "@/utility/utils";
-import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
-import { SVGS } from "@/constant/staticSvgs";
+import UserImageRenderer from '@/components/atoms/UserImageRenderer/UserImageRenderer';
+import React from 'react';
+import { IUserNameWithImageProps } from './UserNameWithImage.types';
+import { formatDateFromNow } from '@/utility/utils';
+import SVGComponent from '@/components/atoms/SvgComponent/SVGComponent';
+import { SVGS } from '@/constant/staticSvgs';
 
 const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   image,
@@ -12,42 +12,45 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   joinDate,
   companyName,
   days,
-  containorStyle,
+  containerStyle,
   companyNameStyle,
   nameStyle,
   divStyle,
   imageStyle,
- postby,
+  postby,
   subText,
   postbyStyle,
 }) => {
   return (
     <div
       className={
-        "flex w-full gap-x-[10px] h-auto flex-row items-center justify-start " +
-        containorStyle
+        'w-full flex flex-row  items-center justify-start ' + containerStyle
       }
     >
       <UserImageRenderer
-        imageStyle={imageStyle + " !w-10 !h-10"}
+        imageStyle={imageStyle}
         image={image}
         name={name}
         type={type}
       />
-      <div className={divStyle + " flex flex-col gap-y-1 w-full capitalize"}>
+      <div
+        className={divStyle + ' ml-[10px]  flex-1 w-full  gap-y-1  capitalize'}
+      >
         {name && (
           <span
-            className={nameStyle + " text-[16px] leading-[20px] text-Black capitalize"}
+            className={
+              nameStyle +
+              ' flex-1 text-[16px] leading-[20px] text-Black capitalize'
+            }
           >
             {name}
           </span>
         )}
         {companyName && (
           <div
-            className={companyNameStyle + " flex gap-x-2 items-center w-full"}
+            className={companyNameStyle + ' flex gap-x-2 items-center w-full'}
           >
-            <span>{companyName}</span>{" "}
-            
+            <span>{companyName}</span>{' '}
             {days && (
               <>
                 <SVGComponent svg={SVGS.circleDot} />
@@ -57,10 +60,8 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           </div>
         )}
         {postby && (
-          <div
-            className={postbyStyle + " flex gap-x-2 items-center w-full"}
-          >
-            <span>Posted by {postby}</span>{" "}
+          <div className={postbyStyle + ' flex gap-x-2 items-center w-full'}>
+            <span>Posted by {postby}</span>{' '}
             {subText && (
               <>
                 <SVGComponent svg={SVGS.circleDot} />
@@ -78,7 +79,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           </div>
         )}
         {joinDate && (
-          <span className={"text-[14px] leading-[18px] w-full text-disable " }>
+          <span className={'text-[14px] leading-[18px] w-full text-disable '}>
             Joined - {joinDate}
           </span>
         )}

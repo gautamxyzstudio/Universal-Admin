@@ -1,80 +1,72 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-"use client";
-import { ICompany } from "@/api/fetures/Company/Company.types";
-import { useLazyGetCompanyQuery } from "@/api/fetures/Company/CompanyApi";
-import DataTable from "@/components/atoms/DataTable/DataTable";
-import SearchField from "@/components/molecules/InputTypes/SearchInput/SearchInput";
-import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import PageHeader from "@/components/organism/PageHeader/PageHeader";
-import AddCompanyForm from "@/components/templates/AddCompanyForm/AddCompanyForm";
-import { STRINGS } from "@/constant/en";
-import { GridColDef } from "@mui/x-data-grid";
-import React, { useCallback, useEffect, useState } from "react";
-import _ from "lodash";
-import { Images } from "../../../../public/exporter";
-import { useRouter } from "next/navigation";
+'use client';
+import { ICompany } from '@/api/fetures/Company/Company.types';
+import { useLazyGetCompanyQuery } from '@/api/fetures/Company/CompanyApi';
+import DataTable from '@/components/atoms/DataTable/DataTable';
+import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
+import PageHeader from '@/components/organism/PageHeader/PageHeader';
+import AddCompanyForm from '@/components/templates/AddCompanyForm/AddCompanyForm';
+import { STRINGS } from '@/constant/en';
+import { GridColDef } from '@mui/x-data-grid';
+import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
+import { Images } from '../../../../public/exporter';
+import { useRouter } from 'next/navigation';
 
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLastPage, setIsLastPage] = useState(true);
-  const [fetchCompanies, { error }] = useLazyGetCompanyQuery();
+  const [totalRecord, setTotalRecord] = useState(0);
+  const [fetchCompanies, { error, isFetching }] = useLazyGetCompanyQuery();
   const [showFormModal, setShowFormModal] = useState(false);
-  const [searchVal, setSearchVal] = useState("");
-  const [searchState, updateSearchState] = useState<"idle" | "searching">(
-    "idle"
+  const [searchVal, setSearchVal] = useState('');
+  const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
+    'idle'
   );
   const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<ICompany[]>([]);
 
   const fetchCompaniesHandler = async (
     characters: string,
-    isFirstPage?: boolean
+    currentPage: number
   ) => {
-    const page = isFirstPage ? currentPage : currentPage + 1;
     try {
-      console.log(page, "pagenumber");
       const response = await fetchCompanies({
-        page: page,
+        page: currentPage,
         search: characters,
+        perPage: 10,
       }).unwrap();
       if (response) {
         setIsLoading(false);
-        if (page === 1) {
-          setCompanies(response.data);
-        } else {
-          setCompanies((prev) => [...prev, ...response.data]);
-        }
+        setCompanies(response.data);
+        setTotalRecord(response.meta.pagination.total);
         setCurrentPage(response.meta.pagination.page);
-        updateSearchState("idle");
-        setIsLastPage(response.meta.pagination.pageCount === page);
+        updateSearchState('idle');
       }
     } catch (error) {
       setIsLoading(false);
-      updateSearchState("idle");
-      console.log("Error fetching companies", error);
+      updateSearchState('idle');
+      console.log('Error fetching companies', error);
     }
   };
   useEffect(() => {
     if (searchVal.length > 0) {
-      updateSearchState("searching");
+      updateSearchState('searching');
       handleSearch(searchVal);
-      setIsLastPage(true);
     } else {
-      fetchCompaniesHandler(searchVal, true);
-      setIsLastPage(true);
+      fetchCompaniesHandler(searchVal, 1);
     }
   }, [searchVal]);
 
   const handleSearch = useCallback(
     _.debounce((query) => {
       if (query) {
-        fetchCompaniesHandler(query, true);
+        fetchCompaniesHandler(query, 1);
       }
-    }, 1000),
+    }, 300),
     []
   );
-
 
   const router = useRouter();
   const handleOnRowClick = (row: any) => {
@@ -82,45 +74,45 @@ const Company = () => {
   };
   const columns: GridColDef[] = [
     {
-      headerName: "S.no",
+      headerName: 'S.no',
       width: 48,
-      field: "sNum",
+      field: 'sNum',
     },
     {
-      headerName: "Company Name",
+      headerName: 'Company Name',
       width: 240,
-      field: "companyname",
+      field: 'companyname',
       renderCell: useCallback(
         (params) => (
           <UserNameWithImage
             imageStyle="!w-10 !h-10"
             image={params?.row?.companylogo}
-            name={params?.row?.companyname ?? ""}
-            type={"white"}
+            name={params?.row?.companyname ?? ''}
+            type={'white'}
           />
         ),
         []
       ),
     },
     {
-      headerName: "E-mail",
+      headerName: 'E-mail',
       width: 240,
-      field: "companyemail",
+      field: 'companyemail',
     },
     {
-      headerName: "Co. registered number",
+      headerName: 'Co. registered number',
       width: 220,
-      field: "regNo",
+      field: 'regNo',
     },
     {
-      headerName: "Account creation",
+      headerName: 'Account creation',
       width: 220,
-      field: "location",
+      field: 'location',
     },
     {
-      headerName: "Action",
+      headerName: 'Action',
       width: 80,
-      field: "",
+      field: '',
       renderCell: useCallback(
         () => <h1 className="text-sm cursor-pointer text-primary">View</h1>,
         []
@@ -128,17 +120,14 @@ const Company = () => {
     },
   ];
 
-  const onReachEnd = () => {
-    console.log("onReachEnd called");
-    if (!isLastPage) {
-      fetchCompaniesHandler(searchVal);
-    }
-  };
-
   const companyAddHandler = (comp: ICompany) => {
     setCompanies((prev) => {
       return [...prev, comp];
     });
+  };
+
+  const onPageChangeHandler = (_, pageNumber) => {
+    fetchCompaniesHandler('', pageNumber + 1);
   };
 
   return (
@@ -149,30 +138,31 @@ const Company = () => {
         onPressButton={() => setShowFormModal(true)}
         title={STRINGS.company}
       />
-
-      {companies && !isLoading && (
-        <div className="flex w-full  justify-start items-start pb-6">
-          <SearchField
-            onPressCross={() => setSearchVal("")}
-            onChangeText={(e) => setSearchVal(e.target.value)}
-            value={searchVal}
-            isLoading={searchState === "searching"}
-          />
-        </div>
-      )}
       <DataTable
         columns={columns}
         rows={companies}
-        isLoading={isLoading}
+        headerView={
+          <div className="flex w-full  justify-start items-start mb-4">
+            <SearchField
+              onPressCross={() => setSearchVal('')}
+              onChangeText={(e) => setSearchVal(e.target.value)}
+              value={searchVal}
+              isLoading={searchState === 'searching'}
+            />
+          </div>
+        }
+        isLoading={isFetching}
+        page={currentPage}
+        totalCount={totalRecord}
         onPressRow={handleOnRowClick}
-        onReachEnd={onReachEnd}
-        isLastPage={isLastPage}
-        tableHeightPercent={90}
+        onPressPageChange={onPageChangeHandler}
+        tableHeightPercent={85}
         emptyViewTitle={STRINGS.no_companies}
-        emptyViewSubTitle={""}
+        emptyViewSubTitle={''}
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={companies.length === 0}
+        withPagination={true}
       />
       <AddCompanyForm
         show={showFormModal}

@@ -13,8 +13,8 @@ import { createImageUrl } from '@/utility/cookies';
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getEmployees: builder.query<ICustomizedEmployeeApiResponse, any>({
-      query: () => ({
-        url: Endpoints.getEmployees,
+      query: (pageNo: number) => ({
+        url: Endpoints.getEmployees(pageNo),
         method: ApiMethodType.get,
       }),
       transformResponse: (
@@ -24,10 +24,10 @@ const authApi = baseApi.injectEndpoints({
           id: employee.id,
           name: employee.euser_id?.name,
           selfie: employee?.euser_id
-              ? employee?.euser_id?.selfie
-                ? createImageUrl(employee.euser_id.selfie[0].url)
-                : ""
-              : "",
+            ? employee?.euser_id?.selfie
+              ? createImageUrl(employee.euser_id.selfie[0].url)
+              : ''
+            : '',
           detailsId: employee.euser_id?.id,
           gender: employee.euser_id?.gender,
           email: employee.euser_id?.email,
@@ -50,4 +50,4 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetEmployeesQuery } = authApi;
+export const { useLazyGetEmployeesQuery } = authApi;

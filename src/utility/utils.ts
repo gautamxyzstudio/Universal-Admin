@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { ICustomErrorResponse } from '@/api/types';
-import moment from "moment"
+import { IDocumentStatus, IWorkStatus } from '@/constant/enums';
+import moment from 'moment';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getCurrentYear = () => {
@@ -76,17 +77,38 @@ export const splitRoute = (route: string) => {
   return parts[1] ?? '';
 };
 
-export const formatDateFromNow = (date: string | Date |undefined) => {
+export const formatDateFromNow = (date: string | Date | undefined) => {
   return moment(date).fromNow();
 };
 
-export const dateFormat = (date: string | Date)=>{
+export const dateFormat = (date: string | Date) => {
   return moment(date).format('D-MM-YYYY');
-}
-export const dateMonthFormat = (date: string | Date)=>{
+};
+export const dateMonthFormat = (date: string | Date) => {
   return moment(date).format('D MMM,YYYY');
-}
+};
 
-export const timeFormat = (date: string | Date)=>{
+export const timeFormat = (date: string | Date) => {
   return moment(date).format('h:mm A');
-}
+};
+
+export const getJobStatusTextByStatus = (status: IWorkStatus) => {
+  switch (status) {
+    case IWorkStatus.PART_TIME:
+      return 'Part-time';
+    case IWorkStatus.FULL_TIME:
+      return 'Full-time';
+    default:
+      return status;
+  }
+};
+export const getDocumentStatusTextByStatus = (status: IDocumentStatus) => {
+  switch (status) {
+    case IDocumentStatus.PENDING:
+      return 'Pending';
+    case IDocumentStatus.APPROVED:
+      return 'Approved';
+    default:
+      return 'Pending';
+  }
+};

@@ -27,10 +27,13 @@ import { ICustomErrorResponse } from '@/api/types';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { IClientStatus } from '@/constant/enums';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
+import TableFilter from '@/components/molecules/TableFilter/TableFilter';
+import { docStatus } from '../employeeManagement/types';
+import { Alert } from '@mui/material';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
   const [showCompanyList, setShowCompanyList] = useState(false);
   const router = useRouter();
@@ -39,20 +42,22 @@ const ClientManagement = () => {
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [addClientModal, setAddClientModal] = useState(false);
-  const [isLastPage, setIsLastPage] = useState(false);
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecord, setTotalRecord] = useState(0);
 
   //====================================================Apis start====================
   //get Clients list
-  const getClientsHandler = async () => {
-    const page = 1;
+  const getClientsHandler = async (page: number) => {
     try {
       const clientResponse = await getClients({ page }).unwrap();
       if (clientResponse) {
         setClients(clientResponse.data);
-        setIsLastPage(clientResponse.pagination.pageSize === page);
+        setCurrentPage(clientResponse.pagination.page);
+        setTotalRecord(clientResponse.pagination.total);
       }
     } catch (e) {
+      setClients([]);
       console.log(e);
     }
   };
@@ -80,6 +85,8 @@ const ClientManagement = () => {
       throw err;
     }
   };
+
+  console.log(clients);
 
   //Add registered client details
   const addRegisteredClientDetails = async (
@@ -155,6 +162,7 @@ const ClientManagement = () => {
             },
           ];
           setClients((prev) => [...newClient, ...prev]);
+          setCurrentPage;
         }
       }
     } catch (error) {
@@ -167,19 +175,19 @@ const ClientManagement = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "joiningDate",
+      field: 'joiningDate',
       headerName: STRINGS.joiningDate,
       width: 100,
       renderCell: (params) =>
         new Date(params.row.joiningDate).toLocaleDateString(),
     },
     {
-      field: "clientDetails",
+      field: 'clientDetails',
       headerName: STRINGS.clientNameAndComp,
       width: 256,
       renderCell: (params: { row: IClient }) => (
         <UserNameWithImage
-          type={"white"}
+          type={'white'}
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name ?? ''}
@@ -192,7 +200,7 @@ const ClientManagement = () => {
       ),
     },
     {
-      field: "contactDetails",
+      field: 'contactDetails',
       headerName: STRINGS.contactDetails,
       width: 256,
       renderCell: (params) => (
@@ -200,12 +208,12 @@ const ClientManagement = () => {
       ),
     },
     {
-      field: "location",
+      field: 'location',
       headerName: STRINGS.location,
       width: 180,
     },
     {
-      field: "status",
+      field: 'status',
       headerName: STRINGS.status,
       width: 180,
       renderCell: (params) => {
@@ -215,7 +223,7 @@ const ClientManagement = () => {
     },
     {
       field: STRINGS.action,
-      headerName: "Action",
+      headerName: 'Action',
       width: 104,
       renderCell: () => <span className="text-primary">{STRINGS.view}</span>,
     },
@@ -223,10 +231,10 @@ const ClientManagement = () => {
 
   const handleOnRowClick = (row: any) => {
     router.push(`/clientManagement/${row.detailsId}`);
-  }; 
+  };
 
   useEffect(() => {
-    getClientsHandler();
+    getClientsHandler(currentPage);
   }, []);
 
   const onSelectCompany = (company) => {
@@ -241,6 +249,10 @@ const ClientManagement = () => {
     }
   };
 
+  const onPageChangeHandler = (_, pageNumber) => {
+    getClientsHandler(pageNumber + 1);
+  };
+
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
@@ -253,16 +265,46 @@ const ClientManagement = () => {
         onPressButton={() => setAddClientModal(true)}
       />
       <DataTable
+        headerView={
+          <div className="flex w-full  justify-between items-center mb-4">
+            <div className="flex items-center">
+              <SearchField
+                searchStyle="w-[288px]"
+                onChangeText={function (
+                  event: React.ChangeEvent<HTMLInputElement>
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+                value={''}
+                isLoading={false}
+                onPressCross={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            </div>
+            <div className="flex flex-row gap-x-8">
+              <TableFilter
+                data={docStatus}
+                initialSelectedOption={docStatus[0]}
+                title={STRINGS.documentStatus}
+              />
+            </div>
+          </div>
+        }
         columns={columns}
         rows={clients}
         onPressRow={handleOnRowClick}
         isLoading={isFetching}
-        isLastPage={isLastPage}
+        page={currentPage}
+        tableHeightPercent={85}
+        onPressPageChange={onPageChangeHandler}
+        totalCount={totalRecord}
         emptyViewTitle={STRINGS.noClients}
         emptyViewSubTitle={STRINGS.noClientDec}
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={clients.length === 0}
+        withPagination={true}
       />
       <AddCompanyList
         show={showCompanyList}

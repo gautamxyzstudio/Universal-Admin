@@ -10,9 +10,16 @@ export interface IDataTableProps extends TableProps, IEmptyScreenViewProps {
   headerView?: React.ReactNode;
   tableHeightPercent?: number;
   onPressRow?: (row: unknown) => void;
-  onReachEnd?: (index: number) => void;
-  isLastPage?: boolean;
-  footerComponent?: React.ComponentType<{
-    context?: any;
-}> | undefined;
+  onPressPageChange?: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    page: number
+  ) => void;
+  footerComponent?:
+    | React.ComponentType<{
+        context?: any;
+      }>
+    | undefined;
+  withPagination: boolean;
+  page?: number;
+  totalCount?: number;
 }
