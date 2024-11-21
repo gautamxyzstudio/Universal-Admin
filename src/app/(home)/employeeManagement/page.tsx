@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import { STRINGS } from '@/constant/en';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Images } from '../../../../public/exporter';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
@@ -15,7 +16,7 @@ import { IEmployeeBasic } from '@/api/fetures/Employee/EmployeeApi.types';
 import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import { getDocumentStatusTextByStatus } from '@/utility/utils';
-
+import _ from 'lodash';
 const EmployeeManagement = () => {
   const [fetchEmployees, { data, isFetching, error }] =
     useLazyGetEmployeesQuery();
@@ -23,29 +24,52 @@ const EmployeeManagement = () => {
   const [employees, setEmployees] = useState<IEmployeeBasic[]>(
     data?.employees ?? []
   );
+  const [searchVal, setSearchVal] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecord, setTotalRecord] = useState(0);
+  const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
+    'idle'
+  );
 
   useEffect(() => {
-    getEmployees(currentPage);
-  }, []);
+    if (searchVal.length > 0) {
+      updateSearchState('searching');
+      handleSearch(searchVal);
+    } else {
+      getEmployees(searchVal, 1);
+    }
+  }, [searchVal]);
 
-  const getEmployees = async (page: number) => {
+  const handleSearch = useCallback(
+    _.debounce((query) => {
+      if (query) {
+        getEmployees(query, 1);
+      }
+    }, 300),
+    []
+  );
+
+  const getEmployees = async (searchVal: string, page: number) => {
     try {
-      const fetchEmployeesResponse = await fetchEmployees(page).unwrap();
+      const fetchEmployeesResponse = await fetchEmployees({
+        searchVal: searchVal,
+        pageNo: page,
+      }).unwrap();
       if (fetchEmployeesResponse) {
         setEmployees(fetchEmployeesResponse.employees);
         setCurrentPage(fetchEmployeesResponse.pagination.page);
         setTotalRecord(fetchEmployeesResponse.pagination.total);
+        updateSearchState('idle');
       }
     } catch (error) {
       setEmployees([]);
+      updateSearchState('idle');
       console.log('Error fetching employees', error);
     }
   };
 
-  const handleOnRowClick = (row: any) => {
-    router.push(`/employeeManagement/${row.id}`);
+  const handleOnRowClick = (row: IEmployeeBasic) => {
+    router.push(`/employeeManagement/${row.detailsId}`);
   };
 
   const columns: GridColDef[] = [
@@ -115,7 +139,7 @@ const EmployeeManagement = () => {
   ];
 
   const onPageChangeHandler = (_, pageNumber) => {
-    getEmployees(pageNumber + 1);
+    getEmployees('', pageNumber + 1);
   };
 
   const onPressPrimaryButton = () => {};
@@ -128,23 +152,16 @@ const EmployeeManagement = () => {
       />
       <DataTable
         columns={columns}
-        onPressRow={handleOnRowClick}
+        onPressRow={handleOnRowClick as any}
         rows={employees}
         headerView={
           <div className="flex w-full  justify-between items-center mb-4">
             <div className="flex items-center">
               <SearchField
-                searchStyle="w-[288px]"
-                onChangeText={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error('Function not implemented.');
-                }}
-                value={''}
-                isLoading={false}
-                onPressCross={function (): void {
-                  throw new Error('Function not implemented.');
-                }}
+                onPressCross={() => setSearchVal('')}
+                onChangeText={(e) => setSearchVal(e.target.value)}
+                value={searchVal}
+                isLoading={searchState === 'searching'}
               />
             </div>
             <div className="flex flex-row gap-x-8">

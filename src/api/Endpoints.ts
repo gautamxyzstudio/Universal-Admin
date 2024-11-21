@@ -6,8 +6,10 @@ export const Endpoints = {
   registerClient: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/local/register`,
   updateSubAdmin: (subAdminId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${subAdminId}`,
-  getEmployees: (page: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/emp?page=${page}&pageSize=10&populate=*`,
+  getEmployees: (searchVal: string, page: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/emp?search=${searchVal}&page=${page}&pageSize=10&populate=*`,
+  getEmployeesById: (id: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/employee-details/${id}`,
   getCompanies: (page: number, search: string, perPage?: number) =>
     `${
       process.env.NEXT_PUBLIC_BASE_URL

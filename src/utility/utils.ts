@@ -112,3 +112,18 @@ export const getDocumentStatusTextByStatus = (status: IDocumentStatus) => {
       return 'Pending';
   }
 };
+
+export const getDocumentStatusColor = (status: IDocumentStatus) => {
+  switch (status) {
+    case IDocumentStatus.PENDING:
+      return '#FBC505';
+    case IDocumentStatus.APPROVED:
+      return '#469C73';
+    case IDocumentStatus.DENIED:
+      return '#C11919';
+    case IDocumentStatus.UPDATE:
+      return '#1985C1';
+    default:
+      return '#FBC505';
+  }
+};

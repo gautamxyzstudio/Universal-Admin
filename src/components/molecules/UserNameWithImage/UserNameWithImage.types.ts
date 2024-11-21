@@ -1,8 +1,9 @@
 import { IUserImageRendererTypes } from '@/components/atoms/UserImageRenderer/UserImageRenderer.types';
+import { StaticImageData } from 'next/image';
 
 export interface IUserNameWithImageProps {
   name: string;
-  image: null | string | undefined;
+  image: StaticImageData | undefined | string;
   imageStyle?: string;
   type?: IUserImageRendererTypes;
   nameStyle?: string;
@@ -16,4 +17,5 @@ export interface IUserNameWithImageProps {
   profileNameStyle?: string;
   postby?: string | undefined;
   postbyStyle?: string | undefined;
+  isLoading?: boolean;
 }

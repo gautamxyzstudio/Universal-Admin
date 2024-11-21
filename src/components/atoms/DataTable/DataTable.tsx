@@ -18,7 +18,6 @@ import { GridRenderCellParams, GridValidRowModel } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import { IDataTableProps } from './DataTable.types';
 import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
-import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
 
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
@@ -36,8 +35,6 @@ const DataTable: React.FC<IDataTableProps> = ({
   emptyViewTitle,
   isDataEmpty,
   error,
-  // isLastPage,
-  footerComponent,
 }) => {
   const { data } = useDemoData({
     rowLength: 10,
@@ -70,10 +67,14 @@ const DataTable: React.FC<IDataTableProps> = ({
       backgroundColor: '#FAFAFA',
       color: '#868686',
       borderRight: '1px solid #EBEBEB',
-      height: 40,
+      height: 10,
+      '.MuiTableCell-head': {
+        padding: '8px',
+      },
       borderBottomColor: '#EBEBEB',
     };
   }, []);
+
   const VirtuosoTableComponents: TableComponents = {
     Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
       <TableContainer
@@ -85,7 +86,7 @@ const DataTable: React.FC<IDataTableProps> = ({
     )),
     Table: (props) => <Table {...props} sx={tableStyles} />,
     TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
-      <TableHead {...props} ref={ref} />
+      <TableHead {...props} sx={tableCellStyles} ref={ref} />
     )),
     TableRow,
 
@@ -173,7 +174,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   );
 
   return (
-    <div className="p-4  w-full bg-white h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
+    <div className="px-4 pt-4  w-full bg-white h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
       <div className="w-full">{headerView}</div>
       {!isLoading && rows.length === 0 ? (
         <div className="h-full flex justify-center items-center">
@@ -198,6 +199,11 @@ const DataTable: React.FC<IDataTableProps> = ({
         <TablePagination
           className="stick"
           component="div"
+          sx={{
+            '.MuiTablePagination-toolbar': {
+              minHeight: '40px',
+            },
+          }}
           height={32}
           count={totalCount ?? 0}
           page={page ? page - 1 : 0}

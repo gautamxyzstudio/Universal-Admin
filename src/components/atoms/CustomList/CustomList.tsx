@@ -1,8 +1,13 @@
-"use client";
-import { List, ListItemButton } from "@mui/material";
-import React from "react";
-import { ICustomListProps } from "./CustomList.types";
-import Image from "next/image";
+'use client';
+import { List, ListItemButton } from '@mui/material';
+import React from 'react';
+import { ICustomListProps } from './CustomList.types';
+import Image from 'next/image';
+import {
+  getDocumentStatusColor,
+  getDocumentStatusTextByStatus,
+} from '@/utility/utils';
+import { IDocumentStatus } from '@/constant/enums';
 
 const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -15,31 +20,31 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
     event.preventDefault();
     setSelectedIndex(index);
     if (itemOnClick) {
-      itemOnClick(event); // Call the dynamic onClick function if provided
+      itemOnClick(event);
     }
   };
 
   return (
     <List
       sx={{
-        "&": {
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          padding: "16px 12px",
+        '&': {
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          padding: '16px 12px',
         },
-        "& .MuiListItemButton-root": {
-          borderRadius: "8px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "12px",
-          height: "fit-content",
-          maxHeight: "fit-content",
-          backgroundColor: "#FAFAFA",
-          color: "#121212",
-          fontSize: "16px",
-          lineHeight: "20px",
+        '& .MuiListItemButton-root': {
+          borderRadius: '8px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '12px',
+          height: 'fit-content',
+          maxHeight: 'fit-content',
+          backgroundColor: '#FAFAFA',
+          color: '#121212',
+          fontSize: '16px',
+          lineHeight: '20px',
         },
       }}
     >
@@ -48,10 +53,10 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
             <ListItemButton
               key={index}
               sx={{
-                "&.Mui-selected": {
-                  border: "1px solid",
-                  borderColor: "#FF7312",
-                  color: "#FF7312",
+                '&.Mui-selected': {
+                  border: '1px solid',
+                  borderColor: '#FF7312',
+                  color: '#FF7312',
                 },
               }}
               selected={selectedIndex === index}
@@ -77,13 +82,10 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
                   </div>
                   {item.status && (
                     <span
-                      className={`text-[14px] leading-[18px] ${
-                        item.status === "Approved"
-                          ? "text-green"
-                          : "text-yellow"
-                      }`}
+                      style={{ color: getDocumentStatusColor(item.status) }}
+                      className={`text-[14px] leading-[18px]`}
                     >
-                      {item.status}
+                      {getDocumentStatusTextByStatus(item.status)}
                     </span>
                   )}
                 </>

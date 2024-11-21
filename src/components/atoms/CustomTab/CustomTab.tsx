@@ -1,7 +1,7 @@
-"use client";
-import { Tabs, Tab } from "@mui/material";
-import React, { useState } from "react";
-import { ICustomTabProps, ITabPanelProps } from "./CustomTab.types";
+'use client';
+import { Tabs, Tab } from '@mui/material';
+import React, { useState } from 'react';
+import { ICustomTabProps, ITabPanelProps } from './CustomTab.types';
 
 function TabPanel(props: ITabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -22,19 +22,15 @@ function TabPanel(props: ITabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
 
-const CustomTab: React.FC<ICustomTabProps> = ({
-  tabs,
-  ...props
-}) => {
+const CustomTab: React.FC<ICustomTabProps> = ({ tabs, ...props }) => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
 
   const handleTabChange = (event: React.SyntheticEvent, tabIndex: number) => {
     setCurrentTabIndex(tabIndex);
-    console.log(tabIndex);
   };
 
   return (

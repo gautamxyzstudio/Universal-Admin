@@ -1,4 +1,4 @@
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export interface ITextGroupProps {
   title: string;
@@ -9,5 +9,6 @@ export interface ITextGroupProps {
   titleStyle?: string;
   textStyle?: string;
   textgroupStyle?: string;
+  isLoading?: boolean;
   icon?: StaticImport;
 }

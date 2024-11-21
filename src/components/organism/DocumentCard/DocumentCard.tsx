@@ -1,13 +1,13 @@
-import React from "react";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
-import UploadedFile from "../UploadedFile/UploadedFile";
+import React from 'react';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import UploadedFile from '../UploadedFile/UploadedFile';
 
 interface IDocumentCardProps {
   label?: string;
   uploadDays?: string;
-  docImageSrc: StaticImport;
+  docImageSrc: StaticImport | string;
   docImageName: string;
-  fileStyle?: string; 
+  fileStyle?: string;
 }
 
 const DocumentCard: React.FC<IDocumentCardProps> = ({
@@ -24,7 +24,11 @@ const DocumentCard: React.FC<IDocumentCardProps> = ({
           <h2 className="text-Black">{label}</h2>
           {uploadDays && <span className="text-disable">{uploadDays}</span>}
         </div>
-        <UploadedFile fileName={docImageName} fileSrc={docImageSrc} fileStyle={fileStyle}/>
+        <UploadedFile
+          fileName={docImageName}
+          fileSrc={docImageSrc as StaticImport}
+          fileStyle={fileStyle}
+        />
       </div>
     </div>
   );

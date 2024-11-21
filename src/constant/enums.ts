@@ -40,3 +40,13 @@ export enum IWorkStatus {
   PART_TIME = 's0',
   FULL_TIME = 's1',
 }
+
+export enum IEmployeeDocsApiKeys {
+  SIN_DOCUMENT = 'sinDocument',
+  LICENSE_ADVANCE = 'securityDocumentAdv',
+  LICENSE_BASIC = 'securityDocumentBasic',
+  SUPPORTING_DOCUMENT = 'supportingDocument',
+  GOVT_ID = 'govtid',
+  CHEQUE = 'directDepositVoidCheque',
+  RESUME = 'resume',
+}
