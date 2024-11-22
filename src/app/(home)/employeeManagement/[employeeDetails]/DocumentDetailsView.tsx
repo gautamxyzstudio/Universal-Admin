@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
-import CustomList from '@/components/atoms/CustomList/CustomList';
 import VirtualList from '@/components/molecules/VirtualList/VirtualList';
-import UploadedFile from '@/components/organism/UploadedFile/UploadedFile';
-import React, { useCallback } from 'react';
-import { Virtual } from 'swiper/modules';
+import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
+import React, { useCallback, useEffect, useState } from 'react';
 
 export type IDocumentDetailsViewType = {
   onPressApprove: () => void;
@@ -16,13 +15,39 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
   onPressReject,
   data,
 }) => {
+  const [title, setTitle] = useState('All documents selected');
+  const [docs, setDocs] = useState<IEmployeeDocument[]>([]);
+
+  useEffect(() => {
+    setDocs(data);
+  }, [data]);
+
   const renderItem = useCallback(
-    (_, item) => (
-      <UploadedFile fileName={item.docName} fileSrc={item.doc?.url ?? ''} />
+    (_, item: IEmployeeDocument) => (
+      <div className="mt-4">
+        <DocumentCard
+          label={item.docName}
+          docImageSrc={item.doc?.url ?? ''}
+          docImageName={item.doc?.name ?? ''}
+          fileStyle="bg-lightPrimary"
+        />
+      </div>
     ),
     []
   );
-  return <VirtualList data={data} renderItem={renderItem} isLoading={false} />;
+  return (
+    <div className="h-full w-full">
+      {docs.length > 0 && (
+        <h1 className="text-2xl sticky text-black">{title}</h1>
+      )}
+      <VirtualList
+        data={docs}
+        isLastPage
+        renderItem={renderItem as any}
+        isLoading={false}
+      />
+    </div>
+  );
 };
 
 export default DocumentDetailsView;

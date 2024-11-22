@@ -22,7 +22,6 @@ import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenV
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
   columns,
-  onPressRow,
   isLoading,
   illustration,
   tableHeightPercent = 100,
@@ -59,7 +58,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   }, []);
 
   const rowStyles = useMemo(() => {
-    return { border: 'none', cursor: 'pointer' };
+    return { border: 'none' };
   }, []);
 
   const tableCellStyles = useMemo(() => {
@@ -114,7 +113,15 @@ const DataTable: React.FC<IDataTableProps> = ({
         {columns.map((column, _index) => {
           return (
             <TableCell
-              onClick={() => onPressRow && onPressRow(row)}
+              className="bg-white"
+              style={{
+                position: column.headerName === 'Action' ? 'sticky' : 'unset',
+                right: column.headerName === 'Action' ? 0 : 'unset',
+                zIndex: column.headerName === 'Action' ? 1 : 0.5,
+                cursor: column.headerName === 'Action' ? 'pointer' : 'unset',
+                backgroundColor:
+                  column.headerName === 'Action' ? '#fafafa' : '#fff',
+              }}
               key={_index}
               sx={rowStyles}
               align="left"
@@ -162,7 +169,12 @@ const DataTable: React.FC<IDataTableProps> = ({
             key={column.field}
             variant="head"
             align="left"
-            style={{ width: column.width }}
+            style={{
+              width: column.width,
+              position: column.headerName === 'Action' ? 'sticky' : 'unset',
+              right: column.headerName === 'Action' ? 0 : 'unset',
+              zIndex: column.headerName === 'Action' ? 1 : 0.5,
+            }}
             sx={tableCellStyles}
           >
             {column.headerName}

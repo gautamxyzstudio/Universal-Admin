@@ -12,9 +12,13 @@ import WorkHistortyCard from '@/components/organism/WorkHistoryCard/WorkHistoryC
 import WorkDetails from '@/components/organism/WorkDetails/WorkDetails';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import { useLazyGetEmployeeByIdQuery } from '@/api/fetures/Employee/EmployeeApi';
-import { IEmployeeAdvance } from '@/api/fetures/Employee/EmployeeApi.types';
+import {
+  IEmployeeAdvance,
+  IEmployeeDocument,
+} from '@/api/fetures/Employee/EmployeeApi.types';
 import { IListItemProps } from '@/components/atoms/CustomList/CustomList.types';
 import { IDocumentStatus } from '@/constant/enums';
+import DocumentDetailsView from './DocumentDetailsView';
 
 const EmployeeDetails = ({
   params,
@@ -22,18 +26,21 @@ const EmployeeDetails = ({
   params: { employeeDetails: string };
 }) => {
   const [getEmployeeById, { isFetching }] = useLazyGetEmployeeByIdQuery();
-  const [selectedItem, setSelectedItem] = useState<React.ReactNode>();
+  const [selectedItem, setSelectedItem] = useState<React.ReactNode>(null);
   const [employee, setEmployee] = useState<IEmployeeAdvance | null>(null);
   const [employeeDocuments, setEmployeeDocuments] = useState<
     IListItemProps[] | []
   >([]);
+  const [employeeDocs, setEmployeeDocs] = useState<IEmployeeDocument[] | []>(
+    []
+  );
 
   useEffect(() => {
     if (params.employeeDetails) {
       getEmployeeHandler(params.employeeDetails);
     }
   }, [params.employeeDetails]);
-  3;
+
   const getEmployeeHandler = async (empId: string) => {
     try {
       const response = await getEmployeeById({ id: parseInt(empId) }).unwrap();
@@ -41,27 +48,48 @@ const EmployeeDetails = ({
         setEmployee(response);
         if (response.documents.length > 0) {
           const documentsToDisplay: IListItemProps[] = [];
+          setEmployeeDocs(response.documents);
           response.documents.forEach((doc) => {
             documentsToDisplay.push({
               label: doc.docName,
               docId: doc.docId ?? 0,
               icon: Icons.doc,
               status: doc.docStatus,
-              onClick: () => {},
+              onClick: () => {
+                setSelectedItem(
+                  <DocumentDetailsView
+                    data={[doc]}
+                    onPressApprove={function (): void {
+                      throw new Error('Function not implemented.');
+                    }}
+                    onPressReject={function (): void {
+                      throw new Error('Function not implemented.');
+                    }}
+                  />
+                );
+              },
             });
           });
-          setEmployeeDocuments([
-            {
-              label: 'All requested Document',
-              icon: Icons.doc,
-              docId: null,
-              status: IDocumentStatus.PENDING,
-              onClick: () => {
-                setSelectedItem('All requested Document');
-              },
+          documentsToDisplay.unshift({
+            label: 'All requested Document',
+            icon: Icons.doc,
+            docId: null,
+            status: IDocumentStatus.PENDING,
+            onClick: () => {
+              setSelectedItem(
+                <DocumentDetailsView
+                  data={response.documents ?? []}
+                  onPressApprove={function (): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                  onPressReject={function (): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                />
+              );
             },
-            ...documentsToDisplay,
-          ]);
+          });
+          setEmployeeDocuments(documentsToDisplay);
         }
       } else {
         console.log('Employee data not available');
@@ -196,13 +224,6 @@ const EmployeeDetails = ({
       },
     },
   ];
-  const DocumentContent = () => {
-    return (
-      <div>
-        <h2>All Request Document </h2>
-      </div>
-    );
-  };
 
   const BankDetails = () => {
     return (
@@ -244,7 +265,17 @@ const EmployeeDetails = ({
       label: 'Document',
       content: <CustomList items={employeeDocuments} />,
       onClickAction: () => {
-        setSelectedItem(<DocumentContent />);
+        setSelectedItem(
+          <DocumentDetailsView
+            onPressApprove={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+            onPressReject={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+            data={employeeDocs}
+          />
+        );
       },
     },
     {
@@ -338,7 +369,19 @@ const EmployeeDetails = ({
         </div>
         {/* Right Side */}
         <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
-          {selectedItem}
+          {selectedItem ? (
+            selectedItem
+          ) : employeeDocs ? (
+            <DocumentDetailsView
+              onPressApprove={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+              onPressReject={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+              data={employeeDocs.length > 0 ? employeeDocs ?? [] : []}
+            />
+          ) : null}
         </div>
       </div>
     </div>

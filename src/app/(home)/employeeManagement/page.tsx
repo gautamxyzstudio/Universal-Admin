@@ -132,8 +132,15 @@ const EmployeeManagement = () => {
       field: 'action',
       headerName: 'Action',
       width: 80,
-      renderCell: () => {
-        return <span className="text-primary">{STRINGS.view}</span>;
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <span
+            onClick={() => handleOnRowClick(params.row)}
+            className="text-primary sticky"
+          >
+            {STRINGS.view}
+          </span>
+        );
       },
     },
   ];
@@ -152,7 +159,6 @@ const EmployeeManagement = () => {
       />
       <DataTable
         columns={columns}
-        onPressRow={handleOnRowClick as any}
         rows={employees}
         headerView={
           <div className="flex w-full  justify-between items-center mb-4">

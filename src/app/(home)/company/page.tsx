@@ -69,7 +69,7 @@ const Company = () => {
   );
 
   const router = useRouter();
-  const handleOnRowClick = (row: any) => {
+  const handleOnRowClick = (row: ICompany) => {
     router.push(`/company/${row.id}`);
   };
   const columns: GridColDef[] = [
@@ -114,7 +114,14 @@ const Company = () => {
       width: 80,
       field: '',
       renderCell: useCallback(
-        () => <h1 className="text-sm cursor-pointer text-primary">View</h1>,
+        (params) => (
+          <h1
+            onClick={() => handleOnRowClick(params.row)}
+            className="text-sm cursor-pointer text-primary"
+          >
+            View
+          </h1>
+        ),
         []
       ),
     },
@@ -154,7 +161,6 @@ const Company = () => {
         isLoading={isFetching}
         page={currentPage}
         totalCount={totalRecord}
-        onPressRow={handleOnRowClick}
         onPressPageChange={onPageChangeHandler}
         tableHeightPercent={85}
         emptyViewTitle={STRINGS.no_companies}
