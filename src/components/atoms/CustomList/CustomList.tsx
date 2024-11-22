@@ -3,8 +3,13 @@ import { List, ListItemButton } from "@mui/material";
 import React from "react";
 import { ICustomListProps } from "./CustomList.types";
 import Image from "next/image";
+import ActivityIndicator from "../ActivityIndicator/ActivityIndicator";
 
-const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
+const CustomList: React.FC<ICustomListProps> = ({
+  items,
+  noList,
+  isLoading,
+}) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleListItemClick = (
@@ -20,6 +25,8 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
   };
 
   return (
+    
+    
     <List
       sx={{
         "&": {
@@ -93,6 +100,11 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
             </ListItemButton>
           ))
         : noList}
+      {isLoading ? (
+        <div className="w-full mt-2 flex justify-center items-center">
+          <ActivityIndicator size={36} />
+        </div>
+      ) : null}
     </List>
   );
 };

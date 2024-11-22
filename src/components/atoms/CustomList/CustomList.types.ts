@@ -7,10 +7,12 @@ export interface IListItemProps{
     status?: string,
     onClick?: () => void; 
     children?: React.ReactNode;
+    
    
 }
 
 export interface ICustomListProps{
     items?: IListItemProps[];
     noList? : React.ReactNode;
+    isLoading?: boolean
 }

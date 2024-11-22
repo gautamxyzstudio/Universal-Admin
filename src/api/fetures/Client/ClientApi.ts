@@ -4,7 +4,7 @@ import { baseApi } from "@/api/BaseApi";
 import { Endpoints } from "@/api/Endpoints";
 import {
   IClient,
-  IClientDetailsResposne,
+  IClientDetailsResponse,
   ICustomizedGetClientsResponse,
   IGetClientDetailsResponse,
   IGetClientsResponse,
@@ -15,7 +15,8 @@ import {
   IUpdateClientDetailsResponse,
 } from "./Client.types";
 import { createImageUrl } from "@/utility/cookies";
-import { IClientStatus } from "@/constant/enums";
+import { IClientStatus, IJobPostStatus } from "@/constant/enums";
+import { IJobPostCustomizedResponse, IJobPostTypes, IPostedJobsResponse } from "../Company/Company.types";
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -118,7 +119,7 @@ const clientApi = baseApi.injectEndpoints({
       }),
     }),
     changeClientStatus: builder.mutation<
-      IClientDetailsResposne,
+      IClientDetailsResponse,
       { clientId: number; status: IClientStatus }
     >({
       query: (body: { clientId: number; status: IClientStatus }) => ({
@@ -158,7 +159,7 @@ const clientApi = baseApi.injectEndpoints({
       }),
       transformResponse: (
         res: IGetClientDetailsResponse
-      ): IClientDetailsResposne => {
+      ): IClientDetailsResponse => {
         return {
           id: res.data?.id,
           name: res.data?.attributes?.Name,
@@ -181,14 +182,70 @@ const clientApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getPostedJobByClient: builder.query({
-      query: ({ clientId, page }: { clientId:number; page: number }) => ({
-        url: Endpoints.getPostJobsByClient(clientId, page),
+    getPostedJobByClient: builder.query<IJobPostCustomizedResponse,{page: number,clientId: number, perPage: number}>({
+      query: ({page,clientId, perPage}:{page:number,clientId:number, perPage: number}) => ({
+        url: Endpoints.getPostJobsByClient(clientId,page, perPage),
         method: ApiMethodType.get,
       }),
-      transformResponse: (response) => {
+      transformResponse: (response:IPostedJobsResponse):IJobPostCustomizedResponse => {
         console.log(response, "api response of post job by client");
-        return response;
+        const data : IJobPostTypes[] = [];
+        if(response.data){
+          response.data.forEach((job)=> {
+            if(job.id){
+              data.push({
+                ...job,
+                id: job.id,
+                status: IJobPostStatus.OPEN,
+                notAccepting: job.notAccepting ?? false,
+                client_details: job.client_details
+                ? {
+                    id: job.client_details[0].id,
+                    Name: job.client_details[0].Name,
+                    companyname: job.client_details[0].companyname,
+                    Industry: job.client_details[0].Industry,
+                    Email: job.client_details[0].Email,
+                    location: job.client_details[0].location,
+                    company_detail: job.client_details[0].company_detail
+                      ? {
+                          companyname:
+                            job.client_details[0].company_detail
+                              ?.companyname ?? "",
+                          id: job.client_details[0].company_detail?.id ?? 0,
+                          companylogo: job.client_details[0].company_detail
+                            ?.companylogo
+                            ? {
+                                url: createImageUrl(
+                                  job.client_details[0].company_detail
+                                    ?.companylogo.url || ""
+                                ),
+                                mime: job.client_details[0].company_detail
+                                  ?.companylogo.mime,
+                                id: job.client_details[0].company_detail
+                                  ?.companylogo.id,
+                                name: job.client_details[0].company_detail
+                                  ?.companylogo.name,
+                                size: job.client_details[0].company_detail
+                                  ?.companylogo.size,
+                              }
+                            : null,
+                        }
+                      : null,
+                  }
+                : null,
+              })
+            }
+          })
+        }
+        return {
+          data: data,
+          pagination: response?.meta && {
+            page: response.meta?.page ?? 1,
+            pageSize: response.meta?.pageSize ?? 1,
+            pageCount: response.meta?.totalPages ?? 1,
+            total: response.meta?.total ?? 1,
+          }
+        };
       },
     }),
   }),
@@ -204,5 +261,6 @@ export const {
   useLazyGetClientDetailsQuery,
   useChangeClientStatusMutation,
   useGetPostedJobByClientQuery,
+  useLazyGetPostedJobByClientQuery,
   useLazyGetPendingRequestsQuery,
 } = clientApi;

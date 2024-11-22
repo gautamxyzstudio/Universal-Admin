@@ -40,7 +40,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     null
   );
   const [companyData, setCompanyData] = useState<ICompanyDetails | null>(null);
-  const [clientDetails, setClientDetials] =
+  const [clientDetails, setClientDetails] =
     useState<IGetCompanyClientResponse | null>(null);
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(null);
 
@@ -58,10 +58,10 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     const response = await fetchCompanyClients(params.companyDetails).unwrap();
     console.log(response);
     if (response) {
-      setClientDetials(response);
+      setClientDetails(response);
     } else {
       console.log("Company clients not available", error);
-      setClientDetials(null);
+      setClientDetails(null);
     }
   };
 

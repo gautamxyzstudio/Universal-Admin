@@ -33,7 +33,6 @@ const Company = () => {
   ) => {
     const page = isFirstPage ? currentPage : currentPage + 1;
     try {
-      console.log(page, "pagenumber");
       const response = await fetchCompanies({
         page: page,
         search: characters,

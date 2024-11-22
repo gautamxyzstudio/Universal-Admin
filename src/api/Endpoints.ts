@@ -29,7 +29,7 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}?sort=id:desc`,
   getCompanyClients : (companyId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*&sort=id:desc`,
   getClientDetails: (client_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}?sort=id:desc`,
-  getPostJobsByClient: (client_id: number, page:number ) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?page=${page}&pageSize=5&populate=*&sort=id:desc`,
+  getPostJobsByClient: (client_id: number, page: number, perPage:number ) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?populate=*&sort=id:desc&page=${page}&pageSize=${perPage}`,
   getFaqs: `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs?sort=id:desc`,
   addFaq: `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs`,
   editFaq: (faq_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/faqs/${faq_id}`,

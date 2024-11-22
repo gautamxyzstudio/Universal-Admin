@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import {
   useChangeClientStatusMutation,
@@ -11,7 +12,7 @@ import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
 import { STRINGS } from "@/constant/en";
 import { dateFormat, dateMonthFormat, timeFormat } from "@/utility/utils";
 import { Skeleton } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { getClientStatusAttributesFromType } from "../types";
 import { IClientStatus } from "@/constant/enums";
 import CustomTab from "@/components/atoms/CustomTab/CustomTab";
@@ -20,17 +21,20 @@ import WorkHistoryCard from "@/components/organism/WorkHistoryCard/WorkHistoryCa
 import { getJobType } from "@/constant/constant";
 import { Icons } from "../../../../../public/exporter";
 import CustomList from "@/components/atoms/CustomList/CustomList";
-// import { IClientDetailsResposne } from "@/api/fetures/Client/Client.types";
 
 const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   const { data, refetch } = useGetClientDetailsQuery(params.clientDetails);
-  const [currentPage, setCurrentPage] =  useState(1)
+  const clientID = parseInt(params.clientDetails);
   const [status, setStatus] = useState<IClientStatus>();
   const [updateClientStatus] = useChangeClientStatusMutation();
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(null);
-  const { data: postjobData } = useGetPostedJobByClientQuery({
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Set to false initially
+  const { currentData } = useGetPostedJobByClientQuery({
+    clientId: clientID,
     page: currentPage,
-    clientId: parseInt(params.clientDetails),
+    perPage: 5,
   });
 
   // Update status when data changes
@@ -40,13 +44,26 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
     }
   }, [data]);
 
-  console.log(data?.status,"122")
   
-  useEffect(()=>{
-    if(postjobData){
-      setCurrentPage(postjobData.currentPage)
+  // Fetch client posted jobs when the page or scroll changes
+  useEffect(() => {
+    if (currentData) {
+      if (currentData?.pagination?.pageCount === currentPage) {
+        setIsLoading(false);
+        setIsLastPage(true); // No more pages to load
+      } else {
+        setIsLoading(false);
+      }
     }
-  },[postjobData])
+  }, [currentData, currentPage]);
+
+  useEffect(() => {
+    if (currentData && currentPage > 1) {
+      // Add new data to the existing job list
+      setIsLoading(false);
+    }
+  }, [currentData]);
+
   const statusAttributes = status && getClientStatusAttributesFromType(status);
 
   const handleStatusChange = async (
@@ -65,6 +82,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
       console.error("Failed to update status:", error);
     }
   };
+
   // Map the job data to CustomList items
   const mapJobData = (jobData) => {
     return jobData?.map((data) => {
@@ -97,18 +115,22 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
     });
   };
 
-  const postedJob = mapJobData(postjobData)
+  const postedJob = mapJobData(currentData?.data);
 
   const tabsData = [
     {
       label: STRINGS.postJobs,
-      content: postedJob && postedJob.length === 0 ?(
-        <CustomList items={postedJob} />
-      ): (
-        <CustomList
-          noList={<div className="text-center">{STRINGS.noJobs}</div>}
-        />
-      ),
+      content:
+        postedJob && postedJob.length > 0 ? (
+          <CustomList
+            items={postedJob}
+            isLoading={isLoading}
+          />
+        ) : (
+          <CustomList
+            noList={<div className="text-center">{STRINGS.noJobs}</div>}
+          />
+        ),
     },
   ];
 
@@ -117,7 +139,6 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
       <PageSubHeader
         pageTitle={STRINGS.clientManagement}
         name={data?.name || ""}
-        
       />
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
         {/* Left Side */}
@@ -144,7 +165,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
                   joinDate={dateMonthFormat(data.createdAt)}
                 />
                 <Switch
-                  checked={status === 's1' ? true : false}
+                  checked={status === "s1" ? true : false}
                   onChange={handleStatusChange}
                   label={statusAttributes?.text}
                   switchClassName={"justify-end !flex-col !w-fit"}
