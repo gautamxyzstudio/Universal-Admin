@@ -2,23 +2,28 @@
 import PageSubHeader from '@/components/organism/PageSubHeader/PageSubHeader';
 import { STRINGS } from '@/constant/en';
 import React, { useEffect, useState } from 'react';
-import { Icons, Images } from '../../../../../public/exporter';
 import ContactCard from '@/components/organism/ContactDetailCard/ContactDetailCard';
 import CustomTab from '@/components/atoms/CustomTab/CustomTab';
-import CustomList from '@/components/atoms/CustomList/CustomList';
 import TextGroup from '@/components/organism/TextGroup/TextGroup';
-import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
-import WorkHistortyCard from '@/components/organism/WorkHistoryCard/WorkHistoryCard';
-import WorkDetails from '@/components/organism/WorkDetails/WorkDetails';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import { useLazyGetEmployeeByIdQuery } from '@/api/fetures/Employee/EmployeeApi';
+import {
+  useLazyGetEmployeeByIdQuery,
+  useUpdateDocumentStatusMutation,
+} from '@/api/fetures/Employee/EmployeeApi';
 import {
   IEmployeeAdvance,
   IEmployeeDocument,
 } from '@/api/fetures/Employee/EmployeeApi.types';
-import { IListItemProps } from '@/components/atoms/CustomList/CustomList.types';
-import { IDocumentStatus } from '@/constant/enums';
-import DocumentDetailsView from './DocumentDetailsView';
+import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
+import DocumentDetailsView from './RightViews/DocumentDetailsView';
+import BankDetailsView from './RightViews/BankDetailsView';
+import ProfileHistoryView from './RightViews/ProfileHistoryView';
+import DocumentList from './LeftTabViewss/DocumentList';
+import { SxProps, Theme } from '@mui/material';
+import TabButton from '@/components/molecules/ButtonTypes/TabButton/TabButton';
+import { withAsyncErrorHandlingPost } from '@/utility/utils';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
 
 const EmployeeDetails = ({
   params,
@@ -26,13 +31,69 @@ const EmployeeDetails = ({
   params: { employeeDetails: string };
 }) => {
   const [getEmployeeById, { isFetching }] = useLazyGetEmployeeByIdQuery();
-  const [selectedItem, setSelectedItem] = useState<React.ReactNode>(null);
   const [employee, setEmployee] = useState<IEmployeeAdvance | null>(null);
-  const [employeeDocuments, setEmployeeDocuments] = useState<
-    IListItemProps[] | []
-  >([]);
+  const [selectedTabIndex, setSelectedTabItemIndex] = useState(0);
+  const [updateDocStatus, { isLoading }] = useUpdateDocumentStatusMutation();
+  const { displaySnackbar } = useSnackBarContext();
   const [employeeDocs, setEmployeeDocs] = useState<IEmployeeDocument[] | []>(
     []
+  );
+  const [employeeTabs, setEmployeeTabs] = useState<IEmployeeDocument[] | []>(
+    []
+  );
+
+  const { changeLoaderState } = useShowLoaderContext();
+
+  useEffect(() => {
+    changeLoaderState(isLoading);
+  }, [isLoading]);
+
+  const updateDocStatusHandler = withAsyncErrorHandlingPost(
+    async (
+      status: IDocumentStatus,
+      key: IEmployeeApiKeyStatus,
+      isCheque?: boolean
+    ) => {
+      const response = await updateDocStatus({
+        docId: parseInt(params.employeeDetails),
+        key: key,
+        docStatus: status,
+      }).unwrap();
+      if (response) {
+        if (isCheque) {
+          setEmployee((prev) => {
+            if (!prev) return null;
+            return {
+              ...prev,
+              bankingDetails: {
+                ...prev.bankingDetails,
+                chique: {
+                  ...prev.bankingDetails.chique,
+                  docStatus: status,
+                },
+              },
+            };
+          });
+        } else {
+          setEmployee((prev) => {
+            if (!prev) return null;
+            let prevEmpDetails = { ...prev };
+            let prevEmpDocs = [...prev.documents];
+            let index = prevEmpDocs.findIndex(
+              (doc) => doc.docStatusKey === key
+            );
+            prevEmpDocs[index] = {
+              ...prevEmpDocs[index],
+              docStatus: status,
+            };
+            prevEmpDetails = { ...prevEmpDetails, documents: prevEmpDocs };
+            return prevEmpDetails;
+          });
+        }
+        displaySnackbar('success', 'Document status updated successfully');
+      }
+    },
+    displaySnackbar
   );
 
   useEffect(() => {
@@ -46,51 +107,6 @@ const EmployeeDetails = ({
       const response = await getEmployeeById({ id: parseInt(empId) }).unwrap();
       if (response) {
         setEmployee(response);
-        if (response.documents.length > 0) {
-          const documentsToDisplay: IListItemProps[] = [];
-          setEmployeeDocs(response.documents);
-          response.documents.forEach((doc) => {
-            documentsToDisplay.push({
-              label: doc.docName,
-              docId: doc.docId ?? 0,
-              icon: Icons.doc,
-              status: doc.docStatus,
-              onClick: () => {
-                setSelectedItem(
-                  <DocumentDetailsView
-                    data={[doc]}
-                    onPressApprove={function (): void {
-                      throw new Error('Function not implemented.');
-                    }}
-                    onPressReject={function (): void {
-                      throw new Error('Function not implemented.');
-                    }}
-                  />
-                );
-              },
-            });
-          });
-          documentsToDisplay.unshift({
-            label: 'All requested Document',
-            icon: Icons.doc,
-            docId: null,
-            status: IDocumentStatus.PENDING,
-            onClick: () => {
-              setSelectedItem(
-                <DocumentDetailsView
-                  data={response.documents ?? []}
-                  onPressApprove={function (): void {
-                    throw new Error('Function not implemented.');
-                  }}
-                  onPressReject={function (): void {
-                    throw new Error('Function not implemented.');
-                  }}
-                />
-              );
-            },
-          });
-          setEmployeeDocuments(documentsToDisplay);
-        }
       } else {
         console.log('Employee data not available');
       }
@@ -99,207 +115,59 @@ const EmployeeDetails = ({
     }
   };
 
-  // Bank Content
-  const bankData = [
-    {
-      label: 'Bank Details',
-      onClick: () => {
-        console.log('Bank Details');
-      },
-    },
-  ];
-
-  // Profile Content
-  const profileData = [
-    {
-      label: 'History',
-      onClick: () => {
-        setSelectedItem('Profile History Content');
-      },
-    },
-  ];
-
-  // Work History Contents
-  const workHistoryData = [
-    {
-      children: (
-        <WorkHistortyCard
-          companyName={'Cosmic Security'}
-          profileName={'Security Guard'}
-          image={Images.demoImg}
-          textLabel={STRINGS.applied}
-          textStyle={'text-darkBlue bg-white'}
-          iconWithTexts={[
-            {
-              text: '20 /hr',
-              icon: Icons.dollar,
-              textStyle: '',
-            },
-            {
-              text: '2-06-2024',
-              subText: '7:00 PM - 2:00 AM ',
-              icon: Icons.timeDate,
-              textStyle: '',
-            },
-            {
-              text: 'IPEX Oakville, 1425 North Service',
-              icon: Icons.locationPin,
-              textStyle: '',
-            },
-          ]}
-          days={new Date(23 / 3 / 2001)}
-        />
-      ),
-      onClick: () => {
-        console.log('Clicked on Work card 1');
-        setSelectedItem(<WorkDetails />);
-      },
-    },
-    {
-      children: (
-        <WorkHistortyCard
-          companyName={'Cosmic Security'}
-          profileName={'Security Guard'}
-          image={Images.demoImg}
-          textLabel={STRINGS.completed}
-          textStyle={'text-skyBlue bg-lightSkyBlue'}
-          iconWithTexts={[
-            {
-              text: '20 /hr',
-              icon: Icons.dollar,
-              textStyle: '',
-            },
-            {
-              text: '2-06-2024',
-              subText: '7:00 PM - 2:00 AM ',
-              icon: Icons.timeDate,
-              textStyle: '',
-            },
-            {
-              text: 'IPEX Oakville, 1425 North Service',
-              icon: Icons.locationPin,
-              textStyle: '',
-            },
-          ]}
-          days={new Date(23 / 3 / 2001)}
-        />
-      ),
-      onClick: () => {
-        console.log('Clicked on Work card 2');
-        setSelectedItem(<WorkDetails />);
-      },
-    },
-    {
-      children: (
-        <WorkHistortyCard
-          companyName={'Cosmic Security'}
-          profileName={'Security Guard'}
-          image={Images.demoImg}
-          textLabel={STRINGS.completed}
-          textStyle={'text-skyBlue bg-lightSkyBlue'}
-          iconWithTexts={[
-            {
-              text: '20 /hr',
-              icon: Icons.dollar,
-              textStyle: '',
-            },
-            {
-              text: '2-06-2024',
-              subText: '7:00 PM - 2:00 AM ',
-              icon: Icons.timeDate,
-              textStyle: '',
-            },
-            {
-              text: 'IPEX Oakville, 1425 North Service',
-              icon: Icons.locationPin,
-              textStyle: '',
-            },
-          ]}
-          days={new Date(23 / 3 / 2001)}
-        />
-      ),
-      onClick: () => {
-        console.log('Clicked on Work card 3');
-        setSelectedItem(<WorkDetails />);
-      },
-    },
-  ];
-
-  const BankDetails = () => {
-    return (
-      <div className="flex flex-col gap-y-6 w-full">
-        <TextGroup
-          textgroupStyle="flex flex-col gap-y-1"
-          title={'Bank account number'}
-          text={employee?.bankingDetails?.bankAccNo ?? ''}
-        />
-        <TextGroup
-          textgroupStyle="flex flex-col gap-y-1"
-          title={'Institution number'}
-          text={employee?.bankingDetails?.institutionNumber ?? ''}
-        />
-        <TextGroup
-          textgroupStyle="flex flex-col gap-y-1"
-          title={'Transit Number'}
-          text={employee?.bankingDetails?.transitNumber ?? ''}
-        />
-        <DocumentCard
-          label="Direct deposit/void cheque"
-          docImageSrc={employee?.bankingDetails.chique.doc?.url ?? ''}
-          docImageName={employee?.bankingDetails.chique.doc?.name ?? ''}
-          fileStyle="bg-lightPrimary"
-        />
-      </div>
-    );
-  };
-  const ProfileDetails = () => {
-    return (
-      <div>
-        <h2>Profile Details Content</h2>
-      </div>
-    );
-  };
+  useEffect(() => {
+    if (employee) {
+      if (employee.documents.length > 0) {
+        setEmployeeDocs(employee.documents);
+        setEmployeeTabs([
+          {
+            docName: 'All Requested Documents',
+            docStatus: IDocumentStatus.PENDING,
+            docStatusKey: IEmployeeApiKeyStatus.GOVT_ID,
+            doc: null,
+            docId: null,
+          },
+          ...employee.documents,
+        ]);
+      }
+    }
+  }, [employee]);
 
   const tabsData = [
     {
       label: 'Document',
-      content: <CustomList items={employeeDocuments} />,
       onClickAction: () => {
-        setSelectedItem(
-          <DocumentDetailsView
-            onPressApprove={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-            onPressReject={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-            data={employeeDocs}
-          />
-        );
+        setSelectedTabItemIndex(0);
+        setEmployeeDocs(employee?.documents ?? []);
       },
     },
     {
       label: 'Bank',
-      content: <CustomList items={bankData} />,
-      onClickAction: () => {
-        setSelectedItem(<BankDetails />);
-      },
+      onClickAction: () => setSelectedTabItemIndex(1),
     },
     {
       label: 'Profile',
-      content: <CustomList items={profileData} />,
-      onClickAction: () => {
-        setSelectedItem(<ProfileDetails />);
-      },
+      onClickAction: () => setSelectedTabItemIndex(2),
     },
     {
       label: 'Work history',
-      content: <CustomList items={workHistoryData} />,
-      onClickAction: () => {
-        setSelectedItem(<WorkDetails />);
-      },
+      onClickAction: () => setSelectedTabItemIndex(3),
     },
   ];
+
+  const onChangeDocTabHandler = (doc: IEmployeeDocument) => {
+    if (employee?.documents) {
+      const employeeDocs = [...employee?.documents];
+      const item = employeeDocs.find(
+        (document) => document.docId === doc.docId
+      );
+      if (item) {
+        setEmployeeDocs([item]);
+      } else {
+        setEmployeeDocs(employee.documents);
+      }
+    }
+  };
 
   return (
     <div className="w-full h-[90%]">
@@ -309,7 +177,7 @@ const EmployeeDetails = ({
           name={employee?.name}
         />
       )}
-      <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
+      <div className="flex gap-x-10 w-full h-full mt-2">
         {/* Left Side */}
         <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
           <UserNameWithImage
@@ -348,44 +216,68 @@ const EmployeeDetails = ({
                 borderTopLeftRadius: '3px',
               },
             }}
-            sx={{
-              '&': {
-                paddingX: '12px',
-                paddingTop: '4px',
-              },
-              '.MuiButtonBase-root': {
-                fontSize: '16px',
-                lineHeight: '20px',
-                textTransform: 'none',
-              },
-              '.MuiTabs-flexContainer': {
-                gap: '10px',
-              },
-              '.Mui-selected': {
-                fontWeight: 'bold',
-              },
-            }}
+            sx={styles}
           />
+          <div className="bg-white border pt-4 border-borderGrey rounded-b-lg h-full w-full">
+            {selectedTabIndex === 0 && (
+              <DocumentList
+                data={employeeTabs}
+                isLoading={isFetching}
+                onPressItem={onChangeDocTabHandler}
+              />
+            )}
+            {selectedTabIndex === 1 && (
+              <TabButton isSelected={true} title={STRINGS.bankDetails} />
+            )}
+            {selectedTabIndex === 2 && (
+              <TabButton isSelected={true} title={STRINGS.profileHistory} />
+            )}
+          </div>
         </div>
         {/* Right Side */}
-        <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
-          {selectedItem ? (
-            selectedItem
-          ) : employeeDocs ? (
-            <DocumentDetailsView
-              onPressApprove={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-              onPressReject={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-              data={employeeDocs.length > 0 ? employeeDocs ?? [] : []}
-            />
-          ) : null}
-        </div>
+        {employee && (
+          <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
+            {selectedTabIndex === 0 && (
+              <DocumentDetailsView
+                onPressButton={(status, id) =>
+                  updateDocStatusHandler(status, id, false)
+                }
+                data={employeeDocs}
+              />
+            )}
+            {selectedTabIndex === 1 && (
+              <BankDetailsView
+                employee={employee}
+                onPressButton={(status, id) =>
+                  updateDocStatusHandler(status, id, true)
+                }
+              />
+            )}
+            {selectedTabIndex === 2 && <ProfileHistoryView />}
+            {selectedTabIndex === 3 && <ProfileHistoryView />}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default EmployeeDetails;
+
+const styles: SxProps<Theme> = {
+  '&': {
+    paddingX: '12px',
+    paddingTop: '4px',
+  },
+  '.MuiButtonBase-root': {
+    fontSize: '16px',
+    lineHeight: '20px',
+    textTransform: 'none',
+  },
+  '.MuiTabs-flexContainer': {
+    gap: '10px',
+  },
+  '.Mui-selected': {
+    fontWeight: 'bold',
+  },
+};

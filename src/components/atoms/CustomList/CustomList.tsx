@@ -7,7 +7,6 @@ import {
   getDocumentStatusColor,
   getDocumentStatusTextByStatus,
 } from '@/utility/utils';
-import { IDocumentStatus } from '@/constant/enums';
 
 const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);

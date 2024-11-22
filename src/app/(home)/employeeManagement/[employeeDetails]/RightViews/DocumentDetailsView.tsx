@@ -2,20 +2,18 @@
 import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
 import VirtualList from '@/components/molecules/VirtualList/VirtualList';
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
+import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
 import React, { useCallback, useEffect, useState } from 'react';
 
 export type IDocumentDetailsViewType = {
-  onPressApprove: () => void;
-  onPressReject: () => void;
+  onPressButton: (status: IDocumentStatus, key: IEmployeeApiKeyStatus) => void;
   data: IEmployeeDocument[];
 };
 
 const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
-  onPressApprove,
-  onPressReject,
+  onPressButton,
   data,
 }) => {
-  const [title, setTitle] = useState('All documents selected');
   const [docs, setDocs] = useState<IEmployeeDocument[]>([]);
 
   useEffect(() => {
@@ -26,10 +24,14 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
     (_, item: IEmployeeDocument) => (
       <div className="mt-4">
         <DocumentCard
-          label={item.docName}
-          docImageSrc={item.doc?.url ?? ''}
-          docImageName={item.doc?.name ?? ''}
           fileStyle="bg-lightPrimary"
+          doc={item}
+          onPressButton={(status) =>
+            onPressButton(
+              status,
+              item?.docStatusKey ?? IEmployeeApiKeyStatus.SIN_DOCUMENT
+            )
+          }
         />
       </div>
     ),
@@ -37,9 +39,6 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
   );
   return (
     <div className="h-full w-full">
-      {docs.length > 0 && (
-        <h1 className="text-2xl sticky text-black">{title}</h1>
-      )}
       <VirtualList
         data={docs}
         isLastPage

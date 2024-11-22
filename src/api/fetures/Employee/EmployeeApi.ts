@@ -12,7 +12,11 @@ import {
   IGetEmployeeApiResponse,
   IGetEmployeeByIdResponse,
 } from './EmployeeApi.types';
-import { IDocumentStatus, IEmployeeDocsApiKeys } from '@/constant/enums';
+import {
+  IDocumentStatus,
+  IEmployeeApiKeyStatus,
+  IEmployeeDocsApiKeys,
+} from '@/constant/enums';
 import { createImageUrl } from '@/utility/cookies';
 import { STRINGS } from '@/constant/en';
 
@@ -104,6 +108,7 @@ const authApi = baseApi.injectEndpoints({
               docName:
                 response.data.attributes?.directDepositVoidCheque?.data
                   ?.attributes?.name ?? '',
+              docStatusKey: IEmployeeApiKeyStatus.CHEQUE,
               docStatus:
                 response.data.attributes?.directDepositVoidChequeStatus ??
                 IDocumentStatus.PENDING,
@@ -140,11 +145,26 @@ const authApi = baseApi.injectEndpoints({
         return employee;
       },
     }),
+    updateDocumentStatus: builder.mutation<
+      any,
+      { docId: number; key: IEmployeeApiKeyStatus; docStatus: IDocumentStatus }
+    >({
+      query: ({ docId, key, docStatus }) => ({
+        url: Endpoints.updateDocumentStatus(docId),
+        method: ApiMethodType.patch,
+        body: {
+          [key]: docStatus,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetEmployeesQuery, useLazyGetEmployeeByIdQuery } =
-  authApi;
+export const {
+  useLazyGetEmployeesQuery,
+  useLazyGetEmployeeByIdQuery,
+  useUpdateDocumentStatusMutation,
+} = authApi;
 
 //to formmat employee documents
 export const extractEmployeeDocumentsFromApiResponse = (
@@ -153,7 +173,13 @@ export const extractEmployeeDocumentsFromApiResponse = (
   //to merge doc details into one
   const addDocument = (
     document:
-      | { name: string; doc: IDoc; id: number; key: IEmployeeDocsApiKeys }
+      | {
+          name: string;
+          doc: IDoc;
+          id: number;
+          key: IEmployeeDocsApiKeys;
+          docStatusKey: IEmployeeApiKeyStatus;
+        }
       | undefined,
     status: IDocumentStatus | undefined
   ): IEmployeeDocument | null => {
@@ -161,6 +187,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
       ? {
           docName: document.name,
           docStatus: status,
+          docStatusKey: document.docStatusKey,
           doc: {
             url: document.doc.url ? createImageUrl(document.doc.url) : null,
             id: document.doc.id,
@@ -181,6 +208,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
       {
         name: STRINGS.sinDocument,
         id: employeeDetails.sinDocument.data.id,
+        docStatusKey: IEmployeeApiKeyStatus.SIN_DOCUMENT,
         doc: {
           mime: employeeDetails.sinDocument.data.attributes?.mime ?? '',
           url: employeeDetails.sinDocument.data.attributes?.url ?? '',
@@ -198,6 +226,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
       {
         name: STRINGS.Govt_ID,
         id: employeeDetails.govtid.data.id,
+        docStatusKey: IEmployeeApiKeyStatus.GOVT_ID,
         doc: {
           mime: employeeDetails.govtid.data.attributes?.mime ?? '',
           url: employeeDetails.govtid.data.attributes?.url ?? '',
@@ -215,6 +244,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
       {
         name: STRINGS.document,
         id: employeeDetails.supportingDocument.data.id,
+        docStatusKey: IEmployeeApiKeyStatus.SUPPORTING_DOCUMENT,
         doc: {
           mime:
             employeeDetails?.supportingDocument?.data.attributes?.mime ?? '',
@@ -236,6 +266,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
       {
         name: STRINGS.license_advance,
         id: employeeDetails.securityDocumentAdv.data.id,
+        docStatusKey: IEmployeeApiKeyStatus.LICENSE_ADVANCE,
         doc: {
           mime: employeeDetails.securityDocumentAdv.data.attributes?.mime ?? '',
           url: employeeDetails.securityDocumentAdv.data.attributes?.url ?? '',
@@ -252,7 +283,9 @@ export const extractEmployeeDocumentsFromApiResponse = (
     const securityDocumentBasic = addDocument(
       {
         name: STRINGS.license_advance,
+
         id: employeeDetails.securityDocumentBasic.data.id,
+        docStatusKey: IEmployeeApiKeyStatus.LICENSE_BASIC,
         doc: {
           mime:
             employeeDetails.securityDocumentBasic.data.attributes?.mime ?? '',
@@ -271,29 +304,3 @@ export const extractEmployeeDocumentsFromApiResponse = (
 
   return documents;
 };
-
-// export const extractEmployeeSecondaryDocumentsFromApiResponse = (
-//   response: IGetEmployeeByIdResponse,
-// ) => {
-//   const documents: IEmployeeDocument[] = [];
-//   response.data?.attributes?.other_documents.data.forEach(doc => {
-//     const docName = doc.attributes.name ?? '';
-//     const docStatus = doc.attributes ?? '';
-//     const docs = doc.Document;
-//     if (docs) {
-//       documents.push({
-//         docName,
-//         docStatus,
-//         doc: {
-//           url: getImageUrl(docs?.url),
-//           id: doc.id,
-//           name: doc.name,
-//           mime: docs.mime,
-//           size: docs.size,
-//         },
-//         docId: doc.id,
-//       });
-//     }
-//   });
-//   return documents;
-// };

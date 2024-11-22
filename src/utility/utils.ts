@@ -108,6 +108,8 @@ export const getDocumentStatusTextByStatus = (status: IDocumentStatus) => {
       return 'Pending';
     case IDocumentStatus.APPROVED:
       return 'Approved';
+    case IDocumentStatus.DENIED:
+      return 'Denied';
     default:
       return 'Pending';
   }

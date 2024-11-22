@@ -37,4 +37,6 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}`,
   getPostJobsByClient: (client_id: number, page: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?page=${page}&pageSize=5&populate=*`,
+  updateDocumentStatus: (docId: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/employee-details/${docId}/document-statuses`,
 };

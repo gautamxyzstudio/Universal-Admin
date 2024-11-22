@@ -118,4 +118,6 @@ export const STRINGS = {
   document: 'Document (PR card, Permit)',
   license_advance: 'Security license advance',
   license_basic: 'Security license basic',
+  bankDetails: 'Bank Details',
+  profileHistory: 'Profile History',
 };

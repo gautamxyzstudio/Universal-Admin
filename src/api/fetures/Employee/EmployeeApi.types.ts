@@ -1,4 +1,8 @@
-import { IDocumentStatus, IEmployeeDocsApiKeys } from '@/constant/enums';
+import {
+  IDocumentStatus,
+  IEmployeeApiKeyStatus,
+  IEmployeeDocsApiKeys,
+} from '@/constant/enums';
 
 export interface IGetEmployeeApiResponse {
   data: {
@@ -80,6 +84,7 @@ export type IDoc = {
 export interface IEmployeeDocument {
   docName: string;
   docStatus: IDocumentStatus;
+  docStatusKey: IEmployeeApiKeyStatus;
   doc: IDoc | null;
   docId: number | null;
   apiKey?: IEmployeeDocsApiKeys;
