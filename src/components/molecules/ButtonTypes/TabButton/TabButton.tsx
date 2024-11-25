@@ -23,6 +23,9 @@ const TabButton: React.FC<ITabButton> = ({
           minHeight: '60px',
           color: '#FF7312',
         },
+        'MuiButtonBase-root': {
+          padding: 0,
+        },
         border: '1px solid',
         borderColor: '#00000000',
         borderRadius: '8px',

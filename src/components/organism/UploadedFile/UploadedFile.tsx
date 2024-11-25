@@ -4,11 +4,12 @@ import { MoreVertOutlined } from '@mui/icons-material';
 import { Fade, IconButton, Menu, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { Icons } from '../../../../public/exporter';
+import { base64Icon, Icons } from '../../../../public/exporter';
 import TextWithBgColor from '@/components/molecules/TextWithBgColor/TextWithBgColor';
 import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
 import { IDocumentStatus } from '@/constant/enums';
 import { getDocumentStatusTextByStatus } from '@/utility/utils';
+import { useDocumentExpandViewContext } from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
 
 interface IUploadedFileProps {
   document: IEmployeeDocument;
@@ -25,6 +26,8 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
   const [empDocument, setEmpDocument] = useState<IEmployeeDocument | null>(
     null
   );
+  const { showDocModal } = useDocumentExpandViewContext();
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -37,6 +40,10 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
     setEmpDocument(document);
   }, [document]);
 
+  const onPressViewDocHandler = () => {
+    showDocModal(document);
+  };
+
   return (
     <div
       className={fileStyles + ' rounded p-3 flex  items-center justify-between'}
@@ -44,13 +51,24 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
       {empDocument && (
         <>
           <div className="flex items-center gap-x-3">
-            <Image
-              src={empDocument.doc?.url ?? ''}
-              alt="documents image"
-              width={56}
-              height={56}
-              className="w-14 h-14 rounded-[4px] object-cover"
-            />
+            <div className="group flex justify-center text-center relative overflow-hidden rounded-md cursor-pointe">
+              <Image
+                src={empDocument.doc?.url ?? ''}
+                alt="documents image"
+                placeholder="blur"
+                blurDataURL={base64Icon.spinner}
+                width={56}
+                height={56}
+                className="w-14 h-14 rounded-[4px] object-cover"
+              />
+              <div
+                onClick={onPressViewDocHandler}
+                className="absolute bg-[#121212] text-white text-sm text-center flex items-center justify-center w-full h-full opacity-0 transition-opacity duration-500 group-hover:opacity-70"
+              >
+                {STRINGS.view}
+              </div>
+            </div>
+
             <div className="flex flex-col gap-y-2">
               <h2 className="text-Black text-[16px] leading-5">
                 {empDocument.doc?.name}

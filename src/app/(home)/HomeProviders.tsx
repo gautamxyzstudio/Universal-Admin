@@ -1,10 +1,11 @@
-import LoaderContextProvider from "@/contexts/LoaderContext/LoaderContext";
-import SubAdminContextProvider from "@/contexts/SubAdminContext/SubAdminContext";
-import MaterialThemeProvider from "@/providers/MaterialThemeProvider";
-import ReduxProvider from "@/providers/ReduxProvider";
-import SnackBarProvider from "@/providers/SnackbarProvider";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import React from "react";
+import DocumentExpandedViewContextProvider from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
+import LoaderContextProvider from '@/contexts/LoaderContext/LoaderContext';
+import SubAdminContextProvider from '@/contexts/SubAdminContext/SubAdminContext';
+import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
+import ReduxProvider from '@/providers/ReduxProvider';
+import SnackBarProvider from '@/providers/SnackbarProvider';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import React from 'react';
 
 const HomeProviders = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -13,7 +14,11 @@ const HomeProviders = ({ children }: { children: React.ReactNode }) => {
         <SnackBarProvider>
           <ReduxProvider>
             <LoaderContextProvider>
-              <SubAdminContextProvider>{children}</SubAdminContextProvider>
+              <SubAdminContextProvider>
+                <DocumentExpandedViewContextProvider>
+                  {children}
+                </DocumentExpandedViewContextProvider>
+              </SubAdminContextProvider>
             </LoaderContextProvider>
           </ReduxProvider>
         </SnackBarProvider>

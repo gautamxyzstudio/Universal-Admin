@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import React, { useState } from 'react';
 import {
   getStylesAttributes,
   IUserImageRendererProps,
 } from './UserImageRenderer.types';
 import { getFirstLetterFromName } from '@/utility/utils';
 import Image from 'next/image';
+import { base64Icon } from '../../../../public/exporter';
 
 const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   name,
@@ -15,7 +15,6 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
   imageStyle,
 }) => {
   const stylesAttributes = getStylesAttributes(type);
-  const [isLoading, setIsLoading] = useState(true);
   const backgroundColor = `${stylesAttributes.backgroundColor}`;
   const textColor = `${stylesAttributes.textColor}`;
 
@@ -30,8 +29,9 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
       {image && (
         <Image
           width={100}
+          placeholder="blur"
+          blurDataURL={base64Icon.spinner}
           height={100}
-          loading="lazy"
           className={
             imageStyle +
             ' object-contain relative  top-0 left-0 w-auto h-auto rounded-full border border-borderGrey'

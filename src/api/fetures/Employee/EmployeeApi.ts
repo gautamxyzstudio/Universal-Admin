@@ -91,6 +91,9 @@ const authApi = baseApi.injectEndpoints({
         const documents: IEmployeeDocument[] =
           extractEmployeeDocumentsFromApiResponse(response);
 
+        const secondaryDocuments: IEmployeeDocument[] =
+          extractOtherDocumentsFromApiResponse(response);
+
         const employee: IEmployeeAdvance = {
           name: response.data.attributes?.name ?? '',
           dob: response.data.attributes?.dob ?? '',
@@ -141,6 +144,7 @@ const authApi = baseApi.injectEndpoints({
           selfie: selfie,
           id: response.data.id,
           documents: documents,
+          otherDocuments: secondaryDocuments,
         };
         return employee;
       },
@@ -166,40 +170,69 @@ export const {
   useUpdateDocumentStatusMutation,
 } = authApi;
 
+const addDocument = (
+  document:
+    | {
+        name: string;
+        doc: IDoc;
+        id: number;
+        key?: IEmployeeDocsApiKeys;
+        docStatusKey: IEmployeeApiKeyStatus;
+      }
+    | undefined,
+  status: IDocumentStatus | undefined
+): IEmployeeDocument | null => {
+  return document && status
+    ? {
+        docName: document.name,
+        docStatus: status,
+        docStatusKey: document.docStatusKey,
+        doc: {
+          url: document.doc.url ? createImageUrl(document.doc.url) : null,
+          id: document.doc.id,
+          name: document.doc.name,
+          mime: document.doc.mime,
+          size: document.doc.size,
+        },
+        docId: document.id,
+        apiKey: document.key,
+      }
+    : null;
+};
+
+export const extractOtherDocumentsFromApiResponse = (
+  response: IGetEmployeeByIdResponse
+): IEmployeeDocument[] | [] => {
+  const documents: IEmployeeDocument[] = [];
+  const employeeDetails = response.data.attributes;
+  if (employeeDetails && employeeDetails.other_documents) {
+    employeeDetails.other_documents.data.forEach((doc) => {
+      const document = addDocument(
+        {
+          name: doc?.attributes?.name ?? '',
+          id: doc?.id ?? 0,
+          docStatusKey: IEmployeeApiKeyStatus.SIN_DOCUMENT,
+          doc: {
+            mime: doc?.attributes?.Document?.data?.attributes.mime ?? '',
+            url: doc?.attributes?.Document?.data?.attributes.url ?? '',
+            size: doc?.attributes?.Document?.data?.attributes.size ?? 0,
+            name: doc?.attributes?.Document?.data?.attributes.name ?? '',
+          },
+        },
+        doc?.attributes?.Docstatus ?? IDocumentStatus.PENDING
+      );
+      if (document) documents.push(document);
+    });
+  }
+  return documents;
+};
+
 //to formmat employee documents
 export const extractEmployeeDocumentsFromApiResponse = (
   response: IGetEmployeeByIdResponse
 ): IEmployeeDocument[] | [] => {
   //to merge doc details into one
-  const addDocument = (
-    document:
-      | {
-          name: string;
-          doc: IDoc;
-          id: number;
-          key: IEmployeeDocsApiKeys;
-          docStatusKey: IEmployeeApiKeyStatus;
-        }
-      | undefined,
-    status: IDocumentStatus | undefined
-  ): IEmployeeDocument | null => {
-    return document && status
-      ? {
-          docName: document.name,
-          docStatus: status,
-          docStatusKey: document.docStatusKey,
-          doc: {
-            url: document.doc.url ? createImageUrl(document.doc.url) : null,
-            id: document.doc.id,
-            name: document.doc.name,
-            mime: document.doc.mime,
-            size: document.doc.size,
-          },
-          docId: document.id,
-          apiKey: document.key,
-        }
-      : null;
-  };
+
   const documents: IEmployeeDocument[] = [];
   const employeeDetails = response.data.attributes;
 

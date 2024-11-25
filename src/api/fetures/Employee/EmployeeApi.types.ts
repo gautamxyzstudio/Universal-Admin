@@ -71,6 +71,7 @@ export interface IEmployeeAdvance {
     chique: IEmployeeDocument;
   };
   documents: IEmployeeDocument[];
+  otherDocuments: IEmployeeDocument[];
 }
 
 export type IDoc = {
@@ -113,13 +114,34 @@ export interface IGetEmployeeByIdResponse {
           securityDocumentAdvStatus: IDocumentStatus | null | undefined;
           other_documents: {
             data: [
-              {
-                id: number;
-                attributes: {
-                  Docstatus: IDocumentStatus;
-                  Document;
-                };
-              }
+              | {
+                  id: number;
+                  attributes:
+                    | {
+                        name: string | null | undefined;
+                        Docstatus: IDocumentStatus | null | undefined;
+                        Document:
+                          | {
+                              data:
+                                | {
+                                    attributes: {
+                                      url: string | null | undefined;
+                                      mime: string | null | undefined;
+                                      size: number | null | undefined;
+                                      name: string | null | undefined;
+                                    };
+                                  }
+                                | null
+                                | undefined;
+                            }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                }
+              | null
+              | undefined
             ];
           };
           govtid:

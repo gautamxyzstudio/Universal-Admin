@@ -38,9 +38,13 @@ const EmployeeDetails = ({
   const [employeeDocs, setEmployeeDocs] = useState<IEmployeeDocument[] | []>(
     []
   );
-  const [employeeTabs, setEmployeeTabs] = useState<IEmployeeDocument[] | []>(
-    []
-  );
+  const [employeeTabs, setEmployeeTabs] = useState<{
+    primaryDocuments: IEmployeeDocument[] | null;
+    otherDocuments: IEmployeeDocument[] | null;
+  }>({
+    primaryDocuments: null,
+    otherDocuments: null,
+  });
 
   const { changeLoaderState } = useShowLoaderContext();
 
@@ -78,8 +82,8 @@ const EmployeeDetails = ({
           setEmployee((prev) => {
             if (!prev) return null;
             let prevEmpDetails = { ...prev };
-            let prevEmpDocs = [...prev.documents];
-            let index = prevEmpDocs.findIndex(
+            const prevEmpDocs = [...prev.documents];
+            const index = prevEmpDocs.findIndex(
               (doc) => doc.docStatusKey === key
             );
             prevEmpDocs[index] = {
@@ -116,21 +120,12 @@ const EmployeeDetails = ({
   };
 
   useEffect(() => {
-    if (employee) {
-      if (employee.documents.length > 0) {
-        setEmployeeDocs(employee.documents);
-        setEmployeeTabs([
-          {
-            docName: 'All Requested Documents',
-            docStatus: IDocumentStatus.PENDING,
-            docStatusKey: IEmployeeApiKeyStatus.GOVT_ID,
-            doc: null,
-            docId: null,
-          },
-          ...employee.documents,
-        ]);
-      }
-    }
+    if (employee)
+      if (employee.documents.length > 0) setEmployeeDocs(employee.documents);
+    setEmployeeTabs({
+      primaryDocuments: employee?.documents ?? [],
+      otherDocuments: employee?.otherDocuments ?? [],
+    });
   }, [employee]);
 
   const tabsData = [
@@ -245,6 +240,7 @@ const EmployeeDetails = ({
                 data={employeeDocs}
               />
             )}
+
             {selectedTabIndex === 1 && (
               <BankDetailsView
                 employee={employee}
