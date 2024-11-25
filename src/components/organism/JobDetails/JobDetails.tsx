@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Icons } from "../../../../public/exporter";
 import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 import { STRINGS } from "@/constant/en";
@@ -8,8 +8,13 @@ import { MoreVertOutlined } from "@mui/icons-material";
 import { IconButton, Menu, Fade, MenuItem } from "@mui/material";
 import { dateMonthFormat, timeFormat } from "@/utility/utils";
 import { getJobStatus, getJobType } from "@/constant/constant";
-const JobDetails = ({ data }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+import { IJobPostTypes } from "@/api/fetures/Company/Company.types";
+import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditForm";
+const JobDetails = ({ data }: { data: IJobPostTypes }) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openFormDrawer, setOpenFormDrawer] = useState<boolean>(false);
+  const [currentSelectPostCard, setCurrentSelectPostCard] =
+    useState<IJobPostTypes | null>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -17,13 +22,20 @@ const JobDetails = ({ data }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleEditClick = (card: IJobPostTypes) => {
+    setCurrentSelectPostCard(card);
+    setAnchorEl(null);
+    setOpenFormDrawer(true);
+  };
+
   const statusStyle =
-    getJobStatus(data.status) === "Open"
+   data.status === "s0"
       ? "text-green bg-statusLightGreen"
       : "text-red bg-lightRedSecondary";
   return (
     <>
-      {data && data !== "" ? (
+      {data && data !== null ? (
         <div className="w-full h-fit">
           <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
             <UserNameWithImage
@@ -32,8 +44,8 @@ const JobDetails = ({ data }) => {
               name={data.job_name}
               imageStyle="!w-10 !h-10"
               nameStyle="font-bold !text-[24px] !leading-[28px]"
-              postby={data.client_details?.Name}
-              postbyStyle="text-disable !text-[16px] !leading-[20px]"
+              postBy={data.client_details?.Name}
+              postByStyle="text-disable !text-[16px] !leading-[20px]"
               subText={data.notAccepting === false ? "" : STRINGS.notAccept}
             />
             <div className="flex flex-col justify-between items-end text-[12px] leading-4 w-full">
@@ -49,7 +61,6 @@ const JobDetails = ({ data }) => {
                   >
                     <MoreVertOutlined />
                   </IconButton>
-
                   <Menu
                     open={open}
                     anchorEl={anchorEl}
@@ -57,11 +68,12 @@ const JobDetails = ({ data }) => {
                       "aria-labelledby": "openMenu",
                     }}
                     sx={{
+                      left: 0,
                       ".MuiList-root": {
                         padding: "0px",
                       },
                       ".MuiMenuItem-root": {
-                        padding: "12px 6px 12px 12px",
+                        padding: "12px 125px 12px 12px",
                         gap: "12px",
                         fontSize: "12px",
                         lineHeight: "16px",
@@ -85,7 +97,7 @@ const JobDetails = ({ data }) => {
                       </svg>
                       <span>Close</span>
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={() => handleEditClick(data)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -181,7 +193,7 @@ const JobDetails = ({ data }) => {
               <div dangerouslySetInnerHTML={{ __html: data.description }} />
             </div>
             <div className="flex flex-col gap-y-2">
-              <span className="font-bold">{STRINGS.jobDut}</span>
+              <span className="font-bold">{STRINGS.jobDuty}</span>
               <div dangerouslySetInnerHTML={{ __html: data.jobDuties }} />
             </div>
             <div className="flex flex-col gap-y-2">
@@ -192,7 +204,7 @@ const JobDetails = ({ data }) => {
               <span className="font-bold">{STRINGS.reqCert}</span>
               <span className="ml-2">
                 <ul className="list-inside list-disc">
-                  {data.required_certificates.map((data, index) => (
+                  {data.required_certificates?.map((data, index) => (
                     <li key={index}>{data}</li>
                   ))}
                 </ul>
@@ -203,6 +215,11 @@ const JobDetails = ({ data }) => {
       ) : (
         <div className="w-full h-fit">{STRINGS.noJobs}</div>
       )}
+      <JobPostEditForm
+        show={openFormDrawer}
+        setGlobalModalState={(state) => setOpenFormDrawer(state)}
+        currentPost={currentSelectPostCard}
+      />
     </>
   );
 };

@@ -91,7 +91,7 @@ export const getStylesFromButtonType = (
         fontWeight: "400",
         textTransform: "capitalize",
         borderRadius: "8px",
-        paddingY: "10px 12px",
+        padding: "10px 12px",
       };
     case "outline-gray-red":
       return {

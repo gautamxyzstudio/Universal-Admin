@@ -37,7 +37,8 @@ const config: Config = {
                 darkBlue: '#182452',
                 skyBlue: '#1985C1',
                 lightSkyBlue: '#F6FCFF',
-                secondaryShade: '#F1F4FF'
+                secondaryShade: '#F1F4FF',
+                textFieldBorder: '#E0E3E7',
                 
             },
             borderRadius: {

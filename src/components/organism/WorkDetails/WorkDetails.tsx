@@ -88,7 +88,7 @@ const WorkDetails = () => {
           </span>
         </div>
         <div className="flex flex-col gap-y-2">
-          <span className="font-bold">{STRINGS.jobDut}</span>
+          <span className="font-bold">{STRINGS.jobDuty}</span>
           <span className="ml-2">
             <ul className="list-inside list-disc">
               <li>

@@ -17,9 +17,9 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   nameStyle,
   divStyle,
   imageStyle,
- postby,
+  postBy,
   subText,
-  postbyStyle,
+  postByStyle,
 }) => {
   return (
     <div
@@ -37,7 +37,9 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
       <div className={divStyle + " flex flex-col gap-y-1 w-full capitalize"}>
         {name && (
           <span
-            className={nameStyle + " text-[16px] leading-[20px] text-Black capitalize"}
+            className={
+              nameStyle + " text-[16px] leading-[20px] text-Black capitalize"
+            }
           >
             {name}
           </span>
@@ -47,7 +49,6 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
             className={companyNameStyle + " flex gap-x-2 items-center w-full"}
           >
             <span>{companyName}</span>{" "}
-            
             {days && (
               <>
                 <SVGComponent svg={SVGS.circleDot} />
@@ -56,11 +57,9 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
             )}
           </div>
         )}
-        {postby && (
-          <div
-            className={postbyStyle + " flex gap-x-2 items-center w-full"}
-          >
-            <span>Posted by {postby}</span>{" "}
+        {postBy && (
+          <div className={postByStyle + " flex gap-x-2 items-center w-full"}>
+            <span>Posted by {postBy}</span>{" "}
             {subText && (
               <>
                 <SVGComponent svg={SVGS.circleDot} />
@@ -78,7 +77,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           </div>
         )}
         {joinDate && (
-          <span className={"text-[14px] leading-[18px] w-full text-disable " }>
+          <span className={"text-[14px] leading-[18px] w-full text-disable "}>
             Joined - {joinDate}
           </span>
         )}

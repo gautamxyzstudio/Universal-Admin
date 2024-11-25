@@ -15,7 +15,7 @@ import {
   IUpdateClientDetailsResponse,
 } from "./Client.types";
 import { createImageUrl } from "@/utility/cookies";
-import { IClientStatus, IJobPostStatus } from "@/constant/enums";
+import { IClientStatus } from "@/constant/enums";
 import { IJobPostCustomizedResponse, IJobPostTypes, IPostedJobsResponse } from "../Company/Company.types";
 
 const clientApi = baseApi.injectEndpoints({
@@ -196,7 +196,7 @@ const clientApi = baseApi.injectEndpoints({
               data.push({
                 ...job,
                 id: job.id,
-                status: IJobPostStatus.OPEN,
+                status: job.status,
                 notAccepting: job.notAccepting ?? false,
                 client_details: job.client_details
                 ? {

@@ -38,3 +38,6 @@ body {
   width: 438px;
   height: 485px;
 }
+.fr-second-toolbar{
+  display: none !important;
+}
