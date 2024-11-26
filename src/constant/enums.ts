@@ -35,3 +35,4 @@ export enum IJobTypesEnum {
   EVENT = "event",
   STATIC = "static",
 }
+

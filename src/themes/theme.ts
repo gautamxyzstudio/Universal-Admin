@@ -20,7 +20,7 @@ const theme = createTheme({
           "--TextField-brandBorderFocusedColor": "#6F7E8C",
           "& label.Mui-focused": {
             color: "var(--TextField-brandBorderFocusedColor)",
-          }, 
+          },
         },
       },
     },
@@ -28,14 +28,18 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {
-          borderColor: "var(--TextField-brandBorderColor)",
+          borderColor: "#EBEBEB",
+          
         },
         root: {
+          "--mui-palette-common-onBackgroundChannel": "#B2BAC2",
           [`&:hover .${outlinedInputClasses.notchedOutline}`]: {
-            borderColor: "var(--TextField-brandBorderHoverColor)",
+            borderColor:
+              "var(--mui-palette-common-onBackgroundChannel)",
           },
           [`&.Mui-focused .${outlinedInputClasses.notchedOutline}`]: {
-            borderColor: "var(--TextField-brandBorderFocusedColor)",
+            borderColor:
+              "var(--mui-palette-common-onBackgroundChannel)",
           },
         },
       },
@@ -56,9 +60,7 @@ const theme = createTheme({
       },
     },
     MuiButton: {
-      styleOverrides: {
-   
-      },
+      styleOverrides: {},
     },
     MuiDialog: {
       styleOverrides: {

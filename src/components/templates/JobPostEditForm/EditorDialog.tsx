@@ -23,10 +23,10 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
   onClickUpdate,
 }) => {
   const [editorData, setEditorData] = useState(data);
-  console.log(data, "edit editor data");
 
   useEffect(() => {
     setEditorData(data);
+    console.log("edit editor data", data);
   }, [data]);
 
   const configFroala = {
@@ -35,7 +35,13 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
     paragraphFormatSelection: true,
     charCounterCount: false,
     wordCounterCount: false,
-    toolbarButtons: ['insertUnorderedList', 'insertOrderedList', '|', 'formatOL', 'formatUL'],
+    toolbarButtons: [
+      "insertUnorderedList",
+      "insertOrderedList",
+      "|",
+      "formatOL",
+      "formatUL",
+    ],
   };
   const handleModelChange = (e: string) => {
     setEditorData(e);
@@ -44,7 +50,7 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
   // Handle the update button click
   const handleUpdateClick = () => {
     if (onClickUpdate) {
-      onClickUpdate(editorData);  // Pass updated data to the parent component
+      onClickUpdate(editorData); // Pass updated data to the parent component
     }
   };
 

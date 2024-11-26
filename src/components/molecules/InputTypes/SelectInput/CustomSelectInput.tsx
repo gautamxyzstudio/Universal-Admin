@@ -1,47 +1,39 @@
-import CustomInput from "@/components/atoms/CustomInput/CustomInput";
-// import { IconButton } from "@mui/material";
 import React from "react";
-import { Icons } from "../../../../../public/exporter";
-import Image from "next/image";
-import { ISelectInputProps } from "./CustomSelectInput.type";
+import { ISelectInputProps } from "./CustomSelectInput.types";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const CustomSelectInput: React.FC<ISelectInputProps> = ({
   label,
   value,
   onChange,
-  children,
+  menuItem,
 }) => {
   return (
-    <div className="inline-flex items-center gap-x-2 text-[12px] leading-4 h-8">
-      {label}
-      <CustomInput
-        select
-        value={value}
-        onChange={onChange}
-        size="small"
+    <FormControl>
+      <InputLabel
+        id="simple-select-label"
         sx={{
-          "& .MuiSelect-select": {
+          color: "#868686",
+          "&.Mui-focused": {
             color: "#868686",
-            fontSize: "12px",
-            lineHeight: "16px",
-          },
-          width: "fit-content",
-        }}
-        slotProps={{
-          select: {
-            IconComponent: () => (
-              <Image
-                src={Icons.arrow}
-                alt="Dropdown Menu"
-                className="w-auto h-auto"
-              />
-            ),
           },
         }}
       >
-        {children}
-      </CustomInput>
-    </div>
+      {label}
+      </InputLabel>
+      <Select
+        labelId="simple-select-label"
+        id="simple-select"
+        value={value}
+        onChange={onChange}
+      >
+        {menuItem.map((item) => (
+          <MenuItem key={item.itemValue} value={item.itemValue as string}>
+            {item.itemLabel}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 

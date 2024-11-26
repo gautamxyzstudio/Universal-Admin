@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { IJobPostEditFromProps } from "./index.types";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useReducer, useState } from "react";
+import {
+  IEditJobPostState,
+  IJobPostEditFromProps,
+  JobPostStateFields,
+} from "./index.types";
 import FormDrawer from "@/components/molecules/DrawerTypes/FormDrawer/FormDrawer";
 import { STRINGS } from "@/constant/en";
 import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import FormTextInput from "@/components/molecules/InputTypes/FormTextInput/FormTextInput";
 import EditorDialog from "./EditorDialog";
-import { IJobPostTypes } from "@/api/fetures/Company/Company.types";
+import { IJobTypesEnum } from "@/constant/enums";
+import { getJobType } from "@/constant/constant";
+import CustomSelectInput from "@/components/molecules/InputTypes/SelectInput/CustomSelectInput";
+import DatePickerComponent from "./DatePickerComponent";
+import dayjs from "dayjs";
+import TimePickerComponent from "./TimePickerComponent";
 
 const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   show,
@@ -15,8 +25,47 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   const [displayFrom, setDisplayFrom] = useState(show);
   const [showEditorDialog, setShowEditorDialog] = useState<boolean>(false);
   const [editData, setEditData] = useState<string>("");
-  const [currentPostData, setCurrentPostData] = useState<IJobPostTypes | null>(null);
-  
+
+  const initialState = {
+    jobName: "",
+    jobDescription: "",
+    jobDuties: "",
+    jobType: "",
+    eventDate: "",
+    startShift: "",
+    endShift: "",
+    location: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    requiredEmployee: "",
+    salary: "",
+    requiredCertificates: "",
+    gender: "",
+    jobNameError: "",
+    jobDescriptionError: "",
+    jobDutiesError: "",
+    jobTypeError: "",
+    eventDateError: "",
+    startShiftError: "",
+    endShiftError: "",
+    locationError: "",
+    addressError: "",
+    cityError: "",
+    postalCodeError: "",
+    requiredEmployeeError: "",
+    salaryError: "",
+    requiredCertificatesError: "",
+    genderError: "",
+  };
+
+  const [state, setState] = useReducer(
+    (prev: IEditJobPostState, next: IEditJobPostState) => ({
+      ...prev,
+      ...next,
+    }),
+    initialState
+  );
 
   useEffect(() => {
     setDisplayFrom(show);
@@ -24,7 +73,28 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
 
   useEffect(() => {
     if (currentPost) {
-      setCurrentPostData(currentPost);
+      setState({
+        ...state,
+        jobName: currentPost.job_name,
+        jobDescription: currentPost.description,
+        jobDuties: currentPost.jobDuties,
+        jobType: currentPost.job_type,
+        eventDate: currentPost.eventDate,
+        startShift: currentPost.startShift,
+        endShift: currentPost.endShift,
+        location: currentPost.location,
+        address: currentPost.address,
+        city: currentPost.city,
+        postalCode: currentPost.postalCode,
+        requiredEmployee: currentPost.requiredEmployee
+          ? currentPost.requiredEmployee.toLocaleString()
+          : "",
+        salary: currentPost.salary,
+        requiredCertificates: currentPost.required_certificates
+          ? currentPost.required_certificates
+          : "",
+        gender: currentPost.gender,
+      });
     }
   }, [currentPost]);
 
@@ -38,7 +108,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     setDisplayFrom(false);
     setGlobalModalState(false);
   };
-  const onPressCross = () => {
+  const onPressEditCross = () => {
     setDisplayFrom(false);
     setGlobalModalState(false);
   };
@@ -64,73 +134,180 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     setEditData(updatedData);
     setShowEditorDialog(false);
   };
+
+  // Text field
+  const onChangeTextField = (e: string, fieldName: string) => {
+    setState({ ...state, [fieldName]: e, [`${fieldName}Error`]: "" });
+  };
+
+  // Date and time fields
+  const onChangeDateTimeField = (
+    newValue: dayjs.Dayjs | null,
+    fieldName: string
+  ) => {
+    setState({ ...state, [fieldName]: newValue, [`${fieldName}Error`]: "" });
+  };
   return (
     <>
       <FormDrawer
         title={STRINGS.edit}
         open={displayFrom}
         handleClose={handleClickOutside}
-        onPressCross={onPressCross}
+        onPressCross={onPressEditCross}
         styles={{
           width: "30%",
         }}
       >
-        <div className="p-6 flex flex-col gap-y-6">
-          <div className="flex flex-col gap-y-6">
-            <h2 className="text-accentColor text-base">{STRINGS.details}</h2>
-            <FormTextInput
-              value={currentPostData?.job_name}
-              onChange={(e) => e.target.value}
-              errorMessage={""}
-              label={STRINGS.jobName}
-            />
-            <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative cursor-pointer">
-              <div
-                className="cursor-pointer"
-                onClick={() =>
-                  OnClickJobDescription(
-                    currentPost?.description || "<div>Data</div>"
+        <div className="h-[90vh] overflow-scroll scrollbar-none">
+          <div className="px-6 pt-4 pb-6 flex h-[95%] overflow-scroll flex-col gap-y-4  scrollbar-none">
+            {/* Details section */}
+            <div className="flex flex-col gap-y-6">
+              <h2 className="text-accentColor text-base">{STRINGS.details}</h2>
+              <FormTextInput
+                value={state.jobName}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.JOB_NAME)
+                }
+                errorMessage={""}
+                label={STRINGS.jobName}
+              />
+              {/* Job descriptions */}
+              <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative cursor-pointer">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => OnClickJobDescription(state.jobDescription)}
+                  
+                  dangerouslySetInnerHTML={{
+                    __html: state.jobDescription.slice(0, 30) + "...Read more",
+                  }}
+                />
+                <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
+                  {STRINGS.jobDes}
+                </span>
+              </div>
+              {/* Job Duties */}
+              <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative cursor-pointer">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => OnClickJobDescription(state.jobDuties)}
+                  dangerouslySetInnerHTML={{
+                    __html: state.jobDuties + "...Read more" || "",
+                  }}
+                />
+                <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
+                  {STRINGS.jobDuty}
+                </span>
+              </div>
+              <CustomSelectInput
+                label={STRINGS.jobType}
+                value={state.jobType}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.JOB_TYPE)
+                }
+                menuItem={jobTypeSelection}
+              />
+            </div>
+            {/* General section */}
+            <div className="flex flex-col gap-y-6">
+              <h2 className="text-accentColor text-base">{STRINGS.general}</h2>
+              {/* Date Picker Component */}
+              <DatePickerComponent
+                label={STRINGS.eventDate}
+                value={state.eventDate}
+                onChange={(e) =>
+                  onChangeDateTimeField(e, JobPostStateFields.EVENT_DATE)
+                }
+              />
+              {/* Time Picker Component */}
+              <div className="flex gap-x-4">
+                <TimePickerComponent
+                  label={STRINGS.startShift}
+                  value={state.startShift}
+                  onChange={(e) =>
+                    onChangeDateTimeField(e, JobPostStateFields.START_SHIFT)
+                  }
+                />
+                <TimePickerComponent
+                  label={STRINGS.endShift}
+                  value={state.endShift}
+                  onChange={(e) =>
+                    onChangeDateTimeField(e, JobPostStateFields.END_SHIFT)
+                  }
+                />
+              </div>
+              <FormTextInput
+                value={state.location}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.LOCATION)
+                }
+                errorMessage={""}
+                label={STRINGS.location}
+              />
+              <FormTextInput
+                value={state.address}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.ADDRESS)
+                }
+                errorMessage={""}
+                label={STRINGS.address}
+              />
+              <FormTextInput
+                value={state.city}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.CITY)
+                }
+                errorMessage={""}
+                label={STRINGS.city}
+              />
+              <FormTextInput
+                value={state.postalCode}
+                onChange={(e) =>
+                  onChangeTextField(
+                    e.target.value,
+                    JobPostStateFields.POSTAL_CODE
                   )
                 }
-                dangerouslySetInnerHTML={{
-                  __html:
-                    currentPostData?.description.slice(0, 30) + "...Read more" ||
-                    "",
-                }}
+                errorMessage={""}
+                label={STRINGS.postalCode}
               />
-              <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
-                {STRINGS.jobDes}
-              </span>
             </div>
-            <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative cursor-pointer">
-              <div
-                className="cursor-pointer"
-                onClick={() =>
-                  OnClickJobDescription(
-                    currentPostData?.jobDuties || "<div>Data</div>"
+
+            {/* Requirement section */}
+            <div className="flex flex-col gap-y-6">
+              <h2 className="text-accentColor text-base">
+                {STRINGS.requirement}
+              </h2>
+              <FormTextInput
+                value={state.requiredEmployee}
+                onChange={(e) =>
+                  onChangeTextField(
+                    e.target.value,
+                    JobPostStateFields.REQUIRED_EMPLOYEE
                   )
                 }
-                dangerouslySetInnerHTML={{
-                  __html:
-                    currentPost?.jobDuties.slice(0, 30) + "...Read more" || "",
-                }}
+                errorMessage={""}
+                label={STRINGS.num_of_employees}
               />
-              <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
-                {STRINGS.jobDuty}
-              </span>
+              <FormTextInput
+                value={state.salary + "$"}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.SALARY)
+                }
+                errorMessage={""}
+                label={STRINGS.wagePerHour}
+              />
+              <CustomSelectInput
+                label={STRINGS.gender + " (optional)"}
+                value={state.gender}
+                onChange={(e) =>
+                  onChangeTextField(e.target.value, JobPostStateFields.GENDER)
+                }
+                menuItem={genderPreferences}
+              />
             </div>
-         
-          </div>
-          <div className="flex fle-col gap-y-3">
-            <h2 className="text-accentColor text-base">{STRINGS.general}</h2>
-          </div>
-          <div className="flex fle-col gap-y-3">
-            <h2 className="text-accentColor text-base">
-              {STRINGS.requirement}
-            </h2>
           </div>
         </div>
-        <div className="px-6">
+        <div className="px-6 pt-4 z-10 fixed w-[30%] bg-white bottom-0 shadow-custom-shadow">
           <CustomButton
             title={STRINGS.save}
             onClick={onPressSave}
@@ -152,3 +329,22 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
 };
 
 export default JobPostEditForm;
+
+// job type selection
+export const jobTypeSelection = [
+  {
+    itemLabel: getJobType(IJobTypesEnum.EVENT),
+    itemValue: IJobTypesEnum.EVENT,
+  },
+  {
+    itemLabel: getJobType(IJobTypesEnum.STATIC),
+    itemValue: IJobTypesEnum.STATIC,
+  },
+];
+// gender preference selection
+export const genderPreferences = [
+  { itemLabel: "Male", itemValue: "Male" },
+  { itemLabel: "Female", itemValue: "Female" },
+  { itemLabel: "No Preference", itemValue: "No Preference" },
+  { itemLabel: "Other", itemValue: "Other" },
+];

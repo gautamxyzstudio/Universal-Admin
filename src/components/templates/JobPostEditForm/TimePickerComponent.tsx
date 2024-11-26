@@ -1,0 +1,37 @@
+import React from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
+import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
+import { SVGS } from "@/constant/staticSvgs";
+
+type ITimePickerComponentProps = {
+  value: Date | string | null;
+  label: string | null;
+  onChange: (newValue: dayjs.Dayjs | null) => void;
+};
+
+const TimePickerComponent: React.FC<ITimePickerComponentProps> = ({
+  value,
+  label,
+  onChange,
+}) => {
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <TimePicker
+        label={label}
+        value={dayjs(value)}
+        onChange={onChange}
+        views={["hours", "minutes"]}
+        slots={{ openPickerIcon: ClockIconComponent}}
+      />
+    </LocalizationProvider>
+  );
+};
+
+export default TimePickerComponent;
+
+export function ClockIconComponent(){
+    return <SVGComponent svg={SVGS.clock}/>
+}
