@@ -24,7 +24,7 @@ const TimePickerComponent: React.FC<ITimePickerComponentProps> = ({
         value={dayjs(value)}
         onChange={onChange}
         views={["hours", "minutes"]}
-        slots={{ openPickerIcon: ClockIconComponent}}
+        slots={{ openPickerIcon: ClockIconComponent }}
       />
     </LocalizationProvider>
   );
@@ -32,6 +32,6 @@ const TimePickerComponent: React.FC<ITimePickerComponentProps> = ({
 
 export default TimePickerComponent;
 
-export function ClockIconComponent(){
-    return <SVGComponent svg={SVGS.clock}/>
+export function ClockIconComponent() {
+  return <SVGComponent svg={SVGS.clock} />;
 }

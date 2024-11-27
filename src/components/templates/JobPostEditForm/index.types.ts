@@ -13,8 +13,9 @@ export interface IEditorDialogProps {
     | ((event: object, reason: "backdropClick" | "escapeKeyDown") => void)
     | undefined;
     data : string;
+    fieldName: string;
     onClickBack: () => void;
-    onClickUpdate: (data : string) => void;
+    onClickUpdate: (data : string, fieldName: string) => void;
 }
 
 export type IEditJobPostState ={
@@ -33,21 +34,6 @@ export type IEditJobPostState ={
     salary: string;
     requiredCertificates: string | string[];
     gender: string;
-    jobNameError: string;
-    jobDescriptionError: string;
-    jobDutiesError: string;
-    jobTypeError: string;
-    eventDateError: string;
-    startShiftError: string;
-    endShiftError: string;
-    locationError: string;
-    addressError: string;
-    cityError: string;
-    postalCodeError: string;
-    requiredEmployeeError: string;
-    salaryError: string;
-    requiredCertificatesError: string;
-    genderError: string;
 }
 
 export enum JobPostStateFields{

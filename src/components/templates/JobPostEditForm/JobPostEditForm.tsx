@@ -16,6 +16,7 @@ import CustomSelectInput from "@/components/molecules/InputTypes/SelectInput/Cus
 import DatePickerComponent from "./DatePickerComponent";
 import dayjs from "dayjs";
 import TimePickerComponent from "./TimePickerComponent";
+import { InputAdornment } from "@mui/material";
 
 const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   show,
@@ -25,6 +26,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   const [displayFrom, setDisplayFrom] = useState(show);
   const [showEditorDialog, setShowEditorDialog] = useState<boolean>(false);
   const [editData, setEditData] = useState<string>("");
+  const [fieldToEdit, setFieldToEdit] = useState<string>('');
 
   const initialState = {
     jobName: "",
@@ -42,21 +44,6 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     salary: "",
     requiredCertificates: "",
     gender: "",
-    jobNameError: "",
-    jobDescriptionError: "",
-    jobDutiesError: "",
-    jobTypeError: "",
-    eventDateError: "",
-    startShiftError: "",
-    endShiftError: "",
-    locationError: "",
-    addressError: "",
-    cityError: "",
-    postalCodeError: "",
-    requiredEmployeeError: "",
-    salaryError: "",
-    requiredCertificatesError: "",
-    genderError: "",
   };
 
   const [state, setState] = useReducer(
@@ -70,6 +57,8 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   useEffect(() => {
     setDisplayFrom(show);
   }, [show]);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (currentPost) {
@@ -118,21 +107,26 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   };
 
   // Triggered when job description is clicked to edit
-  const OnClickJobDescription = (data: string) => {
+  const OnClickReadMore = (data: string,fieldName: string) => {
     setEditData(data);
+    setFieldToEdit(fieldName); 
     setShowEditorDialog(true);
+    setDisplayFrom(false);
   };
 
   // Function to close the editor dialog
   const handleClickBack = () => {
     setShowEditorDialog(false);
+    setDisplayFrom(true);
   };
 
   // Function to handle updated data from the editor dialog
-  const handleUpdateData = (updatedData: string) => {
+  const handleUpdateData = (updatedData: string, fieldName: string) => {
     console.log("Updated Description:", updatedData);
     setEditData(updatedData);
+    setState({ ...state, [fieldName]: updatedData });
     setShowEditorDialog(false);
+    setDisplayFrom(true);
   };
 
   // Text field
@@ -147,6 +141,9 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   ) => {
     setState({ ...state, [fieldName]: newValue, [`${fieldName}Error`]: "" });
   };
+
+  
+
   return (
     <>
       <FormDrawer
@@ -172,13 +169,13 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 label={STRINGS.jobName}
               />
               {/* Job descriptions */}
-              <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative cursor-pointer">
+              <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative">
                 <div
                   className="cursor-pointer"
-                  onClick={() => OnClickJobDescription(state.jobDescription)}
-                  
+                  onClick={() => OnClickReadMore(state.jobDescription, JobPostStateFields.JOB_DESCRIPTION)}
                   dangerouslySetInnerHTML={{
-                    __html: state.jobDescription.slice(0, 30) + "...Read more",
+                    __html:
+                      state.jobDescription.slice(0, 100) + ReadMore,
                   }}
                 />
                 <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
@@ -186,12 +183,12 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 </span>
               </div>
               {/* Job Duties */}
-              <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative cursor-pointer">
+              <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative">
                 <div
                   className="cursor-pointer"
-                  onClick={() => OnClickJobDescription(state.jobDuties)}
+                  onClick={() => OnClickReadMore(state.jobDuties, JobPostStateFields.JOB_DUTIES)}
                   dangerouslySetInnerHTML={{
-                    __html: state.jobDuties + "...Read more" || "",
+                    __html: state.jobDuties.slice(0, 100) + ReadMore,
                   }}
                 />
                 <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
@@ -289,7 +286,14 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 label={STRINGS.num_of_employees}
               />
               <FormTextInput
-                value={state.salary + "$"}
+                value={state.salary}
+                slotProps={
+                  {
+                    input: {
+                      startAdornment: (<InputAdornment position="start">$</InputAdornment>)
+                    }
+                  }
+                }
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.SALARY)
                 }
@@ -319,6 +323,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
       </FormDrawer>
       <EditorDialog
         data={editData}
+        fieldName={fieldToEdit}
         open={showEditorDialog}
         onClose={() => setShowEditorDialog(false)}
         onClickBack={handleClickBack}
@@ -348,3 +353,5 @@ export const genderPreferences = [
   { itemLabel: "No Preference", itemValue: "No Preference" },
   { itemLabel: "Other", itemValue: "Other" },
 ];
+
+export const ReadMore:string = `<span style="color:#FF7312; font-size: 16px; cursor:pointer">...Read more</span>`;

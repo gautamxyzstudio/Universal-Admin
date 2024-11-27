@@ -41,3 +41,8 @@ body {
 .fr-second-toolbar{
   display: none !important;
 }
+
+.fr-wrapper{
+  border-radius: 0 0 10px 10px;
+  border-bottom-color: #CCCCCC !important;;
+}

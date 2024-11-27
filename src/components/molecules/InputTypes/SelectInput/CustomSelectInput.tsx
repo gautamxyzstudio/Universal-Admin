@@ -25,6 +25,7 @@ const CustomSelectInput: React.FC<ISelectInputProps> = ({
         labelId="simple-select-label"
         id="simple-select"
         value={value}
+        label={label}
         onChange={onChange}
       >
         {menuItem.map((item) => (

@@ -1,6 +1,6 @@
 import CustomDialog from "@/components/atoms/CustomDialog/CustomDialog";
 import React, { useEffect, useState } from "react";
-import { IEditorDialogProps } from "./index.types";
+import { IEditorDialogProps, JobPostStateFields } from "./index.types";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 // Import the Froala Editor Stylesheet for displaying content outside the editor
 import "froala-editor/css/froala_style.min.css";
@@ -19,6 +19,7 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
   open,
   onClose,
   data,
+  fieldName,
   onClickBack,
   onClickUpdate,
 }) => {
@@ -45,23 +46,32 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
   };
   const handleModelChange = (e: string) => {
     setEditorData(e);
+    console.log("editor data", e);
   };
 
   // Handle the update button click
   const handleUpdateClick = () => {
     if (onClickUpdate) {
-      onClickUpdate(editorData); // Pass updated data to the parent component
+      onClickUpdate(editorData, fieldName); // Pass updated data to the parent component
     }
   };
 
   return (
     <CustomDialog open={open} onClose={onClose}>
-      <FroalaEditorComponent
-        tag="textarea"
-        config={configFroala}
-        model={editorData}
-        onModelChange={(e: string) => handleModelChange(e)}
-      />
+      <h3 className="text-2xl font-bold p-4">
+        {fieldName === JobPostStateFields.JOB_DESCRIPTION
+          ? STRINGS.jobDes
+          : STRINGS.jobDuty}{" "}
+        Preview
+      </h3>
+      <div className="px-4">
+        <FroalaEditorComponent
+          tag="textarea"
+          config={configFroala}
+          model={editorData}
+          onModelChange={(e: string) => handleModelChange(e)}
+        />
+      </div>
       <div className="p-4 flex justify-between">
         <CustomButton
           title={STRINGS.update}
