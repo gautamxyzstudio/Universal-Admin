@@ -161,6 +161,39 @@ const authApi = baseApi.injectEndpoints({
         },
       }),
     }),
+    updateOtherDocumentStatus: builder.mutation<
+      any,
+      { docId: number; DocStatus: IDocumentStatus }
+    >({
+      query: ({ docId, DocStatus }) => ({
+        url: Endpoints.updateOtherDocsStatus(docId),
+        method: ApiMethodType.patch,
+        body: {
+          data: {
+            Docstatus: DocStatus,
+          },
+        },
+      }),
+    }),
+    getEmployeeJobsHistory: builder.query<
+      any,
+      { id: number; pageNumber: number }
+    >({
+      query: ({ id, pageNumber }) => ({
+        url: Endpoints.getEmployeeJobHistory(id, pageNumber),
+        method: ApiMethodType.get,
+      }),
+
+      // transformResponse: (response: IGetEmployeeJobsHistoryResponse) => {
+      //   return response.data.map((job: any) => ({
+      //     id: job.id,
+      //     jobTitle: job.attributes.jobTitle,
+      //     companyName: job.attributes.companyName,
+      //     startDate: job.attributes.startDate,
+      //     endDate: job.attributes.endDate,
+      //   }));
+      // },
+    }),
   }),
 });
 
@@ -168,6 +201,8 @@ export const {
   useLazyGetEmployeesQuery,
   useLazyGetEmployeeByIdQuery,
   useUpdateDocumentStatusMutation,
+  useLazyGetEmployeeJobsHistoryQuery,
+  useUpdateOtherDocumentStatusMutation,
 } = authApi;
 
 const addDocument = (
@@ -211,7 +246,7 @@ export const extractOtherDocumentsFromApiResponse = (
         {
           name: doc?.attributes?.name ?? '',
           id: doc?.id ?? 0,
-          docStatusKey: IEmployeeApiKeyStatus.SIN_DOCUMENT,
+          docStatusKey: IEmployeeApiKeyStatus.NULL,
           doc: {
             mime: doc?.attributes?.Document?.data?.attributes.mime ?? '',
             url: doc?.attributes?.Document?.data?.attributes.url ?? '',
@@ -236,7 +271,11 @@ export const extractEmployeeDocumentsFromApiResponse = (
   const documents: IEmployeeDocument[] = [];
   const employeeDetails = response.data.attributes;
 
-  if (employeeDetails && employeeDetails.sinDocument) {
+  if (
+    employeeDetails &&
+    employeeDetails.sinDocument &&
+    employeeDetails.sinDocument?.data?.id
+  ) {
     const sinDocument = addDocument(
       {
         name: STRINGS.sinDocument,
@@ -254,7 +293,11 @@ export const extractEmployeeDocumentsFromApiResponse = (
     );
     sinDocument && documents.push(sinDocument);
   }
-  if (employeeDetails && employeeDetails.govtid) {
+  if (
+    employeeDetails &&
+    employeeDetails.govtid &&
+    employeeDetails.govtid?.data?.id
+  ) {
     const govtID = addDocument(
       {
         name: STRINGS.Govt_ID,
@@ -272,7 +315,11 @@ export const extractEmployeeDocumentsFromApiResponse = (
     );
     govtID && documents.push(govtID);
   }
-  if (employeeDetails && employeeDetails.supportingDocument) {
+  if (
+    employeeDetails &&
+    employeeDetails.supportingDocument &&
+    employeeDetails.supportingDocument?.data?.id
+  ) {
     const supportingDocument = addDocument(
       {
         name: STRINGS.document,
@@ -293,18 +340,25 @@ export const extractEmployeeDocumentsFromApiResponse = (
     );
     supportingDocument && documents.push(supportingDocument);
   }
-
-  if (employeeDetails && employeeDetails.securityDocumentAdv) {
+  if (
+    employeeDetails &&
+    employeeDetails.securityDocumentAdv &&
+    employeeDetails.securityDocumentAdv?.data?.id
+  ) {
     const securityDocumentAdv = addDocument(
       {
         name: STRINGS.license_advance,
-        id: employeeDetails.securityDocumentAdv.data.id,
+        id: employeeDetails?.securityDocumentAdv?.data?.id ?? 0,
         docStatusKey: IEmployeeApiKeyStatus.LICENSE_ADVANCE,
         doc: {
-          mime: employeeDetails.securityDocumentAdv.data.attributes?.mime ?? '',
-          url: employeeDetails.securityDocumentAdv.data.attributes?.url ?? '',
-          size: employeeDetails.securityDocumentAdv.data.attributes?.size ?? 0,
-          name: employeeDetails.securityDocumentAdv.data.attributes?.name ?? '',
+          mime:
+            employeeDetails?.securityDocumentAdv?.data?.attributes?.mime ?? '',
+          url:
+            employeeDetails?.securityDocumentAdv?.data?.attributes?.url ?? '',
+          size:
+            employeeDetails?.securityDocumentAdv?.data?.attributes?.size ?? 0,
+          name:
+            employeeDetails?.securityDocumentAdv?.data?.attributes?.name ?? '',
         },
         key: IEmployeeDocsApiKeys.LICENSE_ADVANCE,
       },
@@ -312,21 +366,28 @@ export const extractEmployeeDocumentsFromApiResponse = (
     );
     securityDocumentAdv && documents.push(securityDocumentAdv);
   }
-  if (employeeDetails && employeeDetails.securityDocumentBasic) {
+  if (
+    employeeDetails &&
+    employeeDetails.securityDocumentBasic &&
+    employeeDetails.securityDocumentBasic?.data?.id
+  ) {
     const securityDocumentBasic = addDocument(
       {
-        name: STRINGS.license_advance,
+        name: STRINGS.license_basic,
 
-        id: employeeDetails.securityDocumentBasic.data.id,
+        id: employeeDetails?.securityDocumentBasic?.data?.id ?? 0,
         docStatusKey: IEmployeeApiKeyStatus.LICENSE_BASIC,
         doc: {
           mime:
-            employeeDetails.securityDocumentBasic.data.attributes?.mime ?? '',
-          url: employeeDetails.securityDocumentBasic.data.attributes?.url ?? '',
+            employeeDetails?.securityDocumentBasic?.data?.attributes?.mime ??
+            '',
+          url:
+            employeeDetails?.securityDocumentBasic?.data?.attributes?.url ?? '',
           size:
-            employeeDetails.securityDocumentBasic.data.attributes?.size ?? 0,
+            employeeDetails?.securityDocumentBasic?.data?.attributes?.size ?? 0,
           name:
-            employeeDetails.securityDocumentBasic.data.attributes?.name ?? '',
+            employeeDetails?.securityDocumentBasic?.data?.attributes?.name ??
+            '',
         },
         key: IEmployeeDocsApiKeys.LICENSE_ADVANCE,
       },

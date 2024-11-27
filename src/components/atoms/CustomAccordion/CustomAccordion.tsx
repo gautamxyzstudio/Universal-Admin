@@ -9,6 +9,7 @@ const CustomAccordion: React.FC<IAccordion> = ({
 }) => {
   return (
     <Accordion
+      slotProps={{ transition: { unmountOnExit: true } }}
       style={{
         boxShadow: 'none',
         backgroundColor: 'transparent',
@@ -18,14 +19,29 @@ const CustomAccordion: React.FC<IAccordion> = ({
     >
       <AccordionSummary
         sx={{
-          padding: 0,
-          height: 58,
+          margin: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          '&.Mui-expanded': {
+            minHeight: '48px',
+          },
+          '.MuiAccordionSummary-content.Mui-expanded': {
+            margin: 0,
+          },
         }}
         expandIcon={<ExpandMoreIcon />}
       >
         {title}
       </AccordionSummary>
-      <AccordionDetails>{description}</AccordionDetails>
+      <AccordionDetails
+        sx={{
+          '&.MuiAccordionSummary-content': {
+            margin: 0,
+          },
+        }}
+      >
+        {description}
+      </AccordionDetails>
     </Accordion>
   );
 };

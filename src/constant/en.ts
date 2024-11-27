@@ -120,4 +120,6 @@ export const STRINGS = {
   license_basic: 'Security license basic',
   bankDetails: 'Bank Details',
   profileHistory: 'Profile History',
+  mandatoryDoc: 'Mandatory documents',
+  otherDoc: 'Other documents',
 };

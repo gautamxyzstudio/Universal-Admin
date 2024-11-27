@@ -13,6 +13,7 @@ export enum IDocumentStatus {
   DENIED = 's2',
   UPDATE = 's3',
   HIDDEN = 's4',
+  VERIFIED = 's5',
 }
 
 export enum IClientStatus {
@@ -59,4 +60,5 @@ export enum IEmployeeApiKeyStatus {
   SUPPORTING_DOCUMENT = 'supportingDocumentStatus',
   GOVT_ID = 'govtidStaus',
   CHEQUE = 'directDepositVoidChequeStatus',
+  NULL = 'null',
 }

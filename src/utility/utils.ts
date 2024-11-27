@@ -110,6 +110,8 @@ export const getDocumentStatusTextByStatus = (status: IDocumentStatus) => {
       return 'Approved';
     case IDocumentStatus.DENIED:
       return 'Denied';
+    case IDocumentStatus.VERIFIED:
+      return 'Verified';
     default:
       return 'Pending';
   }
@@ -125,6 +127,8 @@ export const getDocumentStatusColor = (status: IDocumentStatus) => {
       return '#C11919';
     case IDocumentStatus.UPDATE:
       return '#1985C1';
+    case IDocumentStatus.VERIFIED:
+      return '#00B2D5';
     default:
       return '#FBC505';
   }

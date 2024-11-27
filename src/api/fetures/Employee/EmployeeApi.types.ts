@@ -124,6 +124,7 @@ export interface IGetEmployeeByIdResponse {
                           | {
                               data:
                                 | {
+                                    id: number;
                                     attributes: {
                                       url: string | null | undefined;
                                       mime: string | null | undefined;

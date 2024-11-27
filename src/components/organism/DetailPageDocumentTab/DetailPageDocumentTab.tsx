@@ -23,7 +23,7 @@ const DetailPageDocumentTab: React.FC<IDetailPageDocumentTab> = ({
       isSelected={isSelected}
       onPressButton={() => onPressTab(document)}
       content={
-        <div className=" w-full rounded-lg flex items-center justify-between">
+        <div className="py-3 w-full rounded-lg flex items-center justify-between">
           <div className="flex flex-row gap-x-4">
             <Image
               src={Icons.doc}
