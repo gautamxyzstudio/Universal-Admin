@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { ICustomErrorResponse } from '@/api/types';
-import moment from "moment"
+import { ICustomErrorResponse } from "@/api/types";
+import moment from "moment";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getCurrentYear = () => {
@@ -11,7 +11,7 @@ export const getCurrentYear = () => {
 export const withAsyncErrorHandlingPost = (
   fn: (...args: any[]) => Promise<any>,
   displaySnackbar?: (
-    type: 'success' | 'error' | 'warning',
+    type: "success" | "error" | "warning",
     message: string
   ) => void,
   onError?: (error: ICustomErrorResponse) => void
@@ -22,15 +22,15 @@ export const withAsyncErrorHandlingPost = (
     } catch (error) {
       const customError = error as ICustomErrorResponse;
       onError?.(customError);
-      displaySnackbar && displaySnackbar('error', customError.message);
-      console.error('An error occurred:', error);
+      displaySnackbar && displaySnackbar("error", customError.message);
+      console.error("An error occurred:", error);
       return undefined;
     }
   };
 };
 
 export const generateUniqueUserName = (email: string) => {
-  const frontPart = email.split('@')[0];
+  const frontPart = email.split("@")[0];
   const backPart = Math.random() * 10;
   return `${frontPart}${backPart.toFixed(0)}`;
 };
@@ -72,21 +72,23 @@ export const validatePhoneNumber = (number: string): boolean => {
 };
 
 export const splitRoute = (route: string) => {
-  const parts = route.split('/');
-  return parts[1] ?? '';
+  const parts = route.split("/");
+  return parts[1] ?? "";
 };
 
-export const formatDateFromNow = (date: string | Date |undefined) => {
+export const formatDateFromNow = (date: string | Date | undefined) => {
   return moment(date).fromNow();
 };
 
-export const dateFormat = (date: string | Date)=>{
-  return moment(date).format('DD-MM-YYYY');
-}
-export const dateMonthFormat = (date: string | Date)=>{
-  return moment(date).format('D MMM,YYYY');
-}
+export const dateFormat = (date: string | Date) => {
+  return moment(date).format("DD-MM-YYYY");
+};
+export const dateMonthFormat = (date: string | Date, locale: string = "en") => {
+  const validDate = moment(date);
+  return validDate.locale(locale).format("D MMM,YYYY");
+};
 
-export const timeFormat = (date: string | Date)=>{
-  return moment(date).format('h:mm A');
-}
+export const timeFormat = (date: string | Date, locale: string = "en") => {
+  const validDate = moment(date);
+  return validDate.locale(locale).format("h:mm A");
+};

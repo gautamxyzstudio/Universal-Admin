@@ -17,7 +17,7 @@ import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
-import WorkHistoryCard from "@/components/organism/WorkHistoryCard/WorkHistoryCard";
+import JobPostCard from "@/components/organism/JobPostCard/JobPostCard";
 import { STRINGS } from "@/constant/en";
 import React, { useEffect, useState } from "react";
 import { Icons } from "../../../../../public/exporter";
@@ -65,6 +65,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     }
   };
 
+  // open job details
   const getOpenJobs = async () => {
     const response = await fetchOpenJobs(params.companyDetails).unwrap();
     if (response && response.data) {
@@ -75,6 +76,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     }
   };
 
+  // closed job details
   const getClosedJob = async () => {
     const response = await fetchClosedJobs(params.companyDetails).unwrap();
     if (response && response.data) {
@@ -85,13 +87,21 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     }
   };
 
+  // UseEffect to load the data
+  useEffect(() => {
+    if (params.companyDetails) {
+      getOpenJobs();
+      getClosedJob();
+    }
+  }, [params.companyDetails]);
+
   // Map the job data to CustomList items
   const mapJobData = (jobData) => {
     return jobData?.map((data) => {
       return {
         children: (
-          <WorkHistoryCard
-            postbyName={data.client_details?.Name || ""}
+          <JobPostCard
+            postByName={data.client_details?.Name || ""}
             profileName={data.job_name}
             days={data.eventDate}
             image={data.client_details?.company_detail?.companylogo?.url}
@@ -199,8 +209,6 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     if (params.companyDetails) {
       getCompanyDetails();
       getCompanyClients();
-      getOpenJobs();
-      getClosedJob();
     }
   }, [params.companyDetails]);
 

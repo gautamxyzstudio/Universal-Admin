@@ -2,12 +2,12 @@ import React from "react";
 import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 import IconWithText from "@/components/molecules/IconWithText/IconWithText";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import { IWorkHistoryCardProps } from "./WorkHIstoryCard.types";
+import { IJobPostCardProps } from "./JobPostCard";
 
-const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
+const JobPostCard: React.FC<IJobPostCardProps> = ({
   companyName,
   profileName,
-  postbyName,
+  postByName,
   days,
   image,
   textLabel,
@@ -23,10 +23,10 @@ const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
           nameStyle="font-bold"
           imageStyle="!w-9 !h-9"
           companyName={companyName}
-          postby={postbyName}
+          postBy={postByName}
           days={days}
           companyNameStyle="text-disable text-[14px] leading-[18px]"
-          postbyStyle="text-disable text-[14px] leading-[18px]"
+          postByStyle="text-disable text-[14px] leading-[18px]"
         />
         <TextWithBgColor
           textLabel={textLabel}
@@ -47,4 +47,4 @@ const WorkHistoryCard: React.FC<IWorkHistoryCardProps> = ({
   );
 };
 
-export default WorkHistoryCard;
+export default JobPostCard;

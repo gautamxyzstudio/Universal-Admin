@@ -4,13 +4,13 @@ import {
   IEditJobPostState,
   IJobPostEditFromProps,
   JobPostStateFields,
-} from "./index.types";
+} from "./JobPostEditFrom.types";
 import FormDrawer from "@/components/molecules/DrawerTypes/FormDrawer/FormDrawer";
 import { STRINGS } from "@/constant/en";
 import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import FormTextInput from "@/components/molecules/InputTypes/FormTextInput/FormTextInput";
-import EditorDialog from "./EditorDialog";
-import { IJobTypesEnum } from "@/constant/enums";
+import EditorDialog from "../../molecules/DialogTypes/EditorDialog/EditorDialog";
+import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
 import { getJobType } from "@/constant/constant";
 import CustomSelectInput from "@/components/molecules/InputTypes/SelectInput/CustomSelectInput";
 import DatePickerComponent from "./DatePickerComponent";
@@ -20,7 +20,7 @@ import { InputAdornment } from "@mui/material";
 import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
 import { useSnackBarContext } from "@/providers/SnackbarProvider";
 import { ICustomErrorResponse } from "@/api/types";
-import { useUpdateJobPostMutation } from "@/api/fetures/JobPost/JobPostApi";
+import { useUpdateJobPostMutation } from "@/api/fetures/Company/CompanyApi";
 
 const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   show,
@@ -40,18 +40,19 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     jobName: "",
     jobDescription: "",
     jobDuties: "",
-    jobType: "",
-    eventDate: "",
-    startShift: "",
-    endShift: "",
+    jobType: IJobTypesEnum.EVENT,
+    eventDate: new Date(),
+    startShift: new Date(),
+    endShift: new Date(),
     location: "",
     address: "",
     city: "",
     postalCode: "",
-    requiredEmployee: "",
+    requiredEmployee: 0,
     salary: "",
-    requiredCertificates: "",
+    requiredCertificates: [],
     gender: "",
+    status: IJobPostStatus.OPEN,
   };
 
   const [state, setState] = useReducer(
@@ -83,14 +84,11 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
         address: currentPost.address,
         city: currentPost.city,
         postalCode: currentPost.postalCode,
-        requiredEmployee: currentPost.requiredEmployee
-          ? currentPost.requiredEmployee.toLocaleString()
-          : "",
+        requiredEmployee: currentPost.requiredEmployee,
         salary: currentPost.salary,
-        requiredCertificates: currentPost.required_certificates
-          ? currentPost.required_certificates.toLocaleString()
-          : "",
+        requiredCertificates: currentPost.required_certificates,
         gender: currentPost.gender,
+        status: currentPost.status,
       });
     }
   }, [currentPost]);
@@ -115,30 +113,24 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
       if (id) {
         try {
           changeLoaderState(true);
-          onPressEditCross();
           const updatedJobPostResponse = await updateJobPost({
             jobPostId: id,
             jobPostDetails: {
-              data: {
-                job_name: state.jobName,
-                description: state.jobDescription,
-                jobDuties: state.jobDuties,
-                job_type:
-                  state.jobType === "Event"
-                    ? IJobTypesEnum.EVENT
-                    : IJobTypesEnum.STATIC,
-                eventDate: new Date(state.eventDate),
-                startShift: new Date(state.startShift),
-                endShift: new Date(state.endShift),
-                location: state.location,
-                address: state.address,
-                city: state.city,
-                postalCode: state.postalCode,
-                requiredEmployee: parseInt(state.requiredEmployee),
-                salary: state.salary,
-                required_certificates: [state.requiredCertificates],
-                gender: state.gender,
-              },
+              job_name: state.jobName,
+              description: state.jobDescription,
+              jobDuties: state.jobDuties,
+              job_type: state.jobType,
+              eventDate: state.eventDate,
+              startShift: state.startShift,
+              endShift: state.endShift,
+              location: state.location,
+              address: state.address,
+              city: state.city,
+              postalCode: state.postalCode,
+              requiredEmployee: state.requiredEmployee ?? 0,
+              salary: state.salary,
+              required_certificates: state.requiredCertificates,
+              gender: state.gender,
             },
           }).unwrap();
           if (updatedJobPostResponse) {
@@ -147,23 +139,22 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               job_name: state.jobName,
               description: state.jobDescription,
               jobDuties: state.jobDuties,
-              job_type:
-                state.jobType === "Event"
-                  ? IJobTypesEnum.EVENT
-                  : IJobTypesEnum.STATIC,
-              eventDate: new Date(state.eventDate),
-              startShift: new Date(state.startShift),
-              endShift: new Date(state.endShift),
+              job_type: state.jobType,
+              eventDate: state.eventDate,
+              startShift: state.startShift,
+              endShift: state.endShift,
               location: state.location,
               address: state.address,
               city: state.city,
               postalCode: state.postalCode,
-              requiredEmployee: parseInt(state.requiredEmployee),
+              requiredEmployee: state.requiredEmployee,
               salary: state.salary,
-              required_certificates: [state.requiredCertificates],
+              required_certificates: state.requiredCertificates,
               gender: state.gender,
+              status: state.status,
             });
-            displaySnackbar('success', "Job Post updated successfully")
+            displaySnackbar("success", "Job Post updated successfully");
+            onPressEditCross();
           }
         } catch (err) {
           const error = err as ICustomErrorResponse;
@@ -202,7 +193,8 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
 
   // Text field
   const onChangeTextField = (e: string, fieldName: string) => {
-    setState({ ...state, [fieldName]: e, [`${fieldName}Error`]: "" });
+    setState({ ...state, [fieldName]: e });
+    console.log(`onChangeDateTimeField ${fieldName} ${e}`);
   };
 
   // Date and time fields
@@ -210,7 +202,8 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     newValue: dayjs.Dayjs | null,
     fieldName: string
   ) => {
-    setState({ ...state, [fieldName]: newValue, [`${fieldName}Error`]: "" });
+    setState({ ...state, [fieldName]: newValue });
+    console.log(`onChangeDateTimeField ${fieldName} ${newValue}`);
   };
 
   return (

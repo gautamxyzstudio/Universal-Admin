@@ -1,5 +1,5 @@
 import { IJobPostTypes } from "@/api/fetures/Company/Company.types";
-import { IJobTypesEnum } from "@/constant/enums";
+import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
 
 export interface IJobPostEditFromProps {
   show: boolean;
@@ -8,33 +8,23 @@ export interface IJobPostEditFromProps {
   currentPost: IJobPostTypes | null;
 }
 
-export interface IEditorDialogProps {
-  open: boolean;
-  onClose:
-    | ((event: object, reason: "backdropClick" | "escapeKeyDown") => void)
-    | undefined;
-  data: string;
-  fieldName: string;
-  onClickBack: () => void;
-  onClickUpdate: (data: string, fieldName: string) => void;
-}
-
 export type IEditJobPostState = {
   jobName: string;
   jobDescription: string;
   jobDuties: string;
-  jobType: string | IJobTypesEnum;
-  eventDate: string | Date;
-  startShift: string | Date;
-  endShift: string | Date;
+  jobType: IJobTypesEnum;
+  eventDate: Date;
+  startShift: Date;
+  endShift: Date;
   location: string;
   address: string;
   city: string;
   postalCode: string;
-  requiredEmployee: string;
+  requiredEmployee: number | undefined;
   salary: string;
-  requiredCertificates: string;
+  requiredCertificates: string[] | null;
   gender: string;
+  status: IJobPostStatus;
 };
 
 export enum JobPostStateFields {

@@ -146,7 +146,7 @@ export interface IJobPostTypes {
   eventDate: Date;
   endShift: Date;
   requiredEmployee?: number;
-  status?: IJobPostStatus;
+  status: IJobPostStatus;
   startShift: Date;
   client_details?: {
     id: number;
@@ -247,5 +247,23 @@ export type IGetCompanyClientResponse = {
   company_details: {
     Industry: string | null | undefined;
     companyname: string | null | undefined;
-  }
+  };
 }[];
+
+export interface IAddNewJobPostRequest {
+  job_name: string;
+  required_certificates: string[] | null;
+  city: string;
+  address: string;
+  postalCode: string;
+  gender: string;
+  eventDate: Date;
+  salary: string;
+  jobDuties: string;
+  job_type: IJobTypesEnum;
+  location: string;
+  requiredEmployee: number;
+  startShift: Date;
+  endShift: Date;
+  description: string;
+}

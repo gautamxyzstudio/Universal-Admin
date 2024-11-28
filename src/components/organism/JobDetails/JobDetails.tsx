@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icons } from "../../../../public/exporter";
 import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 import { STRINGS } from "@/constant/en";
@@ -10,11 +10,18 @@ import { dateMonthFormat, timeFormat } from "@/utility/utils";
 import { getJobStatus, getJobType } from "@/constant/constant";
 import { IJobPostTypes } from "@/api/fetures/Company/Company.types";
 import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditForm";
+
 const JobDetails = ({ data }: { data: IJobPostTypes }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openFormDrawer, setOpenFormDrawer] = useState<boolean>(false);
+  const [jobPostDetails, setJobPostDetails] = useState<IJobPostTypes>();
   const [currentSelectPostCard, setCurrentSelectPostCard] =
     useState<IJobPostTypes | null>(null);
+
+  useEffect(() => {
+    setJobPostDetails(data);
+  }, [data]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,28 +35,35 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
     setAnchorEl(null);
     setOpenFormDrawer(true);
   };
+  const onPostEditHandler = (data: IJobPostTypes) => {
+    setJobPostDetails((prev) => ({ ...prev, ...data }));
+  };
 
   const statusStyle =
-   data.status === "s0"
+    jobPostDetails?.status === "s0"
       ? "text-green bg-statusLightGreen"
       : "text-red bg-lightRedSecondary";
   return (
     <>
-      {data && data !== null ? (
+      {jobPostDetails && jobPostDetails !== null ? (
         <div className="w-full h-fit">
           <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
             <UserNameWithImage
-              image={data.client_details?.company_detail?.companylogo?.url}
+              image={
+                jobPostDetails.client_details?.company_detail?.companylogo?.url
+              }
               containorStyle="!flex-col !items-start gap-y-3"
-              name={data.job_name}
+              name={jobPostDetails.job_name}
               imageStyle="!w-10 !h-10"
               nameStyle="font-bold !text-[24px] !leading-[28px]"
-              postBy={data.client_details?.Name}
+              postBy={jobPostDetails.client_details?.Name}
               postByStyle="text-disable !text-[16px] !leading-[20px]"
-              subText={data.notAccepting === false ? "" : STRINGS.notAccept}
+              subText={
+                jobPostDetails.notAccepting === false ? "" : STRINGS.notAccept
+              }
             />
             <div className="flex flex-col justify-between items-end text-[12px] leading-4 w-full">
-              {data.status === "s0" ? (
+              {jobPostDetails.status === "s0" ? (
                 <>
                   <IconButton
                     id="openMenu"
@@ -120,7 +134,7 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
 
               <div className="flex gap-x-1 w-full justify-end">
                 <TextWithBgColor
-                  textLabel={getJobStatus(data.status)}
+                  textLabel={getJobStatus(jobPostDetails.status)}
                   textStyle={statusStyle}
                 />
                 <TextWithBgColor
@@ -134,14 +148,14 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
             <TextGroup
               icon={Icons.event}
               title={STRINGS.jobType}
-              text={getJobType(data.job_type)}
+              text={getJobType(jobPostDetails.job_type)}
               divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-[136px]"
               textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
             />
             <TextGroup
               icon={Icons.dollar}
               title={STRINGS.wageRate}
-              text={data.salary + "$ /hr"}
+              text={jobPostDetails.salary + "$ /hr"}
               divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-[136px]"
               textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
             />
@@ -150,12 +164,14 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
               title={STRINGS.shiftTime}
               subTitle={STRINGS.date}
               text={
-                timeFormat(data.startShift) + " - " + timeFormat(data.endShift)
+                timeFormat(jobPostDetails.startShift) +
+                " - " +
+                timeFormat(jobPostDetails.endShift)
               }
               subText={
-                dateMonthFormat(data.startShift) +
+                dateMonthFormat(jobPostDetails.startShift) +
                 " - " +
-                dateMonthFormat(data.endShift)
+                dateMonthFormat(jobPostDetails.endShift)
               }
               divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-fit"
               textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
@@ -166,45 +182,43 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
               title={STRINGS.post_ID}
               titleStyle="!text-Black font-bold"
               textgroupStyle="flex justify-between w-full"
-              text={data.id}
+              text={jobPostDetails.id}
             />
             <TextGroup
               title={STRINGS.reqcandidate}
               titleStyle="!text-Black font-bold"
               textgroupStyle="flex justify-between w-full"
-              text={data.requiredEmployee}
+              text={jobPostDetails.requiredEmployee}
             />
-            {/* <TextGroup
-          title={STRINGS.yoe}
-          titleStyle="!text-Black font-bold"
-          textgroupStyle="flex justify-between w-full"
-          text={""}
-        /> */}
             <TextGroup
               title={STRINGS.gender}
               titleStyle="!text-Black font-bold"
               textgroupStyle="flex justify-between w-full"
-              text={data.gender}
+              text={jobPostDetails.gender}
             />
           </div>
           <div className="flex flex-col gap-y-4 text-[14px] leading-[18px] mt-6">
             <div className="flex flex-col gap-y-2">
               <span className="font-bold">{STRINGS.jobDes}</span>
-              <div dangerouslySetInnerHTML={{ __html: data.description }} />
+              <div
+                dangerouslySetInnerHTML={{ __html: jobPostDetails.description }}
+              />
             </div>
             <div className="flex flex-col gap-y-2">
               <span className="font-bold">{STRINGS.jobDuty}</span>
-              <div dangerouslySetInnerHTML={{ __html: data.jobDuties }} />
+              <div
+                dangerouslySetInnerHTML={{ __html: jobPostDetails.jobDuties }}
+              />
             </div>
             <div className="flex flex-col gap-y-2">
               <span className="font-bold">{STRINGS.address}</span>
-              <span>{data.location}</span>
+              <span>{jobPostDetails.location}</span>
             </div>
             <div className="flex flex-col gap-y-2">
               <span className="font-bold">{STRINGS.reqCert}</span>
               <span className="ml-2">
                 <ul className="list-inside list-disc">
-                  {data.required_certificates?.map((data, index) => (
+                  {jobPostDetails.required_certificates?.map((data, index) => (
                     <li key={index}>{data}</li>
                   ))}
                 </ul>
@@ -217,6 +231,7 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
       )}
       <JobPostEditForm
         show={openFormDrawer}
+        onPostEditHandler={onPostEditHandler}
         setGlobalModalState={(state) => setOpenFormDrawer(state)}
         currentPost={currentSelectPostCard}
       />

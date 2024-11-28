@@ -1,10 +1,9 @@
 import CustomDialog from "@/components/atoms/CustomDialog/CustomDialog";
 import React, { useEffect, useState } from "react";
-import { IEditorDialogProps, JobPostStateFields } from "./index.types";
+import { JobPostStateFields } from "../../../templates/JobPostEditForm/JobPostEditFrom.types";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 // Import the Froala Editor Stylesheet for displaying content outside the editor
 import "froala-editor/css/froala_style.min.css";
-
 // Import the Froala Editor Stylesheet
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
@@ -15,6 +14,7 @@ import "froala-editor/js/plugins/paragraph_format.min.js";
 import "froala-editor/js/plugins/quick_insert.min.js";
 import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import { STRINGS } from "@/constant/en";
+import { IEditorDialogProps } from "./EditorDialog.types";
 const EditorDialog: React.FC<IEditorDialogProps> = ({
   open,
   onClose,
@@ -27,7 +27,6 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
 
   useEffect(() => {
     setEditorData(data);
-    console.log("edit editor data", data);
   }, [data]);
 
   const configFroala = {
@@ -46,7 +45,6 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
   };
   const handleModelChange = (e: string) => {
     setEditorData(e);
-    console.log("editor data", e);
   };
 
   // Handle the update button click

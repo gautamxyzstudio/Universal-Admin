@@ -8,7 +8,7 @@ import CustomTab from "@/components/atoms/CustomTab/CustomTab";
 import CustomList from "@/components/atoms/CustomList/CustomList";
 import TextGroup from "@/components/organism/TextGroup/TextGroup";
 import DocumentCard from "@/components/organism/DocumentCard/DocumentCard";
-import WorkHistortyCard from "@/components/organism/WorkHistoryCard/WorkHistoryCard";
+import JobPostCard from "@/components/organism/JobPostCard/JobPostCard";
 import WorkDetails from "@/components/organism/WorkDetails/WorkDetails";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 
@@ -87,10 +87,10 @@ const EmployeeDetails = ({
   ];
 
   // Work History Contents
-  const workHistoryData = [
+  const JobPostData = [
     {
       children: (
-        <WorkHistortyCard
+        <JobPostCard
           companyName={"Cosmic Security"}
           profileName={"Security Guard"}
           image={Images.demoImg}
@@ -124,7 +124,7 @@ const EmployeeDetails = ({
     },
     {
       children: (
-        <WorkHistortyCard
+        <JobPostCard
           companyName={"Cosmic Security"}
           profileName={"Security Guard"}
           image={Images.demoImg}
@@ -158,7 +158,7 @@ const EmployeeDetails = ({
     },
     {
       children: (
-        <WorkHistortyCard
+        <JobPostCard
           companyName={"Cosmic Security"}
           profileName={"Security Guard"}
           image={Images.demoImg}
@@ -261,7 +261,7 @@ const EmployeeDetails = ({
     },
     {
       label: "Work history",
-      content: <CustomList items={workHistoryData} />,
+      content: <CustomList items={JobPostData} />,
       onClickAction: () => {
         console.log("Work Content");
         setSelectedItem(<WorkDetails />);
