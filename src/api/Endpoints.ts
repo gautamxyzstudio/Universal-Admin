@@ -27,6 +27,7 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Openjob/${detailsId}?sort=id:desc`,
   getClosedJobPost: (detailsId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/find-Closejob/${detailsId}?sort=id:desc`,
+  updateJobPost: (jobPostId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/${jobPostId}`,
   getCompanyClients : (companyId: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details/${companyId}/clients?populate=*&sort=id:desc`,
   getClientDetails: (client_id: number) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/client-details/${client_id}?sort=id:desc`,
   getPostJobsByClient: (client_id: number, page: number, perPage:number ) => `${process.env.NEXT_PUBLIC_BASE_URL}/api/jobs/client/${client_id}?populate=*&sort=id:desc&page=${page}&pageSize=${perPage}`,

@@ -17,16 +17,24 @@ import DatePickerComponent from "./DatePickerComponent";
 import dayjs from "dayjs";
 import TimePickerComponent from "./TimePickerComponent";
 import { InputAdornment } from "@mui/material";
+import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
+import { useSnackBarContext } from "@/providers/SnackbarProvider";
+import { ICustomErrorResponse } from "@/api/types";
+import { useUpdateJobPostMutation } from "@/api/fetures/JobPost/JobPostApi";
 
 const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   show,
   setGlobalModalState,
+  onPostEditHandler,
   currentPost,
 }) => {
   const [displayFrom, setDisplayFrom] = useState(show);
   const [showEditorDialog, setShowEditorDialog] = useState<boolean>(false);
   const [editData, setEditData] = useState<string>("");
-  const [fieldToEdit, setFieldToEdit] = useState<string>('');
+  const [fieldToEdit, setFieldToEdit] = useState<string>("");
+  const { changeLoaderState } = useShowLoaderContext();
+  const { displaySnackbar } = useSnackBarContext();
+  const [updateJobPost] = useUpdateJobPostMutation();
 
   const initialState = {
     jobName: "",
@@ -80,7 +88,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
           : "",
         salary: currentPost.salary,
         requiredCertificates: currentPost.required_certificates
-          ? currentPost.required_certificates
+          ? currentPost.required_certificates.toLocaleString()
           : "",
         gender: currentPost.gender,
       });
@@ -101,15 +109,78 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     setDisplayFrom(false);
     setGlobalModalState(false);
   };
-  const onPressSave = () => {
-    setDisplayFrom(false);
-    setGlobalModalState(false);
+  const onPressSave = async () => {
+    if (currentPost) {
+      const { id } = currentPost;
+      if (id) {
+        try {
+          changeLoaderState(true);
+          onPressEditCross();
+          const updatedJobPostResponse = await updateJobPost({
+            jobPostId: id,
+            jobPostDetails: {
+              data: {
+                job_name: state.jobName,
+                description: state.jobDescription,
+                jobDuties: state.jobDuties,
+                job_type:
+                  state.jobType === "Event"
+                    ? IJobTypesEnum.EVENT
+                    : IJobTypesEnum.STATIC,
+                eventDate: new Date(state.eventDate),
+                startShift: new Date(state.startShift),
+                endShift: new Date(state.endShift),
+                location: state.location,
+                address: state.address,
+                city: state.city,
+                postalCode: state.postalCode,
+                requiredEmployee: parseInt(state.requiredEmployee),
+                salary: state.salary,
+                required_certificates: [state.requiredCertificates],
+                gender: state.gender,
+              },
+            },
+          }).unwrap();
+          if (updatedJobPostResponse) {
+            onPostEditHandler({
+              id,
+              job_name: state.jobName,
+              description: state.jobDescription,
+              jobDuties: state.jobDuties,
+              job_type:
+                state.jobType === "Event"
+                  ? IJobTypesEnum.EVENT
+                  : IJobTypesEnum.STATIC,
+              eventDate: new Date(state.eventDate),
+              startShift: new Date(state.startShift),
+              endShift: new Date(state.endShift),
+              location: state.location,
+              address: state.address,
+              city: state.city,
+              postalCode: state.postalCode,
+              requiredEmployee: parseInt(state.requiredEmployee),
+              salary: state.salary,
+              required_certificates: [state.requiredCertificates],
+              gender: state.gender,
+            });
+            displaySnackbar('success', "Job Post updated successfully")
+          }
+        } catch (err) {
+          const error = err as ICustomErrorResponse;
+          displaySnackbar("error", error.message);
+        } finally {
+          changeLoaderState(false);
+        }
+      } else {
+        displaySnackbar("error", "Failed to update job post");
+      }
+    }
   };
 
   // Triggered when job description is clicked to edit
-  const OnClickReadMore = (data: string,fieldName: string) => {
+  const OnClickReadMore = (data: string, fieldName: string) => {
     setEditData(data);
-    setFieldToEdit(fieldName); 
+    setFieldToEdit(fieldName);
     setShowEditorDialog(true);
     setDisplayFrom(false);
   };
@@ -142,8 +213,6 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     setState({ ...state, [fieldName]: newValue, [`${fieldName}Error`]: "" });
   };
 
-  
-
   return (
     <>
       <FormDrawer
@@ -172,10 +241,14 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative">
                 <div
                   className="cursor-pointer"
-                  onClick={() => OnClickReadMore(state.jobDescription, JobPostStateFields.JOB_DESCRIPTION)}
+                  onClick={() =>
+                    OnClickReadMore(
+                      state.jobDescription,
+                      JobPostStateFields.JOB_DESCRIPTION
+                    )
+                  }
                   dangerouslySetInnerHTML={{
-                    __html:
-                      state.jobDescription.slice(0, 100) + ReadMore,
+                    __html: state.jobDescription.slice(0, 100) + ReadMore,
                   }}
                 />
                 <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
@@ -186,7 +259,12 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               <div className="border border-textFieldBorder rounded-lg py-[16.5px] px-[14px] relative">
                 <div
                   className="cursor-pointer"
-                  onClick={() => OnClickReadMore(state.jobDuties, JobPostStateFields.JOB_DUTIES)}
+                  onClick={() =>
+                    OnClickReadMore(
+                      state.jobDuties,
+                      JobPostStateFields.JOB_DUTIES
+                    )
+                  }
                   dangerouslySetInnerHTML={{
                     __html: state.jobDuties.slice(0, 100) + ReadMore,
                   }}
@@ -287,13 +365,13 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               />
               <FormTextInput
                 value={state.salary}
-                slotProps={
-                  {
-                    input: {
-                      startAdornment: (<InputAdornment position="start">$</InputAdornment>)
-                    }
-                  }
-                }
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">$</InputAdornment>
+                    ),
+                  },
+                }}
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.SALARY)
                 }
@@ -313,7 +391,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
         </div>
         <div className="px-6 pt-4 z-10 fixed w-[30%] bg-white bottom-0 shadow-custom-shadow">
           <CustomButton
-            title={STRINGS.save}
+            title={STRINGS.update}
             onClick={onPressSave}
             fullWidth
             buttonType={"primary-small"}
@@ -354,4 +432,4 @@ export const genderPreferences = [
   { itemLabel: "Other", itemValue: "Other" },
 ];
 
-export const ReadMore:string = `<span style="color:#FF7312; font-size: 16px; cursor:pointer">...Read more</span>`;
+export const ReadMore: string = `<span style="color:#FF7312; font-size: 16px; cursor:pointer">...Read more</span>`;

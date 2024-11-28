@@ -140,13 +140,13 @@ export interface IJobPostTypes {
   notAccepting?: boolean;
   jobDuties: string;
   job_type: IJobTypesEnum;
-  publishedAt: Date;
+  publishedAt?: Date;
   location: string;
   description: string;
   eventDate: Date;
   endShift: Date;
   requiredEmployee?: number;
-  status: IJobPostStatus;
+  status?: IJobPostStatus;
   startShift: Date;
   client_details?: {
     id: number;
