@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
-import DataTable from '@/components/atoms/DataTable/DataTable';
-import { STRINGS } from '@/constant/en';
-import React, { useEffect, useState } from 'react';
-import { Images } from '../../../../public/exporter';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import TableFilter from '@/components/molecules/TableFilter/TableFilter';
-import { docStatus, workStatus } from './types';
-import { useGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
-import ExportButton from '@/components/molecules/ButtonTypes/ExportButton/ExportButton';
-import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import { useRouter } from 'next/navigation';
-import { IEmployeeBasic } from '@/api/fetures/Employee/EmployeeApi.types';
-import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
+"use client";
+import DataTable from "@/components/atoms/DataTable/DataTable";
+import { STRINGS } from "@/constant/en";
+import React, { useEffect, useState } from "react";
+import { Images } from "../../../../public/exporter";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import PageHeader from "@/components/organism/PageHeader/PageHeader";
+import TableFilter from "@/components/molecules/TableFilter/TableFilter";
+import { docStatus, workStatus } from "./types";
+import { useGetEmployeesQuery } from "@/api/fetures/Employee/EmployeeApi";
+import ExportButton from "@/components/molecules/ButtonTypes/ExportButton/ExportButton";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import { useRouter } from "next/navigation";
+import { IEmployeeBasic } from "@/api/fetures/Employee/EmployeeApi.types";
+import ContactDetails from "@/components/molecules/ContactDetails/ContactDetails";
 
 const EmployeeManagement = () => {
   const { data, isLoading, error } = useGetEmployeesQuery(null);
@@ -21,8 +21,6 @@ const EmployeeManagement = () => {
   const [employees, setEmployees] = useState<IEmployeeBasic[]>(
     data?.employees ?? []
   );
-
-  console.log(data,'EMPLOYEE DETAILS')
 
   useEffect(() => {
     if (data) {
@@ -36,12 +34,12 @@ const EmployeeManagement = () => {
 
   const columns: GridColDef[] = [
     {
-      field: 'name',
-      headerName: 'Employee Name',
+      field: "name",
+      headerName: "Employee Name",
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
         <UserNameWithImage
-          type={'white'}
+          type={"white"}
           imageStyle="!w-8 !h-8 object-cover"
           name={params.row.name}
           image={params.row.selfie}
@@ -49,43 +47,43 @@ const EmployeeManagement = () => {
       ),
     },
     {
-      field: 'contact_details',
-      headerName: 'Contact Details',
+      field: "contact_details",
+      headerName: "Contact Details",
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
         <ContactDetails phone={params.row.phone} email={params.row.email} />
       ),
     },
     {
-      field: 'sinNo',
-      headerName: 'SIN Number',
+      field: "sinNo",
+      headerName: "SIN Number",
       width: 180,
     },
     {
-      field: 'gender',
-      headerName: 'Gender',
+      field: "gender",
+      headerName: "Gender",
       width: 104,
     },
     {
-      field: 'workStatus',
-      headerName: 'Work Status',
+      field: "workStatus",
+      headerName: "Work Status",
       width: 104,
     },
     {
-      field: 'docStatus',
-      headerName: 'Document Status',
+      field: "docStatus",
+      headerName: "Document Status",
       width: 130,
       renderCell: (params: GridRenderCellParams) => {
         const status =
           params.row.document_status === STRINGS.approved
-            ? 'text-green'
-            : 'text-yellow';
+            ? "text-green"
+            : "text-yellow";
         return <span className={status}>{params.row?.docStatus}</span>;
       },
     },
     {
-      field: 'action',
-      headerName: 'Action',
+      field: "action",
+      headerName: "Action",
       width: 104,
       renderCell: () => {
         return <span className="text-primary">{STRINGS.view}</span>;
@@ -139,7 +137,7 @@ const EmployeeManagement = () => {
         isLoading={isLoading}
         tableHeightPercent={90}
         emptyViewTitle={STRINGS.noEmployees}
-        emptyViewSubTitle={''}
+        emptyViewSubTitle={""}
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={employees.length === 0}

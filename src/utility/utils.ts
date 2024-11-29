@@ -77,18 +77,18 @@ export const splitRoute = (route: string) => {
 };
 
 export const formatDateFromNow = (date: string | Date | undefined) => {
-  return moment(date).fromNow();
+  return moment.utc(date).fromNow();
 };
 
 export const dateFormat = (date: string | Date) => {
-  return moment(date).format("DD-MM-YYYY");
+  return moment.utc(date).format("DD-MM-YYYY");
 };
-export const dateMonthFormat = (date: string | Date, locale: string = "en") => {
-  const validDate = moment(date);
-  return validDate.locale(locale).format("D MMM,YYYY");
+export const dateMonthFormat = (date: string | Date) => {
+  const validDate = moment.utc(date);
+  return validDate.format("D MMM,YYYY");
 };
 
-export const timeFormat = (date: string | Date, locale: string = "en") => {
-  const validDate = moment(date);
-  return validDate.locale(locale).format("h:mm A");
+export const timeFormat = (date: string | Date) => {
+  const validDate = moment.utc(date);
+  return validDate.format("h:mm A");
 };

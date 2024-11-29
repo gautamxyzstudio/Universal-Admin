@@ -22,8 +22,10 @@ import JobPostCard from "@/components/organism/JobPostCard/JobPostCard";
 import { getJobType } from "@/constant/constant";
 import { Icons } from "../../../../../public/exporter";
 import CustomList from "@/components/atoms/CustomList/CustomList";
-import { IJobPostCustomizedResponse, IJobPostTypes } from "@/api/fetures/Company/Company.types";
-import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditForm";
+import {
+  IJobPostCustomizedResponse,
+  IJobPostTypes,
+} from "@/api/fetures/Company/Company.types";
 
 const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   const { data, refetch } = useGetClientDetailsQuery(params.clientDetails);
@@ -39,7 +41,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   const [jobPosts, setJobPosts] = useState<IJobPostCustomizedResponse | null>(
     null
   );
-  
+
   // Update status when data changes
   useEffect(() => {
     if (data?.status) {
@@ -87,10 +89,9 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
     }
   };
 
-  
   // Map the job data to CustomList items
   const mapJobData = (jobData) => {
-    return jobData?.map((data) => {
+    return jobData?.map((data: IJobPostTypes) => {
       return {
         children: (
           <JobPostCard
@@ -138,86 +139,86 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
 
   return (
     <>
-    <div className="w-full h-[90%]">
-      <PageSubHeader
-        pageTitle={STRINGS.clientManagement}
-        name={data?.name || ""}
-      />
-      <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
-        {/* Left Side */}
-        <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
-          {!data ? (
-            <>
-              <Skeleton variant="circular" width={56} height={56} />
-              <Skeleton variant="text" width="80%" height={40} />
-              <Skeleton variant="text" width="60%" height={20} />
-              <Skeleton variant="rectangular" width="100%" height={60} />
-              {/* Skeletons for Tabs */}
-              <Skeleton variant="rectangular" width="100%" height={40} />
-            </>
-          ) : (
-            <>
-              <div className="flex justify-between h-fit mb-3">
-                <UserNameWithImage
-                  name={data.name || ""}
-                  containorStyle="!text-[16px] !leading-[20px]"
-                  image={data.companyLogo}
-                  imageStyle="!w-14 !h-14"
-                  companyName={data.companyName || ""}
-                  companyNameStyle="!text-[14px] !leading-[18px] !w-fit"
-                  joinDate={dateMonthFormat(data.createdAt)}
-                />
-                <Switch
-                  checked={status === "s1" ? true : false}
-                  onChange={handleStatusChange}
-                  label={statusAttributes?.text}
-                  switchClassName={"justify-end !flex-col !w-fit"}
-                  className={` -mt-[10px] text-[8px] leading-3 ${statusAttributes?.styles}`}
-                />
-              </div>
+      <div className="w-full h-[90%]">
+        <PageSubHeader
+          pageTitle={STRINGS.clientManagement}
+          name={data?.name || ""}
+        />
+        <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
+          {/* Left Side */}
+          <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
+            {!data ? (
+              <>
+                <Skeleton variant="circular" width={56} height={56} />
+                <Skeleton variant="text" width="80%" height={40} />
+                <Skeleton variant="text" width="60%" height={20} />
+                <Skeleton variant="rectangular" width="100%" height={60} />
+                {/* Skeletons for Tabs */}
+                <Skeleton variant="rectangular" width="100%" height={40} />
+              </>
+            ) : (
+              <>
+                <div className="flex justify-between h-fit mb-3">
+                  <UserNameWithImage
+                    name={data.name || ""}
+                    containorStyle="!text-[16px] !leading-[20px]"
+                    image={data.companyLogo}
+                    imageStyle="!w-14 !h-14"
+                    companyName={data.companyName || ""}
+                    companyNameStyle="!text-[14px] !leading-[18px] !w-fit"
+                    joinDate={dateMonthFormat(data.createdAt)}
+                  />
+                  <Switch
+                    checked={status === "s1" ? true : false}
+                    onChange={handleStatusChange}
+                    label={statusAttributes?.text}
+                    switchClassName={"justify-end !flex-col !w-fit"}
+                    className={` -mt-[10px] text-[8px] leading-3 ${statusAttributes?.styles}`}
+                  />
+                </div>
 
-              <ContactDetailCard
-                email={data.email || ""}
-                phoneNumber={data.contactNo || ""}
-                address={data.location || ""}
-                department={data.industry || ""}
-              />
-              <CustomTab
-                tabs={tabsData}
-                TabIndicatorProps={{
-                  style: {
-                    height: "3px",
-                    borderTopRightRadius: "3px",
-                    borderTopLeftRadius: "3px",
-                  },
-                }}
-                sx={{
-                  "&": { paddingX: "12px", paddingTop: "4px" },
-                  ".MuiButtonBase-root": {
-                    fontSize: "16px",
-                    lineHeight: "20px",
-                    textTransform: "none",
-                  },
-                  ".MuiTabs-flexContainer": { gap: "10px" },
-                  ".Mui-selected": { fontWeight: "bold" },
-                }}
-              />
-            </>
-          )}
-        </div>
+                <ContactDetailCard
+                  email={data.email || ""}
+                  phoneNumber={data.contactNo || ""}
+                  address={data.location || ""}
+                  department={data.industry || ""}
+                />
+                <CustomTab
+                  tabs={tabsData}
+                  TabIndicatorProps={{
+                    style: {
+                      height: "3px",
+                      borderTopRightRadius: "3px",
+                      borderTopLeftRadius: "3px",
+                    },
+                  }}
+                  sx={{
+                    "&": { paddingX: "12px", paddingTop: "4px" },
+                    ".MuiButtonBase-root": {
+                      fontSize: "16px",
+                      lineHeight: "20px",
+                      textTransform: "none",
+                    },
+                    ".MuiTabs-flexContainer": { gap: "10px" },
+                    ".Mui-selected": { fontWeight: "bold" },
+                  }}
+                />
+              </>
+            )}
+          </div>
 
-        {/* Right Side */}
-        <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
-          {selectedItem ? (
-            selectedItem
-          ) : jobPosts && jobPosts.data ? (
-            <JobDetails data={jobPosts.data[0]}  />
-          ) : (
-            <Skeleton variant="rectangular" width="100%" height={500} />
-          )}
+          {/* Right Side */}
+          <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
+            {selectedItem ? (
+              selectedItem
+            ) : jobPosts && jobPosts.data ? (
+              <JobDetails data={jobPosts.data[0]} />
+            ) : (
+              <Skeleton variant="rectangular" width="100%" height={500} />
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

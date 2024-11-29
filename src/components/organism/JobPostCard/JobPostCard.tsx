@@ -2,7 +2,8 @@ import React from "react";
 import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 import IconWithText from "@/components/molecules/IconWithText/IconWithText";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import { IJobPostCardProps } from "./JobPostCard";
+import { IJobPostCardProps } from "./JobPostCard.types.";
+
 
 const JobPostCard: React.FC<IJobPostCardProps> = ({
   companyName,

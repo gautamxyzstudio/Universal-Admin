@@ -4,8 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
 import { SVGS } from "@/constant/staticSvgs";
-import 'dayjs/locale/en'
 import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 type ITimePickerComponentProps = {
   value: Date | string | null;
@@ -19,11 +21,11 @@ const TimePickerComponent: React.FC<ITimePickerComponentProps> = ({
   onChange,
 }) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en'>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DesktopTimePicker
-        ampm = {true}
+        ampm={true}
         label={label}
-        defaultValue={dayjs(value)}
+        value={dayjs.utc(value)}
         onChange={onChange}
         views={["hours", "minutes"]}
         slots={{ openPickerIcon: ClockIconComponent }}

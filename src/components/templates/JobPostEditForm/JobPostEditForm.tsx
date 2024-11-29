@@ -67,8 +67,6 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
     setDisplayFrom(show);
   }, [show]);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     if (currentPost) {
       setState({
@@ -218,7 +216,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
         }}
       >
         <div className="h-[90vh] overflow-scroll scrollbar-none">
-          <div className="px-6 pt-4 pb-6 flex h-[95%] overflow-scroll flex-col gap-y-4  scrollbar-none">
+          <div className="px-6 pt-4 pb-6 flex h-full overflow-scroll flex-col gap-y-4  scrollbar-none">
             {/* Details section */}
             <div className="flex flex-col gap-y-6">
               <h2 className="text-accentColor text-base">{STRINGS.details}</h2>
@@ -379,7 +377,8 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 }
                 menuItem={genderPreferences}
               />
-            </div>
+            </div> 
+            <div className="mt-6"/>
           </div>
         </div>
         <div className="px-6 pt-4 z-10 fixed w-[30%] bg-white bottom-0 shadow-custom-shadow">

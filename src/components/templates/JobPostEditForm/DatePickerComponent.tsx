@@ -5,7 +5,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { SVGS } from "@/constant/staticSvgs";
 import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
+import utc from "dayjs/plugin/utc";
 
+dayjs.extend(utc);
 type IDatePickerComponentProps = {
   value: Date | string | null;
   onChange: (newValue: dayjs.Dayjs | null) => void;
@@ -25,7 +27,7 @@ const DatePickerComponent: React.FC<IDatePickerComponentProps> = ({
           textField: { variant: "outlined", fullWidth: true },
         }}
         slots={{ openPickerIcon: CalendarComponent }}
-        value={dayjs(value)}
+        value={dayjs.utc(value)}
         onChange={onChange}
       />
     </LocalizationProvider>

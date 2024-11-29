@@ -140,7 +140,7 @@ export interface IJobPostTypes {
   notAccepting?: boolean;
   jobDuties: string;
   job_type: IJobTypesEnum;
-  publishedAt?: Date;
+  publishedAt?: Date | string;
   location: string;
   description: string;
   eventDate: Date;

@@ -5,7 +5,7 @@ export interface IJobPostCardProps {
   companyName?: string;
   postByName? : string;
   profileName: string;
-  days: Date;
+  days: Date | string;
   image: StaticImport | string | null | undefined;
   textLabel: string;
   textStyle: string;

@@ -144,7 +144,7 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
               </div>
             </div>
           </div>
-          <div className="flex gap-x-5 mt-4">
+          <div className="flex gap-x-5 mt-4 justify-between">
             <TextGroup
               icon={Icons.event}
               title={STRINGS.jobType}
@@ -168,11 +168,7 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
                 " - " +
                 timeFormat(jobPostDetails.endShift)
               }
-              subText={
-                dateMonthFormat(jobPostDetails.startShift) +
-                " - " +
-                dateMonthFormat(jobPostDetails.endShift)
-              }
+              subText={dateMonthFormat(jobPostDetails.startShift)}
               divStyle="bg-extraWhite border border-backgroundLight rounded py-[10px] px-2 w-fit"
               textgroupStyle="flex flex-col gap-y-[2px] text-[14px] leading-[18px]"
             />
@@ -229,12 +225,14 @@ const JobDetails = ({ data }: { data: IJobPostTypes }) => {
       ) : (
         <div className="w-full h-fit">{STRINGS.noJobs}</div>
       )}
-      <JobPostEditForm
-        show={openFormDrawer}
-        onPostEditHandler={onPostEditHandler}
-        setGlobalModalState={(state) => setOpenFormDrawer(state)}
-        currentPost={currentSelectPostCard}
-      />
+      {openFormDrawer && (
+        <JobPostEditForm
+          show={openFormDrawer}
+          onPostEditHandler={onPostEditHandler}
+          setGlobalModalState={(state) => setOpenFormDrawer(state)}
+          currentPost={currentSelectPostCard}
+        />
+      )}
     </>
   );
 };
