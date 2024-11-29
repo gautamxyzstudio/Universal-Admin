@@ -4,6 +4,7 @@ import React from "react";
 import ContactDetailCard from "../ContactDetailCard/ContactDetailCard";
 import TextGroup from "../TextGroup/TextGroup";
 import { STRINGS } from "@/constant/en";
+import { ITextGroupTypes } from "../TextGroup/TextGroup.types";
 
 const CompanyClientDetails = ({ data, image }) => {
   return (
@@ -13,6 +14,7 @@ const CompanyClientDetails = ({ data, image }) => {
           <UserNameWithImage
             name={data?.Name}
             image={image}
+            imageStyle="!w-14 !h-14"
             joinDate={dateMonthFormat(data?.publishedAt)}
           />
           <ContactDetailCard
@@ -23,12 +25,14 @@ const CompanyClientDetails = ({ data, image }) => {
             <TextGroup
               title={STRINGS.company}
               text={data?.company_detail?.companyname}
+              type={ITextGroupTypes.detailPage}
             />
             <TextGroup
               title={STRINGS.industry}
               text={data?.company_detail?.Industry}
+              type={ITextGroupTypes.detailPage}
             />
-            <TextGroup title={STRINGS.clientAddress} text={data?.location} />
+            <TextGroup title={STRINGS.clientAddress} text={data?.location}  type={ITextGroupTypes.detailPage} />
           </div>
         </div>
       ) : (

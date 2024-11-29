@@ -9,11 +9,14 @@ import { getJobStatus, getJobType } from '@/constant/constant';
 import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
 import CustomMenuComponent from '@/components/atoms/CustomMenuComponent/CustomMenuComponent';
 import { ITextGroupTypes } from '../TextGroup/TextGroup.types';
+import { IJobPostTypes } from '@/api/fetures/Company/Company.types';
 const JobDetails = ({
   data,
   isEmployee,
+
 }: {
-  data: IJobPost;
+  data: IJobPost 
+
   isEmployee: boolean;
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,7 +29,7 @@ const JobDetails = ({
   };
 
   const statusStyle =
-    getJobStatus(data.status) === 'Open'
+    getJobStatus(data?.status) === 'Open'
       ? 'text-green bg-statusLightGreen'
       : 'text-red bg-lightRedSecondary';
   return (
@@ -35,9 +38,9 @@ const JobDetails = ({
         <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
           <div className="flex-1">
             <UserNameWithImage
-              image={data.client_details.companylogo}
+              image={data.client_details?.companylogo }
               name={data.job_name}
-              companyName={data.client_details.companyname}
+              companyName={data.client_details.companyname }
               imageStyle="!w-14 !h-14"
               nameStyle="font-bold !text-[24px] !leading-[28px]"
               postby={data.client_details?.clientName}

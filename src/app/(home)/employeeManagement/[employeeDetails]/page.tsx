@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import PageSubHeader from '@/components/organism/PageSubHeader/PageSubHeader';
 import { STRINGS } from '@/constant/en';
