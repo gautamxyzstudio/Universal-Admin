@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import { STRINGS } from "@/constant/en";
 import React, { useCallback, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
@@ -10,7 +10,7 @@ import { useDemoData } from "@mui/x-data-grid-generator";
 import { ICompany } from "@/api/fetures/Company/Company.types";
 import IconWithText from "../IconWithText/IconWithText";
 import { Icons } from "../../../../public/exporter";
-import ConfirmationDialog from "../DialogTypes/ComfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../DialogTypes/ConfirmationDialog/ConfirmationDialog";
 
 const SelectedList: React.FC<ISelectedListProps> = ({
   lists,

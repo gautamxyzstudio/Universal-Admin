@@ -2,7 +2,7 @@
 'use client';
 import { useLoginMutation } from '@/api/fetures/Auth/AuthApis';
 import CustomInput from '@/components/atoms/CustomInput/CustomInput';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { STRINGS } from '@/constant/en';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { IUserCookies, saveUserDetailsInCookies } from '@/utility/cookies';

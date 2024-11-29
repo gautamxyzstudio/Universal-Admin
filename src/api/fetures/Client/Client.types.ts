@@ -143,7 +143,7 @@ export type IGetClientDetailsResponse = {
   };
 };
 
-export type IClientDetailsResposne = {
+export type IClientDetailsResponse = {
   id: number | null | undefined;
   name: string | null | undefined;
   location: string | null | undefined;

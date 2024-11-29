@@ -19,16 +19,16 @@ import { SxProps } from '@mui/material';
 import EmployeeJobsList from '../../employeeManagement/[employeeDetails]/LeftTabViewss/EmployeeJobsList';
 import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
 import JobDetails from '@/components/organism/JobDetails/JobDetails';
-import { IClientDetailsResposne } from '@/api/fetures/Client/Client.types';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { IClientDetailsResponse } from '@/api/fetures/Client/Client.types';
 // import { IClientDetailsResposne } from "@/api/fetures/Client/Client.types";
 
 const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   const { data, isFetching } = useGetClientDetailsQuery(params.clientDetails);
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
-  const [client, setClient] = useState<IClientDetailsResposne | null>(null);
+  const [client, setClient] = useState<IClientDetailsResponse | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [updateClientStatus, { isLoading }] = useChangeClientStatusMutation();
   const [clientJobs, setClientJobs] = useState<IJobPost[]>([]);

@@ -7,11 +7,11 @@ export interface IListItemProps {
   icon?: StaticImageData;
   status?: IDocumentStatus;
   onClick?: () => void;
-  docId?: number | null;
   children?: React.ReactNode;
 }
 
 export interface ICustomListProps {
   items?: IListItemProps[];
   noList?: React.ReactNode;
+  isLoading?: boolean;
 }

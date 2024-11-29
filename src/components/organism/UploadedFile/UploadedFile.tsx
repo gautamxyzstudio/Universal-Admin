@@ -1,4 +1,3 @@
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
 import { STRINGS } from '@/constant/en';
 import { MoreVertOutlined } from '@mui/icons-material';
 import { Fade, IconButton, Menu, MenuItem } from '@mui/material';
@@ -10,6 +9,7 @@ import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
 import { IDocumentStatus } from '@/constant/enums';
 import { getDocumentStatusTextByStatus } from '@/utility/utils';
 import { useDocumentExpandViewContext } from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 
 interface IUploadedFileProps {
   document: IEmployeeDocument;

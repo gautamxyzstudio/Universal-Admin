@@ -33,7 +33,9 @@ const CustomButton: React.FC<ICustomButtonProps> = ({
       loadingIndicator={<CircularProgress color="inherit" />}
       fullWidth={fullWidth}
       size={size}
-      sx={{ ...buttonStyles, cursor: "pointer" }}
+      sx={{ ...buttonStyles, cursor: "pointer", boxShadow: 'none',  '&:hover':{
+        boxShadow: 'none'
+      } }}
       onClick={onClick}
       {...props}
     >

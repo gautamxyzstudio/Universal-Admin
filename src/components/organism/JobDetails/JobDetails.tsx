@@ -147,7 +147,7 @@ const JobDetails = ({
               <span className="font-bold">{STRINGS.reqCert}</span>
               <span className="ml-2">
                 <ul className="list-inside list-disc">
-                  {data.required_certificates.map((data, index) => (
+                  {data.required_certificates?.map((data, index) => (
                     <li key={index}>{data}</li>
                   ))}
                 </ul>

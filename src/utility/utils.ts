@@ -81,17 +81,6 @@ export const formatDateFromNow = (date: string | Date | undefined) => {
   return moment(date).fromNow();
 };
 
-export const dateFormat = (date: string | Date) => {
-  return moment(date).format('D-MM-YYYY');
-};
-export const dateMonthFormat = (date: string | Date) => {
-  return moment(date).format('D MMM,YYYY');
-};
-
-export const timeFormat = (date: string | Date) => {
-  return moment(date).format('h:mm A');
-};
-
 export const getJobStatusTextByStatus = (status: IWorkStatus) => {
   switch (status) {
     case IWorkStatus.PART_TIME:
@@ -147,4 +136,17 @@ export const getJobStatusColor = (status: IJobPostStatus) => {
     default:
       return `text-red bg-lightRed`;
   }
+};
+
+export const dateFormat = (date: string | Date) => {
+  return moment.utc(date).format('DD-MM-YYYY');
+};
+export const dateMonthFormat = (date: string | Date) => {
+  const validDate = moment.utc(date);
+  return validDate.format('D MMM,YYYY');
+};
+
+export const timeFormat = (date: string | Date) => {
+  const validDate = moment.utc(date);
+  return validDate.format('h:mm A');
 };

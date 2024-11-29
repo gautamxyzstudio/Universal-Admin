@@ -19,6 +19,8 @@ const CustomDialog: React.FC<ICustomDialogProps> = ({
         ".mui-1edu3kt-MuiPaper-root-MuiDialog-paper": {
           borderRadius: 2,
           boxShadow: "none",
+          overflow: "scroll",
+          scrollbarWidth: "none",
         },
       }}
       open={open}

@@ -3,12 +3,17 @@ import { List, ListItemButton } from '@mui/material';
 import React from 'react';
 import { ICustomListProps } from './CustomList.types';
 import Image from 'next/image';
+import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
 import {
   getDocumentStatusColor,
   getDocumentStatusTextByStatus,
 } from '@/utility/utils';
 
-const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
+const CustomList: React.FC<ICustomListProps> = ({
+  items,
+  noList,
+  isLoading,
+}) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleListItemClick = (
@@ -72,7 +77,7 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
                       <div className="w-9 h-9 rounded-full flex items-center justify-center">
                         <Image
                           src={item.icon}
-                          alt="Document image"
+                          alt={item.label}
                           className="w-auto h-auto"
                         />
                       </div>
@@ -94,6 +99,11 @@ const CustomList: React.FC<ICustomListProps> = ({ items, noList }) => {
             </ListItemButton>
           ))
         : noList}
+      {isLoading ? (
+        <div className="w-full mt-2 flex justify-center items-center">
+          <ActivityIndicator size={36} />
+        </div>
+      ) : null}
     </List>
   );
 };

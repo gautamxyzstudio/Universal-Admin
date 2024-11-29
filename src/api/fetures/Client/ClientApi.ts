@@ -4,7 +4,7 @@ import { baseApi } from '@/api/BaseApi';
 import { Endpoints } from '@/api/Endpoints';
 import {
   IClient,
-  IClientDetailsResposne,
+  IClientDetailsResponse,
   ICustomizedGetClientResponse,
   ICustomizedGetClientsResponse,
   IGetClientDetailsResponse,
@@ -121,7 +121,7 @@ const clientApi = baseApi.injectEndpoints({
       }),
     }),
     changeClientStatus: builder.mutation<
-      IClientDetailsResposne,
+      IClientDetailsResponse,
       { clientId: number; status: IClientStatus }
     >({
       query: (body: { clientId: number; status: IClientStatus }) => ({
@@ -161,7 +161,7 @@ const clientApi = baseApi.injectEndpoints({
       }),
       transformResponse: (
         res: IGetClientDetailsResponse
-      ): IClientDetailsResposne => {
+      ): IClientDetailsResponse => {
         return {
           id: res.data?.id,
           name: res.data?.attributes?.Name,
@@ -186,7 +186,7 @@ const clientApi = baseApi.injectEndpoints({
     }),
     getPostedJobByClient: builder.query({
       query: ({ clientId, page }: { clientId: number; page: number }) => ({
-        url: Endpoints.getPostJobsByClient(clientId, page),
+        url: Endpoints.getPostJobsByClient(clientId, page, 10),
         method: ApiMethodType.get,
       }),
       transformResponse: (

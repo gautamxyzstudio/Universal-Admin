@@ -140,7 +140,7 @@ export interface IJobPostTypes {
   notAccepting?: boolean;
   jobDuties: string;
   job_type: IJobTypesEnum;
-  publishedAt: Date;
+  publishedAt?: Date | string;
   location: string;
   description: string;
   eventDate: Date;
@@ -247,5 +247,23 @@ export type IGetCompanyClientResponse = {
   company_details: {
     Industry: string | null | undefined;
     companyname: string | null | undefined;
-  }
+  };
 }[];
+
+export interface IAddNewJobPostRequest {
+  job_name: string;
+  required_certificates: string[] | null;
+  city: string;
+  address: string;
+  postalCode: string;
+  gender: string;
+  eventDate: Date;
+  salary: string;
+  jobDuties: string;
+  job_type: IJobTypesEnum;
+  location: string;
+  requiredEmployee: number;
+  startShift: Date;
+  endShift: Date;
+  description: string;
+}

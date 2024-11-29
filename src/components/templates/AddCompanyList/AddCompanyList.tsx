@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import VirtualList from "@/components/molecules/VirtualList/VirtualList";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import CustomButton from "@/components/atoms/CutomButton/CustomButton";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
 import _ from "lodash";
 import IconWithText from "@/components/molecules/IconWithText/IconWithText";
 import { IAddCompanyListProps } from "./AddCompanyList.types";

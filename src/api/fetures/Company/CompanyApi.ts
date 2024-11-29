@@ -4,6 +4,7 @@ import { Endpoints } from "@/api/Endpoints";
 import {
   IAddANewCompanyRequest,
   IAddNewCompanyResponse,
+  IAddNewJobPostRequest,
   ICompany,
   ICompanyDetails,
   IGetCompaniesCustomizedResponse,
@@ -15,7 +16,6 @@ import {
   IPostedJobsResponse,
 } from "./Company.types";
 import { createImageUrl } from "@/utility/cookies";
-import { IJobPostStatus } from "@/constant/enums";
 
 const companiesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -105,7 +105,7 @@ const companiesApi = baseApi.injectEndpoints({
               data.push({
                 ...job,
                 id: job.id,
-                status: IJobPostStatus.OPEN,
+                status: job.status,
                 notAccepting: job?.notAccepting ?? false,
                 client_details: job.client_details
                   ? {
@@ -173,7 +173,7 @@ const companiesApi = baseApi.injectEndpoints({
               data.push({
                 ...job,
                 id: job.id,
-                status: IJobPostStatus.CLOSED,
+                status: job.status,
                 notAccepting: job?.notAccepting ?? false,
                 client_details: job.client_details
                   ? {
@@ -236,7 +236,24 @@ const companiesApi = baseApi.injectEndpoints({
           return client;
         });
         console.log(data);
-        return data
+        return data;
+      },
+    }),
+    updateJobPost: builder.mutation<
+      IJobPostTypes,
+      { jobPostDetails: IAddNewJobPostRequest; jobPostId: number }
+    >({
+      query: (body: {
+        jobPostDetails: IAddNewJobPostRequest;
+        jobPostId: number;
+      }) => ({
+        url: Endpoints.updateJobPost(body.jobPostId),
+        method: ApiMethodType.patch,
+        body: body.jobPostDetails,
+      }),
+      transformResponse: (response: IJobPostTypes) => {
+        console.log(response, "api response");
+        return response;
       },
     }),
   }),
@@ -254,4 +271,5 @@ export const {
   useLazyGetCompanyDetailsQuery,
   useGetCompanyClientDetailsQuery,
   useLazyGetCompanyClientDetailsQuery,
+  useUpdateJobPostMutation,
 } = companiesApi;

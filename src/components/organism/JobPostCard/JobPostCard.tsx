@@ -1,8 +1,7 @@
 import React from 'react';
 import IconWithText from '@/components/molecules/IconWithText/IconWithText';
-import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import { IJobPostCardProps } from './JobPostCard.types';
-
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 const JobPostCard: React.FC<IJobPostCardProps> = ({
   companyName,
   profileName,

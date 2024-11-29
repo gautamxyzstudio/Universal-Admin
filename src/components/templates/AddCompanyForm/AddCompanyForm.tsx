@@ -7,7 +7,7 @@ import {
 } from './AddCompany.types';
 import PhotoUpload from '@/components/atoms/PhotoUpload/PhotoUpload';
 import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { validateEmail, validatePhoneNumber } from '@/utility/utils';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import { useAddCompanyMutation } from '@/api/fetures/Company/CompanyApi';
