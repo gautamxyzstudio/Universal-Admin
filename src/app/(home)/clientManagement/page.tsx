@@ -223,8 +223,11 @@ const ClientManagement = () => {
       field: STRINGS.action,
       headerName: 'Action',
       width: 104,
-      renderCell: () => (
-        <span onClick={handleOnRowClick} className="text-primary">
+      renderCell: (params) => (
+        <span
+          onClick={() => handleOnRowClick(params.row)}
+          className="text-primary"
+        >
           {STRINGS.view}
         </span>
       ),

@@ -269,12 +269,11 @@ const EmployeeDetails = ({
 
   return (
     <div className="w-full h-[90%]">
-      {employee?.name && (
-        <PageSubHeader
-          pageTitle={STRINGS.employeeManagement}
-          name={employee?.name}
-        />
-      )}
+      <PageSubHeader
+        pageTitle={STRINGS.employeeManagement}
+        isLoading={isLoading}
+        name={employee?.name ?? ''}
+      />
       <div className="flex gap-x-10 w-full h-full mt-2">
         {/* Left Side */}
         <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">

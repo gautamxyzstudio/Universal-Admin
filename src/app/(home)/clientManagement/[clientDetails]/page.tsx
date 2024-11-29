@@ -2,189 +2,169 @@
 import {
   useChangeClientStatusMutation,
   useGetClientDetailsQuery,
-  useGetPostedJobByClientQuery,
+  useLazyGetPostedJobByClientQuery,
 } from '@/api/fetures/Client/ClientApi';
 import Switch from '@/components/atoms/Switch/Switch';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import ContactDetailCard from '@/components/organism/ContactDetailCard/ContactDetailCard';
 import PageSubHeader from '@/components/organism/PageSubHeader/PageSubHeader';
 import { STRINGS } from '@/constant/en';
-import { dateFormat, dateMonthFormat, timeFormat } from '@/utility/utils';
-import { Skeleton } from '@mui/material';
+import { dateMonthFormat, withAsyncErrorHandlingPost } from '@/utility/utils';
 import React, { useEffect, useState } from 'react';
 import { getClientStatusAttributesFromType } from '../types';
 import { IClientStatus } from '@/constant/enums';
 import CustomTab from '@/components/atoms/CustomTab/CustomTab';
+import { Theme } from '@emotion/react';
+import { SxProps } from '@mui/material';
+import EmployeeJobsList from '../../employeeManagement/[employeeDetails]/LeftTabViewss/EmployeeJobsList';
+import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
 import JobDetails from '@/components/organism/JobDetails/JobDetails';
-import WorkHistoryCard from '@/components/organism/JobPostCard/JobPostCard';
-import { getJobType } from '@/constant/constant';
-import { Icons } from '../../../../../public/exporter';
-import CustomList from '@/components/atoms/CustomList/CustomList';
+import { IClientDetailsResposne } from '@/api/fetures/Client/Client.types';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
 // import { IClientDetailsResposne } from "@/api/fetures/Client/Client.types";
 
 const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
-  const { data, refetch } = useGetClientDetailsQuery(params.clientDetails);
+  const { data, isFetching } = useGetClientDetailsQuery(params.clientDetails);
+  const { changeLoaderState } = useShowLoaderContext();
+  const { displaySnackbar } = useSnackBarContext();
+  const [client, setClient] = useState<IClientDetailsResposne | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [status, setStatus] = useState<IClientStatus>();
-  const [updateClientStatus] = useChangeClientStatusMutation();
-  const [selectedItem, setSelectedItem] = useState<React.ReactNode>(null);
-  const { data: postjobData } = useGetPostedJobByClientQuery({
-    page: currentPage,
-    clientId: parseInt(params.clientDetails),
-  });
+  const [updateClientStatus, { isLoading }] = useChangeClientStatusMutation();
+  const [clientJobs, setClientJobs] = useState<IJobPost[]>([]);
+  const [selectedJobPost, setSelectedJobPost] = useState<IJobPost | null>(null);
+  const [fetchClientJobs, { isFetching: isClientJobFecthing }] =
+    useLazyGetPostedJobByClientQuery();
 
   // Update status when data changes
   useEffect(() => {
-    if (data?.status) {
-      setStatus(data.status);
+    if (data) {
+      setClient(data);
     }
   }, [data]);
 
-  console.log(data?.status, '122');
+  useEffect(() => {
+    changeLoaderState(isLoading);
+  }, [isLoading]);
 
   useEffect(() => {
-    if (postjobData) {
-      setCurrentPage(postjobData.currentPage);
+    if (params.clientDetails) {
+      getClientJobsHandler();
     }
-  }, [postjobData]);
-  const statusAttributes = status && getClientStatusAttributesFromType(status);
+  }, [params.clientDetails]);
 
-  const handleStatusChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-    isChecked: boolean
-  ) => {
-    const newStatus = isChecked ? IClientStatus.ACTIVE : IClientStatus.INACTIVE;
-    setStatus(newStatus); // Update state
+  const statusAttributes = getClientStatusAttributesFromType(
+    client?.status ?? IClientStatus.INACTIVE
+  );
+
+  const getClientJobsHandler = async () => {
     try {
-      await updateClientStatus({
+      const clientJobs = await fetchClientJobs({
+        page: currentPage,
+        clientId: parseInt(params.clientDetails),
+      }).unwrap();
+      if (clientJobs) {
+        setClientJobs(clientJobs.data);
+        setSelectedJobPost(clientJobs.data[0]);
+        setCurrentPage(clientJobs.pagination?.page ?? 1);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleStatusChange = withAsyncErrorHandlingPost(
+    async (event: React.ChangeEvent<HTMLInputElement>, isChecked: boolean) => {
+      const newStatus = isChecked
+        ? IClientStatus.ACTIVE
+        : IClientStatus.INACTIVE;
+
+      const response = await updateClientStatus({
         status: newStatus,
         clientId: parseInt(params.clientDetails),
       });
-      refetch();
-    } catch (error) {
-      console.error('Failed to update status:', error);
-    }
-  };
-  // Map the job data to CustomList items
-  const mapJobData = (jobData) => {
-    return jobData?.map((data) => {
-      return {
-        children: (
-          <WorkHistoryCard
-            companyName={data.client_details?.Name || ''}
-            profileName={data.job_name}
-            days={data.eventDate}
-            image={data.client_details?.company_detail?.companylogo?.url}
-            textLabel={getJobType(data.job_type)}
-            textStyle={'text-darkBlue bg-white'}
-            iconWithTexts={[
-              { text: `${data.id}`, icon: Icons.jobId },
-              {
-                text: `${dateFormat(data.eventDate)}`,
-                subText: `${timeFormat(data.startShift)} - ${timeFormat(
-                  data.endShift
-                )}`,
-                icon: Icons.time_Date,
-              },
-              { text: `${data.location}`, icon: Icons.location_Pin },
-            ]}
-          />
-        ),
-        onClick: () => {
-          setSelectedItem(<JobDetails data={data} />);
-        },
-      };
-    });
-  };
-
-  const postedJob = mapJobData(postjobData);
+      if (response) {
+        setClient((prev) => {
+          if (!prev) {
+            return null;
+          }
+          return {
+            ...prev,
+            status: newStatus,
+          };
+        });
+        displaySnackbar('success', 'Status updated successful');
+      }
+    },
+    displaySnackbar
+  );
 
   const tabsData = [
     {
       label: STRINGS.postJobs,
-      content:
-        postedJob && postedJob.length === 0 ? (
-          <CustomList items={postedJob} />
-        ) : (
-          <CustomList
-            noList={<div className="text-center">{STRINGS.noJobs}</div>}
-          />
-        ),
     },
   ];
 
   return (
     <div className="w-full h-[90%]">
       <PageSubHeader
+        isLoading={isFetching}
         pageTitle={STRINGS.clientManagement}
-        name={data?.name || ''}
+        name={client?.name || ''}
       />
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
-        {/* Left Side */}
         <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
-          {!data ? (
-            <>
-              <Skeleton variant="circular" width={56} height={56} />
-              <Skeleton variant="text" width="80%" height={40} />
-              <Skeleton variant="text" width="60%" height={20} />
-              <Skeleton variant="rectangular" width="100%" height={60} />
-              {/* Skeletons for Tabs */}
-              <Skeleton variant="rectangular" width="100%" height={40} />
-            </>
-          ) : (
-            <>
-              <div className="flex justify-between h-fit mb-3">
-                <UserNameWithImage
-                  name={data.name || ''}
-                  containorStyle="!text-[16px] !leading-[20px]"
-                  image={data.companyLogo}
-                  imageStyle="!w-14 !h-14"
-                  companyName={data.companyName || ''}
-                  companyNameStyle="!text-[14px] !leading-[18px] !w-fit"
-                  joinDate={dateMonthFormat(data.createdAt)}
-                />
-                <Switch
-                  checked={status === 's1' ? true : false}
-                  onChange={handleStatusChange}
-                  label={statusAttributes?.text}
-                  switchClassName={'justify-end !flex-col !w-fit'}
-                  className={` -mt-[10px] text-[8px] leading-3 ${statusAttributes?.styles}`}
-                />
-              </div>
-
-              <ContactDetailCard
-                email={data.email || ''}
-                phoneNumber={data.contactNo || ''}
-                address={data.location || ''}
-                department={data.industry || ''}
-              />
-              <CustomTab
-                tabs={tabsData}
-                TabIndicatorProps={{
-                  style: {
-                    height: '3px',
-                    borderTopRightRadius: '3px',
-                    borderTopLeftRadius: '3px',
-                  },
-                }}
-                sx={{
-                  '&': { paddingX: '12px', paddingTop: '4px' },
-                  '.MuiButtonBase-root': {
-                    fontSize: '16px',
-                    lineHeight: '20px',
-                    textTransform: 'none',
-                  },
-                  '.MuiTabs-flexContainer': { gap: '10px' },
-                  '.Mui-selected': { fontWeight: 'bold' },
-                }}
-              />
-            </>
-          )}
+          <div className="flex justify-between h-fit mb-3">
+            <UserNameWithImage
+              name={client?.name || ''}
+              isLoading={isFetching}
+              image={client?.companyLogo ?? ''}
+              imageStyle="!w-14 !h-14"
+              companyName={client?.companyName || ''}
+              companyNameStyle="!text-[14px] !leading-[18px] !w-fit"
+              joinDate={dateMonthFormat(client?.createdAt ?? new Date()) ?? ''}
+            />
+            <Switch
+              checked={client?.status === IClientStatus.ACTIVE ? true : false}
+              onChange={handleStatusChange}
+              label={statusAttributes?.text}
+              switchClassName={'justify-end !flex-col !w-fit'}
+              className={` -mt-[10px] text-[8px] leading-3 ${statusAttributes?.styles}`}
+            />
+          </div>
+          <ContactDetailCard
+            email={client?.email || ''}
+            isLoading={isFetching}
+            phoneNumber={client?.contactNo || ''}
+            address={client?.location || ''}
+            department={client?.industry || ''}
+          />
+          <CustomTab
+            tabs={tabsData}
+            TabIndicatorProps={{
+              style: {
+                height: '3px',
+                borderTopRightRadius: '3px',
+                borderTopLeftRadius: '3px',
+              },
+            }}
+            sx={styles}
+          />
+          <div className="bg-white border pt-4 border-borderGrey rounded-b-lg h-full w-full">
+            <EmployeeJobsList
+              data={clientJobs}
+              isLoading={isClientJobFecthing}
+              selectedPostId={selectedJobPost?.id ?? null}
+              onPressButton={(post) => setSelectedJobPost(post)}
+            />
+          </div>
         </div>
-
-        {/* Right Side */}
         <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
-          {selectedItem}
+          <div className="w-full mb-5 h-full">
+            {selectedJobPost && (
+              <JobDetails data={selectedJobPost} isEmployee={false} />
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -192,3 +172,21 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
 };
 
 export default ClientDetails;
+
+const styles: SxProps<Theme> = {
+  '&': {
+    paddingX: '12px',
+    paddingTop: '4px',
+  },
+  '.MuiButtonBase-root': {
+    fontSize: '16px',
+    lineHeight: '20px',
+    textTransform: 'none',
+  },
+  '.MuiTabs-flexContainer': {
+    gap: '10px',
+  },
+  '.Mui-selected': {
+    fontWeight: 'bold',
+  },
+};

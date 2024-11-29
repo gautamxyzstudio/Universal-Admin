@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApiMethodType } from "@/api/ApiConstants";
-import { baseApi } from "@/api/BaseApi";
-import { Endpoints } from "@/api/Endpoints";
+import { ApiMethodType } from '@/api/ApiConstants';
+import { baseApi } from '@/api/BaseApi';
+import { Endpoints } from '@/api/Endpoints';
 import {
   IClient,
   IClientDetailsResposne,
+  ICustomizedGetClientResponse,
   ICustomizedGetClientsResponse,
   IGetClientDetailsResponse,
+  IGetClientJobsResponse,
   IGetClientsResponse,
   ILinkClientRequest,
   IRegisterClientReq,
   IRegisterClientResponse,
   IUpdateClientDetailsRequest,
   IUpdateClientDetailsResponse,
-} from "./Client.types";
-import { createImageUrl } from "@/utility/cookies";
-import { IClientStatus } from "@/constant/enums";
+} from './Client.types';
+import { createImageUrl } from '@/utility/cookies';
+import { IClientStatus, IJobPostStatus, IJobTypesEnum } from '@/constant/enums';
+import { IJobPost } from '../Employee/EmployeeApi.types';
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -37,12 +40,12 @@ const clientApi = baseApi.injectEndpoints({
               detailsId: client.cuser_id.id,
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,
-              selfie: "",
+              selfie: '',
               company: {
                 id: client.cuser_id.company_detail?.id ?? 0,
-                companyname: client.cuser_id.company_detail?.companyname ?? "",
+                companyname: client.cuser_id.company_detail?.companyname ?? '',
                 companyemail:
-                  client.cuser_id.company_detail?.companyemail ?? "",
+                  client.cuser_id.company_detail?.companyemail ?? '',
                 companylogo: client.cuser_id.company_detail?.companylogo?.url
                   ? createImageUrl(
                       client.cuser_id.company_detail?.companylogo?.url
@@ -86,7 +89,7 @@ const clientApi = baseApi.injectEndpoints({
               detailsId: client.cuser_id.id,
               joiningDate: new Date(client.updatedAt),
               location: client.cuser_id.location,
-              selfie: "",
+              selfie: '',
               company: null,
               companyName: client.cuser_id.companyname,
               industry: client.cuser_id?.Industry,
@@ -124,9 +127,9 @@ const clientApi = baseApi.injectEndpoints({
       query: (body: { clientId: number; status: IClientStatus }) => ({
         url: Endpoints.getClientDetails(body.clientId),
         method: ApiMethodType.patch,
-        body:{
-          status:body.status
-        }
+        body: {
+          status: body.status,
+        },
       }),
     }),
     registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
@@ -182,13 +185,67 @@ const clientApi = baseApi.injectEndpoints({
       },
     }),
     getPostedJobByClient: builder.query({
-      query: ({ clientId, page }: { clientId:number; page: number }) => ({
+      query: ({ clientId, page }: { clientId: number; page: number }) => ({
         url: Endpoints.getPostJobsByClient(clientId, page),
         method: ApiMethodType.get,
       }),
-      transformResponse: (response) => {
-        console.log(response, "api response of post job by client");
-        return response;
+      transformResponse: (
+        response: IGetClientJobsResponse
+      ): ICustomizedGetClientResponse => {
+        let resp: ICustomizedGetClientResponse = {
+          data: [],
+          pagination: undefined,
+        };
+        const jobs: IJobPost[] = [];
+        if (response.data && response.data.length > 0) {
+          response.data.forEach((job) => {
+            if (job) {
+              jobs.push({
+                status: job?.status ?? IJobPostStatus.OPEN,
+                CheckIn: null,
+                CheckOut: null,
+                id: job.id ?? 0,
+                job_name: job.job_name ?? '',
+                city: job.city ?? '',
+                address: job.address ?? '',
+                postalCode: job.postalCode ?? '',
+                postID: job.postID ?? '',
+                notAccepting: job.notAccepting ?? null,
+                gender: job.gender ?? '',
+                salary: job.salary ?? '',
+                job_type: job.job_type ?? IJobTypesEnum.EVENT,
+                location: job.location ?? '',
+                required_certificates: job.required_certificates ?? [],
+                eventDate: job.eventDate ?? null,
+                startShift: job.startShift ?? null,
+                description: job.description ?? '',
+                jobDuties: job.jobDuties ?? '',
+                endShift: job.endShift ?? null,
+                requiredEmployee: job.requiredEmployee ?? null,
+                client_details: {
+                  clientId: job.client_details[0]?.id ?? 0,
+                  clientName: job.client_details[0]?.Name ?? '',
+                  id: job.client_details[0]?.company_detail.id ?? 0,
+                  companyname:
+                    job.client_details[0]?.company_detail.companyname ?? '',
+                  companyemail:
+                    job.client_details[0]?.company_detail.companyemail ?? '',
+                  companylogo: job.client_details[0]?.company_detail.companylogo
+                    .url
+                    ? createImageUrl(
+                        job.client_details[0]?.company_detail.companylogo.url
+                      )
+                    : '',
+                },
+              });
+            }
+          });
+          resp = {
+            data: jobs,
+            pagination: response.meta,
+          };
+        }
+        return resp;
       },
     }),
   }),
@@ -203,6 +260,6 @@ export const {
   useGetClientDetailsQuery,
   useLazyGetClientDetailsQuery,
   useChangeClientStatusMutation,
-  useGetPostedJobByClientQuery,
+  useLazyGetPostedJobByClientQuery,
   useLazyGetPendingRequestsQuery,
 } = clientApi;

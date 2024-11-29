@@ -1,11 +1,12 @@
-import { IPagination } from "@/api/types";
-import { IClientStatus } from "@/constant/enums";
+import { IPagination } from '@/api/types';
+import { IClientStatus, IJobPostStatus, IJobTypesEnum } from '@/constant/enums';
+import { IJobPost } from '../Employee/EmployeeApi.types';
 
 export type IGetClientsResponse = {
   data: {
     id: number;
     email: string;
-    user_type: "client";
+    user_type: 'client';
     updatedAt: Date;
     cuser_id: {
       id: number;
@@ -31,7 +32,7 @@ export type IGetClientsResponse = {
 export interface IClient {
   id: number;
   name: string | null;
-  status: "s0" | "s1" | "s2";
+  status: 's0' | 's1' | 's2';
   email: string;
   phone: string | null;
   detailsId: number;
@@ -66,8 +67,8 @@ export type IRegisterClientReq = {
   username: string;
   email: string;
   password: string;
-  role: "ClientUser";
-  user_type: "client";
+  role: 'ClientUser';
+  user_type: 'client';
 };
 
 export type IRegisterClientResponse = {
@@ -77,7 +78,7 @@ export type IRegisterClientResponse = {
         id: number;
         username: string;
         email: string;
-        user_type: "emp" | "client";
+        user_type: 'emp' | 'client';
       }
     | null
     | undefined;
@@ -133,7 +134,7 @@ export type IGetClientDetailsResponse = {
                 attributes: {
                   url: string;
                 };
-              }| null;
+              } | null;
             } | null;
           };
         } | null;
@@ -153,4 +154,61 @@ export type IClientDetailsResposne = {
   contactNo: string | null | undefined;
   email: string | null | undefined;
   status: IClientStatus;
+};
+
+export type ICustomizedGetClientResponse = {
+  data: IJobPost[];
+  pagination:
+    | {
+        total: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
+      }
+    | null
+    | undefined;
+};
+
+export type IGetClientJobsResponse = {
+  data: {
+    id: number | null | undefined;
+    job_name: string | null | undefined;
+    city: string | null | undefined;
+    address: string | null | undefined;
+    postalCode: string | null | undefined;
+    postID: string | null | undefined;
+    gender: string | null | undefined;
+    salary: string | null | undefined;
+    job_type: IJobTypesEnum | null | undefined;
+    location: string | null | undefined;
+    required_certificates: string[] | null | undefined;
+    startShift: Date | null | undefined;
+    eventDate: Date | null | undefined;
+    description: string | null | undefined;
+    jobDuties: string | null | undefined;
+    status: IJobPostStatus | null | undefined;
+    endShift: Date | null | undefined;
+    requiredEmployee: string | null | undefined;
+    notAccepting: boolean | null | undefined;
+    updatedAt: Date | null | undefined;
+    client_details:
+      | {
+          id: number | null | undefined;
+          Name: string | null | undefined;
+          company_detail: {
+            id: number | null | undefined;
+            companyname: string | null | undefined;
+            companyemail: string | null | undefined;
+            companylogo: {
+              url: string | null | undefined;
+            };
+          };
+        }[];
+  }[];
+  meta: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
 };
