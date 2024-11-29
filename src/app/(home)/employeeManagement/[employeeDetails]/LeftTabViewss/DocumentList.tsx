@@ -78,6 +78,14 @@ const DocumentList: React.FC<IEmployeeDocumentList> = ({
           docStatus: IDocumentStatus.PENDING,
           docStatusKey: IEmployeeApiKeyStatus.NULL,
         });
+      } else {
+        setAllRetested({
+          doc: null,
+          docId: null,
+          docName: 'New Requests',
+          docStatus: IDocumentStatus.NULL,
+          docStatusKey: IEmployeeApiKeyStatus.NULL,
+        });
       }
     }
     if (data.primaryDocuments) {
@@ -107,6 +115,11 @@ const DocumentList: React.FC<IEmployeeDocumentList> = ({
         setDocStatus((prev) => ({
           ...prev,
           secondary: IDocumentStatus.PENDING,
+        }));
+      } else {
+        setDocStatus((prev) => ({
+          ...prev,
+          secondary: IDocumentStatus.VERIFIED,
         }));
       }
     }

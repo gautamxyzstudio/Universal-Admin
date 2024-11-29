@@ -15,6 +15,7 @@ import {
 import {
   IEmployeeAdvance,
   IEmployeeDocument,
+  IJobPost,
 } from '@/api/fetures/Employee/EmployeeApi.types';
 import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
 import DocumentDetailsView from './RightViews/DocumentDetailsView';
@@ -26,6 +27,9 @@ import TabButton from '@/components/molecules/ButtonTypes/TabButton/TabButton';
 import { withAsyncErrorHandlingPost } from '@/utility/utils';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import EmployeeJobsList from './LeftTabViewss/EmployeeJobsList';
+import JobDetails from '@/components/organism/JobDetails/JobDetails';
+import { ITextGroupTypes } from '@/components/organism/TextGroup/TextGroup.types';
 
 const EmployeeDetails = ({
   params,
@@ -36,10 +40,13 @@ const EmployeeDetails = ({
   const [employee, setEmployee] = useState<IEmployeeAdvance | null>(null);
   const [selectedTabIndex, setSelectedTabItemIndex] = useState(0);
   const [updateDocStatus, { isLoading }] = useUpdateDocumentStatusMutation();
+  const [selectedJobPost, setSelectedJobPost] = useState<IJobPost | null>(null);
   const [updateOtherDocsStatus, { isLoading: showLoading }] =
     useUpdateOtherDocumentStatusMutation();
+  const [jobEmployees, setJobEmployees] = useState<IJobPost[]>([]);
   const { displaySnackbar } = useSnackBarContext();
-  const [getJobHistory] = useLazyGetEmployeeJobsHistoryQuery();
+  const [getJobHistory, { isFetching: getJobHistoryLoading }] =
+    useLazyGetEmployeeJobsHistoryQuery();
   const [employeeDocsTabList, setEmployeeDocsTabList] = useState<{
     primaryDocuments: IEmployeeDocument[] | null;
     otherDocuments: IEmployeeDocument[] | null;
@@ -182,9 +189,8 @@ const EmployeeDetails = ({
         pageNumber: 1,
       }).unwrap();
       if (response) {
-        console.log('Job history data:', response);
-      } else {
-        console.log('Job history data not available');
+        setJobEmployees(response.data);
+        setSelectedJobPost(response.data[0]);
       }
     } catch (err) {
       console.log('Error in fetching job history', err);
@@ -282,14 +288,14 @@ const EmployeeDetails = ({
           <div className="flex justify-around border border-borderGrey rounded-lg p-3 text-[16px] leading-[20px] mt-6 w-full">
             <TextGroup
               isLoading={isFetching}
-              textgroupStyle="flex flex-col gap-y-1"
+              type={ITextGroupTypes.detailPage}
               title="Date of Birth"
               text="04/08/2000"
             />
             <TextGroup
               isLoading={isFetching}
-              textgroupStyle="flex flex-col gap-y-1"
               title="Gender"
+              type={ITextGroupTypes.detailPage}
               text={employee?.gender ?? ''}
             />
           </div>
@@ -324,6 +330,14 @@ const EmployeeDetails = ({
             {selectedTabIndex === 2 && (
               <TabButton isSelected={true} title={STRINGS.profileHistory} />
             )}
+            {selectedTabIndex === 3 && (
+              <EmployeeJobsList
+                data={jobEmployees}
+                isLoading={getJobHistoryLoading}
+                selectedPostId={selectedJobPost?.id ?? null}
+                onPressButton={(post) => setSelectedJobPost(post)}
+              />
+            )}
           </div>
         </div>
         {/* Right Side */}
@@ -347,7 +361,14 @@ const EmployeeDetails = ({
               />
             )}
             {selectedTabIndex === 2 && <ProfileHistoryView />}
-            {selectedTabIndex === 3 && <ProfileHistoryView />}
+
+            {selectedTabIndex === 3 && (
+              <div className="w-full mb-5 h-full">
+                {selectedJobPost && (
+                  <JobDetails data={selectedJobPost} isEmployee={true} />
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

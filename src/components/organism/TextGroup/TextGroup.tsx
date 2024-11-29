@@ -1,5 +1,9 @@
 import React from 'react';
-import { ITextGroupProps } from './TextGroup.types';
+import {
+  getTextGroupStyles,
+  ITextGroupProps,
+  ITextGroupTypes,
+} from './TextGroup.types';
 import Image from 'next/image';
 import { Skeleton } from '@mui/material';
 
@@ -9,15 +13,16 @@ const TextGroup: React.FC<ITextGroupProps> = ({
   titleStyle,
   text,
   subText,
+  type = ITextGroupTypes.default,
   textStyle,
   isLoading,
-  divStyle,
-  textgroupStyle,
+
   icon,
 }) => {
+  const styles = getTextGroupStyles(type);
   if (isLoading) {
     return (
-      <div className={'flex   items-center gap-x-1 h-fit' + divStyle}>
+      <div className={'flex   items-center gap-x-1 h-fit' + styles.divStyle}>
         {icon && <Skeleton variant="circular" width={24} height={24} />}
         <div className=" items-center gap-x-1 h-fit">
           <Skeleton variant="text" width={100} height={20} />
@@ -27,9 +32,9 @@ const TextGroup: React.FC<ITextGroupProps> = ({
     );
   } else {
     return (
-      <div className={'flex items-center gap-x-1 h-fit ' + divStyle}>
+      <div className={'flex items-center gap-x-1 h-fit ' + styles.divStyle}>
         {icon && <Image src={icon} alt={title} className="w-6 h-6" />}
-        <div className={textgroupStyle}>
+        <div className={styles.textgroupStyle}>
           <div
             className={'flex gap-x-3 items-center text-disable ' + titleStyle}
           >

@@ -11,11 +11,15 @@ import {
   IEmployeeDocument,
   IGetEmployeeApiResponse,
   IGetEmployeeByIdResponse,
+  IGetEmployeeCustomResponse,
+  IGetEmployeeJobResponse,
+  IJobPost,
 } from './EmployeeApi.types';
 import {
   IDocumentStatus,
   IEmployeeApiKeyStatus,
   IEmployeeDocsApiKeys,
+  IJobTypesEnum,
 } from '@/constant/enums';
 import { createImageUrl } from '@/utility/cookies';
 import { STRINGS } from '@/constant/en';
@@ -176,23 +180,74 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
     getEmployeeJobsHistory: builder.query<
-      any,
+      IGetEmployeeCustomResponse,
       { id: number; pageNumber: number }
     >({
       query: ({ id, pageNumber }) => ({
         url: Endpoints.getEmployeeJobHistory(id, pageNumber),
         method: ApiMethodType.get,
       }),
-
-      // transformResponse: (response: IGetEmployeeJobsHistoryResponse) => {
-      //   return response.data.map((job: any) => ({
-      //     id: job.id,
-      //     jobTitle: job.attributes.jobTitle,
-      //     companyName: job.attributes.companyName,
-      //     startDate: job.attributes.startDate,
-      //     endDate: job.attributes.endDate,
-      //   }));
-      // },
+      transformResponse: (
+        response: IGetEmployeeJobResponse
+      ): IGetEmployeeCustomResponse => {
+        let resp: IGetEmployeeCustomResponse = {
+          data: [],
+          pagination: undefined,
+        };
+        const jobs: IJobPost[] = [];
+        if (response.data && response.data.length > 0) {
+          response.data.forEach((job) => {
+            if (job.jobs) {
+              jobs.push({
+                status: job.status,
+                CheckIn: job.CheckIn,
+                CheckOut: job.CheckOut,
+                id: job.jobs[0]?.id ?? 0,
+                job_name: job.jobs[0]?.job_name ?? '',
+                city: job.jobs[0]?.city ?? '',
+                address: job.jobs[0]?.address ?? '',
+                postalCode: job.jobs[0]?.postalCode ?? '',
+                postID: job.jobs[0]?.postID ?? '',
+                notAccepting: job.jobs[0].notAccepting ?? null,
+                gender: job.jobs[0]?.gender ?? '',
+                salary: job.jobs[0]?.salary ?? '',
+                job_type: job.jobs[0]?.job_type ?? IJobTypesEnum.EVENT,
+                location: job.jobs[0]?.location ?? '',
+                required_certificates: job.jobs[0]?.required_certificates ?? [],
+                eventDate: job.jobs[0]?.eventDate ?? null,
+                startShift: job.jobs[0]?.startShift ?? null,
+                description: job.jobs[0]?.description ?? '',
+                jobDuties: job.jobs[0]?.jobDuties ?? '',
+                endShift: job.jobs[0]?.endShift ?? null,
+                requiredEmployee: job.jobs[0]?.requiredEmployee ?? null,
+                client_details: {
+                  clientId: job.jobs[0]?.client_details[0]?.id ?? 0,
+                  clientName: job.jobs[0]?.client_details[0]?.Name ?? '',
+                  id: job.jobs[0]?.client_details[0]?.company_detail.id ?? 0,
+                  companyname:
+                    job.jobs[0]?.client_details[0]?.company_detail
+                      .companyname ?? '',
+                  companyemail:
+                    job.jobs[0]?.client_details[0]?.company_detail
+                      .companyemail ?? '',
+                  companylogo: job.jobs[0]?.client_details[0]?.company_detail
+                    .companylogo.url
+                    ? createImageUrl(
+                        job.jobs[0]?.client_details[0]?.company_detail
+                          .companylogo.url
+                      )
+                    : '',
+                },
+              });
+            }
+          });
+          resp = {
+            data: jobs,
+            pagination: response.pagination,
+          };
+        }
+        return resp;
+      },
     }),
   }),
 });

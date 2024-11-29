@@ -1,6 +1,7 @@
 import { IEmployeeAdvance } from '@/api/fetures/Employee/EmployeeApi.types';
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
 import TextGroup from '@/components/organism/TextGroup/TextGroup';
+import { ITextGroupTypes } from '@/components/organism/TextGroup/TextGroup.types';
 import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
 import React from 'react';
 
@@ -20,17 +21,17 @@ const BankDetailsView: React.FC<IBankDetailsViewProps> = ({
   return (
     <div className="flex flex-col gap-y-6 w-full">
       <TextGroup
-        textgroupStyle="flex flex-col gap-y-1"
+        type={ITextGroupTypes.textTypeBank}
         title={'Bank account number'}
         text={employee?.bankingDetails?.bankAccNo ?? ''}
       />
       <TextGroup
-        textgroupStyle="flex flex-col gap-y-1"
+        type={ITextGroupTypes.textTypeBank}
         title={'Institution number'}
         text={employee?.bankingDetails?.institutionNumber ?? ''}
       />
       <TextGroup
-        textgroupStyle="flex flex-col gap-y-1"
+        type={ITextGroupTypes.textTypeBank}
         title={'Transit Number'}
         text={employee?.bankingDetails?.transitNumber ?? ''}
       />

@@ -7,6 +7,7 @@ import {
   getDocumentStatusColor,
   getDocumentStatusTextByStatus,
 } from '@/utility/utils';
+import { IDocumentStatus } from '@/constant/enums';
 
 type IDetailPageDocumentTab = {
   document: IEmployeeDocument;
@@ -32,12 +33,14 @@ const DetailPageDocumentTab: React.FC<IDetailPageDocumentTab> = ({
             />
             <h1 className="text-black text-text-md">{document?.docName}</h1>
           </div>
-          <span
-            style={{ color: getDocumentStatusColor(document?.docStatus) }}
-            className={`text-[14px] leading-[18px]`}
-          >
-            {getDocumentStatusTextByStatus(document?.docStatus)}
-          </span>
+          {document.docStatus !== IDocumentStatus.NULL && (
+            <span
+              style={{ color: getDocumentStatusColor(document?.docStatus) }}
+              className={`text-[14px] leading-[18px]`}
+            >
+              {getDocumentStatusTextByStatus(document?.docStatus)}
+            </span>
+          )}
         </div>
       }
     />

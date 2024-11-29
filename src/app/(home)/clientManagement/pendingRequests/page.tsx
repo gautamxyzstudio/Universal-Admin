@@ -89,19 +89,19 @@ const PendingRequests = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "joiningDate",
+      field: 'joiningDate',
       headerName: STRINGS.date,
       width: 100,
       renderCell: (params) =>
         new Date(params.row.joiningDate).toLocaleDateString(),
     },
     {
-      field: "clientDetails",
+      field: 'clientDetails',
       headerName: STRINGS.clientNameAndComp,
       width: 256,
       renderCell: (params) => (
         <UserNameWithImage
-          type={"white"}
+          type={'white'}
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name}
@@ -112,7 +112,7 @@ const PendingRequests = () => {
       ),
     },
     {
-      field: "contactDetails",
+      field: 'contactDetails',
       headerName: STRINGS.contactDetails,
       width: 256,
       renderCell: (params) => (
@@ -120,23 +120,23 @@ const PendingRequests = () => {
       ),
     },
     {
-      field: "location",
+      field: 'location',
       headerName: STRINGS.location,
       width: 180,
     },
     {
-      field: "industry",
+      field: 'industry',
       headerName: STRINGS.industry,
       width: 180,
     },
     {
-      field: "Action",
+      field: 'Action',
       headerName: STRINGS.action,
       width: 90,
-      renderCell: () => (
+      renderCell: (params) => (
         <span
           className="text-green cursor-pointer font-bold "
-          onClick={() => setListData(true)}
+          onClick={() => handleSelectClient(params.row)}
         >
           {STRINGS.verify}
         </span>
@@ -172,12 +172,12 @@ const PendingRequests = () => {
         columns={columns}
         illustration={Images.noSubAdmin}
         rows={pendingRequests}
-        onPressRow={(row) => handleSelectClient(row as IClient)}
         isLoading={isLoading}
         emptyViewTitle={STRINGS.no_pending}
-        emptyViewSubTitle={""}
+        emptyViewSubTitle={''}
         error={error}
         isDataEmpty={pendingRequests?.length === 0}
+        withPagination={false}
       />
       <AddCompanyList
         show={showCompanyList}

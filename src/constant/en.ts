@@ -40,6 +40,7 @@ export const STRINGS = {
   noSubAdmin: 'No Sub-Admin Added Yet',
   noClients: 'No Clients Added Yet',
   noJobs: 'No Jobs Added Yet',
+  noJobsCompleted: 'No Jobs Completed Yet',
   noClientDec: 'Click the add client button to add a new client',
   noSubAdminDec: 'Click the add sub admin button to assign new sub admin',
   active: 'Active',
@@ -122,4 +123,8 @@ export const STRINGS = {
   profileHistory: 'Profile History',
   mandatoryDoc: 'Mandatory documents',
   otherDoc: 'Other documents',
+  checkin: 'Checkin',
+  checkout: 'Checkout',
+  noRequestFound: 'No Requests Found',
+  youHaveNoPending: 'You have no pending document requests at this time',
 };

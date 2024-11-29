@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { ICustomErrorResponse } from '@/api/types';
-import { IDocumentStatus, IWorkStatus } from '@/constant/enums';
+import { IDocumentStatus, IJobPostStatus, IWorkStatus } from '@/constant/enums';
 import moment from 'moment';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -131,5 +131,20 @@ export const getDocumentStatusColor = (status: IDocumentStatus) => {
       return '#00B2D5';
     default:
       return '#FBC505';
+  }
+};
+
+export const getJobStatusColor = (status: IJobPostStatus) => {
+  switch (status) {
+    case IJobPostStatus.OPEN:
+      return `text-green bg-statusLightGreen`;
+    case IJobPostStatus.CLOSED:
+      return `text-red bg-lightRed`;
+    case IJobPostStatus.COMPLETED:
+      return `text-skyBlue bg-lightSkyBlue`;
+    case IJobPostStatus.DECLINED:
+      return `text-red bg-lightRed`;
+    default:
+      return `text-red bg-lightRed`;
   }
 };

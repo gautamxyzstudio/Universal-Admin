@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
+import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
+import { STRINGS } from '@/constant/en';
 import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
 import React, { useEffect, useState } from 'react';
+import { Images } from '../../../../../../public/exporter';
 
 export type IDocumentDetailsViewType = {
   onPressButton: (
@@ -46,7 +49,7 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
   );
   return (
     <div className="h-full w-full">
-      <h1 className="text-2xl">{title}</h1>
+      {docs.length > 0 && <h1 className="text-2xl">{title}</h1>}
       {docs.length > 0 && (
         <>
           {docs.map((doc, index) => {
@@ -54,6 +57,16 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
           })}
         </>
       )}
+      <div className="flex flex-row w-full h-full items-center justify-center">
+        {docs.length == 0 && (
+          <EmptyScreenView
+            illustration={Images.noDocRequest}
+            emptyViewSubTitle={STRINGS.youHaveNoPending}
+            isDataEmpty={docs?.length === 0}
+            emptyViewTitle={STRINGS.no_pending}
+          />
+        )}
+      </div>
       <div className="h-6" />
     </div>
   );

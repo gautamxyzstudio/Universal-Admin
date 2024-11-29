@@ -14,6 +14,7 @@ export enum IDocumentStatus {
   UPDATE = 's3',
   HIDDEN = 's4',
   VERIFIED = 's5',
+  NULL = 'null',
 }
 
 export enum IClientStatus {

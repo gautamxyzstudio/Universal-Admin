@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ITextWithBgColor {
   textLabel: string;
@@ -9,9 +9,14 @@ const TextWithBgColor: React.FC<ITextWithBgColor> = ({
   textStyle,
 }) => {
   return (
-    <h2 className={textStyle + " font-bold rounded-[40px] px-3 py-2 h-fit text-[12px] leading-4"}>
+    <div
+      className={
+        textStyle +
+        ' font-bold rounded-[40px] px-3 py-2 h-fit text-[12px] leading-4'
+      }
+    >
       {textLabel}
-    </h2>
+    </div>
   );
 };
 

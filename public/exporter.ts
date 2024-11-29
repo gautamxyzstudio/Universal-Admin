@@ -47,6 +47,8 @@ import animatedSpinner from './animatedSpinner.svg';
 import jobId from './jobId.svg';
 import location_Pin from './location_Pin.svg';
 import time_Date from './time_Date.svg';
+import check_in from './checkin.svg';
+import check_out from './checkout.svg';
 
 // Icon Object
 export const Icons = {
@@ -56,6 +58,8 @@ export const Icons = {
   success,
   building,
   client,
+  check_in,
+  check_out,
   people,
   crossDialog,
   crossForm,
@@ -107,12 +111,15 @@ import errorILLustration from './errorIllustration.png';
 import mobileLogin from './mobileLogin.svg';
 import tabLogin from './tabLogin.svg';
 import webLogin from './webLogin.svg';
-
+import noDocRequest from './noDocsRequest.svg';
+import noJobs from './noJobs.svg';
 // Image Object
 export const Images = {
   demoImg,
   noSubAdmin,
   errorILLustration,
+  noJobs,
+  noDocRequest,
   mobileLogin,
   tabLogin,
   webLogin,

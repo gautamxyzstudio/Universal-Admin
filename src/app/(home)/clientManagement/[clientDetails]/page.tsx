@@ -1,30 +1,30 @@
-"use client";
+'use client';
 import {
   useChangeClientStatusMutation,
   useGetClientDetailsQuery,
   useGetPostedJobByClientQuery,
-} from "@/api/fetures/Client/ClientApi";
-import Switch from "@/components/atoms/Switch/Switch";
-import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import ContactDetailCard from "@/components/organism/ContactDetailCard/ContactDetailCard";
-import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
-import { STRINGS } from "@/constant/en";
-import { dateFormat, dateMonthFormat, timeFormat } from "@/utility/utils";
-import { Skeleton } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { getClientStatusAttributesFromType } from "../types";
-import { IClientStatus } from "@/constant/enums";
-import CustomTab from "@/components/atoms/CustomTab/CustomTab";
-import JobDetails from "@/components/organism/JobDetails/JobDetails";
-import WorkHistoryCard from "@/components/organism/WorkHistoryCard/WorkHistoryCard";
-import { getJobType } from "@/constant/constant";
-import { Icons } from "../../../../../public/exporter";
-import CustomList from "@/components/atoms/CustomList/CustomList";
+} from '@/api/fetures/Client/ClientApi';
+import Switch from '@/components/atoms/Switch/Switch';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
+import ContactDetailCard from '@/components/organism/ContactDetailCard/ContactDetailCard';
+import PageSubHeader from '@/components/organism/PageSubHeader/PageSubHeader';
+import { STRINGS } from '@/constant/en';
+import { dateFormat, dateMonthFormat, timeFormat } from '@/utility/utils';
+import { Skeleton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { getClientStatusAttributesFromType } from '../types';
+import { IClientStatus } from '@/constant/enums';
+import CustomTab from '@/components/atoms/CustomTab/CustomTab';
+import JobDetails from '@/components/organism/JobDetails/JobDetails';
+import WorkHistoryCard from '@/components/organism/JobPostCard/JobPostCard';
+import { getJobType } from '@/constant/constant';
+import { Icons } from '../../../../../public/exporter';
+import CustomList from '@/components/atoms/CustomList/CustomList';
 // import { IClientDetailsResposne } from "@/api/fetures/Client/Client.types";
 
 const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   const { data, refetch } = useGetClientDetailsQuery(params.clientDetails);
-  const [currentPage, setCurrentPage] =  useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState<IClientStatus>();
   const [updateClientStatus] = useChangeClientStatusMutation();
   const [selectedItem, setSelectedItem] = useState<React.ReactNode>(null);
@@ -40,13 +40,13 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
     }
   }, [data]);
 
-  console.log(data?.status,"122")
-  
-  useEffect(()=>{
-    if(postjobData){
-      setCurrentPage(postjobData.currentPage)
+  console.log(data?.status, '122');
+
+  useEffect(() => {
+    if (postjobData) {
+      setCurrentPage(postjobData.currentPage);
     }
-  },[postjobData])
+  }, [postjobData]);
   const statusAttributes = status && getClientStatusAttributesFromType(status);
 
   const handleStatusChange = async (
@@ -62,7 +62,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
       });
       refetch();
     } catch (error) {
-      console.error("Failed to update status:", error);
+      console.error('Failed to update status:', error);
     }
   };
   // Map the job data to CustomList items
@@ -71,12 +71,12 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
       return {
         children: (
           <WorkHistoryCard
-            companyName={data.client_details?.Name || ""}
+            companyName={data.client_details?.Name || ''}
             profileName={data.job_name}
             days={data.eventDate}
             image={data.client_details?.company_detail?.companylogo?.url}
             textLabel={getJobType(data.job_type)}
-            textStyle={"text-darkBlue bg-white"}
+            textStyle={'text-darkBlue bg-white'}
             iconWithTexts={[
               { text: `${data.id}`, icon: Icons.jobId },
               {
@@ -97,18 +97,19 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
     });
   };
 
-  const postedJob = mapJobData(postjobData)
+  const postedJob = mapJobData(postjobData);
 
   const tabsData = [
     {
       label: STRINGS.postJobs,
-      content: postedJob && postedJob.length === 0 ?(
-        <CustomList items={postedJob} />
-      ): (
-        <CustomList
-          noList={<div className="text-center">{STRINGS.noJobs}</div>}
-        />
-      ),
+      content:
+        postedJob && postedJob.length === 0 ? (
+          <CustomList items={postedJob} />
+        ) : (
+          <CustomList
+            noList={<div className="text-center">{STRINGS.noJobs}</div>}
+          />
+        ),
     },
   ];
 
@@ -116,8 +117,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
     <div className="w-full h-[90%]">
       <PageSubHeader
         pageTitle={STRINGS.clientManagement}
-        name={data?.name || ""}
-        
+        name={data?.name || ''}
       />
       <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
         {/* Left Side */}
@@ -135,11 +135,11 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
             <>
               <div className="flex justify-between h-fit mb-3">
                 <UserNameWithImage
-                  name={data.name || ""}
+                  name={data.name || ''}
                   containorStyle="!text-[16px] !leading-[20px]"
                   image={data.companyLogo}
                   imageStyle="!w-14 !h-14"
-                  companyName={data.companyName || ""}
+                  companyName={data.companyName || ''}
                   companyNameStyle="!text-[14px] !leading-[18px] !w-fit"
                   joinDate={dateMonthFormat(data.createdAt)}
                 />
@@ -147,35 +147,35 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
                   checked={status === 's1' ? true : false}
                   onChange={handleStatusChange}
                   label={statusAttributes?.text}
-                  switchClassName={"justify-end !flex-col !w-fit"}
+                  switchClassName={'justify-end !flex-col !w-fit'}
                   className={` -mt-[10px] text-[8px] leading-3 ${statusAttributes?.styles}`}
                 />
               </div>
 
               <ContactDetailCard
-                email={data.email || ""}
-                phoneNumber={data.contactNo || ""}
-                address={data.location || ""}
-                department={data.industry || ""}
+                email={data.email || ''}
+                phoneNumber={data.contactNo || ''}
+                address={data.location || ''}
+                department={data.industry || ''}
               />
               <CustomTab
                 tabs={tabsData}
                 TabIndicatorProps={{
                   style: {
-                    height: "3px",
-                    borderTopRightRadius: "3px",
-                    borderTopLeftRadius: "3px",
+                    height: '3px',
+                    borderTopRightRadius: '3px',
+                    borderTopLeftRadius: '3px',
                   },
                 }}
                 sx={{
-                  "&": { paddingX: "12px", paddingTop: "4px" },
-                  ".MuiButtonBase-root": {
-                    fontSize: "16px",
-                    lineHeight: "20px",
-                    textTransform: "none",
+                  '&': { paddingX: '12px', paddingTop: '4px' },
+                  '.MuiButtonBase-root': {
+                    fontSize: '16px',
+                    lineHeight: '20px',
+                    textTransform: 'none',
                   },
-                  ".MuiTabs-flexContainer": { gap: "10px" },
-                  ".Mui-selected": { fontWeight: "bold" },
+                  '.MuiTabs-flexContainer': { gap: '10px' },
+                  '.Mui-selected': { fontWeight: 'bold' },
                 }}
               />
             </>

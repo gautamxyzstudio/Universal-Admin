@@ -30,7 +30,6 @@ import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import TableFilter from '@/components/molecules/TableFilter/TableFilter';
 import { docStatus } from '../employeeManagement/types';
-import { Alert } from '@mui/material';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
@@ -162,7 +161,6 @@ const ClientManagement = () => {
             },
           ];
           setClients((prev) => [...newClient, ...prev]);
-          setCurrentPage;
         }
       }
     } catch (error) {
@@ -191,7 +189,7 @@ const ClientManagement = () => {
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name ?? ''}
-          image={params.row.company?.companylogo}
+          image={params.row.company?.companylogo ?? ''}
           companyNameStyle=" text-disable "
           companyName={
             params.row.company?.companyname ?? params.row.companyName
@@ -225,7 +223,11 @@ const ClientManagement = () => {
       field: STRINGS.action,
       headerName: 'Action',
       width: 104,
-      renderCell: () => <span className="text-primary">{STRINGS.view}</span>,
+      renderCell: () => (
+        <span onClick={handleOnRowClick} className="text-primary">
+          {STRINGS.view}
+        </span>
+      ),
     },
   ];
 
@@ -270,11 +272,7 @@ const ClientManagement = () => {
             <div className="flex items-center">
               <SearchField
                 searchStyle="w-[288px]"
-                onChangeText={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error('Function not implemented.');
-                }}
+                onChangeText={() => console.log('e')}
                 value={''}
                 isLoading={false}
                 onPressCross={function (): void {
@@ -293,7 +291,6 @@ const ClientManagement = () => {
         }
         columns={columns}
         rows={clients}
-        onPressRow={handleOnRowClick}
         isLoading={isFetching}
         page={currentPage}
         tableHeightPercent={85}

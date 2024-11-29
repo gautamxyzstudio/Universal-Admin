@@ -5,6 +5,7 @@ export interface IEmptyScreenViewProps {
   emptyViewTitle?: string;
   emptyViewSubTitle?: string;
   illustration?: StaticImport;
+  illustrationStyes?: string;
   retryHandler?: () => void;
   error?: ICustomErrorResponse | undefined;
   isDataEmpty?: boolean;

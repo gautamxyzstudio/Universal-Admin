@@ -2,6 +2,8 @@ import {
   IDocumentStatus,
   IEmployeeApiKeyStatus,
   IEmployeeDocsApiKeys,
+  IJobPostStatus,
+  IJobTypesEnum,
 } from '@/constant/enums';
 
 export interface IGetEmployeeApiResponse {
@@ -247,4 +249,101 @@ export interface IGetEmployeeByIdResponse {
       | null
       | undefined;
   };
+}
+
+export interface IJobPost {
+  status: IJobPostStatus;
+  CheckIn: Date | null;
+  CheckOut: Date | null;
+  id: number;
+  job_name: string;
+  city: string;
+  address: string;
+  postalCode: string;
+  postID: string;
+  gender: string;
+  salary: string;
+  job_type: IJobTypesEnum;
+  location: string;
+  required_certificates: string[];
+  eventDate: Date | null;
+  startShift: Date | null;
+  description: string;
+  jobDuties: string;
+  endShift: Date | null;
+  requiredEmployee: string | null;
+  notAccepting: boolean | null;
+  client_details: {
+    id: number;
+    companyname: string;
+    clientId: number;
+    clientName: string;
+    companyemail: string;
+    companylogo: string;
+  };
+}
+
+export interface IGetEmployeeCustomResponse {
+  data: IJobPost[];
+  pagination:
+    | {
+        page: number;
+        pageSize: number;
+        pageCount: number;
+        total: number;
+      }
+    | null
+    | undefined;
+}
+
+export interface IGetEmployeeJobResponse {
+  data: {
+    status: IJobPostStatus;
+    CheckIn: Date | null;
+    CheckOut: Date | null;
+    jobs:
+      | {
+          id: number;
+          job_name: string | null | undefined;
+          city: string | null | undefined;
+          address: string | null | undefined;
+          postalCode: string | null | undefined;
+          postID: string | null | undefined;
+          notAccepting: boolean | null | undefined;
+          gender: string | null | undefined;
+          salary: string | null | undefined;
+          job_type: IJobTypesEnum | null | undefined;
+          location: string | null | undefined;
+          required_certificates: string[] | null | undefined;
+          eventDate: Date | null | undefined;
+          startShift: Date | null | undefined;
+          description: string | null | undefined;
+          jobDuties: string | null | undefined;
+          endShift: Date | null | undefined;
+          requiredEmployee: string | null | undefined;
+          client_details:
+            | {
+                id: number | null | undefined;
+                Name: string | null | undefined;
+                company_detail: {
+                  id: number | null | undefined;
+                  companyname: string | null | undefined;
+                  companyemail: string | null | undefined;
+                  companylogo: {
+                    url: string | null | undefined;
+                  };
+                };
+              }[];
+        }[]
+      | null;
+  }[];
+  pagination:
+    | {
+        page: number;
+        pageSize: number;
+        pageCount: number;
+        total: number;
+      }
+    | null
+    | undefined;
 }

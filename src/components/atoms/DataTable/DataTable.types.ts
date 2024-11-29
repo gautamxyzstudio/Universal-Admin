@@ -9,7 +9,6 @@ export interface IDataTableProps extends TableProps, IEmptyScreenViewProps {
   isLoading: boolean;
   headerView?: React.ReactNode;
   tableHeightPercent?: number;
-  onPressRow?: (row: unknown) => void;
   onPressPageChange?: (
     event: React.MouseEvent<HTMLButtonElement> | null,
     page: number
