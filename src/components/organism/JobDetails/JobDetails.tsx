@@ -9,7 +9,6 @@ import { getJobStatus, getJobType } from '@/constant/constant';
 import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
 import CustomMenuComponent from '@/components/atoms/CustomMenuComponent/CustomMenuComponent';
 import { ITextGroupTypes } from '../TextGroup/TextGroup.types';
-import { IJobPostTypes } from '@/api/fetures/Company/Company.types';
 const JobDetails = ({
   data,
   isEmployee,

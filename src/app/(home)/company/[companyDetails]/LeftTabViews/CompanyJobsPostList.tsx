@@ -4,21 +4,20 @@
 import VirtualList from "@/components/molecules/VirtualList/VirtualList";
 import JobPostCard from "@/components/organism/JobPostCard/JobPostCard";
 import React, { useCallback, useEffect, useState } from "react";
-
 import { dateFormat, timeFormat } from "@/utility/utils";
 import TabButton from "@/components/molecules/ButtonTypes/TabButton/TabButton";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import JobPostCardLoading from "@/components/organism/JobPostCard/JobPostCardLoading";
 import { STRINGS } from "@/constant/en";
-import { Icons, Images } from "../../../../../public/exporter";
-import { IJobPostTypes } from "@/api/fetures/Company/Company.types";
+import { Icons, Images } from "../../../../../../public/exporter";
 import { getJobType } from "@/constant/constant";
+import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
 
 type ICompanyJobsListProps = {
-  data: IJobPostTypes[];
+  data: IJobPost[];
   isLoading: boolean;
   selectedPostId: number | null;
-  onPressButton: (post: IJobPostTypes) => void;
+  onPressButton: (post: IJobPost) => void;
 };
 
 const CompanyJobsList: React.FC<ICompanyJobsListProps> = ({
@@ -27,7 +26,7 @@ const CompanyJobsList: React.FC<ICompanyJobsListProps> = ({
   selectedPostId,
   onPressButton,
 }) => {
-  const [jobs, setJobs] = useState<IJobPostTypes[]>([]);
+  const [jobs, setJobs] = useState<IJobPost[]>([]);
   const { data: demoData } = useDemoData({
     rowLength: 5,
     maxColumns: 9,
@@ -49,25 +48,25 @@ const CompanyJobsList: React.FC<ICompanyJobsListProps> = ({
   };
 
   const renderItem = useCallback(
-    (_: number, item: IJobPostTypes) => {
+    (_: number, item: IJobPost) => {
       return (
         <TabButton
           key={item.id}
           content={
             <JobPostCard
-              postByName={item.client_details?.Name || ""}
+              postByName={item.client_details.clientName || ""}
               profileName={item.job_name}
-              days={item.eventDate}
-              image={item.client_details?.company_detail?.companylogo?.url}
+              days={item.eventDate ?? new Date()}
+              image={item.client_details?.companylogo}
               textLabel={getJobType(item.job_type)}
               textStyle={"text-darkBlue bg-white"}
               iconWithTexts={[
                 { text: `${item.id}`, icon: Icons.jobId },
                 {
-                  text: `${dateFormat(item.eventDate)}`,
-                  subText: `${timeFormat(item.startShift)} - ${timeFormat(
-                    item.endShift
-                  )}`,
+                  text: `${dateFormat(item?.eventDate ?? new Date())}`,
+                  subText: `${timeFormat(
+                    item.startShift ?? new Date()
+                  )} - ${timeFormat(item.endShift ?? new Date())}`,
                   icon: Icons.time_Date,
                 },
                 { text: `${item.location}`, icon: Icons.location_Pin },

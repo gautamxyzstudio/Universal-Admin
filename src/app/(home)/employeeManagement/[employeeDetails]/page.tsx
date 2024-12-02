@@ -167,7 +167,7 @@ const EmployeeDetails = ({
 
   useEffect(() => {
     if (params.employeeDetails && selectedTabIndex === 3)
-      getEmployeeJobHistory(params.employeeDetails);
+      getEmployeeJobHistory(params.employeeDetails); 
   }, [selectedTabIndex === 3]);
 
   const getEmployeeHandler = async (empId: string) => {

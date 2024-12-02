@@ -7,7 +7,8 @@ const CustomAccordion: React.FC<IAccordion> = ({
   description,
   isExpanded,
 }) => {
-  return (
+  
+  return (<>
     <Accordion
       slotProps={{ transition: { unmountOnExit: true } }}
       style={{
@@ -22,6 +23,10 @@ const CustomAccordion: React.FC<IAccordion> = ({
           margin: 0,
           paddingLeft: 0,
           paddingRight: 0,
+          color: '#121212',
+          fontSize: '16px',
+          lineHeight: '20px',
+          fontWeight: 'bold',
           '&.Mui-expanded': {
             minHeight: '48px',
           },
@@ -43,6 +48,7 @@ const CustomAccordion: React.FC<IAccordion> = ({
         {description}
       </AccordionDetails>
     </Accordion>
+    </>
   );
 };
 
