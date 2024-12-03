@@ -4,13 +4,13 @@
 import VirtualList from "@/components/molecules/VirtualList/VirtualList";
 import JobPostCard from "@/components/organism/JobPostCard/JobPostCard";
 import React, { useCallback, useEffect, useState } from "react";
-import { dateFormat, timeFormat } from "@/utility/utils";
+import { dateFormat, getJobStatusColor, timeFormat } from "@/utility/utils";
 import TabButton from "@/components/molecules/ButtonTypes/TabButton/TabButton";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import JobPostCardLoading from "@/components/organism/JobPostCard/JobPostCardLoading";
 import { STRINGS } from "@/constant/en";
 import { Icons, Images } from "../../../../../../public/exporter";
-import { getJobType } from "@/constant/constant";
+import { getJobStatus} from "@/constant/constant";
 import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
 
 type ICompanyJobsListProps = {
@@ -54,12 +54,12 @@ const CompanyJobsList: React.FC<ICompanyJobsListProps> = ({
           key={item.id}
           content={
             <JobPostCard
-              postByName={item.client_details.clientName || ""}
+              postByName={item.client_details?.clientName || ""}
               profileName={item.job_name}
               days={item.eventDate ?? new Date()}
               image={item.client_details?.companylogo}
-              textLabel={getJobType(item.job_type)}
-              textStyle={"text-darkBlue bg-white"}
+              textLabel={getJobStatus(item.status)}
+              textStyle={getJobStatusColor(item.status) }
               iconWithTexts={[
                 { text: `${item.id}`, icon: Icons.jobId },
                 {

@@ -221,7 +221,7 @@ const clientApi = baseApi.injectEndpoints({
                 description: job.description ?? '',
                 jobDuties: job.jobDuties ?? '',
                 endShift: job.endShift ?? null,
-                requiredEmployee: job.requiredEmployee ?? null,
+                requiredEmployee: job.requiredEmployee ?? 0,
                 client_details: {
                   clientId: job.client_details[0]?.id ?? 0,
                   clientName: job.client_details[0]?.Name ?? '',

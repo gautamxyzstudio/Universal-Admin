@@ -75,14 +75,14 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
         jobDescription: currentPost.description,
         jobDuties: currentPost.jobDuties,
         jobType: currentPost.job_type,
-        eventDate: currentPost.eventDate,
-        startShift: currentPost.startShift,
-        endShift: currentPost.endShift,
+        eventDate: currentPost.eventDate ?? new Date(),
+        startShift: currentPost.startShift ?? new Date(),
+        endShift: currentPost.endShift ?? new Date(),
         location: currentPost.location,
         address: currentPost.address,
         city: currentPost.city,
         postalCode: currentPost.postalCode,
-        requiredEmployee: currentPost.requiredEmployee,
+        requiredEmployee: currentPost.requiredEmployee ?? 0,
         salary: currentPost.salary,
         requiredCertificates: currentPost.required_certificates,
         gender: currentPost.gender,
@@ -125,7 +125,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               address: state.address,
               city: state.city,
               postalCode: state.postalCode,
-              requiredEmployee: state.requiredEmployee ?? 0,
+              requiredEmployee: state.requiredEmployee,
               salary: state.salary,
               required_certificates: state.requiredCertificates,
               gender: state.gender,
@@ -150,6 +150,11 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               required_certificates: state.requiredCertificates,
               gender: state.gender,
               status: state.status,
+              CheckIn: null,
+              CheckOut: null,
+              postID: "",
+              notAccepting: null,
+              client_details: null,
             });
             displaySnackbar("success", "Job Post updated successfully");
             onPressEditCross();
@@ -261,7 +266,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                   }}
                 />
                 <span className="absolute -top-[13px] left-[9px] bg-white text-xs text-disable p-[5px]">
-                  {STRINGS.jobDuty}
+                  {STRINGS.jobDut}
                 </span>
               </div>
               <CustomSelectInput
@@ -377,8 +382,8 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 }
                 menuItem={genderPreferences}
               />
-            </div> 
-            <div className="mt-6"/>
+            </div>
+            <div className="mt-6" />
           </div>
         </div>
         <div className="px-6 pt-4 z-10 fixed w-[30%] bg-white bottom-0 shadow-custom-shadow">

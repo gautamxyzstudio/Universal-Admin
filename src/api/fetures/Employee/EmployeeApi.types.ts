@@ -265,13 +265,13 @@ export interface IJobPost {
   salary: string;
   job_type: IJobTypesEnum;
   location: string;
-  required_certificates: string[];
+  required_certificates: string[] | null;
   eventDate: Date | null;
   startShift: Date | null;
   description: string;
   jobDuties: string;
   endShift: Date | null;
-  requiredEmployee: string | null;
+  requiredEmployee: number | null;
   notAccepting: boolean | null;
   client_details: {
     id: number;
@@ -280,7 +280,7 @@ export interface IJobPost {
     clientName: string;
     companyemail: string;
     companylogo: string;
-  };
+  } | null;
 }
 
 export interface IGetEmployeeCustomResponse {
@@ -320,7 +320,7 @@ export interface IGetEmployeeJobResponse {
           description: string | null | undefined;
           jobDuties: string | null | undefined;
           endShift: Date | null | undefined;
-          requiredEmployee: string | null | undefined;
+          requiredEmployee: number | null | undefined;
           client_details:
             | {
                 id: number | null | undefined;

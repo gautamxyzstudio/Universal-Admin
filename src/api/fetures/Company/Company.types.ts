@@ -205,7 +205,7 @@ export type IGetPostedJobsResponse = {
     jobDuties: string | null | undefined;
     status: IJobPostStatus | null | undefined;
     endShift: Date | null | undefined;
-    requiredEmployee: string | null | undefined;
+    requiredEmployee: number | null | undefined;
     notAccepting: boolean | null | undefined;
     updatedAt: Date | null | undefined;
     client_details:

@@ -12,7 +12,6 @@ import {
   IGetCompanyClientResponse,
   IGetCompanyDetailsResponse,
   IJobPostCustomizedResponse,
-  IJobPostTypes,
   IGetPostedJobsResponse,
   ICompanyClientDetails,
   IGetCustomizeCompanyClientResponse,
@@ -128,7 +127,7 @@ const companiesApi = baseApi.injectEndpoints({
                 description: job.description ?? "",
                 jobDuties: job.jobDuties ?? "",
                 endShift: job.endShift ?? null,
-                requiredEmployee: job.requiredEmployee ?? null,
+                requiredEmployee: job.requiredEmployee ?? 0,
                 client_details: {
                   clientId: job.client_details[0]?.id ?? 0,
                   clientName: job.client_details[0]?.Name ?? "",
@@ -194,7 +193,7 @@ const companiesApi = baseApi.injectEndpoints({
                 description: job.description ?? "",
                 jobDuties: job.jobDuties ?? "",
                 endShift: job.endShift ?? null,
-                requiredEmployee: job.requiredEmployee ?? null,
+                requiredEmployee: job.requiredEmployee ?? 0,
                 client_details: {
                   clientId: job.client_details[0]?.id ?? 0,
                   clientName: job.client_details[0]?.Name ?? "",
@@ -259,7 +258,7 @@ const companiesApi = baseApi.injectEndpoints({
       },
     }),
     updateJobPost: builder.mutation<
-      IJobPostTypes,
+      IJobPost,
       { jobPostDetails: IAddNewJobPostRequest; jobPostId: number }
     >({
       query: (body: {
@@ -270,7 +269,7 @@ const companiesApi = baseApi.injectEndpoints({
         method: ApiMethodType.patch,
         body: body.jobPostDetails,
       }),
-      transformResponse: (response: IJobPostTypes) => {
+      transformResponse: (response: IJobPost) => {
         console.log(response, "api response");
         return response;
       },

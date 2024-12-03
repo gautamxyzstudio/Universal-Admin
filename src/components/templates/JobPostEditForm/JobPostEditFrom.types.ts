@@ -1,11 +1,11 @@
-import { IJobPostTypes } from "@/api/fetures/Company/Company.types";
+import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
 import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
 
 export interface IJobPostEditFromProps {
   show: boolean;
   setGlobalModalState: (state: boolean) => void;
-  onPostEditHandler: (post: IJobPostTypes) => void;
-  currentPost: IJobPostTypes | null;
+  onPostEditHandler: (post: IJobPost) => void;
+  currentPost: IJobPost | null;
 }
 
 export type IEditJobPostState = {
@@ -20,7 +20,7 @@ export type IEditJobPostState = {
   address: string;
   city: string;
   postalCode: string;
-  requiredEmployee: number | undefined;
+  requiredEmployee: number;
   salary: string;
   requiredCertificates: string[] | null;
   gender: string;

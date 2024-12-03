@@ -1,15 +1,16 @@
-'use client';
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
-import VirtualList from '@/components/molecules/VirtualList/VirtualList';
-import JobPostCard from '@/components/organism/JobPostCard/JobPostCard';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Icons, Images } from '../../../../../../public/exporter';
-import { dateFormat, timeFormat } from '@/utility/utils';
-import TabButton from '@/components/molecules/ButtonTypes/TabButton/TabButton';
-import { useDemoData } from '@mui/x-data-grid-generator';
-import JobPostCardLoading from '@/components/organism/JobPostCard/JobPostCardLoading';
-import { STRINGS } from '@/constant/en';
+import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
+import VirtualList from "@/components/molecules/VirtualList/VirtualList";
+import JobPostCard from "@/components/organism/JobPostCard/JobPostCard";
+import React, { useCallback, useEffect, useState } from "react";
+import { Icons, Images } from "../../../../../../public/exporter";
+import { dateFormat, getJobStatusColor, timeFormat } from "@/utility/utils";
+import TabButton from "@/components/molecules/ButtonTypes/TabButton/TabButton";
+import { useDemoData } from "@mui/x-data-grid-generator";
+import JobPostCardLoading from "@/components/organism/JobPostCard/JobPostCardLoading";
+import { STRINGS } from "@/constant/en";
+import { getJobStatus } from "@/constant/constant";
 
 type IEmployeeJobsListProps = {
   data: IJobPost[];
@@ -28,7 +29,7 @@ const EmployeeJobsList: React.FC<IEmployeeJobsListProps> = ({
   const { data: demoData } = useDemoData({
     rowLength: 5,
     maxColumns: 9,
-    dataSet: 'Employee',
+    dataSet: "Employee",
   });
   useEffect(() => {
     if (data) {
@@ -52,11 +53,12 @@ const EmployeeJobsList: React.FC<IEmployeeJobsListProps> = ({
           key={item.id}
           content={
             <JobPostCard
-              companyName={item.client_details.companyname}
+              companyName={item.client_details?.companyname}
               profileName={item.job_name}
               days={undefined}
-              image={item.client_details.companylogo}
-              textLabel={item.job_type}
+              image={item.client_details?.companylogo}
+              textLabel={getJobStatus(item.status)}
+              textStyle={getJobStatusColor(item.status)}
               iconWithTexts={[
                 {
                   icon: Icons.dollar,

@@ -27,7 +27,7 @@ const TabButton: React.FC<ITabButton> = ({
           padding: 0,
         },
         border: '1px solid',
-        borderColor: '#00000000',
+        borderColor: '#EBEBEB',
         borderRadius: '8px',
         margin: '12px',
       }}
