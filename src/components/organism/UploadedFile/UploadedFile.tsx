@@ -6,8 +6,12 @@ import React, { useEffect, useState } from 'react';
 import { base64Icon, Icons } from '../../../../public/exporter';
 import TextWithBgColor from '@/components/molecules/TextWithBgColor/TextWithBgColor';
 import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
-import { IDocumentStatus } from '@/constant/enums';
-import { getDocumentStatusTextByStatus } from '@/utility/utils';
+import { IDocumentStatus, IJobPostStatus } from '@/constant/enums';
+import {
+  getDocumentStatusStyles,
+  getDocumentStatusTextByStatus,
+  getJobStatusColor,
+} from '@/utility/utils';
 import { useDocumentExpandViewContext } from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
 import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 
@@ -71,7 +75,7 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
 
             <div className="flex flex-col gap-y-2">
               <h2 className="text-Black text-[16px] leading-5">
-                {empDocument.doc?.name}
+                {empDocument.docName}
               </h2>
               {/* {days && (
                 <h2 className="text-disable text-[14px] leading-[18px]">
@@ -101,34 +105,53 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                     />
                   }
                 />
-                <CustomButton
-                  customStyles={{
-                    '.MuiLoadingButton-label': {
-                      gap: '4px',
-                    },
-                  }}
-                  buttonType="outline-small-green"
-                  variant="outlined"
-                  title={STRINGS.approved}
-                  onClick={() => onPressButton(IDocumentStatus.APPROVED)}
-                  icon={
-                    <Image
-                      src={Icons.accept}
-                      alt="accept"
-                      className="w-4 h-4"
-                    />
-                  }
-                />
+                {empDocument.isUpdate ? (
+                  <CustomButton
+                    customStyles={{
+                      '.MuiLoadingButton-label': {
+                        gap: '4px',
+                      },
+                    }}
+                    buttonType="outline-small-blue"
+                    variant="outlined"
+                    title={STRINGS.update}
+                    onClick={() => onPressButton(IDocumentStatus.UPDATE)}
+                    icon={
+                      <Image
+                        src={Icons.accept}
+                        alt="accept"
+                        className="w-4 h-4"
+                      />
+                    }
+                  />
+                ) : (
+                  <CustomButton
+                    customStyles={{
+                      '.MuiLoadingButton-label': {
+                        gap: '4px',
+                      },
+                    }}
+                    buttonType="outline-small-green"
+                    variant="outlined"
+                    title={STRINGS.approved}
+                    onClick={() => onPressButton(IDocumentStatus.APPROVED)}
+                    icon={
+                      <Image
+                        src={Icons.accept}
+                        alt="accept"
+                        className="w-4 h-4"
+                      />
+                    }
+                  />
+                )}
               </>
             )}
             {document.docStatus !== IDocumentStatus.PENDING && (
               <>
                 <TextWithBgColor
-                  textStyle={`${
-                    document.docStatus === IDocumentStatus.APPROVED
-                      ? 'bg-lightGreen text-green'
-                      : 'bg-lightRed text-red'
-                  }`}
+                  textStyle={getDocumentStatusStyles(
+                    document.docStatus ?? IJobPostStatus.OPEN
+                  )}
                   textLabel={getDocumentStatusTextByStatus(document.docStatus)}
                 />
                 <IconButton
@@ -141,31 +164,6 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                 >
                   <MoreVertOutlined />
                 </IconButton>
-                <Menu
-                  open={open}
-                  anchorEl={anchorEl}
-                  MenuListProps={{
-                    'aria-labelledby': 'openMenu',
-                  }}
-                  sx={{
-                    '.MuiList-root': {
-                      padding: '0px',
-                    },
-                    '.MuiMenuItem-root': {
-                      padding: '12px 6px 12px 12px',
-                      gap: '12px',
-                      fontSize: '12px',
-                      lineHeight: '16px',
-                    },
-                  }}
-                  onClose={handleClose}
-                  TransitionComponent={Fade}
-                >
-                  <MenuItem onClick={handleClose}>
-                    <Image src={Icons.hide} alt="hide" />
-                    <span>Hide from employee side</span>
-                  </MenuItem>
-                </Menu>
               </>
             )}
           </div>

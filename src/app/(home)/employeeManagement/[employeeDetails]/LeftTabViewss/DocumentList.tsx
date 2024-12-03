@@ -20,6 +20,7 @@ type IEmployeeDocumentList = {
   data: {
     primaryDocuments: IEmployeeDocument[] | null;
     otherDocuments: IEmployeeDocument[] | null;
+    docRequests: IEmployeeDocument[] | null;
   };
   onPressItem: (
     type: 'primary' | 'secondary' | null,
@@ -58,18 +59,21 @@ const DocumentList: React.FC<IEmployeeDocumentList> = ({
     maxColumns: 9,
     dataSet: 'Employee',
   });
+
   useEffect(() => {
     if (data.otherDocuments) setSecondaryDocs(data.otherDocuments);
     if (data.primaryDocuments) setPrimaryDocs(data.primaryDocuments);
     if (data.otherDocuments && data.primaryDocuments) {
       let isPending = false;
-      [...(data?.primaryDocuments ?? []), ...(data.otherDocuments ?? [])].map(
-        (doc) => {
-          if (doc.docStatus === IDocumentStatus.PENDING) {
-            isPending = true;
-          }
+      [
+        ...(data?.docRequests ?? []),
+        ...(data?.primaryDocuments ?? []),
+        ...(data.otherDocuments ?? []),
+      ].map((doc) => {
+        if (doc.docStatus === IDocumentStatus.PENDING) {
+          isPending = true;
         }
-      );
+      });
       if (isPending) {
         setAllRetested({
           doc: null,

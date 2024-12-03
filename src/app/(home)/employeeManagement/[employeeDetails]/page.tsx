@@ -10,6 +10,7 @@ import {
   useLazyGetEmployeeByIdQuery,
   useLazyGetEmployeeJobsHistoryQuery,
   useUpdateDocumentStatusMutation,
+  useUpdateOrRejectedDocumentUpdateRequestMutation,
   useUpdateOtherDocumentStatusMutation,
 } from '@/api/fetures/Employee/EmployeeApi';
 import {
@@ -36,24 +37,60 @@ const EmployeeDetails = ({
 }: {
   params: { employeeDetails: string };
 }) => {
+  //=------------------------------apis start ------------------------------
+
+  // to getCurrent user details
   const [getEmployeeById, { isFetching }] = useLazyGetEmployeeByIdQuery();
-  const [employee, setEmployee] = useState<IEmployeeAdvance | null>(null);
-  const [selectedTabIndex, setSelectedTabItemIndex] = useState(0);
+
+  // to update mandatory document status
   const [updateDocStatus, { isLoading }] = useUpdateDocumentStatusMutation();
-  const [selectedJobPost, setSelectedJobPost] = useState<IJobPost | null>(null);
+
+  // to update other document status
   const [updateOtherDocsStatus, { isLoading: showLoading }] =
     useUpdateOtherDocumentStatusMutation();
-  const [jobEmployees, setJobEmployees] = useState<IJobPost[]>([]);
-  const { displaySnackbar } = useSnackBarContext();
+
+  // to update the status of document  update request
+  const [mutateUpdateRequest, { isLoading: updateDocLoading }] =
+    useUpdateOrRejectedDocumentUpdateRequestMutation();
+
+  // to get employee completed jobs
   const [getJobHistory, { isFetching: getJobHistoryLoading }] =
     useLazyGetEmployeeJobsHistoryQuery();
+
+  //=------------------------------apis end ------------------------------
+
+  //-----------------------------State start ----------------------------------
+
+  // to save current employee details
+  const [employee, setEmployee] = useState<IEmployeeAdvance | null>(null);
+
+  // to save the tab index for the custom tab component
+  const [selectedTabIndex, setSelectedTabItemIndex] = useState(0);
+
+  // to persist state when render occurs on the page
+  const [tabChangeAttributes, setTabChangeAttributes] = useState<{
+    doc: null | IEmployeeDocument;
+    type: 'primary' | 'secondary' | null;
+  }>({ doc: null, type: null });
+
+  // to save the current selected job post employee
+  const [selectedJobPost, setSelectedJobPost] = useState<IJobPost | null>(null);
+
+  // to save all the job post of the employee
+  const [jobEmployees, setJobEmployees] = useState<IJobPost[]>([]);
+
+  // to save the all kinds of docs to show on the left side tabs
   const [employeeDocsTabList, setEmployeeDocsTabList] = useState<{
     primaryDocuments: IEmployeeDocument[] | null;
     otherDocuments: IEmployeeDocument[] | null;
+    docRequests: IEmployeeDocument[] | null;
   }>({
     primaryDocuments: null,
+    docRequests: null,
     otherDocuments: null,
   });
+
+  //to save the all kinds of docs to show on the right side tabs
   const [employeeDocs, setEmployeeDocs] = useState<{
     heading: string;
     docs: IEmployeeDocument[];
@@ -62,8 +99,17 @@ const EmployeeDetails = ({
     docs: [],
   });
 
-  const { changeLoaderState } = useShowLoaderContext();
+  //-----------------------------State end ----------------------------------
 
+  //--------------------------Contexts Starts---------------------------------
+  const { displaySnackbar } = useSnackBarContext();
+
+  const { changeLoaderState } = useShowLoaderContext();
+  //--------------------------Contexts End---------------------------------
+
+  //--------------- Side Effects Start --------------------------------------
+
+  // to display loader when api mutation takes place
   useEffect(() => {
     changeLoaderState(isLoading);
   }, [isLoading]);
@@ -71,30 +117,102 @@ const EmployeeDetails = ({
   useEffect(() => {
     changeLoaderState(showLoading);
   }, [showLoading]);
+  useEffect(() => {
+    changeLoaderState(updateDocLoading);
+  }, [updateDocLoading]);
 
+  // to call api when we get current employee id via params
+  useEffect(() => {
+    if (params.employeeDetails) {
+      getEmployeeHandler(params.employeeDetails);
+    }
+  }, [params.employeeDetails]);
+
+  // to call the api when user click on the third tab which is employee job posts
+  useEffect(() => {
+    if (params.employeeDetails && selectedTabIndex === 3)
+      getEmployeeJobHistory(params.employeeDetails);
+  }, [selectedTabIndex === 3]);
+
+  // executes when there is a change in any employee document states to
+  useEffect(() => {
+    if (employee) {
+      if (!tabChangeAttributes.type) {
+        const pendingRequest = getCurrentPendingRequests(employee);
+        setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
+      } else {
+        const allEmployeeDocs = getAllDocumentEmployee(employee);
+        const requests = allEmployeeDocs.filter(
+          (doc) => doc.docName === tabChangeAttributes?.doc?.docName
+        );
+        setEmployeeDocs({ heading: requests[0].docName, docs: requests });
+      }
+      setEmployeeDocsTabList({
+        primaryDocuments: employee?.documents ?? [],
+        otherDocuments: employee?.otherDocuments ?? [],
+        docRequests: employee.documentRequests ?? [],
+      });
+    }
+  }, [employee]);
+
+  //--------------- Side Effects End --------------------------------------
+
+  //------------------------------------ Api Functions Start ---------------------------
+
+  // call when to make change in any document
   const updateDocStatusHandler = (
+    item: IEmployeeDocument,
     status: IDocumentStatus,
     key: IEmployeeApiKeyStatus,
     isCheque?: boolean,
-    docId?: number
+    docId?: number,
+    isUpdate?: boolean,
+    licenseNumber?: string
   ) => {
     if (key === IEmployeeApiKeyStatus.NULL) {
-      updateOtherDocStatus(docId, status);
+      if (isUpdate) {
+        mutateUpdateDocumentStatusHandler(docId, status);
+      } else {
+        updateOtherDocStatus(docId, status);
+      }
     } else {
-      updateMandatoryDocumentsStatus(status, key, isCheque);
+      updateMandatoryDocumentsStatus(
+        item,
+        status,
+        key,
+        licenseNumber,
+        isCheque
+      );
     }
   };
-
+  // to update the status of mandatory document
   const updateMandatoryDocumentsStatus = withAsyncErrorHandlingPost(
     async (
+      item: IEmployeeDocument,
       status: IDocumentStatus,
       key: IEmployeeApiKeyStatus,
+      licenseNumber: string,
       isCheque?: boolean
     ) => {
+      let body: { [key: string]: string } = {};
+      body = {
+        [key]: status,
+      };
+      if (item.docName === STRINGS.license_advance && licenseNumber) {
+        body = {
+          ...body,
+          securityAdvNo: licenseNumber,
+        };
+      }
+      if (item.docName === STRINGS.license_basic && licenseNumber) {
+        body = {
+          ...body,
+          securityBasicNo: licenseNumber,
+        };
+      }
       const response = await updateDocStatus({
         docId: parseInt(params.employeeDetails),
-        key: key,
-        docStatus: status,
+        body: body,
       }).unwrap();
       if (response) {
         if (isCheque) {
@@ -122,17 +240,48 @@ const EmployeeDetails = ({
             prevEmpDocs[index] = {
               ...prevEmpDocs[index],
               docStatus: status,
+              licenseNo: licenseNumber,
             };
             prevEmpDetails = { ...prevEmpDetails, documents: prevEmpDocs };
             return prevEmpDetails;
           });
         }
-        displaySnackbar('success', 'Document status updated successfully');
+        displaySnackbar('success', 'Document  updated successfully');
       }
     },
     displaySnackbar
   );
 
+  // to update the status of update document requests
+  const mutateUpdateDocumentStatusHandler = withAsyncErrorHandlingPost(
+    async (docId: number, status: IDocumentStatus) => {
+      const response = await mutateUpdateRequest({
+        id: docId,
+        status: status,
+      }).unwrap();
+      if (response) {
+        setEmployee((prev) => {
+          if (!prev) return null;
+          let prevEmpDetails = { ...prev };
+          const prevDocsRequest = [...prev.documentRequests];
+          const index = prevDocsRequest.findIndex((doc) => doc.docId === docId);
+          prevDocsRequest[index] = {
+            ...prevDocsRequest[index],
+            docStatus: status,
+          };
+          prevEmpDetails = {
+            ...prevEmpDetails,
+            documentRequests: prevDocsRequest,
+          };
+          return prevEmpDetails;
+        });
+        displaySnackbar('success', 'Document updated successfully');
+      }
+    },
+    displaySnackbar
+  );
+
+  // to update the status of other documents document
   const updateOtherDocStatus = withAsyncErrorHandlingPost(
     async (docId: number, status: IDocumentStatus) => {
       const response = await updateOtherDocsStatus({
@@ -158,30 +307,19 @@ const EmployeeDetails = ({
     displaySnackbar
   );
 
-  useEffect(() => {
-    if (params.employeeDetails) {
-      getEmployeeHandler(params.employeeDetails);
-    }
-  }, [params.employeeDetails]);
-
-  useEffect(() => {
-    if (params.employeeDetails && selectedTabIndex === 3)
-      getEmployeeJobHistory(params.employeeDetails);
-  }, [selectedTabIndex === 3]);
-
+  //  to get current employee details
   const getEmployeeHandler = async (empId: string) => {
     try {
       const response = await getEmployeeById({ id: parseInt(empId) }).unwrap();
       if (response) {
         setEmployee(response);
-      } else {
-        console.log('Employee data not available');
       }
     } catch (err) {
       console.log('Error in fetching employee details', err);
     }
   };
 
+  // to get current employee job History
   const getEmployeeJobHistory = async (id: string) => {
     try {
       const response = await getJobHistory({
@@ -197,17 +335,9 @@ const EmployeeDetails = ({
     }
   };
 
-  useEffect(() => {
-    if (employee) {
-      const pendingRequest = getCurrentPendingRequests(employee);
-      setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
-      setEmployeeDocsTabList({
-        primaryDocuments: employee?.documents ?? [],
-        otherDocuments: employee?.otherDocuments ?? [],
-      });
-    }
-  }, [employee]);
+  //------------------------------------ Api Functions Start ---------------------------
 
+  // let side tabs data
   const tabsData = [
     {
       label: 'Document',
@@ -216,6 +346,7 @@ const EmployeeDetails = ({
         setEmployeeDocsTabList({
           primaryDocuments: employee?.documents ?? [],
           otherDocuments: employee?.otherDocuments ?? [],
+          docRequests: employee?.documentRequests ?? [],
         });
         const pendingRequest = getCurrentPendingRequests(employee);
         setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
@@ -235,32 +366,52 @@ const EmployeeDetails = ({
     },
   ];
 
+  console.log(
+    '_==-=-=-=-=-=-=-=-=-=-=-=-=-EMPLOYEE DOCS=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+  );
+  console.log(employee);
+  console.log(
+    '_==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+  );
+
+  // executes when there is a change in current selected document type
   const onChangeDocTabHandler = (
     type: 'primary' | 'secondary' | null,
     doc: IEmployeeDocument
   ) => {
+    setTabChangeAttributes({ doc: doc.docId === null ? null : doc, type });
     if (employee?.documents) {
       const employeeDocs = [...employee?.documents];
       const otherDocs = [...employee?.otherDocuments];
+      const requestedDocs = [...employee.documentRequests];
       if (type === null) {
         const pendingRequest = getCurrentPendingRequests(employee);
         setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
       }
       if (type === 'primary') {
-        const item = employeeDocs.find(
-          (document) => document.docId === doc.docId
-        );
+        const docs: IEmployeeDocument[] = [];
+        const otherItem =
+          requestedDocs.find((document) => document.docName === doc.docName) ??
+          null;
+        if (otherItem) {
+          docs.push(otherItem);
+        }
+        const item =
+          employeeDocs.find((document) => document.docId === doc.docId) ?? null;
+        if (item) {
+          docs.push(item);
+        }
         if (item)
           setEmployeeDocs({
-            heading: 'Mandatory Documents',
-            docs: [item],
+            heading: docs[0].docName,
+            docs: docs,
           });
       }
       if (type === 'secondary') {
         const item = otherDocs.find((document) => document.docId === doc.docId);
         if (item)
           setEmployeeDocs({
-            heading: 'Other Documents',
+            heading: item.docName,
             docs: [item],
           });
       }
@@ -344,8 +495,23 @@ const EmployeeDetails = ({
           <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
             {selectedTabIndex === 0 && (
               <DocumentDetailsView
-                onPressButton={(status, key, id) =>
-                  updateDocStatusHandler(status, key, false, id)
+                onPressButton={(
+                  item,
+                  status,
+                  key,
+                  id,
+                  isUpdate,
+                  licenseNumber
+                ) =>
+                  updateDocStatusHandler(
+                    item,
+                    status,
+                    key,
+                    false,
+                    id,
+                    isUpdate,
+                    licenseNumber
+                  )
                 }
                 data={employeeDocs}
               />
@@ -354,8 +520,8 @@ const EmployeeDetails = ({
             {selectedTabIndex === 1 && (
               <BankDetailsView
                 employee={employee}
-                onPressButton={(status, id) =>
-                  updateDocStatusHandler(status, id, true)
+                onPressButton={(item, status, id) =>
+                  updateDocStatusHandler(item, status, id, true)
                 }
               />
             )}
@@ -402,8 +568,22 @@ const getCurrentPendingRequests = (
   const localDocs: IEmployeeDocument[] | [] = [
     ...emp.documents,
     ...emp.otherDocuments,
+    ...emp.documentRequests,
   ]
     .map((doc) => (doc.docStatus === IDocumentStatus.PENDING ? doc : null))
     .filter((doc) => doc !== null);
+  return localDocs;
+};
+
+const getAllDocumentEmployee = (
+  emp: IEmployeeAdvance | null
+): IEmployeeDocument[] | [] => {
+  if (!emp) return [];
+  const localDocs: IEmployeeDocument[] | [] = [
+    ...emp.documents,
+    ...emp.otherDocuments,
+    ...emp.documentRequests,
+  ].map((doc) => doc);
+
   return localDocs;
 };

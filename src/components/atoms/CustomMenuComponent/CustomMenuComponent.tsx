@@ -4,23 +4,20 @@ import { Menu, Fade, MenuItem, IconButton } from '@mui/material';
 import Image from 'next/image';
 import { MoreVertOutlined } from '@mui/icons-material';
 
-const CustomMenuComponent: React.FC<IMenuItemProps> = ({
-  onPresItem,
-  onClose,
-  data,
-}) => {
+const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const onPressKebab = () => {
+  const onPressKebab = (event: React.MouseEvent<HTMLElement>) => {
     setIsOpen(true);
+    setAnchorEl(event.currentTarget);
   };
 
-  // const onPressClose = () => {
-  //   setIsOpen(false);
-  //   onClose();
-  // }
+  const handleClose = () => {
+    setIsOpen(false);
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -46,18 +43,24 @@ const CustomMenuComponent: React.FC<IMenuItemProps> = ({
             padding: '0px',
           },
           '.MuiMenuItem-root': {
-            padding: '12px 6px 12px 12px',
+            padding: '12px 125px 12px 12px',
             gap: '12px',
             fontSize: '12px',
             lineHeight: '16px',
           },
         }}
-        onClose={onClose}
+        onClose={handleClose}
         TransitionComponent={Fade}
       >
         {data.map((item, index) => {
           return (
-            <MenuItem key={index} onClick={() => onPresItem(item.value)}>
+            <MenuItem
+              key={index}
+              onClick={() => {
+                item.onPresItem(item.value);
+                handleClose();
+              }}
+            >
               <Image width={16} height={16} src={item.icon} alt={''} />
               <span>{item.value}</span>
             </MenuItem>

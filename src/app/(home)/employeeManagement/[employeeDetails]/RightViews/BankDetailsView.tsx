@@ -1,4 +1,7 @@
-import { IEmployeeAdvance } from '@/api/fetures/Employee/EmployeeApi.types';
+import {
+  IEmployeeAdvance,
+  IEmployeeDocument,
+} from '@/api/fetures/Employee/EmployeeApi.types';
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
 import TextGroup from '@/components/organism/TextGroup/TextGroup';
 import { ITextGroupTypes } from '@/components/organism/TextGroup/TextGroup.types';
@@ -8,6 +11,7 @@ import React from 'react';
 type IBankDetailsViewProps = {
   employee: IEmployeeAdvance | null;
   onPressButton: (
+    item: IEmployeeDocument,
     status: IDocumentStatus,
     key: IEmployeeApiKeyStatus,
     isCheque?: boolean
@@ -40,7 +44,12 @@ const BankDetailsView: React.FC<IBankDetailsViewProps> = ({
           fileStyle="bg-lightPrimary"
           doc={employee?.bankingDetails.chique}
           onPressButton={(status) =>
-            onPressButton(status, IEmployeeApiKeyStatus.CHEQUE, true)
+            onPressButton(
+              employee?.bankingDetails.chique,
+              status,
+              IEmployeeApiKeyStatus.CHEQUE,
+              true
+            )
           }
         />
       )}

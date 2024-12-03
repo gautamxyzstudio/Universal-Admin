@@ -51,4 +51,6 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/job-applications/employee/${id}?status=s6&[page]=${pageNumber}&[pageSize]=10`,
   updateOtherDocsStatus: (docId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/other-documents/${docId}`,
+  mutateUpdateDocRequest: (docId: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/document-requests/${docId}/status`,
 };

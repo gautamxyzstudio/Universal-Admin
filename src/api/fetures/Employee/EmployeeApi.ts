@@ -16,6 +16,7 @@ import {
   IJobPost,
 } from './EmployeeApi.types';
 import {
+  IDocumentNames,
   IDocumentStatus,
   IEmployeeApiKeyStatus,
   IEmployeeDocsApiKeys,
@@ -23,6 +24,7 @@ import {
 } from '@/constant/enums';
 import { createImageUrl } from '@/utility/cookies';
 import { STRINGS } from '@/constant/en';
+import { getDocumentNameFromCode } from '@/utility/utils';
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -94,7 +96,8 @@ const authApi = baseApi.injectEndpoints({
 
         const documents: IEmployeeDocument[] =
           extractEmployeeDocumentsFromApiResponse(response);
-
+        const documentRequests: IEmployeeDocument[] =
+          extractDocumentRequestsFromApiResponse(response);
         const secondaryDocuments: IEmployeeDocument[] =
           extractOtherDocumentsFromApiResponse(response);
 
@@ -149,20 +152,19 @@ const authApi = baseApi.injectEndpoints({
           id: response.data.id,
           documents: documents,
           otherDocuments: secondaryDocuments,
+          documentRequests: documentRequests,
         };
         return employee;
       },
     }),
     updateDocumentStatus: builder.mutation<
       any,
-      { docId: number; key: IEmployeeApiKeyStatus; docStatus: IDocumentStatus }
+      { docId: number; body: { [key: string]: string } }
     >({
-      query: ({ docId, key, docStatus }) => ({
+      query: ({ docId, body }) => ({
         url: Endpoints.updateDocumentStatus(docId),
         method: ApiMethodType.patch,
-        body: {
-          [key]: docStatus,
-        },
+        body: body,
       }),
     }),
     updateOtherDocumentStatus: builder.mutation<
@@ -176,6 +178,21 @@ const authApi = baseApi.injectEndpoints({
           data: {
             Docstatus: DocStatus,
           },
+        },
+      }),
+    }),
+    updateOrRejectedDocumentUpdateRequest: builder.mutation<
+      any,
+      {
+        id: number;
+        status: IDocumentStatus;
+      }
+    >({
+      query: ({ id, status }) => ({
+        url: Endpoints.mutateUpdateDocRequest(id),
+        method: ApiMethodType.patch,
+        body: {
+          status: status,
         },
       }),
     }),
@@ -258,6 +275,7 @@ export const {
   useUpdateDocumentStatusMutation,
   useLazyGetEmployeeJobsHistoryQuery,
   useUpdateOtherDocumentStatusMutation,
+  useUpdateOrRejectedDocumentUpdateRequestMutation,
 } = authApi;
 
 const addDocument = (
@@ -270,7 +288,9 @@ const addDocument = (
         docStatusKey: IEmployeeApiKeyStatus;
       }
     | undefined,
-  status: IDocumentStatus | undefined
+  isUpdate: boolean,
+  status: IDocumentStatus | undefined,
+  licenseNo?: string | null | undefined
 ): IEmployeeDocument | null => {
   return document && status
     ? {
@@ -284,8 +304,15 @@ const addDocument = (
           mime: document.doc.mime,
           size: document.doc.size,
         },
+        isUpdate: isUpdate,
         docId: document.id,
         apiKey: document.key,
+        licenseNo:
+          status !== IDocumentStatus.PENDING
+            ? document.name === STRINGS.license_advance || STRINGS.license_basic
+              ? licenseNo
+              : undefined
+            : undefined,
       }
     : null;
 };
@@ -294,6 +321,7 @@ export const extractOtherDocumentsFromApiResponse = (
   response: IGetEmployeeByIdResponse
 ): IEmployeeDocument[] | [] => {
   const documents: IEmployeeDocument[] = [];
+
   const employeeDetails = response.data.attributes;
   if (employeeDetails && employeeDetails.other_documents) {
     employeeDetails.other_documents.data.forEach((doc) => {
@@ -309,6 +337,7 @@ export const extractOtherDocumentsFromApiResponse = (
             name: doc?.attributes?.Document?.data?.attributes.name ?? '',
           },
         },
+        false,
         doc?.attributes?.Docstatus ?? IDocumentStatus.PENDING
       );
       if (document) documents.push(document);
@@ -317,7 +346,46 @@ export const extractOtherDocumentsFromApiResponse = (
   return documents;
 };
 
-//to formmat employee documents
+export const extractDocumentRequestsFromApiResponse = (
+  response: IGetEmployeeByIdResponse
+): IEmployeeDocument[] | [] => {
+  const documents: IEmployeeDocument[] = [];
+  const employeeDetails = response.data.attributes;
+  if (employeeDetails && employeeDetails.document_requests) {
+    employeeDetails.document_requests.data.forEach((doc) => {
+      const document = addDocument(
+        {
+          name: getDocumentNameFromCode(
+            doc?.attributes?.DocName ?? IDocumentNames.NULL
+          ),
+          id: doc?.id ?? 0,
+          docStatusKey: IEmployeeApiKeyStatus.NULL,
+          doc: {
+            mime: doc?.attributes?.document?.data?.attributes.mime ?? '',
+            url: doc?.attributes?.document?.data?.attributes.url ?? '',
+            size: doc?.attributes?.document?.data?.attributes.size ?? 0,
+            name: doc?.attributes?.document?.data?.attributes.name ?? '',
+          },
+        },
+        true,
+        doc?.attributes?.status ?? IDocumentStatus.PENDING,
+        getDocumentNameFromCode(
+          doc?.attributes?.DocName ?? IDocumentNames.NULL
+        ) === STRINGS.license_advance
+          ? employeeDetails.securityAdvNo
+          : getDocumentNameFromCode(
+              doc?.attributes?.DocName ?? IDocumentNames.NULL
+            ) === STRINGS.license_basic
+          ? employeeDetails.securityBasicNo
+          : undefined
+      );
+      if (document) documents.push(document);
+    });
+  }
+  return documents;
+};
+
+//to format employee documents
 export const extractEmployeeDocumentsFromApiResponse = (
   response: IGetEmployeeByIdResponse
 ): IEmployeeDocument[] | [] => {
@@ -344,6 +412,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
         },
         key: IEmployeeDocsApiKeys.SIN_DOCUMENT,
       },
+      false,
       employeeDetails.sinDocumentStatus ?? IDocumentStatus.PENDING
     );
     sinDocument && documents.push(sinDocument);
@@ -366,6 +435,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
         },
         key: IEmployeeDocsApiKeys.GOVT_ID,
       },
+      false,
       employeeDetails.govtidStaus ?? IDocumentStatus.PENDING
     );
     govtID && documents.push(govtID);
@@ -391,6 +461,7 @@ export const extractEmployeeDocumentsFromApiResponse = (
         },
         key: IEmployeeDocsApiKeys.SUPPORTING_DOCUMENT,
       },
+      false,
       employeeDetails.supportingDocumentStatus ?? IDocumentStatus.PENDING
     );
     supportingDocument && documents.push(supportingDocument);
@@ -417,7 +488,9 @@ export const extractEmployeeDocumentsFromApiResponse = (
         },
         key: IEmployeeDocsApiKeys.LICENSE_ADVANCE,
       },
-      employeeDetails.securityDocumentAdvStatus ?? IDocumentStatus.PENDING
+      false,
+      employeeDetails.securityDocumentAdvStatus ?? IDocumentStatus.PENDING,
+      employeeDetails.securityAdvNo
     );
     securityDocumentAdv && documents.push(securityDocumentAdv);
   }
@@ -446,7 +519,9 @@ export const extractEmployeeDocumentsFromApiResponse = (
         },
         key: IEmployeeDocsApiKeys.LICENSE_ADVANCE,
       },
-      employeeDetails.securityDocBasicStatus ?? IDocumentStatus.PENDING
+      false,
+      employeeDetails.securityDocBasicStatus ?? IDocumentStatus.PENDING,
+      employeeDetails.securityBasicNo
     );
     securityDocumentBasic && documents.push(securityDocumentBasic);
   }

@@ -4,14 +4,17 @@ import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
 import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
 import { STRINGS } from '@/constant/en';
 import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Images } from '../../../../../../public/exporter';
 
 export type IDocumentDetailsViewType = {
   onPressButton: (
+    item: IEmployeeDocument,
     status: IDocumentStatus,
     key: IEmployeeApiKeyStatus,
-    id: number
+    id: number,
+    isUpdate?: boolean,
+    licenseNumber?: string
   ) => void;
   data: {
     heading: string;
@@ -32,20 +35,27 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
     }
   }, [data]);
 
-  const renderItem = (_, item: IEmployeeDocument) => (
-    <div className="mt-4">
-      <DocumentCard
-        fileStyle="bg-lightPrimary"
-        doc={item}
-        onPressButton={(status) =>
-          onPressButton(
-            status,
-            item?.docStatusKey ?? IEmployeeApiKeyStatus.SIN_DOCUMENT,
-            item.docId ?? 0
-          )
-        }
-      />
-    </div>
+  const renderItem = useCallback(
+    (index, item: IEmployeeDocument) => (
+      <div className="mt-4">
+        <DocumentCard
+          fileStyle="bg-lightPrimary"
+          doc={item}
+          isPrevious={index === 1 && data.heading !== 'New Requests'}
+          onPressButton={(status, licenseNumber) => {
+            onPressButton(
+              item,
+              status,
+              item?.docStatusKey ?? IEmployeeApiKeyStatus.SIN_DOCUMENT,
+              item.docId ?? 0,
+              item.isUpdate,
+              licenseNumber
+            );
+          }}
+        />
+      </div>
+    ),
+    [docs]
   );
   return (
     <div className="h-full w-full">
@@ -57,16 +67,16 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
           })}
         </>
       )}
-      <div className="flex flex-row w-full h-full items-center justify-center">
-        {docs.length == 0 && (
+      {docs.length == 0 && (
+        <div className="flex flex-row h-full w-full items-center justify-center">
           <EmptyScreenView
             illustration={Images.noDocRequest}
             emptyViewSubTitle={STRINGS.youHaveNoPending}
             isDataEmpty={docs?.length === 0}
             emptyViewTitle={STRINGS.no_pending}
           />
-        )}
-      </div>
+        </div>
+      )}
       <div className="h-6" />
     </div>
   );

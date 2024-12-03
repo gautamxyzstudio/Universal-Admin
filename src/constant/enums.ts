@@ -12,7 +12,6 @@ export enum IDocumentStatus {
   APPROVED = 's1',
   DENIED = 's2',
   UPDATE = 's3',
-  HIDDEN = 's4',
   VERIFIED = 's5',
   NULL = 'null',
 }
@@ -64,3 +63,13 @@ export enum IEmployeeApiKeyStatus {
   NULL = 'null',
 }
 
+export enum IDocumentNames {
+  GOVT_ID = 'd0',
+  DIRECT_DEPOSIT_VOID_CHEQUE = 'd1',
+  SIN_DOCUMENT = 'd2',
+  SECURITY_DOCUMENT_BASIC = 'd3',
+  SECURITY_DOCUMENT_ADV = 'd4',
+  SUPPORTING_DOCUMENT = 'd5',
+  RESUME = 'd6',
+  NULL = 'd7',
+}

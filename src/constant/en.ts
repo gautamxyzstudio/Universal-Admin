@@ -47,6 +47,7 @@ export const STRINGS = {
   inActive: 'InActive',
   create: 'Create',
   update: 'Update',
+  saveChanges: 'Save changes',
   subAdminAdded: 'Sub-Admin Added Successfully!',
   noUpdate: 'No Field Updated!!',
   subAdminUpdated: 'Sub-Admin updated Successfully!',
@@ -116,6 +117,7 @@ export const STRINGS = {
   postJobs: 'Posted Jobs',
   sinDocument: 'Sin document',
   Govt_ID: 'Govt. IDs',
+  directDeposit: 'directDepositVoidCheque',
   document: 'Document (PR card, Permit)',
   license_advance: 'Security license advance',
   license_basic: 'Security license basic',
@@ -149,4 +151,5 @@ export const STRINGS = {
   details: 'Details',
   general: 'General',
   requirement: 'Requirement',
+  updateRequest: 'Update Request',
 };

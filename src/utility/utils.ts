@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { ICustomErrorResponse } from '@/api/types';
-import { IDocumentStatus, IJobPostStatus, IWorkStatus } from '@/constant/enums';
+import { STRINGS } from '@/constant/en';
+import {
+  IDocumentNames,
+  IDocumentStatus,
+  IJobPostStatus,
+  IWorkStatus,
+} from '@/constant/enums';
 import moment from 'moment';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -101,6 +107,8 @@ export const getDocumentStatusTextByStatus = (status: IDocumentStatus) => {
       return 'Denied';
     case IDocumentStatus.VERIFIED:
       return 'Verified';
+    case IDocumentStatus.UPDATE:
+      return 'Updated';
     default:
       return 'Pending';
   }
@@ -138,6 +146,19 @@ export const getJobStatusColor = (status: IJobPostStatus) => {
   }
 };
 
+export const getDocumentStatusStyles = (status: IDocumentStatus) => {
+  switch (status) {
+    case IDocumentStatus.APPROVED:
+      return `text-green bg-statusLightGreen`;
+    case IDocumentStatus.DENIED:
+      return `text-red bg-lightRed`;
+    case IDocumentStatus.UPDATE:
+      return `text-skyBlue bg-lightSkyBlue`;
+    default:
+      return `text-red bg-lightRed`;
+  }
+};
+
 export const dateFormat = (date: string | Date) => {
   return moment.utc(date).format('DD-MM-YYYY');
 };
@@ -149,4 +170,23 @@ export const dateMonthFormat = (date: string | Date) => {
 export const timeFormat = (date: string | Date) => {
   const validDate = moment.utc(date);
   return validDate.format('h:mm A');
+};
+
+export const getDocumentNameFromCode = (code: IDocumentNames) => {
+  switch (code) {
+    case IDocumentNames.SIN_DOCUMENT:
+      return STRINGS.sinDocument;
+    case IDocumentNames.DIRECT_DEPOSIT_VOID_CHEQUE:
+      return STRINGS.directDeposit;
+    case IDocumentNames.GOVT_ID:
+      return STRINGS.Govt_ID;
+    case IDocumentNames.SUPPORTING_DOCUMENT:
+      return STRINGS.document;
+    case IDocumentNames.SECURITY_DOCUMENT_ADV:
+      return STRINGS.license_advance;
+    case IDocumentNames.SECURITY_DOCUMENT_BASIC:
+      return STRINGS.license_basic;
+    default:
+      return STRINGS.sinDocument;
+  }
 };

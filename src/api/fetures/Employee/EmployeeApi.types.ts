@@ -1,4 +1,5 @@
 import {
+  IDocumentNames,
   IDocumentStatus,
   IEmployeeApiKeyStatus,
   IEmployeeDocsApiKeys,
@@ -73,6 +74,7 @@ export interface IEmployeeAdvance {
     chique: IEmployeeDocument;
   };
   documents: IEmployeeDocument[];
+  documentRequests: IEmployeeDocument[];
   otherDocuments: IEmployeeDocument[];
 }
 
@@ -87,10 +89,12 @@ export type IDoc = {
 export interface IEmployeeDocument {
   docName: string;
   docStatus: IDocumentStatus;
+  isUpdate?: boolean;
   docStatusKey: IEmployeeApiKeyStatus;
   doc: IDoc | null;
   docId: number | null;
   apiKey?: IEmployeeDocsApiKeys;
+  licenseNo?: string | null | undefined;
 }
 
 export interface IGetEmployeeByIdResponse {
@@ -103,6 +107,8 @@ export interface IGetEmployeeByIdResponse {
           gender: string | null | undefined;
           email: string | null | undefined;
           phone: string | null | undefined;
+          securityAdvNo: string | null | undefined;
+          securityBasicNo: string | null | undefined;
           city: string | null | undefined;
           address: string | null | undefined;
           bankAcNo: string | null | undefined;
@@ -123,6 +129,39 @@ export interface IGetEmployeeByIdResponse {
                         name: string | null | undefined;
                         Docstatus: IDocumentStatus | null | undefined;
                         Document:
+                          | {
+                              data:
+                                | {
+                                    id: number;
+                                    attributes: {
+                                      url: string | null | undefined;
+                                      mime: string | null | undefined;
+                                      size: number | null | undefined;
+                                      name: string | null | undefined;
+                                    };
+                                  }
+                                | null
+                                | undefined;
+                            }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                }
+              | null
+              | undefined
+            ];
+          };
+          document_requests: {
+            data: [
+              | {
+                  id: number;
+                  attributes:
+                    | {
+                        DocName: IDocumentNames | null | undefined;
+                        status: IDocumentStatus | null | undefined;
+                        document:
                           | {
                               data:
                                 | {
