@@ -62,7 +62,14 @@ const DocumentCard: React.FC<IDocumentCardProps> = ({
           <div>
             {doc.isUpdate && (
               <h2 className="text-Black  mb-2 font-bold pb-2  border-b-[1px] border-b-[#EBEBEB]">
-                {STRINGS.updateRequest}
+                {doc.docStatus === IDocumentStatus.PENDING
+                  ? STRINGS.updateRequest
+                  : STRINGS.updatedDoc}
+              </h2>
+            )}
+            {isPrevious && (
+              <h2 className="text-Black  mb-2 font-bold pb-2  border-b-[1px] border-b-[#EBEBEB]">
+                {STRINGS.previousDoc}
               </h2>
             )}
           </div>
@@ -70,6 +77,7 @@ const DocumentCard: React.FC<IDocumentCardProps> = ({
         </div>
         <UploadedFile
           document={doc}
+          isPrevious={isPrevious ?? false}
           fileStyles={fileStyle}
           onPressButton={buttonPressHandler}
         />

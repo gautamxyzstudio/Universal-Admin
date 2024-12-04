@@ -55,6 +55,7 @@ import faq from './faq.svg';
 import faqs from './faqs.svg';
 import dropdownFill from './dropdownFill.svg';
 import deleteIcon from './deleteIcon.svg';
+import denyIcon from './denyIcon.svg';
 
 // Icon Object
 export const Icons = {
@@ -80,6 +81,7 @@ export const Icons = {
   buildingfill,
   clientfill,
   peoplefill,
+  denyIcon,
   homefill,
   reportfill,
   settingfill,

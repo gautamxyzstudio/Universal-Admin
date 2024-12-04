@@ -152,4 +152,8 @@ export const STRINGS = {
   general: 'General',
   requirement: 'Requirement',
   updateRequest: 'Update Request',
+  previousDoc: 'Previous Document',
+  updatedDoc: 'Updated Document',
+  advance: 'Advance-',
+  basic: 'Basic-',
 };

@@ -58,6 +58,8 @@ const authApi = baseApi.injectEndpoints({
           email: employee.euser_id?.email,
           phone: employee.euser_id?.phone,
           sinNo: employee.euser_id?.sinNo,
+          securityAdvNo: employee.euser_id?.securityAdvNo,
+          securityBasicNo: employee.euser_id?.securityBasicNo,
           workStatus: employee.euser_id?.workStatus,
           docStatus: IDocumentStatus.PENDING,
         }));

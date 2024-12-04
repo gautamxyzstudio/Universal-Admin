@@ -62,7 +62,31 @@ const DocumentList: React.FC<IEmployeeDocumentList> = ({
 
   useEffect(() => {
     if (data.otherDocuments) setSecondaryDocs(data.otherDocuments);
-    if (data.primaryDocuments) setPrimaryDocs(data.primaryDocuments);
+
+    if (data.primaryDocuments) {
+      const docs: IEmployeeDocument[] = [];
+      data.primaryDocuments.forEach((doc) => {
+        let isUpdate = false;
+        let status = IDocumentStatus.PENDING;
+
+        // Find matching request document
+        for (const reqDoc of data.docRequests || []) {
+          if (
+            doc.docName === reqDoc.docName &&
+            reqDoc.docStatus !== IDocumentStatus.PENDING
+          ) {
+            isUpdate = true;
+            status = reqDoc.docStatus;
+            break; // Exit loop once a match is found
+          }
+        }
+
+        // Push document with determined status
+        docs.push(isUpdate ? { ...doc, docStatus: status } : doc);
+      });
+
+      setPrimaryDocs(docs);
+    }
     if (data.otherDocuments && data.primaryDocuments) {
       let isPending = false;
       [

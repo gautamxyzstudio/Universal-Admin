@@ -145,6 +145,9 @@ const EmployeeDetails = ({
         const requests = allEmployeeDocs.filter(
           (doc) => doc.docName === tabChangeAttributes?.doc?.docName
         );
+        requests.sort((a, b) =>
+          a.isUpdate === b.isUpdate ? 0 : a.isUpdate ? -1 : 1
+        );
         setEmployeeDocs({ heading: requests[0].docName, docs: requests });
       }
       setEmployeeDocsTabList({
@@ -171,7 +174,12 @@ const EmployeeDetails = ({
   ) => {
     if (key === IEmployeeApiKeyStatus.NULL) {
       if (isUpdate) {
-        mutateUpdateDocumentStatusHandler(docId, status);
+        mutateUpdateDocumentStatusHandler(
+          docId,
+          status,
+          licenseNumber,
+          item.docName
+        );
       } else {
         updateOtherDocStatus(docId, status);
       }
@@ -254,7 +262,47 @@ const EmployeeDetails = ({
 
   // to update the status of update document requests
   const mutateUpdateDocumentStatusHandler = withAsyncErrorHandlingPost(
-    async (docId: number, status: IDocumentStatus) => {
+    async (
+      docId: number,
+      status: IDocumentStatus,
+      licenseNumber?: string,
+      docName?: string
+    ) => {
+      let body: { [key: string]: string } = {};
+      if (docName === STRINGS.license_advance && licenseNumber) {
+        body = {
+          securityAdvNo: licenseNumber,
+        };
+      }
+      if (docName === STRINGS.license_basic && licenseNumber) {
+        body = {
+          securityBasicNo: licenseNumber,
+        };
+      }
+      if (Object.keys(body).length > 0) {
+        const response = await updateDocStatus({
+          docId: parseInt(params.employeeDetails),
+          body: body,
+        }).unwrap();
+        if (response) {
+          setEmployee((prev) => {
+            if (!prev) return null;
+            let prevEmployee = { ...prev };
+            const employeeDocs = [...prevEmployee.documentRequests];
+            const index = employeeDocs.findIndex(
+              (doc) => doc.docName === docName
+            );
+            if (index !== -1) {
+              employeeDocs[index] = {
+                ...employeeDocs[index],
+                licenseNo: licenseNumber,
+              };
+            }
+            prevEmployee = { ...prevEmployee, documentRequests: employeeDocs };
+            return prevEmployee;
+          });
+        }
+      }
       const response = await mutateUpdateRequest({
         id: docId,
         status: status,

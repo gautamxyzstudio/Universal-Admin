@@ -106,6 +106,29 @@ const EmployeeManagement = () => {
       field: 'license number',
       headerName: 'License Number',
       width: 180,
+      renderCell: (params: GridRenderCellParams) => {
+        console.log(params.row.securityAdvNo, params.row.securityBasicNo);
+        return (
+          <div className="flex flex-col">
+            {params.row.securityAdvNo && (
+              <span className="text-sx text-black font-bold">
+                {STRINGS.advance}
+                <span className="text-sx  text-black font-normal">
+                  {params.row.securityAdvNo}
+                </span>
+              </span>
+            )}
+            {params.row.securityBasicNo && (
+              <span className="text-sx text-black font-bold">
+                {STRINGS.basic}
+                <span className="text-sx  text-black font-normal">
+                  {params.row.securityBasicNo}
+                </span>
+              </span>
+            )}
+          </div>
+        );
+      },
     },
     {
       field: 'gender',

@@ -1,6 +1,4 @@
 import { STRINGS } from '@/constant/en';
-import { MoreVertOutlined } from '@mui/icons-material';
-import { Fade, IconButton, Menu, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { base64Icon, Icons } from '../../../../public/exporter';
@@ -10,35 +8,29 @@ import { IDocumentStatus, IJobPostStatus } from '@/constant/enums';
 import {
   getDocumentStatusStyles,
   getDocumentStatusTextByStatus,
-  getJobStatusColor,
 } from '@/utility/utils';
 import { useDocumentExpandViewContext } from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
 import CustomButton from '@/components/atoms/CustomButton/CustomButton';
+import CustomMenuComponent from '@/components/atoms/CustomMenuComponent/CustomMenuComponent';
 
 interface IUploadedFileProps {
   document: IEmployeeDocument;
   fileStyles?: string;
+  isPrevious: boolean;
   onPressButton: (status: IDocumentStatus) => void;
 }
 
 const UploadedFile: React.FC<IUploadedFileProps> = ({
   document,
   fileStyles,
+
+  isPrevious,
   onPressButton,
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [empDocument, setEmpDocument] = useState<IEmployeeDocument | null>(
     null
   );
   const { showDocModal } = useDocumentExpandViewContext();
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
     setEmpDocument(document);
@@ -46,6 +38,24 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
 
   const onPressViewDocHandler = () => {
     showDocModal(document);
+  };
+
+  const onPressTreeDotOption = () => {
+    if (document.docStatus === IDocumentStatus.DENIED && document.isUpdate) {
+      onPressButton(IDocumentStatus.UPDATE);
+    } else if (
+      document.docStatus === IDocumentStatus.APPROVED ||
+      document.docStatus === IDocumentStatus.UPDATE
+    ) {
+      onPressButton(IDocumentStatus.DENIED);
+    } else if (
+      document.docStatus === IDocumentStatus.DENIED &&
+      !document.isUpdate
+    ) {
+      onPressButton(IDocumentStatus.APPROVED);
+    } else {
+      onPressButton(IDocumentStatus.DENIED);
+    }
   };
 
   return (
@@ -77,11 +87,6 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
               <h2 className="text-Black text-[16px] leading-5">
                 {empDocument.docName}
               </h2>
-              {/* {days && (
-                <h2 className="text-disable text-[14px] leading-[18px]">
-                  {days}
-                </h2>
-              )} */}
             </div>
           </div>
           <div className="flex items-center gap-x-3">
@@ -154,16 +159,21 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                   )}
                   textLabel={getDocumentStatusTextByStatus(document.docStatus)}
                 />
-                <IconButton
-                  id="openMenu"
-                  aria-controls={open ? 'fade-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  sx={{ padding: 0 }}
-                  onClick={handleClick}
-                >
-                  <MoreVertOutlined />
-                </IconButton>
+                {!isPrevious && (
+                  <CustomMenuComponent
+                    data={[
+                      {
+                        icon: Icons.denyIcon,
+                        value:
+                          document.docStatus === IDocumentStatus.DENIED
+                            ? 'Approve'
+                            : 'Deny',
+                        onPresItem: onPressTreeDotOption,
+                      },
+                    ]}
+                    isOpen={true}
+                  />
+                )}
               </>
             )}
           </div>

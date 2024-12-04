@@ -18,6 +18,8 @@ export interface IGetEmployeeApiResponse {
       email: string;
       phone: string;
       sinNo: string;
+      securityAdvNo: string | null;
+      securityBasicNo: string | null;
       workStatus: string;
       selfie:
         | {
@@ -44,6 +46,8 @@ export interface IEmployeeBasic {
   phone: string;
   sinNo: string;
   workStatus: string;
+  securityAdvNo: string | null;
+  securityBasicNo: string | null;
   docStatus: IDocumentStatus;
 }
 
