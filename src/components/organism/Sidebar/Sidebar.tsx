@@ -13,18 +13,18 @@ import { splitRoute } from "@/utility/utils";
 
 const Sidebar = () => {
   const [translateY, setTranslateValue] = useState(0);
-  const [active, setActive] = useState(false);
+  const [activeSetting, setActiveSetting] = useState(false);
 
   const currentPathName = usePathname();
 
   useEffect(() => {
-    if (currentPathName) {
+    if (currentPathName) { 
       const index = quickLink.findIndex(
         (link) => link.path === currentPathName
       );
       if (index !== -1) {
         setTranslateValue(index * 72); // Set translateY based on the current path
-        setActive(false);
+        setActiveSetting(false);
       }
     }
   }, [currentPathName]); // Ensure the useEffect depends on currentPathName
@@ -39,7 +39,7 @@ const Sidebar = () => {
   const onPressSettings = () => {
     route.push(routeNames.Settings);
     setTranslateValue(-1);
-    setActive(true);
+    setActiveSetting(true);
   };
 
   const onPressLogout = () => {
@@ -108,12 +108,12 @@ const Sidebar = () => {
             className={`flex cursor-pointer flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
           >
             <Image
-              src={active ? Icons.settingfill : Icons.setting}
+              src={activeSetting ? Icons.settingfill : Icons.setting}
               alt={"settings"}
               className="w-6 h-6"
             />
             <span
-              className={`text-md ${active ? "text-primary" : "text-disable"}`}
+              className={`text-md ${activeSetting ? "text-primary" : "text-disable"}`}
             >
               {STRINGS.settings}
             </span>

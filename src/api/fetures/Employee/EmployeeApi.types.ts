@@ -266,11 +266,11 @@ export interface IJobPost {
   job_type: IJobTypesEnum;
   location: string;
   required_certificates: string[] | null;
-  eventDate: Date | null;
-  startShift: Date | null;
+  eventDate: Date | null | string;
+  startShift: Date | null | string;
   description: string;
   jobDuties: string;
-  endShift: Date | null;
+  endShift: Date | null | string;
   requiredEmployee: number | null;
   notAccepting: boolean | null;
   client_details: {

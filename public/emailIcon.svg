@@ -1,8 +1,8 @@
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Mail">
 <g id="Group">
-<path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M4.4 4H15.6C16.37 4 17 4.63 17 5.4V13.8C17 14.57 16.37 15.2 15.6 15.2H4.4C3.63 15.2 3 14.57 3 13.8V5.4C3 4.63 3.63 4 4.4 4Z" stroke="url(#paint0_linear_7146_3300)" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_2" d="M17 5.3999L10 10.2999L3 5.3999" stroke="url(#paint1_linear_7146_3300)" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M4.4 4H15.6C16.37 4 17 4.63 17 5.4V13.8C17 14.57 16.37 15.2 15.6 15.2H4.4C3.63 15.2 3 14.57 3 13.8V5.4C3 4.63 3.63 4 4.4 4Z" stroke="url(#paint0_linear_7146_3300)" strokeLinecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M17 5.3999L10 10.2999L3 5.3999" stroke="url(#paint1_linear_7146_3300)" strokeLinecap="round" stroke-linejoin="round"/>
 </g>
 </g>
 <defs>

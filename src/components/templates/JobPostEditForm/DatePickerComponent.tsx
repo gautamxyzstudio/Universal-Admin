@@ -28,6 +28,7 @@ const DatePickerComponent: React.FC<IDatePickerComponentProps> = ({
         }}
         slots={{ openPickerIcon: CalendarComponent }}
         value={dayjs.utc(value)}
+        format="DD/MM/YYYY"
         onChange={onChange}
       />
     </LocalizationProvider>

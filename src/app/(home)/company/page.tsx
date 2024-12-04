@@ -24,7 +24,7 @@ const Company = () => {
   const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
     'idle'
   );
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<ICompany[]>([]);
 
   const fetchCompaniesHandler = async (
@@ -38,14 +38,14 @@ const Company = () => {
         perPage: 10,
       }).unwrap();
       if (response) {
-        setIsLoading(false);
+        // setIsLoading(false);
         setCompanies(response.data);
         setTotalRecord(response.meta.pagination.total);
         setCurrentPage(response.meta.pagination.page);
         updateSearchState('idle');
       }
     } catch (error) {
-      setIsLoading(false);
+      // setIsLoading(false);
       updateSearchState('idle');
       console.log('Error fetching companies', error);
     }

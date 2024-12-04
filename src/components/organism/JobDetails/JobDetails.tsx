@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Icons } from "../../../../public/exporter";
 import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
 import { STRINGS } from "@/constant/en";
@@ -13,24 +13,18 @@ import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
 import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
 import { ITextGroupTypes } from "../TextGroup/TextGroup.types";
 import { IJobPostStatus } from "@/constant/enums";
-import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditForm";
 
 const JobDetails = ({
   data,
   isEmployee,
+  onPressMenuItem,
 }: {
   data: IJobPost;
-
+   onPressMenuItem?:(item:string)=> void;
   isEmployee: boolean;
 }) => {
-  const [openEditForm, setOpenEditForm] = useState<boolean>(false);
-  const [jobPostDetails, setJobPostDetails] = useState<IJobPost | null>(null);
- 
 
-  const onPostEditHandler = (data: IJobPost) => {
-    setJobPostDetails((prev) => ({ ...prev, ...data }));
-  };
- 
+  
   return (
     <>
       <div className="w-full h-full">
@@ -64,18 +58,12 @@ const JobDetails = ({
                   {
                     icon: Icons.crossForm,
                     value: STRINGS.close,
-                    onPresItem: (value: string) => {
-                      console.log("close" + value);
-                    },
+                    onPresItem:()=>onPressMenuItem && onPressMenuItem(STRINGS.close),
                   },
                   {
                     icon: Icons.pencil,
                     value: STRINGS.edit,
-                    onPresItem: (value: string) => {
-                      console.log("edit " + value);
-                      setOpenEditForm(true);
-                      setJobPostDetails(data);
-                    },
+                    onPresItem:()=>onPressMenuItem && onPressMenuItem(STRINGS.edit),
                   },
                 ]}
               />
@@ -182,12 +170,6 @@ const JobDetails = ({
         </div>
         <div className="h-6" />
       </div>
-      <JobPostEditForm
-        show={openEditForm}
-        setGlobalModalState={(state) => setOpenEditForm(state)}
-        onPostEditHandler={onPostEditHandler}
-        currentPost={jobPostDetails}
-      />
     </>
   );
 };

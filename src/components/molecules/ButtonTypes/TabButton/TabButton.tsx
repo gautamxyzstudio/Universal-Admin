@@ -1,5 +1,5 @@
-import { ListItemButton } from '@mui/material';
-import React from 'react';
+import { ListItemButton } from "@mui/material";
+import React from "react";
 
 type ITabButton = {
   isSelected: boolean;
@@ -17,19 +17,20 @@ const TabButton: React.FC<ITabButton> = ({
   return (
     <ListItemButton
       sx={{
-        '&.Mui-selected': {
-          border: '1px solid',
-          borderColor: '#FF7312',
-          minHeight: '60px',
-          color: '#FF7312',
+        "&.Mui-selected": {
+          border: "1px solid",
+          borderColor: "#FF7312",
+          minHeight: "60px",
+          color: "#FF7312",
         },
-        'MuiButtonBase-root': {
+        "MuiButtonBase-root": {
           padding: 0,
         },
-        border: '1px solid',
-        borderColor: '#EBEBEB',
-        borderRadius: '8px',
-        margin: '12px',
+        border: "1px solid",
+        borderColor: "#EBEBEB",
+        borderRadius: "8px",
+        marginX: "12px",
+        marginBottom: "12px",
       }}
       selected={isSelected}
       onClick={onPressButton}

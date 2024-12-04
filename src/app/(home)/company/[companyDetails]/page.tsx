@@ -26,24 +26,22 @@ import CompanyJobsList from "./LeftTabViews/CompanyJobsPostList";
 import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
 import AllClientsList from "./LeftTabViews/AllCLientsList";
 import ClientDetailsView from "./RightTabViews/ClientDetailsViews";
+import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditForm";
 
 const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
   const [fetchCompanyDetail, { isFetching }] = useLazyGetCompanyDetailsQuery();
   const [companyData, setCompanyData] = useState<ICompanyDetails | null>(null);
-
+  const [openEditForm, setOpenEditForm] = useState<boolean>(false);
   // Open Job
   const [fetchOpenJobs, { isFetching: fetchOpenJobLoading }] =
     useLazyGetPostedJobQuery();
   const [openJob, setOpenJob] = useState<IJobPost[]>([]);
-  const [selectedOpenJob, setSelectedOpenJob] = useState<IJobPost | null>(null);
+  const [selectedJob, setSelectedJob] = useState<IJobPost | null>(null);
 
   // Closed Job
   const [fetchClosedJobs, { isFetching: fetchClosedJobLoading }] =
     useLazyGetClosedJobsQuery();
   const [closedJob, setClosedJob] = useState<IJobPost[]>([]);
-  const [selectedClosedJob, setSelectedClosedJob] = useState<IJobPost | null>(
-    null
-  );
 
   // Client Details
   const [fetchCompanyClients, { isFetching: fetchCompanyClientLoading }] =
@@ -83,11 +81,12 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
 
   // open job details
   const getOpenJob = async (id: number) => {
+    setSelectedJob(null);
     try {
       const response = await fetchOpenJobs(id).unwrap();
       if (response.data) {
         setOpenJob(response.data);
-        setSelectedOpenJob(response.data[0]);
+        setSelectedJob(response.data[0]);
       }
     } catch (error) {
       console.log("Error in fetching open Job", error);
@@ -96,11 +95,12 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
 
   // closed job details
   const getClosedJob = async (id: number) => {
+    setSelectedJob(null);
     try {
       const response = await fetchClosedJobs(id).unwrap();
       if (response.data) {
         setClosedJob(response.data);
-        setSelectedClosedJob(response.data[0]);
+        setSelectedJob(response.data[0]);
       }
     } catch (error) {
       console.log("Error in fetching open Job", error);
@@ -140,13 +140,43 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
     },
     {
       label: STRINGS.openJob,
-      onClickAction: () => setSelectedTabItemIndex(1),
+      onClickAction: () => {
+        setSelectedTabItemIndex(1);
+      },
     },
     {
       label: STRINGS.closeJob,
-      onClickAction: () => setSelectedTabItemIndex(2),
+      onClickAction: () => {
+        setSelectedTabItemIndex(2);
+      },
     },
   ];
+
+  const menuPressHandler = (option: string) => {
+    if (option === STRINGS.close) {
+    }
+    if (option === STRINGS.edit) {
+      setOpenEditForm(true);
+    }
+  };
+
+  const onPostEditHandler = (data: IJobPost) => {
+    if (data.id) {
+      setOpenJob((prev) => {
+        const prevJobs = [...prev];
+        const jIndex = prevJobs.findIndex((j) => j.id === data.id);
+        prevJobs[jIndex] = {
+          ...prevJobs[jIndex],
+          ...data,
+          client_details: prevJobs[jIndex].client_details
+            ? { ...prevJobs[jIndex].client_details }
+            : null,
+        };
+        setSelectedJob(prevJobs[jIndex]);
+        return prevJobs;
+      });
+    }
+  };
 
   return (
     <div className="w-full h-[90%]">
@@ -187,7 +217,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
               viewBox="0 0 2 52"
               fill="none"
             >
-              <path d="M1 1V51" stroke="#DBDBDB" stroke-linecap="round" />
+              <path d="M1 1V51" stroke="#DBDBDB" strokeLinecap="round" />
             </svg>
             <TextGroup
               isLoading={isFetching}
@@ -221,16 +251,16 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
               <CompanyJobsList
                 data={openJob}
                 isLoading={fetchOpenJobLoading}
-                selectedPostId={selectedOpenJob?.id ?? null}
-                onPressButton={(jobPost) => setSelectedOpenJob(jobPost)}
+                selectedPostId={selectedJob?.id ?? null}
+                onPressButton={(jobPost) => setSelectedJob(jobPost)}
               />
             )}
             {selectedTabItemIndex === 2 && (
               <CompanyJobsList
                 data={closedJob}
                 isLoading={fetchClosedJobLoading}
-                selectedPostId={selectedClosedJob?.id ?? null}
-                onPressButton={(jobPost) => setSelectedClosedJob(jobPost)}
+                selectedPostId={selectedJob?.id ?? null}
+                onPressButton={(jobPost) => setSelectedJob(jobPost)}
               />
             )}
           </div>
@@ -245,23 +275,26 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
                 image={companyData.companylogo ?? ""}
               />
             )}
-            {selectedTabItemIndex === 1 && (
+            {(selectedTabItemIndex === 1 || selectedTabItemIndex === 2) && (
               <div className="w-full mb-5 h-full">
-                {selectedOpenJob && (
-                  <JobDetails data={selectedOpenJob} isEmployee={false} />
-                )}
-              </div>
-            )}
-            {selectedTabItemIndex === 2 && (
-              <div className="w-full mb-5 h-full">
-                {selectedClosedJob && (
-                  <JobDetails data={selectedClosedJob} isEmployee={false} />
+                {selectedJob && (
+                  <JobDetails
+                    onPressMenuItem={menuPressHandler}
+                    data={selectedJob}
+                    isEmployee={false}
+                  />
                 )}
               </div>
             )}
           </div>
         )}
       </div>
+      <JobPostEditForm
+        show={openEditForm}
+        setGlobalModalState={(state) => setOpenEditForm(state)}
+        onPostEditHandler={onPostEditHandler}
+        currentPost={selectedJob}
+      />
     </div>
   );
 };

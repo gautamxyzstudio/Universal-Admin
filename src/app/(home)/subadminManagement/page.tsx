@@ -156,6 +156,7 @@ const SubAdminManagement = () => {
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={true}
+        withPagination={false}
       />
       <AddSubAdminForm
         setGlobalModalState={(state) => setShowFormModal(state)}

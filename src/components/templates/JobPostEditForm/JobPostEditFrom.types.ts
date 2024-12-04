@@ -13,9 +13,9 @@ export type IEditJobPostState = {
   jobDescription: string;
   jobDuties: string;
   jobType: IJobTypesEnum;
-  eventDate: Date;
-  startShift: Date;
-  endShift: Date;
+  eventDate: Date | string;
+  startShift: Date | string;
+  endShift: Date | string;
   location: string;
   address: string;
   city: string;

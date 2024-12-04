@@ -65,7 +65,7 @@ const AllClientsList: React.FC<IAllClientsListProps> = ({
             <UserNameWithImage
               name={item.clientName ?? ""}
               image={image ?? ""}
-              imageStyle="!w-14 !h-14"
+              imageStyle="!w-10 !h-10"
             />
           }
           isSelected={selectedClientId === item.id}

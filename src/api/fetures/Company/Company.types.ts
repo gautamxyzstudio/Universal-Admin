@@ -269,13 +269,13 @@ export interface IAddNewJobPostRequest {
   address: string;
   postalCode: string;
   gender: string;
-  eventDate: Date;
+  eventDate: Date | string | null;
   salary: string;
   jobDuties: string;
   job_type: IJobTypesEnum;
   location: string;
   requiredEmployee: number;
-  startShift: Date;
-  endShift: Date;
+  startShift: Date | string| null; 
+  endShift: Date | string| null;
   description: string;
 }

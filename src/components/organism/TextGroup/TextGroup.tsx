@@ -48,7 +48,7 @@ const TextGroup: React.FC<ITextGroupProps> = ({
                   viewBox="0 0 2 14"
                   fill="none"
                 >
-                  <path d="M1 1V13" stroke="#DBDBDB" stroke-linecap="round" />
+                  <path d="M1 1V13" stroke="#DBDBDB" strokeLinecap="round" />
                 </svg>
                 {subTitle}
               </>
@@ -65,7 +65,7 @@ const TextGroup: React.FC<ITextGroupProps> = ({
                   viewBox="0 0 2 14"
                   fill="none"
                 >
-                  <path d="M1 1V13" stroke="#DBDBDB" stroke-linecap="round" />
+                  <path d="M1 1V13" stroke="#DBDBDB" strokeLinecap="round" />
                 </svg>
                 {subText}
               </>

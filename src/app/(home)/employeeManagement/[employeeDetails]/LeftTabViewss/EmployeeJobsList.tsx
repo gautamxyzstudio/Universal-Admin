@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
@@ -55,7 +56,7 @@ const EmployeeJobsList: React.FC<IEmployeeJobsListProps> = ({
             <JobPostCard
               companyName={item.client_details?.companyname}
               profileName={item.job_name}
-              days={undefined}
+              days={item.eventDate && dateFormat(item.eventDate)}
               image={item.client_details?.companylogo}
               textLabel={getJobStatus(item.status)}
               textStyle={getJobStatusColor(item.status)}
