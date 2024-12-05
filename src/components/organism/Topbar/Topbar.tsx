@@ -10,9 +10,9 @@ const Topbar = () => {
 
   return (
     <div className="text-disable flex bg-white justify-between border-b rounded-tl-[40px] border-borderGrey px-10 h-[8%]">
-      <span className="my-[18px] text-[16px] leading-5">
+      <p className="my-[18px] text-[16px] leading-5">
         Welcome, {userName}
-      </span>
+      </p>
 
       <div className="flex items-center my-[10px] gap-x-4">
         <IconButton>
@@ -27,7 +27,7 @@ const Topbar = () => {
 
         <div className="flex items-center gap-x-2">
           <div className="flex items-center gap-x-1">
-            <span className="text-Black text-[16px] leading-5">{userName}</span>
+            <p className="text-Black text-[16px] leading-5">{userName}</p>
             <Image src={Icons.arrow} alt="arrow" className="w-auto h-auto" />
           </div>
         </div>

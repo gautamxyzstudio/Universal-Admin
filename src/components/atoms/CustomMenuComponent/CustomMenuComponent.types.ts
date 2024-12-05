@@ -3,6 +3,7 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 export type IMenuItemProps = {
   isOpen: boolean;
   data: IMenuItem[];
+  menuButton?: React.ReactNode
 };
 
 export type IMenuItem = {

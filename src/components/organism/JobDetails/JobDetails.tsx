@@ -4,15 +4,17 @@ import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgCo
 import { STRINGS } from "@/constant/en";
 import TextGroup from "../TextGroup/TextGroup";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import { dateMonthFormat, getJobStatusColor, timeFormat } from "@/utility/utils";
 import {
-  getJobStatus,
-  getJobType,
-} from "@/constant/constant";
+  dateMonthFormat,
+  getJobStatusColor,
+  timeFormat,
+} from "@/utility/utils";
+import { getJobStatus, getJobType } from "@/constant/constant";
 import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
 import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
 import { ITextGroupTypes } from "../TextGroup/TextGroup.types";
 import { IJobPostStatus } from "@/constant/enums";
+import { MoreVertOutlined } from "@mui/icons-material";
 
 const JobDetails = ({
   data,
@@ -20,11 +22,9 @@ const JobDetails = ({
   onPressMenuItem,
 }: {
   data: IJobPost;
-   onPressMenuItem?:(item:string)=> void;
+  onPressMenuItem?: (item: string) => void;
   isEmployee: boolean;
 }) => {
-
-  
   return (
     <>
       <div className="w-full h-full">
@@ -53,17 +53,20 @@ const JobDetails = ({
           <div className=" flex flex-col justify-between items-end">
             {!isEmployee && data?.status === IJobPostStatus.OPEN && (
               <CustomMenuComponent
+                menuButton={<MoreVertOutlined />}
                 isOpen={true}
                 data={[
                   {
                     icon: Icons.crossForm,
                     value: STRINGS.close,
-                    onPresItem:()=>onPressMenuItem && onPressMenuItem(STRINGS.close),
+                    onPresItem: () =>
+                      onPressMenuItem && onPressMenuItem(STRINGS.close),
                   },
                   {
                     icon: Icons.pencil,
                     value: STRINGS.edit,
-                    onPresItem:()=>onPressMenuItem && onPressMenuItem(STRINGS.edit),
+                    onPresItem: () =>
+                      onPressMenuItem && onPressMenuItem(STRINGS.edit),
                   },
                 ]}
               />

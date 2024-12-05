@@ -185,7 +185,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         pageTitle={STRINGS.company}
         name={companyData?.companyname || ""}
       />
-      <div className="flex gap-x-10 w-full h-[-webkit-fill-available] mt-2">
+      <div className="flex gap-x-10 w-full h-full mt-2">
         {/* Left Side */}
         <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
           <UserNameWithImage

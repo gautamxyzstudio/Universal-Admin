@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { IMenuItemProps } from "./CustomMenuComponent.types";
 import { Menu, Fade, MenuItem, IconButton } from "@mui/material";
 import Image from "next/image";
-import { MoreVertOutlined } from "@mui/icons-material";
 
-const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
+const CustomMenuComponent: React.FC<IMenuItemProps> = ({
+  data,
+  menuButton,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,7 +31,7 @@ const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
         sx={{ padding: 0 }}
         onClick={onPressKebab}
       >
-        <MoreVertOutlined />
+        {menuButton}
       </IconButton>
 
       <Menu

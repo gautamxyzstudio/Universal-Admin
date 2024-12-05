@@ -55,6 +55,12 @@ import faq from './faq.svg';
 import faqs from './faqs.svg';
 import dropdownFill from './dropdownFill.svg';
 import deleteIcon from './deleteIcon.svg';
+import help from './help.svg';
+import helpFill from './helpFill.svg';
+import filter from './filter.svg';
+import allMessage from './allMessage.svg';
+import openMessage from './openMessage.svg';
+import closeMessage from './closeMessage.svg';
 
 // Icon Object
 export const Icons = {
@@ -114,6 +120,12 @@ export const Icons = {
   faqs,
   dropdownFill,
   deleteIcon,
+  help,
+  helpFill,
+  filter,
+  allMessage,
+  openMessage,
+  closeMessage,
 };
 
 // Images
@@ -125,6 +137,7 @@ import tabLogin from './tabLogin.svg';
 import webLogin from './webLogin.svg';
 import noDocRequest from './noDocsRequest.svg';
 import noJobs from './noJobs.svg';
+import noHelpSupport from './noHelpSupport.svg';
 // Image Object
 export const Images = {
   demoImg,
@@ -135,6 +148,7 @@ export const Images = {
   mobileLogin,
   tabLogin,
   webLogin,
+  noHelpSupport,
 };
 
 export const base64Icon = {

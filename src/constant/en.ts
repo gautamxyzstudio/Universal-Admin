@@ -150,4 +150,6 @@ export const STRINGS = {
   general: "General",
   requirement: "Requirement",
   close: "Close",
+  open : "Open",
+  help: "Help & Support",
 };

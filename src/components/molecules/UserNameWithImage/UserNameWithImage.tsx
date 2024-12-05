@@ -22,6 +22,8 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   postby,
   subText,
   postbyStyle,
+  issueId,
+  issuePublish,
 }) => {
   if (isLoading) {
     return (
@@ -41,7 +43,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         }
       >
         <UserImageRenderer
-          imageStyle={imageStyle}
+          imageStyle={imageStyle ?? ""}
           image={image}
           name={name}
           type={type}
@@ -81,7 +83,22 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
               )}
             </div>
           )}
-          {days && <span className="text-disable text-[14px] leading-[18px]">{formatDateFromNow(days)} </span>}
+          {issueId && (
+            <div className="flex gap-x-2 items-center w-full text-disable text-[12px] leading-4 ">
+              <span>#{issueId}</span>{" "}
+              {issuePublish && (
+                <>
+                  <SVGComponent svg={SVGS.circleDot} />
+                  <span>{formatDateFromNow(issuePublish)}</span>
+                </>
+              )}
+            </div>
+          )}
+          {days && (
+            <span className="text-disable text-[12px] leading-[16px]">
+              {formatDateFromNow(days)}{" "}
+            </span>
+          )}
 
           {joinDate && (
             <span className={"text-[14px] leading-[18px] w-full text-disable "}>

@@ -28,7 +28,7 @@ const JobPostCard: React.FC<IJobPostCardProps> = ({
           postbyStyle="text-disable text-[14px] leading-[18px]"
          
         />
-        {textLabel && textStyle && <TextWithBgColor textLabel={textLabel} textStyle={textStyle + ' absolute top-[3px] right-[8px]'} />}
+        {textLabel && textStyle && <TextWithBgColor textLabel={textLabel} textStyle={textStyle + ' absolute top-[12px] right-[12px]'} />}
       </div>
       <div className="flex flex-col pl-2 mt-4 gap-y-2 w-full">
         {iconWithTexts.map((item, index) => (
