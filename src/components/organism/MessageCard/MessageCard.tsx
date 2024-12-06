@@ -4,7 +4,6 @@ import React from "react";
 import { IMessageCardProps } from "./MessageCard.types";
 
 const MessageCard: React.FC<IMessageCardProps> = ({
-  isClient,
   companyName,
   profileName,
   issueId,
@@ -20,9 +19,8 @@ const MessageCard: React.FC<IMessageCardProps> = ({
         <UserNameWithImage
           image={image ?? ""}
           name={profileName}
-          nameStyle="font-bold"
           imageStyle="!w-9 !h-9"
-          companyName={isClient ? companyName : null}
+          companyName={companyName}
           issueId={issueId}
           issuePublish={issuePublish}
           companyNameStyle="text-disable text-[14px] leading-[18px]"

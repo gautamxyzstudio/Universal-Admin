@@ -1,37 +1,38 @@
 import { ListItemButton } from "@mui/material";
 import React from "react";
+import { ITabButtonProps } from "./TabButton.types";
 
-type ITabButton = {
-  isSelected: boolean;
-  onPressButton?: () => void | undefined;
-  content?: React.ReactNode;
-  title?: string;
-};
-
-const TabButton: React.FC<ITabButton> = ({
+const TabButton: React.FC<ITabButtonProps> = ({
   isSelected,
   onPressButton,
   content,
   title,
+  customButtonStyle,
+  ...props
 }) => {
   return (
     <ListItemButton
-      sx={{
-        "&.Mui-selected": {
-          border: "1px solid",
-          borderColor: "#FF7312",
-          minHeight: "60px",
-          color: "#FF7312",
-        },
-        "MuiButtonBase-root": {
-          padding: 0,
-        },
-        border: "1px solid",
-        borderColor: "#EBEBEB",
-        borderRadius: "8px",
-        marginX: "12px",
-        marginBottom: "12px",
-      }}
+      {...props}
+      sx={
+        customButtonStyle
+          ? customButtonStyle
+          : {
+              "&.Mui-selected": {
+                border: "1px solid",
+                borderColor: "#FF7312",
+                minHeight: "60px",
+                color: "#FF7312",
+              },
+              ".MuiButtonBase-root": {
+                padding: 0,
+              },
+              border: "1px solid",
+              borderColor: "#EBEBEB",
+              borderRadius: "8px",
+              marginX: "12px",
+              marginBottom: "12px",
+            }
+      }
       selected={isSelected}
       onClick={onPressButton}
     >

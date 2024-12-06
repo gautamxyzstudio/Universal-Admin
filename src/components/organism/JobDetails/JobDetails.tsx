@@ -31,7 +31,7 @@ const JobDetails = ({
         <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
           <div className="flex-1">
             <UserNameWithImage
-              image={data.client_details?.companylogo}
+              image={data.client_details?.companylogo ?? ''}
               name={data.job_name}
               containerStyle={
                 !isEmployee ? "!flex-col !items-start gap-y-3" : ""

@@ -60,7 +60,7 @@ import helpFill from './helpFill.svg';
 import filter from './filter.svg';
 import allMessage from './allMessage.svg';
 import openMessage from './openMessage.svg';
-import closeMessage from './closeMessage.svg';
+import closedMessage from './closedMessage.svg';
 
 // Icon Object
 export const Icons = {
@@ -125,7 +125,7 @@ export const Icons = {
   filter,
   allMessage,
   openMessage,
-  closeMessage,
+  closedMessage,
 };
 
 // Images

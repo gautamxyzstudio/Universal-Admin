@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
@@ -11,74 +12,89 @@ import Image from "next/image";
 import React, { useState, useEffect, useCallback } from "react";
 import { Icons, Images } from "../../../../public/exporter";
 import EmptyScreenView from "@/components/templates/EmptyScreenView/EmptyScreenView";
-import MessageCard from "@/components/organism/MessageCard/MessageCard";
 import { useLazyGetHelpIssuesQuery } from "@/api/fetures/HelpIssue/HelpIssueApi";
 import { IIssueRaisedByEmployee } from "@/api/fetures/HelpIssue/HelpIssueApi.types";
 import _ from "lodash";
 import MessageCardsList from "./LeftTabViews/MessageCardsList";
+import { getUserDetailsFromCookies } from "@/utility/cookies";
+import IssueRaisedDetails from "./RightTabViews/IssueRaisedDetails";
+import { IJobPostStatus } from "@/constant/enums";
 
 const HelpAndSupport = () => {
   // Tab Selection
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [fetchHelpIssue, { data, isFetching, error }] =
-    useLazyGetHelpIssuesQuery();
+  const [fetchHelpIssue, { data, isFetching }] = useLazyGetHelpIssuesQuery();
   const [issueMessage, setIssueMessage] = useState<IIssueRaisedByEmployee[]>(
-    data?.data ?? []
+    []
   );
   const [selectedMessage, setSelectedMessage] =
     useState<IIssueRaisedByEmployee | null>(null);
+  const [searchVal, setSearchVal] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
+
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecord, setTotalRecord] = useState(0);
   const [searchState, updateSearchState] = useState<"idle" | "searching">(
     "idle"
   );
-  const [searchVal, setSearchVal] = useState("");
 
+  // Fetch Issues
   const getIssueMessage = async (searchVal: string, page: number) => {
     try {
       const fetchHelpIssueResponse = await fetchHelpIssue({
-        searchVal: searchVal,
+        searchVal,
         pageNo: page,
       }).unwrap();
-      console.log(fetchHelpIssueResponse, "Full fetchHelpIssueResponse");
 
-      // Check if response contains the expected data
       if (fetchHelpIssueResponse?.data) {
-        setIssueMessage(fetchHelpIssueResponse.data);
-        setSelectedMessage(fetchHelpIssueResponse.data[0]);
+        let filteredData = fetchHelpIssueResponse.data;
+
+        // Apply Filter
+        if (filterStatus === "Open") {
+          filteredData = filteredData.filter(
+            (issue) => issue.issueStatus === IJobPostStatus.OPEN
+          );
+        } else if (filterStatus === "Closed") {
+          filteredData = filteredData.filter(
+            (issue) => issue.issueStatus === IJobPostStatus.CLOSED
+          );
+        }
+
+        setIssueMessage(filteredData);
+        setSelectedMessage(filteredData[0] ?? null);
         setCurrentPage(fetchHelpIssueResponse.pagination?.page || 1);
         setTotalRecord(fetchHelpIssueResponse.pagination?.totalPages || 0);
       } else {
-        console.log("No issues found in the response");
-        setIssueMessage([]); // Empty array if no issues are found
+        setIssueMessage([]);
       }
       updateSearchState("idle");
     } catch (error) {
       console.log("Error fetching help issue", error);
-      setIssueMessage([]); // Reset the state in case of error
+      setIssueMessage([]);
       updateSearchState("idle");
     }
   };
 
-  useEffect(() => {
-    if (searchVal.length > 0 && selectedTabIndex === 0) {
-      updateSearchState("searching");
-      handleSearch(searchVal);
-    } else {
-      getIssueMessage(searchVal, 1);
-    }
-  }, [searchVal, selectedTabIndex === 0]);
+  // Handle Filter Change
+  const menuPressHandler = (status: string) => {
+    setFilterStatus(status);
+    getIssueMessage(searchVal, 1); // Fetch data again with new filter
+  };
 
+  // Handle Search
   const handleSearch = useCallback(
     _.debounce((query) => {
-      if (query) {
-        getIssueMessage(query, 1);
-      }
+      getIssueMessage(query, 1);
     }, 300),
-    []
+    [filterStatus]
   );
-  const [showDot, setShowDot] = useState<boolean>(true);
 
+  useEffect(() => {
+    getIssueMessage(searchVal, 1);
+  }, [selectedTabIndex, filterStatus]);
+
+  // Filter Button
   const FilterButton = () => (
     <Image
       src={Icons.filter}
@@ -87,34 +103,59 @@ const HelpAndSupport = () => {
     />
   );
 
-  const menuPressHandler = (option: string) => {
-    if (option === STRINGS.all) {
-      setShowDot(true);
-    }
-    if (option === STRINGS.open) {
-      setShowDot(false);
-    }
-    if (option === STRINGS.close) {
-      setShowDot(false);
-    }
-  };
-  console.log(issueMessage, "help issues message", currentPage, totalRecord);
+  const FILTER_OPTIONS = [
+    { label: STRINGS.all, value: "All" },
+    { label: STRINGS.open, value: "Open" },
+    { label: STRINGS.closed, value: "Closed" },
+  ];
+
+  // List Header Options
+  const ListHeader = () => (
+    <div className="flex flex-col gap-y-4 mx-3 mb-4">
+      <div className="flex gap-x-4">
+        <SearchField
+          searchStyle="w-[316px]"
+          onChangeText={(e) => setSearchVal(e.target.value)}
+          value={searchVal}
+          onPressCross={() => setSearchVal("")}
+          isLoading={searchState === "searching"}
+        />
+        <div className="w-10 h-10 p-2 flex justify-center items-center border rounded border-borderGrey">
+          <Badge
+            variant="dot"
+            color="warning"
+            overlap="circular"
+            invisible={filterStatus === "All"}
+          >
+            <CustomMenuComponent
+              isOpen={false}
+              menuButton={<FilterButton />}
+              data={FILTER_OPTIONS.map((option) => ({
+                icon: Icons[option.value.toLowerCase() + "Message"],
+                value: option.label,
+                onPresItem: () => menuPressHandler(option.value),
+              }))}
+            />
+          </Badge>
+        </div>
+      </div>
+      <span className="text-accentColor text-sm font-bold">{`Open Ticket (3)`}</span>
+    </div>
+  );
+
   return (
-    <div className="w-full h-[90%]">
+    <div className="w-full h-[90vh] overflow-hidden">
       <PageHeader title={STRINGS.help} />
-      <div className="flex gap-x-10 w-full h-full mt-2">
+      <div className="flex gap-x-10 w-full h-[91%]">
         {/* Left Side View */}
-        <div className="flex flex-col w-[35%] overflow-scroll scrollbar-none">
+        <div className="flex flex-col w-[35%] h-[97%]">
           <CustomTab
             tabs={[
               {
                 label: "Employee",
                 onClickAction: () => setSelectedTabIndex(0),
               },
-              {
-                label: "Client",
-                onClickAction: () => setSelectedTabIndex(1),
-              },
+              { label: "Client", onClickAction: () => setSelectedTabIndex(1) },
             ]}
             TabIndicatorProps={{
               style: {
@@ -125,51 +166,11 @@ const HelpAndSupport = () => {
             }}
             sx={styles}
           />
-          <div className="bg-white border pt-4 border-borderGrey rounded-b-lg h-full w-full">
-            <div className="flex mx-3 mb-6 gap-x-4">
-              <SearchField
-                searchStyle="w-[316px]"
-                onChangeText={(e) => setSearchVal(e.target.value)}
-                value={searchVal}
-                onPressCross={() => setSearchVal("")}
-                isLoading={searchState === "searching"}
-              />
-              <div className="w-10 h-10 p-2 flex justify-center items-center border rounded border-borderGrey">
-                <Badge
-                  variant="dot"
-                  color="warning"
-                  overlap="circular"
-                  invisible={showDot}
-                >
-                  <CustomMenuComponent
-                    menuButton={<FilterButton />}
-                    isOpen={false}
-                    data={[
-                      {
-                        icon: Icons.allMessage,
-                        value: STRINGS.all,
-                        onPresItem: () =>
-                          menuPressHandler && menuPressHandler(STRINGS.all),
-                      },
-                      {
-                        icon: Icons.openMessage,
-                        value: STRINGS.open,
-                        onPresItem: () =>
-                          menuPressHandler && menuPressHandler(STRINGS.open),
-                      },
-                      {
-                        icon: Icons.closeMessage,
-                        value: STRINGS.close,
-                        onPresItem: () =>
-                          menuPressHandler && menuPressHandler(STRINGS.close),
-                      },
-                    ]}
-                  />
-                </Badge>
-              </div>
-            </div>
+          <div className="bg-white border py-4 border-borderGrey rounded-b-lg h-[91%] w-full">
             {selectedTabIndex === 0 && (
               <MessageCardsList
+                isClients={false}
+                headerView={<ListHeader />}
                 data={issueMessage}
                 isLoading={isFetching}
                 selectedIssueId={selectedMessage?.id ?? null}
@@ -178,6 +179,8 @@ const HelpAndSupport = () => {
             )}
             {selectedTabIndex === 1 && (
               <MessageCardsList
+                headerView={<ListHeader />}
+                isClients={true}
                 data={issueMessage}
                 isLoading={isFetching}
                 selectedIssueId={selectedMessage?.id ?? null}
@@ -187,19 +190,19 @@ const HelpAndSupport = () => {
           </div>
         </div>
         {/* Right Side View */}
-        <div className="flex w-[65%] bg-white border border-borderGrey rounded-lg mt-3 p-6 overflow-scroll scrollbar-none">
+        <div className="flex w-[65%] h-[95%] bg-white border border-borderGrey rounded-lg mt-3 p-6 overflow-scroll scrollbar-none">
           {selectedTabIndex === null && (
             <div className="w-full flex justify-center items-center">
               <EmptyScreenView
-                //   emptyViewTitle="Please make a selection before moving forward."
-                //   emptyViewSubTitle="No message has been chosen."
                 illustration={Images.noHelpSupport}
                 isDataEmpty={true}
               />
             </div>
           )}
-          {selectedTabIndex === 0 && (
-            <div className="w-full">{STRINGS.employeeManagement}</div>
+          {selectedTabIndex === 0 && selectedMessage && (
+            <div className="w-full mt-2 h-full">
+              <IssueRaisedDetails data={selectedMessage} />
+            </div>
           )}
           {selectedTabIndex === 1 && (
             <div className="w-full">{STRINGS.clientManagement}</div>
