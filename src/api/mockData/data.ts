@@ -54,18 +54,3 @@ export const quickLink: IQuickLinkData[] = [
     iconfill: Icons.reportfill,
   },
 ];
-
-// {
-//   id: 7,
-//   title: STRINGS.settings,
-//   path: routeNames.Settings,
-//   icon: Icons.setting,
-//   iconfill: Icons.settingfill,
-// },
-// {
-//   id: 8,
-//   title: STRINGS.logout,
-//   path: routeNames.LogOut,
-//   icon: Icons.logout,
-//   iconfill: Icons.arrow
-// }

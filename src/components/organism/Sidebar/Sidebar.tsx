@@ -5,8 +5,6 @@ import React, { useEffect, useState } from "react";
 import { IQuickLinkData, quickLink } from "@/api/mockData/data";
 import Link from "next/link";
 import { STRINGS } from "@/constant/en";
-// import ConfirmationDialog from "../../molecules/DialogTypes/ConfirmationDialog/ConfirmationDialog";
-// import { removeUserDetailsFromCookies } from "@/utility/cookies";
 import { usePathname, useRouter } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
 import { splitRoute } from "@/utility/utils";
@@ -31,13 +29,7 @@ const Sidebar = () => {
     }
   }, [currentPathName]); // Ensure the useEffect depends on currentPathName
 
-  // const [showDialog, setShowDialog] = useState<boolean>(false);
   const route = useRouter();
-
-  // const onPressClose = () => {
-  //   setShowDialog(false);
-  // };
-
   const onPressSettings = () => {
     route.push(routeNames.Settings);
     setTranslateValue(-1);
@@ -46,20 +38,10 @@ const Sidebar = () => {
   };
   const onPressHelp = () => {
     route.push(routeNames.Help);
-    setTranslateValue(-1);
+    setTranslateValue(-2);
     setActiveHelp(true);
     setActiveSetting(false);
   };
-
-  // const onPressLogout = () => {
-  //   setShowDialog(true);
-  // };
-
-  // const logoutHandler = () => {
-  //   setShowDialog(false);
-  //   removeUserDetailsFromCookies();
-  //   route.push(routeNames.Login);
-  // };
 
   const SideBarTab = (
     data: IQuickLinkData,
@@ -146,20 +128,7 @@ const Sidebar = () => {
               {STRINGS.help}
             </span>
           </div>
-          {/* <div
-            onClick={onPressLogout}
-            className={`flex cursor-pointer flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
-          >
-            <Image src={Icons.logout} alt={"logout"} className="w-6 h-6" />
-            <span className={"text-md text-disable"}>{STRINGS.logout}</span>
-          </div> */}
         </div>
-        {/* <ConfirmationDialog
-          type={"logout"}
-          onPressButton={logoutHandler}
-          onClose={onPressClose}
-          open={showDialog}
-        /> */}
       </div>
     </div>
   );

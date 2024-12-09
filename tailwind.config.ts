@@ -31,7 +31,7 @@ const config: Config = {
                 modal: 'rgba(0, 0, 0, 0.2)',
                 borderGreySecondary: '#dbdbdb',
                 externalLink: '#2048E0',
-                lightPrimary: '#FFF8F4',
+                lightPrimary: '#FFF2EA',
                 lightGreenSecondary: '#F6FFFB',
                 lightRedSecondary: '#FFF4F4',
                 darkBlue: '#182452',
@@ -67,6 +67,11 @@ const config: Config = {
                     '0.75rem',
                     {
                         lineHeight: '1rem'
+                    }
+                ],
+                'text-14': [
+                    '0.875rem',{
+                        lineHeight: '1.125rem'
                     }
                 ],
                 'text-md': [

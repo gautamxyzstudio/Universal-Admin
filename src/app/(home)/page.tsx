@@ -1,7 +1,7 @@
-'use client';
-import { STRINGS } from '@/constant/en';
-import Image from 'next/image';
-import { Icons } from '../../../public/exporter';
+"use client";
+import { STRINGS } from "@/constant/en";
+import Image from "next/image";
+import { Icons } from "../../../public/exporter";
 
 export default function Home() {
   return (
