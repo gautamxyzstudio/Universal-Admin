@@ -10,18 +10,16 @@ import { Skeleton } from "@mui/material";
 // import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import MessageCard from "@/components/organism/MessageCard/MessageCard";
 import { Images } from "../../../../../public/exporter";
-import { IIssueRaisedByEmployee } from "@/api/fetures/HelpIssue/HelpIssueApi.types";
+import { IIssueRaisedByClient, IIssueRaisedByEmployee } from "@/api/fetures/HelpIssue/HelpIssueApi.types";
 import { IJobPostStatus } from "@/constant/enums";
 import { getJobStatusColor } from "@/utility/utils";
 import { getJobStatus } from "@/constant/constant";
 type IMessageCardsListProps = {
-  data: IIssueRaisedByEmployee[];
+  data: IIssueRaisedByEmployee[] | IIssueRaisedByClient[];
   isLoading: boolean;
   selectedIssueId: number | null | string;
-  // image: StaticImport | string | null;
   isClients: boolean;
-  headerView: React.ReactNode;
-  onPressButton: (post: IIssueRaisedByEmployee) => void;
+  onPressButton: (post: IIssueRaisedByEmployee | IIssueRaisedByClient) => void;
 };
 
 const MessageCardsList: React.FC<IMessageCardsListProps> = ({
@@ -29,10 +27,9 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
   data,
   isLoading,
   selectedIssueId,
-  headerView,
   onPressButton,
 }) => {
-  const [message, setMessage] = useState<IIssueRaisedByEmployee[]>([]);
+  const [message, setMessage] = useState<IIssueRaisedByEmployee[] | IIssueRaisedByClient[]>([]);
   useEffect(() => {
     if (data) {
       setMessage(data);
@@ -79,7 +76,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
               issueId={item.id}
               issuePublish={item.publishedAt}
               message={item.issue ?? ""}
-              image={null}
+              image={item.employeeImageUrl}
               textLabel={getJobStatus(item.issueStatus)}
               textStyle={getJobStatusColor(item.issueStatus)}
             />
@@ -96,7 +93,6 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
       <VirtualList
         data={isLoading ? demoData.rows : message}
         isLastPage={true}
-        headerView={headerView}
         illustration={Images.noHelpSupport}
         illustrationStyes="!w-40 !h-40"
         emptyViewTitle={STRINGS.noHelp}

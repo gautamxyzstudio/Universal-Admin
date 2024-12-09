@@ -51,5 +51,6 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/job-applications/employee/${id}?status=s6&[page]=${pageNumber}&[pageSize]=10`,
   updateOtherDocsStatus: (docId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/other-documents/${docId}`,
-  getHelpSupportIssue :  (searchVal: string, page: number) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds?populate=*&sort=id:desc&search=${searchVal}&pagination[page]=${page}&pagination[pageSize]=25`
+  getHelpSupportIssueByEmployee :  (searchVal: string) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raised/emp?populate=*&sort=id:desc&search=${searchVal}`,
+  getHelpSupportIssueByClient :  (searchVal: string) =>`${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raised/client?populate=*&sort=id:desc&search=${searchVal}`,
 };
