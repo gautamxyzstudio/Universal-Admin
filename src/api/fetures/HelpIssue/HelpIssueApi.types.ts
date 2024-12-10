@@ -1,38 +1,38 @@
 import { IJobPostStatus } from "@/constant/enums";
 
 export interface IGetIssueRaisedByEmpApiResponse {
-  id: number;
-  Issue: string;
-  publishedAt: Date | string;
-  status: IJobPostStatus;
-  employee_detail: {
+  data: {
     id: number;
-    name: string;
-    email: string;
-    phone: string;
-    selfie: {
+    Issue: string;
+    publishedAt: Date | string;
+    status: IJobPostStatus;
+    employee_detail: {
+      id: number;
       name: string;
-      url: string;
+      email: string;
+      phone: string;
+      selfie: {
+        name: string;
+        url: string;
+      };
     };
+  }[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
   };
 }
-// meta: {
-//   pagination: {
-//     total: number;
-//     page: number;
-//     pageSize: number;
-//     totalPages: number;
-//   };
-// };
 
 export interface ICustomizedIssueRaisedByEmpApiResponse {
   data: IIssueRaisedByEmployee[];
-  // pagination: {
-  //   page: number;
-  //   pageSize: number;
-  //   total: number;
-  //   totalPages: number;
-  // };
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    totalPages: number;
+  };
 }
 
 export interface IIssueRaisedByEmployee {
@@ -47,29 +47,42 @@ export interface IIssueRaisedByEmployee {
   employeeImageUrl: string | null;
 }
 
-
 // By Clients
 export interface IGetIssueRaisedByClientApiResponse {
-  id: number;
-  Issue: string;
-  publishedAt: Date | string;
-  status: IJobPostStatus;
-  client_detail: {
+  data:{
     id: number;
-    Name: string;
-    Email: string;
-    contactno: string;
-    company_detail: {
-      companyname: string;
-      companylogo: {
-        url: string;
+    Issue: string;
+    publishedAt: Date | string;
+    status: IJobPostStatus;
+    client_detail: {
+      id: number;
+      Name: string;
+      Email: string;
+      contactno: string;
+      company_detail: {
+        companyname: string;
+        companylogo: {
+          url: string;
+        };
       };
     };
+  }[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
   };
 }
 
 export interface ICustomizedIssueRaisedByClientApiResponse {
   data: IIssueRaisedByClient[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    totalPages: number;
+  };
 }
 
 export interface IIssueRaisedByClient {

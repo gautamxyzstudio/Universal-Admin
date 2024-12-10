@@ -24,9 +24,11 @@ import _ from "lodash";
 import MessageCardsList from "./LeftTabViews/MessageCardsList";
 import IssueRaisedDetails from "./RightTabViews/IssueRaisedDetails";
 import { IJobPostStatus } from "@/constant/enums";
+// import { getUserDetailsFromCookies } from "@/utility/cookies";
 
 const HelpAndSupport = () => {
   // Tab Selection
+  // console.log(getUserDetailsFromCookies(), "Tab Selection")
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   // By Employees
@@ -43,28 +45,34 @@ const HelpAndSupport = () => {
     IIssueRaisedByClient[]
   >([]);
 
-  const [selectedMessage, setSelectedMessage] = useState<IIssueRaisedByEmployee | null>(null);
-  const [selectedMessageByClient, setSelectedMessageByClient] = useState<IIssueRaisedByClient | null>(null);
+  const [selectedMessage, setSelectedMessage] = useState<
+    IIssueRaisedByEmployee | IIssueRaisedByClient | null
+  >(null);
   const [searchVal, setSearchVal] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
   // Pagination
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [totalRecord, setTotalRecord] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLastPage, setIsLastPage] = useState(true);
+
   const [searchState, updateSearchState] = useState<"idle" | "searching">(
     "idle"
   );
 
   // Fetch Issues By Employee
-  const getIssueMessageByEmp = async (searchVal: string) => {
+  const getIssueMessageByEmp = async (
+    searchVal: string,
+    isFirstPage?: boolean
+  ) => {
+    const pageNo = isFirstPage ? 1 : currentPage + 1;
     try {
-      const fetchHelpIssueResponse = await fetchHelpIssueByEmp({
+      const employeeResponse = await fetchHelpIssueByEmp({
         searchVal,
-        // pageNo: page,
+        page: pageNo,
       }).unwrap();
 
-      if (fetchHelpIssueResponse?.data) {
-        let filteredData = fetchHelpIssueResponse.data;
+      if (employeeResponse?.data) {
+        let filteredData = employeeResponse.data;
         // Apply Filter
         if (filterStatus === "Open") {
           filteredData = filteredData.filter(
@@ -75,11 +83,16 @@ const HelpAndSupport = () => {
             (issue) => issue.issueStatus === IJobPostStatus.CLOSED
           );
         }
-
-        setIssueMessageByEmp(filteredData);
-        setSelectedMessage(filteredData[0] ?? null);
-        // setCurrentPage(fetchHelpIssueResponse.pagination?.page || 1);
-        // setTotalRecord(fetchHelpIssueResponse.pagination?.totalPages || 0);
+        if (pageNo === 1) {
+          setIssueMessageByEmp(filteredData);
+        } else {
+          setIssueMessageByEmp((prev) => [...prev, ...filteredData]);
+        }
+        setCurrentPage(employeeResponse.pagination?.page);
+        setIsLastPage(
+          employeeResponse?.data.length === 0 ||
+            currentPage === employeeResponse.pagination?.totalPages
+        );
       } else {
         setIssueMessageByEmp([]);
       }
@@ -92,13 +105,17 @@ const HelpAndSupport = () => {
   };
 
   // Fetch Issues By Client
-  const getIssueMessageByClient = async (searchVal: string) => {
+  const getIssueMessageByClient = async (
+    searchVal: string,
+    isFirstPage?: boolean
+  ) => {
+    const pageNo = isFirstPage ? 1 : currentPage + 1;
     try {
       const issueResponse = await fetchHelpIssueByClient({
         searchVal,
-        // pageNo: page,
+        page: pageNo,
       }).unwrap();
-      if(issueResponse?.data){
+      if (issueResponse?.data) {
         let filteredData = issueResponse.data;
         // Apply Filter
         if (filterStatus === "Open") {
@@ -110,37 +127,45 @@ const HelpAndSupport = () => {
             (issue) => issue.issueStatus === IJobPostStatus.CLOSED
           );
         }
-
-        setIssueMessageByClient(filteredData);
-        setSelectedMessageByClient(filteredData[0] ?? null);
-        // setCurrentPage(fetchHelpIssueResponse.pagination?.page || 1);
-        // setTotalRecord(fetchHelpIssueResponse.pagination?.totalPages || 0);
+        if (pageNo === 1) {
+          setIssueMessageByClient(filteredData);
+        } else {
+          setIssueMessageByClient((prev) => [...prev, ...filteredData]);
+        }
+        setCurrentPage(issueResponse.pagination?.page);
+        setIsLastPage(
+          issueResponse.data?.length === 0 ||
+            currentPage === issueResponse.pagination?.totalPages
+        );
       } else {
         setIssueMessageByEmp([]);
       }
       updateSearchState("idle");
-      
     } catch (error) {
       console.log("Error fetching help issue by client", error);
       setIssueMessageByClient([]);
       updateSearchState("idle");
     }
-  }
-  console.log(issueMessageByEmp, "issue message", issueMessageByEmp);
+  };
+
   // Handle Filter Change
   const menuPressHandler = (status: string) => {
     setFilterStatus(status);
-    getIssueMessageByEmp(searchVal); 
-    getIssueMessageByClient(searchVal); 
+    getIssueMessageByEmp(searchVal, true);
+    getIssueMessageByClient(searchVal, true);
   };
 
   // Handle Search
   const handleSearch = useCallback(
     _.debounce((query) => {
-      getIssueMessageByEmp(query);
-      getIssueMessageByClient(query);
+      if (selectedTabIndex === 0) {
+        getIssueMessageByEmp(query, true);
+      }
+      if (selectedTabIndex === 1) {
+        getIssueMessageByClient(query, true);
+      }
     }, 300),
-    [filterStatus, searchVal]
+    []
   );
 
   useEffect(() => {
@@ -148,12 +173,34 @@ const HelpAndSupport = () => {
       if (searchVal.length > 0) {
         updateSearchState("searching");
         handleSearch(searchVal);
+        setIsLastPage(true);
       } else {
-        getIssueMessageByEmp(searchVal);
+        getIssueMessageByEmp(searchVal, true);
+        setIsLastPage(true);
       }
     }
   }, [selectedTabIndex === 0, filterStatus, searchVal]);
+  useEffect(() => {
+    if (selectedTabIndex === 1) {
+      if (searchVal.length > 0) {
+        updateSearchState("searching");
+        handleSearch(searchVal);
+        setIsLastPage(true);
+      } else {
+        getIssueMessageByClient(searchVal, true);
+        setIsLastPage(true);
+      }
+    }
+  }, [selectedTabIndex === 1, filterStatus, searchVal]);
 
+  const loadMore = () => {
+    if (!isLastPage && selectedTabIndex === 0) {
+      getIssueMessageByEmp(searchVal);
+    }
+    if (!isLastPage && selectedTabIndex === 1) {
+      getIssueMessageByClient(searchVal);
+    }
+  };
   // Filter Button
   const FilterButton = () => (
     <Image
@@ -199,7 +246,12 @@ const HelpAndSupport = () => {
           </Badge>
         </div>
       </div>
-      <span className="text-accentColor text-sm font-bold">{`Open Ticket (3)`}</span>
+      {filterStatus && filterStatus !== "All" && (
+        <span className="text-accentColor text-sm font-bold">{`${filterStatus} Ticket (${
+          (selectedTabIndex === 0 && issueMessageByEmp.length) ||
+          (selectedTabIndex === 1 && issueMessageByClient.length)
+        })`}</span>
+      )}
     </div>
   );
 
@@ -230,7 +282,8 @@ const HelpAndSupport = () => {
             <ListHeader />
             {selectedTabIndex === 0 && (
               <MessageCardsList
-                isClients={false}
+                onReachEnd={loadMore}
+                isLastPage={isLastPage}
                 data={issueMessageByEmp}
                 isLoading={isFetchingByEmp}
                 selectedIssueId={selectedMessage?.id ?? null}
@@ -239,32 +292,30 @@ const HelpAndSupport = () => {
             )}
             {selectedTabIndex === 1 && (
               <MessageCardsList
-                isClients={true}
-                data={issueMessageByEmp}
+                onReachEnd={loadMore}
+                isLastPage={isLastPage}
+                data={issueMessageByClient}
                 isLoading={isFetchingByClient}
-                selectedIssueId={selectedMessageByClient?.id ?? null}
-                onPressButton={(issue) => setSelectedMessageByClient(issue)}
+                selectedIssueId={selectedMessage?.id ?? null}
+                onPressButton={(issue) => setSelectedMessage(issue)}
               />
             )}
           </div>
         </div>
         {/* Right Side View */}
         <div className="flex w-[65%] h-[95%] bg-white border border-borderGrey rounded-lg mt-3 p-6 overflow-scroll scrollbar-none">
-          {selectedTabIndex === null && (
+          {(selectedTabIndex === 0 || selectedTabIndex === 1) &&
+          selectedMessage ? (
+            <div className="w-full mt-2 h-full">
+              <IssueRaisedDetails data={selectedMessage} />
+            </div>
+          ) : (
             <div className="w-full flex justify-center items-center">
               <EmptyScreenView
                 illustration={Images.noHelpSupport}
                 isDataEmpty={true}
               />
             </div>
-          )}
-          {selectedTabIndex === 0 && selectedMessage && (
-            <div className="w-full mt-2 h-full">
-              <IssueRaisedDetails data={selectedMessage} />
-            </div>
-          )}
-          {selectedTabIndex === 1 && (
-            <div className="w-full">{STRINGS.clientManagement}</div>
           )}
         </div>
       </div>

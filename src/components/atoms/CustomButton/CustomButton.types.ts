@@ -34,7 +34,8 @@ export const getStylesFromButtonType = (
         lineHeight: "28px",
         fontWeight: "bold",
         textTransform: "capitalize",
-        borderRadius: "4px",
+        border: "1px solid",
+        borderRadius: "8px",
         paddingY: "10px",
       };
     case "outline-small-red":

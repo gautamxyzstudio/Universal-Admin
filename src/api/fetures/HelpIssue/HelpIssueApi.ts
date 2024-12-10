@@ -15,18 +15,18 @@ const HelpIssueApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getHelpIssuesByEmp: builder.query<
       ICustomizedIssueRaisedByEmpApiResponse,
-      { searchVal: string }
+      { searchVal: string, page: number}
     >({
-      query: ({ searchVal }: { searchVal: string }) => ({
-        url: Endpoints.getHelpSupportIssueByEmployee(searchVal),
+      query: ({ searchVal , page}: { searchVal: string, page: number }) => ({
+        url: Endpoints.getHelpSupportIssueByEmployee(searchVal, page),
         method: ApiMethodType.get,
       }),
       transformResponse: (
-        response: IGetIssueRaisedByEmpApiResponse[]
+        response: IGetIssueRaisedByEmpApiResponse
       ): ICustomizedIssueRaisedByEmpApiResponse => {
         const issueResponse: IIssueRaisedByEmployee[] = [];
-        if (response) {
-          response.forEach((issue) => {
+        if (response.data) {
+          response.data.forEach((issue) => {
             issueResponse.push({
               id: issue.id,
               issue: issue.Issue,
@@ -45,29 +45,29 @@ const HelpIssueApi = baseApi.injectEndpoints({
         console.log(issueResponse, "issueResponse");
         return {
           data: issueResponse,
-          // pagination: {
-          //   page: response.meta.pagination.page,
-          //   pageSize: response.meta.pagination.pageSize,
-          //   total: response.meta.pagination.total,
-          //   totalPages: response.meta.pagination.totalPages,
-          // },
+          pagination: {
+            page: response.pagination.page,
+            pageSize: response.pagination.pageSize,
+            pageCount: response.pagination.pageCount,
+            totalPages: response.pagination.total,
+          },
         };
       },
     }),
     getHelpIssuesByClient: builder.query<
       ICustomizedIssueRaisedByClientApiResponse,
-      { searchVal: string }
+      { searchVal: string, page: number }
     >({
-      query: ({ searchVal }: { searchVal: string }) => ({
-        url: Endpoints.getHelpSupportIssueByClient(searchVal),
+      query: ({ searchVal, page }: { searchVal: string, page:number }) => ({
+        url: Endpoints.getHelpSupportIssueByClient(searchVal, page),
         method: ApiMethodType.get,
       }),
       transformResponse: (
-        response: IGetIssueRaisedByClientApiResponse[]
+        response: IGetIssueRaisedByClientApiResponse
       ): ICustomizedIssueRaisedByClientApiResponse => {
         const issueResponseByClient: IIssueRaisedByClient[] = [];
         if (response) {
-          response.forEach((issue) => {
+          response.data.forEach((issue) => {
             issueResponseByClient.push({
               id: issue.id,
               issue: issue.Issue,
@@ -90,6 +90,12 @@ const HelpIssueApi = baseApi.injectEndpoints({
         }
         return {
           data: issueResponseByClient,
+          pagination: {
+            page: response.pagination.page,
+            pageSize: response.pagination.pageSize,
+            pageCount: response.pagination.pageCount,
+            totalPages: response.pagination.total,
+          }
         };
       },
     }),
