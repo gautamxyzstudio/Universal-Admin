@@ -61,6 +61,7 @@ import filter from './filter.svg';
 import allMessage from './allMessage.svg';
 import openMessage from './openMessage.svg';
 import closedMessage from './closedMessage.svg';
+import notAnIssueMessage from './notAnIssueMessage.svg';
 
 // Icon Object
 export const Icons = {
@@ -126,6 +127,7 @@ export const Icons = {
   allMessage,
   openMessage,
   closedMessage,
+  notAnIssueMessage,
 };
 
 // Images

@@ -1,4 +1,9 @@
-import { IJobPostStatus, IJobTypesEnum } from "./enums";
+import {
+  IIssueRaisedStatusEnum,
+  IJobPostStatus,
+  IJobTypesEnum,
+  IUserTypesEnum,
+} from "./enums";
 
 export const getJobStatus = (status: IJobPostStatus) => {
   switch (status) {
@@ -31,5 +36,31 @@ export const getJobType = (jobType: IJobTypesEnum) => {
       return "Static";
     default:
       return "Event";
+  }
+};
+
+export const getUsersType = (type: IUserTypesEnum) => {
+  switch (type) {
+    case IUserTypesEnum.EMPLOYEE:
+      return "Employee";
+    case IUserTypesEnum.CLIENT:
+      return "Client";
+    case IUserTypesEnum.SUPERADMIN:
+      return "SuperAdmin";
+    default:
+      return "Employee";
+  }
+};
+
+export const getIssueRaisedStatus = (status: IIssueRaisedStatusEnum) => {
+  switch (status) {
+    case IIssueRaisedStatusEnum.OPEN:
+      return "Open";
+    case IIssueRaisedStatusEnum.CLOSED:
+      return "Closed";
+    case IIssueRaisedStatusEnum.NO_ISSUE:
+      return "Not an issue";
+    default:
+      return "Not an issue";
   }
 };

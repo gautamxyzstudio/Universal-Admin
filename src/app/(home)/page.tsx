@@ -8,6 +8,7 @@ import { Add } from "@mui/icons-material";
 import DataTable from "@/components/atoms/DataTable/DataTable";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useGetAllUsersQuery } from "@/api/fetures/Users/UsersApi";
+import { getUsersType } from "@/constant/constant";
 
 export default function Home() {
   const { data, isFetching } = useGetAllUsersQuery("");
@@ -35,6 +36,14 @@ export default function Home() {
       width: 150,
       renderCell: (params: GridRenderCellParams) => {
         return params.row.status === "s1"? "text-green" : "text-red";
+      }
+    },
+    {
+      field : "user_type",
+      headerName: "Roles",
+      width: 150,
+      renderCell: (params: GridRenderCellParams) => {
+        return getUsersType(params.row.user_type);
       }
     },
     {
@@ -69,7 +78,7 @@ export default function Home() {
           <CustomButton
             title={STRINGS.create}
             onClick={undefined}
-            buttonType={"primary"}
+            buttonType={"primary-small"}
             icon={<Add />}
           />
         </div>

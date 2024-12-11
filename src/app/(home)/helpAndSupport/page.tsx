@@ -23,7 +23,10 @@ import {
 import _ from "lodash";
 import MessageCardsList from "./LeftTabViews/MessageCardsList";
 import IssueRaisedDetails from "./RightTabViews/IssueRaisedDetails";
-import { IJobPostStatus } from "@/constant/enums";
+import { IIssueRaisedStatusEnum } from "@/constant/enums";
+import { getIssueRaisedStatus } from "@/constant/constant";
+import { log } from "console";
+
 // import { getUserDetailsFromCookies } from "@/utility/cookies";
 
 const HelpAndSupport = () => {
@@ -45,9 +48,7 @@ const HelpAndSupport = () => {
     IIssueRaisedByClient[]
   >([]);
 
-  const [selectedMessage, setSelectedMessage] = useState<
-    IIssueRaisedByEmployee | IIssueRaisedByClient | null
-  >(null);
+  const [selectedMessage, setSelectedMessage] = useState<number | null>(null);
   const [searchVal, setSearchVal] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
@@ -72,26 +73,21 @@ const HelpAndSupport = () => {
       }).unwrap();
 
       if (employeeResponse?.data) {
-        let filteredData = employeeResponse.data;
-        // Apply Filter
-        if (filterStatus === "Open") {
-          filteredData = filteredData.filter(
-            (issue) => issue.issueStatus === IJobPostStatus.OPEN
-          );
-        } else if (filterStatus === "Closed") {
-          filteredData = filteredData.filter(
-            (issue) => issue.issueStatus === IJobPostStatus.CLOSED
-          );
-        }
+        const filteredData = employeeResponse.data;
         if (pageNo === 1) {
           setIssueMessageByEmp(filteredData);
         } else {
-          setIssueMessageByEmp((prev) => [...prev, ...filteredData]);
+          setIssueMessageByEmp((prev) => {
+            const prevIssues = [...prev];
+            prevIssues.push(...employeeResponse.data);
+            const uniqueArray = [...new Set(prevIssues)];
+            return uniqueArray ;
+          });
         }
         setCurrentPage(employeeResponse.pagination?.page);
         setIsLastPage(
           employeeResponse?.data.length === 0 ||
-            currentPage === employeeResponse.pagination?.totalPages
+            pageNo === employeeResponse.pagination?.totalPages
         );
       } else {
         setIssueMessageByEmp([]);
@@ -103,6 +99,12 @@ const HelpAndSupport = () => {
       updateSearchState("idle");
     }
   };
+
+
+  console.log(issueMessageByEmp,'FILTERED DATA')
+
+
+  // console.log(issueMessageByEmp,'issues ')
 
   // Fetch Issues By Client
   const getIssueMessageByClient = async (
@@ -116,26 +118,22 @@ const HelpAndSupport = () => {
         page: pageNo,
       }).unwrap();
       if (issueResponse?.data) {
-        let filteredData = issueResponse.data;
-        // Apply Filter
-        if (filterStatus === "Open") {
-          filteredData = filteredData.filter(
-            (issue) => issue.issueStatus === IJobPostStatus.OPEN
-          );
-        } else if (filterStatus === "Closed") {
-          filteredData = filteredData.filter(
-            (issue) => issue.issueStatus === IJobPostStatus.CLOSED
-          );
-        }
+        const filteredData = issueResponse.data;
         if (pageNo === 1) {
-          setIssueMessageByClient(filteredData);
+          setIssueMessageByClient(issueResponse?.data);
         } else {
-          setIssueMessageByClient((prev) => [...prev, ...filteredData]);
+          setIssueMessageByClient((prev) => {
+            const prevIssues = [...prev];
+            prevIssues.push(...issueResponse.data);
+            const uniqueArray = [...new Set(prevIssues)];
+            return uniqueArray ;
+          });
         }
         setCurrentPage(issueResponse.pagination?.page);
+        console.log(issueResponse.pagination?.totalPages, "Total pages: ")
         setIsLastPage(
           issueResponse.data?.length === 0 ||
-            currentPage === issueResponse.pagination?.totalPages
+          pageNo === issueResponse.pagination?.totalPages
         );
       } else {
         setIssueMessageByEmp([]);
@@ -168,6 +166,7 @@ const HelpAndSupport = () => {
     []
   );
 
+  // Employee Tab Index
   useEffect(() => {
     if (selectedTabIndex === 0) {
       if (searchVal.length > 0) {
@@ -180,6 +179,8 @@ const HelpAndSupport = () => {
       }
     }
   }, [selectedTabIndex === 0, filterStatus, searchVal]);
+
+  // Client Tab Index
   useEffect(() => {
     if (selectedTabIndex === 1) {
       if (searchVal.length > 0) {
@@ -193,6 +194,7 @@ const HelpAndSupport = () => {
     }
   }, [selectedTabIndex === 1, filterStatus, searchVal]);
 
+  // Load More Button
   const loadMore = () => {
     if (!isLastPage && selectedTabIndex === 0) {
       getIssueMessageByEmp(searchVal);
@@ -201,8 +203,9 @@ const HelpAndSupport = () => {
       getIssueMessageByClient(searchVal);
     }
   };
+
   // Filter Button
-  const FilterButton = () => (
+  const FilterButtonIcon = () => (
     <Image
       src={Icons.filter}
       alt="Filter Button"
@@ -211,9 +214,26 @@ const HelpAndSupport = () => {
   );
 
   const FILTER_OPTIONS = [
-    { label: STRINGS.all, value: "All" },
-    { label: STRINGS.open, value: "Open" },
-    { label: STRINGS.closed, value: "Closed" },
+    {
+      icon: Icons.allMessage,
+      value: STRINGS.all,
+      onPresItem: (value: string) => menuPressHandler(value),
+    },
+    {
+      icon: Icons.openMessage,
+      value: getIssueRaisedStatus(IIssueRaisedStatusEnum.OPEN),
+      onPresItem: (value: string) => menuPressHandler(value),
+    },
+    {
+      icon: Icons.closedMessage,
+      value: getIssueRaisedStatus(IIssueRaisedStatusEnum.CLOSED),
+      onPresItem: (value: string) => menuPressHandler(value),
+    },
+    {
+      icon: Icons.notAnIssueMessage,
+      value: getIssueRaisedStatus(IIssueRaisedStatusEnum.NO_ISSUE),
+      onPresItem: (value: string) => menuPressHandler(value),
+    },
   ];
 
   // List Header Options
@@ -232,21 +252,17 @@ const HelpAndSupport = () => {
             variant="dot"
             color="warning"
             overlap="circular"
-            invisible={filterStatus === "All"}
+            invisible={filterStatus === STRINGS.all}
           >
             <CustomMenuComponent
               isOpen={false}
-              menuButton={<FilterButton />}
-              data={FILTER_OPTIONS.map((option) => ({
-                icon: Icons[option.value.toLowerCase() + "Message"],
-                value: option.label,
-                onPresItem: () => menuPressHandler(option.value),
-              }))}
+              menuButton={<FilterButtonIcon />}
+              data={FILTER_OPTIONS}
             />
           </Badge>
         </div>
       </div>
-      {filterStatus && filterStatus !== "All" && (
+      {filterStatus && filterStatus !== STRINGS.all && (
         <span className="text-accentColor text-sm font-bold">{`${filterStatus} Ticket (${
           (selectedTabIndex === 0 && issueMessageByEmp.length) ||
           (selectedTabIndex === 1 && issueMessageByClient.length)
@@ -254,7 +270,28 @@ const HelpAndSupport = () => {
       )}
     </div>
   );
+  const markAsRead = (messageId: number) => {
+    if (selectedTabIndex === 0) {
+      const updatedData = issueMessageByEmp.map((message) => {
+        if (message.id === messageId) {
+          return { ...message, isRead: true }; // Mark it as read
+        }
+        return message;
+      });
+      setIssueMessageByEmp(updatedData);
+    }
+    if (selectedTabIndex === 1) {
+      const updatedData = issueMessageByClient.map((message) => {
+        if (message.id === messageId) {
+          return { ...message, isRead: true }; // Mark it as read
+        }
+        return message;
+      });
+      setIssueMessageByClient(updatedData);
+    }
+  };
 
+  console.log(filterStatus, " issues filtered status: ");
   return (
     <div className="w-full h-[90vh] overflow-hidden">
       <PageHeader title={STRINGS.help} />
@@ -286,8 +323,9 @@ const HelpAndSupport = () => {
                 isLastPage={isLastPage}
                 data={issueMessageByEmp}
                 isLoading={isFetchingByEmp}
-                selectedIssueId={selectedMessage?.id ?? null}
-                onPressButton={(issue) => setSelectedMessage(issue)}
+                selectedIssueId={selectedMessage ?? null}
+                onPressButton={(issueId) => setSelectedMessage(issueId)}
+                markAsRead={markAsRead}
               />
             )}
             {selectedTabIndex === 1 && (
@@ -296,8 +334,9 @@ const HelpAndSupport = () => {
                 isLastPage={isLastPage}
                 data={issueMessageByClient}
                 isLoading={isFetchingByClient}
-                selectedIssueId={selectedMessage?.id ?? null}
+                selectedIssueId={selectedMessage ?? 0}
                 onPressButton={(issue) => setSelectedMessage(issue)}
+                markAsRead={markAsRead}
               />
             )}
           </div>
@@ -307,7 +346,10 @@ const HelpAndSupport = () => {
           {(selectedTabIndex === 0 || selectedTabIndex === 1) &&
           selectedMessage ? (
             <div className="w-full mt-2 h-full">
-              <IssueRaisedDetails data={selectedMessage} />
+              <IssueRaisedDetails
+                messageId={selectedMessage}
+                markAsRead={markAsRead}
+              />
             </div>
           ) : (
             <div className="w-full flex justify-center items-center">

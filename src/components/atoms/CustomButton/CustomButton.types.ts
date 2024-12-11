@@ -34,7 +34,6 @@ export const getStylesFromButtonType = (
         lineHeight: "28px",
         fontWeight: "bold",
         textTransform: "capitalize",
-        border: "1px solid",
         borderRadius: "8px",
         paddingY: "10px",
       };

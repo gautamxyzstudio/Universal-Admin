@@ -14,16 +14,16 @@ import {
   IIssueRaisedByClient,
   IIssueRaisedByEmployee,
 } from "@/api/fetures/HelpIssue/HelpIssueApi.types";
-import { IJobPostStatus } from "@/constant/enums";
-import { getJobStatusColor } from "@/utility/utils";
-import { getJobStatus } from "@/constant/constant";
+import { getIssueRaisedStatusColor } from "@/utility/utils";
+import { getIssueRaisedStatus } from "@/constant/constant";
 type IMessageCardsListProps = {
   data: IIssueRaisedByEmployee[] | IIssueRaisedByClient[];
   isLoading: boolean;
   isLastPage: boolean;
   onReachEnd: (index: number) => void;
   selectedIssueId: number | null | string;
-  onPressButton: (post: IIssueRaisedByEmployee | IIssueRaisedByClient) => void;
+  onPressButton: (messageId: number | null) => void;
+  markAsRead: (messageId: number) => void;
 };
 
 const MessageCardsList: React.FC<IMessageCardsListProps> = ({
@@ -33,6 +33,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
   selectedIssueId,
   onReachEnd,
   onPressButton,
+  markAsRead,
 }) => {
   const [message, setMessage] = useState<
     IIssueRaisedByEmployee[] | IIssueRaisedByClient[]
@@ -81,10 +82,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
           customButtonStyle={{
             padding: "12px",
             borderBottom: "1px solid #DBDBDB",
-            borderLeft:
-              item.issueStatus === IJobPostStatus.OPEN
-                ? " 4px solid #182452"
-                : "none",
+            borderLeft: item.isRead === null ? "4px solid #182452" : "none",
           }}
           key={item.id}
           content={
@@ -95,8 +93,8 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
                 issuePublish={item.publishedAt}
                 message={item.issue ?? ""}
                 image={item.employeeImageUrl}
-                textLabel={getJobStatus(item.issueStatus)}
-                textStyle={getJobStatusColor(item.issueStatus)}
+                textLabel={getIssueRaisedStatus(item.issueStatus)}
+                textStyle={getIssueRaisedStatusColor(item.issueStatus)}
               />
             ) : (
               <MessageCard
@@ -106,13 +104,17 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
                 issuePublish={item.publishedAt}
                 message={item.issue ?? ""}
                 image={item.clientCompanyLogoUrl}
-                textLabel={getJobStatus(item.issueStatus)}
-                textStyle={getJobStatusColor(item.issueStatus)}
+                textLabel={getIssueRaisedStatus(item.issueStatus)}
+                textStyle={getIssueRaisedStatusColor(item.issueStatus)}
               />
             )
           }
           isSelected={selectedIssueId === item.id}
-          onPressButton={() => onPressButton(item)}
+          onPressButton={() => {
+            onPressButton(item.id);
+            console.log(item.id, "when pressed");
+            markAsRead(item.id);
+          }}
         />
       );
     },

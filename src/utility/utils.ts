@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { ICustomErrorResponse } from '@/api/types';
-import { IDocumentStatus, IJobPostStatus, IWorkStatus } from '@/constant/enums';
+import { IDocumentStatus, IIssueRaisedStatusEnum, IJobPostStatus, IWorkStatus } from '@/constant/enums';
 import moment from 'moment';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -137,6 +137,19 @@ export const getJobStatusColor = (status: IJobPostStatus) => {
       return `text-red bg-lightRed`;
   }
 };
+
+export const getIssueRaisedStatusColor = (status: IIssueRaisedStatusEnum)=>{
+  switch(status){
+    case IIssueRaisedStatusEnum.OPEN:
+      return `text-green bg-statusLightGreen`;
+    case IIssueRaisedStatusEnum.CLOSED:
+      return `text-red bg-lightRed`;
+    case IIssueRaisedStatusEnum.NO_ISSUE:
+      return `text-yellow bg-lightYellow`;
+    default:
+      return  `text-red bg-lightRed`;
+  }
+}
 
 export const dateFormat = (date: string | Date) => {
   return moment.utc(date).format('DD-MM-YYYY');

@@ -3,10 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { IconButton } from "@mui/material";
 import { Icons } from "../../../../public/exporter";
-import {
-  getUserNameFormCookies,
-  removeUserDetailsFromCookies,
-} from "@/utility/cookies";
+import { removeUserDetailsFromCookies } from "@/utility/cookies";
 import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 import { STRINGS } from "@/constant/en";
@@ -16,7 +13,7 @@ import { routeNames } from "@/utility/routesName";
 import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
 
 const Topbar = () => {
-  const userName = getUserNameFormCookies();
+  const userName = "Sumit";
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const { changeLoaderState } = useShowLoaderContext();
   const route = useRouter();

@@ -154,4 +154,5 @@ export const STRINGS = {
   closed: "Closed",
   open : "Open",
   help: "Help & Support",
+  noIssue: "NoIssue"
 };

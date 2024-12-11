@@ -8,6 +8,8 @@ import {
   IGetIssueRaisedByClientApiResponse,
   IIssueRaisedByClient,
   IIssueRaisedByEmployee,
+  IGetIssueRaisedByIdApiResponse,
+  IIssueRaisedById,
 } from "./HelpIssueApi.types";
 import { createImageUrl } from "@/utility/cookies";
 
@@ -15,9 +17,9 @@ const HelpIssueApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getHelpIssuesByEmp: builder.query<
       ICustomizedIssueRaisedByEmpApiResponse,
-      { searchVal: string, page: number}
+      { searchVal: string; page: number }
     >({
-      query: ({ searchVal , page}: { searchVal: string, page: number }) => ({
+      query: ({ searchVal, page }: { searchVal: string; page: number }) => ({
         url: Endpoints.getHelpSupportIssueByEmployee(searchVal, page),
         method: ApiMethodType.get,
       }),
@@ -32,12 +34,13 @@ const HelpIssueApi = baseApi.injectEndpoints({
               issue: issue.Issue,
               publishedAt: issue.publishedAt,
               issueStatus: issue.status,
+              isRead: issue.isRead,
               employeeName: issue.employee_detail?.name,
               employeeEmail: issue.employee_detail?.email,
               employeePhone: issue.employee_detail?.phone,
               employeeId: issue.employee_detail?.id,
-              employeeImageUrl: issue.employee_detail?.selfie.url
-                ? createImageUrl(issue.employee_detail?.selfie.url)
+              employeeImageUrl: issue.employee_detail?.selfie?.[0]?.url
+                ? createImageUrl(issue.employee_detail?.selfie?.[0]?.url)
                 : "",
             });
           });
@@ -48,17 +51,17 @@ const HelpIssueApi = baseApi.injectEndpoints({
           pagination: {
             page: response.pagination.page,
             pageSize: response.pagination.pageSize,
-            pageCount: response.pagination.pageCount,
-            totalPages: response.pagination.total,
+            totalPages: response.pagination.pageCount,
+            total: response.pagination.total,
           },
         };
       },
     }),
     getHelpIssuesByClient: builder.query<
       ICustomizedIssueRaisedByClientApiResponse,
-      { searchVal: string, page: number }
+      { searchVal: string; page: number }
     >({
-      query: ({ searchVal, page }: { searchVal: string, page:number }) => ({
+      query: ({ searchVal, page }: { searchVal: string; page: number }) => ({
         url: Endpoints.getHelpSupportIssueByClient(searchVal, page),
         method: ApiMethodType.get,
       }),
@@ -73,6 +76,7 @@ const HelpIssueApi = baseApi.injectEndpoints({
               issue: issue.Issue,
               publishedAt: issue.publishedAt,
               issueStatus: issue.status,
+              isRead: issue.isRead,
               clientName: issue.client_detail?.Name,
               clientEmail: issue.client_detail?.Email,
               clientPhone: issue.client_detail?.contactno,
@@ -93,13 +97,64 @@ const HelpIssueApi = baseApi.injectEndpoints({
           pagination: {
             page: response.pagination.page,
             pageSize: response.pagination.pageSize,
-            pageCount: response.pagination.pageCount,
-            totalPages: response.pagination.total,
-          }
+            totalPages: response.pagination.pageCount,
+            total: response.pagination.total,
+          },
+        };
+      },
+    }),
+    getIssueRaisedById: builder.query({
+      query: (messageId: number) => ({
+        url: Endpoints.getIssueRaisedById(messageId),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (
+        response: IGetIssueRaisedByIdApiResponse
+      ): IIssueRaisedById => {
+        return {
+          id: response.id,
+          issue: response.Issue,
+          publishedAt: response.publishedAt ?? null,
+          issueStatus: response.status,
+          user_type: response.user_type ?? null,
+          isRead: response.isRead,
+          employeeDetails: response?.employee_detail
+            ? {
+                employeeId: response.employee_detail?.id,
+                employeeName: response.employee_detail?.name,
+                employeeEmail: response.employee_detail?.email,
+                employeePhone: response.employee_detail?.phone,
+                employeeImageUrl: response.employee_detail?.selfie?.[0]?.url
+                  ? createImageUrl(response.employee_detail?.selfie?.[0]?.url)
+                  : null,
+              }
+            : null,
+          clientDetails: response.client_detail
+            ? {
+                clientId: response.client_detail?.id,
+                clientName: response.client_detail?.Name,
+                clientEmail: response.client_detail?.Email,
+                clientPhone: response.client_detail?.contactno,
+                clientCompanyName:
+                  response.client_detail?.company_detail?.companyname,
+                clientCompanyLogoUrl: response.client_detail?.company_detail
+                  ?.companylogo
+                  ? createImageUrl(
+                      response.client_detail?.company_detail?.companylogo?.url
+                    )
+                  : null,
+              }
+            : null,
         };
       },
     }),
   }),
 });
-export const { useGetHelpIssuesByEmpQuery, useLazyGetHelpIssuesByEmpQuery, useGetHelpIssuesByClientQuery, useLazyGetHelpIssuesByClientQuery } =
-  HelpIssueApi;
+export const {
+  useGetHelpIssuesByEmpQuery,
+  useLazyGetHelpIssuesByEmpQuery,
+  useGetHelpIssuesByClientQuery,
+  useLazyGetHelpIssuesByClientQuery,
+  useGetIssueRaisedByIdQuery,
+  useLazyGetIssueRaisedByIdQuery,
+} = HelpIssueApi;

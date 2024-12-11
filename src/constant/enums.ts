@@ -64,3 +64,15 @@ export enum IEmployeeApiKeyStatus {
   NULL = 'null',
 }
 
+export enum IUserTypesEnum {
+  EMPLOYEE = 'emp',
+  CLIENT = 'client',
+  SUPERADMIN = 'supAdmin',
+}
+
+
+export enum IIssueRaisedStatusEnum {
+  OPEN = 's0',
+  CLOSED = 's1',
+  NO_ISSUE = 's2',
+}
