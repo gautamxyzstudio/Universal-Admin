@@ -12,15 +12,24 @@ import {
   IIssueRaisedById,
 } from "./HelpIssueApi.types";
 import { createImageUrl } from "@/utility/cookies";
+import { IIssueRaisedStatusEnum } from "@/constant/enums";
 
 const HelpIssueApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getHelpIssuesByEmp: builder.query<
       ICustomizedIssueRaisedByEmpApiResponse,
-      { searchVal: string; page: number }
+      { searchVal: string; page: number; status?: IIssueRaisedStatusEnum }
     >({
-      query: ({ searchVal, page }: { searchVal: string; page: number }) => ({
-        url: Endpoints.getHelpSupportIssueByEmployee(searchVal, page),
+      query: ({
+        searchVal,
+        page,
+        status,
+      }: {
+        searchVal: string;
+        page: number;
+        status: IIssueRaisedStatusEnum;
+      }) => ({
+        url: Endpoints.getHelpSupportIssueByEmployee(searchVal, page, status),
         method: ApiMethodType.get,
       }),
       transformResponse: (
@@ -45,7 +54,6 @@ const HelpIssueApi = baseApi.injectEndpoints({
             });
           });
         }
-        console.log(issueResponse, "issueResponse");
         return {
           data: issueResponse,
           pagination: {
@@ -59,10 +67,18 @@ const HelpIssueApi = baseApi.injectEndpoints({
     }),
     getHelpIssuesByClient: builder.query<
       ICustomizedIssueRaisedByClientApiResponse,
-      { searchVal: string; page: number }
+      { searchVal: string; page: number; status?: IIssueRaisedStatusEnum }
     >({
-      query: ({ searchVal, page }: { searchVal: string; page: number }) => ({
-        url: Endpoints.getHelpSupportIssueByClient(searchVal, page),
+      query: ({
+        searchVal,
+        page,
+        status,
+      }: {
+        searchVal: string;
+        page: number;
+        status: IIssueRaisedStatusEnum;
+      }) => ({
+        url: Endpoints.getHelpSupportIssueByClient(searchVal, page, status),
         method: ApiMethodType.get,
       }),
       transformResponse: (
@@ -148,6 +164,18 @@ const HelpIssueApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateIssueResolve: builder.mutation({
+      query: (issueId: number) => ({
+        url: Endpoints.updateIssueStatusIsResolveById(issueId),
+        method: ApiMethodType.patch,
+      }),
+    }),
+    updateNotAnIssue: builder.mutation({
+      query: (issueId: number) => ({
+        url: Endpoints.updateIssueStatusIsNotAnIssueById(issueId),
+        method: ApiMethodType.patch,
+      }),
+    }),
   }),
 });
 export const {
@@ -157,4 +185,6 @@ export const {
   useLazyGetHelpIssuesByClientQuery,
   useGetIssueRaisedByIdQuery,
   useLazyGetIssueRaisedByIdQuery,
+  useUpdateIssueResolveMutation,
+  useUpdateNotAnIssueMutation,
 } = HelpIssueApi;

@@ -1,12 +1,12 @@
-import { IIssueRaisedStatusEnum,  IUserTypesEnum } from "@/constant/enums";
+import { IIssueRaisedStatusEnum, IUserTypesEnum } from "@/constant/enums";
 
 export interface IGetIssueRaisedByEmpApiResponse {
   data: {
     id: number;
     Issue: string;
     publishedAt: Date | string;
-    status:IIssueRaisedStatusEnum;
-    isRead: boolean | string;
+    status: IIssueRaisedStatusEnum;
+    isRead: boolean | null;
     employee_detail: {
       id: number;
       name: string;
@@ -43,7 +43,7 @@ export interface IIssueRaisedByEmployee {
   issue: string | null;
   publishedAt: Date | string | null;
   issueStatus: IIssueRaisedStatusEnum;
-  isRead: boolean | string;
+  isRead: boolean | null;
   employeeName: string | null;
   employeeEmail: string | null;
   employeePhone: string | null;
@@ -58,7 +58,7 @@ export interface IGetIssueRaisedByClientApiResponse {
     Issue: string;
     publishedAt: Date | string;
     status: IIssueRaisedStatusEnum;
-    isRead: boolean | string;
+    isRead: boolean | null;
     client_detail: {
       id: number;
       Name: string;
@@ -95,7 +95,7 @@ export interface IIssueRaisedByClient {
   issue: string | null;
   publishedAt: Date | string | null;
   issueStatus: IIssueRaisedStatusEnum;
-  isRead: boolean | string;
+  isRead: boolean | null;
   clientId: number;
   clientName: string | null;
   clientEmail: string | null;
@@ -116,10 +116,12 @@ export interface IGetIssueRaisedByIdApiResponse {
     name: string;
     email: string;
     phone: string;
-    selfie:[ {
-      name: string;
-      url: string;
-    }];
+    selfie: [
+      {
+        name: string;
+        url: string;
+      }
+    ];
   } | null;
   client_detail: {
     id: number;

@@ -14,8 +14,9 @@ import {
   IIssueRaisedByClient,
   IIssueRaisedByEmployee,
 } from "@/api/fetures/HelpIssue/HelpIssueApi.types";
-import { getIssueRaisedStatusColor } from "@/utility/utils";
 import { getIssueRaisedStatus } from "@/constant/constant";
+import { getIssueRaisedStatusColor } from "@/utility/utils";
+import { IIssueRaisedStatusEnum } from "@/constant/enums";
 type IMessageCardsListProps = {
   data: IIssueRaisedByEmployee[] | IIssueRaisedByClient[];
   isLoading: boolean;
@@ -24,6 +25,7 @@ type IMessageCardsListProps = {
   selectedIssueId: number | null | string;
   onPressButton: (messageId: number | null) => void;
   markAsRead: (messageId: number) => void;
+  changedIssueStatus: (messageId: number, status:IIssueRaisedStatusEnum) => void;
 };
 
 const MessageCardsList: React.FC<IMessageCardsListProps> = ({
@@ -34,6 +36,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
   onReachEnd,
   onPressButton,
   markAsRead,
+  changedIssueStatus,
 }) => {
   const [message, setMessage] = useState<
     IIssueRaisedByEmployee[] | IIssueRaisedByClient[]
@@ -82,7 +85,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
           customButtonStyle={{
             padding: "12px",
             borderBottom: "1px solid #DBDBDB",
-            borderLeft: item.isRead === null ? "4px solid #182452" : "none",
+            borderLeft: item.isRead === false ? "4px solid #182452" : "none",
           }}
           key={item.id}
           content={
@@ -114,6 +117,9 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
             onPressButton(item.id);
             console.log(item.id, "when pressed");
             markAsRead(item.id);
+            if (changedIssueStatus) {
+              changedIssueStatus(item.id, item.issueStatus);
+            }
           }}
         />
       );
@@ -121,7 +127,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
     [selectedIssueId, data]
   );
   return (
-    <div className="h-[inherit] pb-4 w-full">
+    <div className=" h-[90%] pb-4 w-full">
       <VirtualList
         data={isLoading ? demoData.rows : message}
         isLastPage={isLastPage}
@@ -139,3 +145,7 @@ const MessageCardsList: React.FC<IMessageCardsListProps> = ({
 };
 
 export default MessageCardsList;
+
+
+
+

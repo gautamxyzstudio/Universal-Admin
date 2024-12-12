@@ -61,6 +61,6 @@ export const getIssueRaisedStatus = (status: IIssueRaisedStatusEnum) => {
     case IIssueRaisedStatusEnum.NO_ISSUE:
       return "Not an issue";
     default:
-      return "Not an issue";
+      return "open";
   }
 };

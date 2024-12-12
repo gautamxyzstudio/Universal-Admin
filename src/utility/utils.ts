@@ -145,7 +145,7 @@ export const getIssueRaisedStatusColor = (status: IIssueRaisedStatusEnum)=>{
     case IIssueRaisedStatusEnum.CLOSED:
       return `text-red bg-lightRed`;
     case IIssueRaisedStatusEnum.NO_ISSUE:
-      return `text-yellow bg-lightYellow`;
+      return `text-yellow bg-lightYellowSecondary`;
     default:
       return  `text-red bg-lightRed`;
   }

@@ -59,7 +59,7 @@ export enum IEmployeeApiKeyStatus {
   LICENSE_ADVANCE = 'securityDocumentAdvStatus',
   LICENSE_BASIC = 'securityDocBasicStatus',
   SUPPORTING_DOCUMENT = 'supportingDocumentStatus',
-  GOVT_ID = 'govtidStaus',
+  GOVT_ID = 'govtidStatus',
   CHEQUE = 'directDepositVoidChequeStatus',
   NULL = 'null',
 }

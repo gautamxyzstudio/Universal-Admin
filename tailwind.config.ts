@@ -4,7 +4,8 @@ const config: Config = {
         './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
         './src/components/**/*.{js,ts,jsx,tsx,mdx}',
         './src/appcomponents/**/*.{js,ts,jsx,tsx,mdx}',
-        './src/app/**/*.{js,ts,jsx,tsx,mdx}'
+        './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/utility/**/*.{ts,js,tsx,mdx}',
     ],
     theme: {
         extend: {
@@ -21,7 +22,7 @@ const config: Config = {
                 accentColor: '#182452',
                 lightGreen: 'rgba(70, 156, 115, 0.20)',
                 lightRed: 'rgba(193, 25, 25, 0.20)',
-                lightYellow: `rgba(255,250,231, 1.2)`,
+                lightYellow: `rgba(255,250,23, 1.2)`,
                 statusLightGreen: '#ECFFF6',
                 yellow: '#FBC505',
                 extraWhite: '#FAFAFA',
