@@ -9,6 +9,8 @@ import DataTable from "@/components/atoms/DataTable/DataTable";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useGetAllUsersQuery } from "@/api/fetures/Users/UsersApi";
 import { getUsersType } from "@/constant/constant";
+import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
+import { getClientStatusAttributesFromType } from "./clientManagement/types";
 
 export default function Home() {
   const { data, isFetching } = useGetAllUsersQuery("");
@@ -24,6 +26,14 @@ export default function Home() {
       field: "name",
       headerName: STRINGS.name,
       width: 200,
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <span>
+            {params.row.euser_id && params.row.euser_id.name}
+            {params.row.cuser_id && params.row.cuser_id.Name}
+          </span>
+        );
+      },
     },
     {
       field: "email",
@@ -31,20 +41,41 @@ export default function Home() {
       width: 300,
     },
     {
-      field : "status",
+      field: "status",
       headerName: STRINGS.status,
       width: 150,
       renderCell: (params: GridRenderCellParams) => {
-        return params.row.status === "s1"? "text-green" : "text-red";
-      }
+        const attributesForEmp =
+          params.row.euser_id &&
+          getClientStatusAttributesFromType(params.row.euser_id.workStatus);
+        const attributesForClient =
+          params.row.cuser_id &&
+          getClientStatusAttributesFromType(params.row.cuser_id.status);
+        return (
+          <>
+            {params.row.euser_id && (
+              <TextWithBgColor
+                textLabel={attributesForEmp.text}
+                textStyle={attributesForEmp.styles}
+              />
+            )}
+            {params.row.cuser_id && (
+              <TextWithBgColor
+                textLabel={attributesForClient.text}
+                textStyle={attributesForClient.styles}
+              />
+            )}
+          </>
+        );
+      },
     },
     {
-      field : "user_type",
+      field: "user_type",
       headerName: "Roles",
       width: 150,
       renderCell: (params: GridRenderCellParams) => {
         return getUsersType(params.row.user_type);
-      }
+      },
     },
     {
       field: "action",
