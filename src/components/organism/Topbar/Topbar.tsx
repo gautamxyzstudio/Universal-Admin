@@ -43,7 +43,7 @@ const Topbar = () => {
         Welcome, {userName}
       </p>
 
-      <div className="flex items-center my-[10px] gap-x-4">
+      <div className="flex items-center my-[10px] gap-x-3">
         <IconButton>
           <div className=" bg-backgroundLight rounded-full  w-9 h-9">
             <Image

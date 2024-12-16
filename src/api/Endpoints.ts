@@ -67,7 +67,7 @@ export const Endpoints = {
     page: number,
     status: IIssueRaisedStatusEnum
   ) => getIssueRaisedByClientUrl(searchVal, page, status),
-  getUsers: `${process.env.NEXT_PUBLIC_BASE_URL}/api/users?populate=*&sort=id:desc`,
+  getUsers: `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findAllUsers`,
   getIssueRaisedById: (id: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds/${id}?populate=*`,
   updateIssueStatusIsResolveById: (id: number) =>
