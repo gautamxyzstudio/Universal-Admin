@@ -106,14 +106,14 @@ const JobDetails = ({
             <TextGroup
               icon={Icons.check_in}
               title={STRINGS.checkin}
-              titleStyle="text-green"
+              titleStyle="text-Green"
               text={timeFormat(data.CheckIn)}
             />
           )}
           {isEmployee && data.CheckOut && (
             <TextGroup
               icon={Icons.check_in}
-              titleStyle="text-red"
+              titleStyle="text-Red"
               title={STRINGS.checkin}
               text={timeFormat(data.CheckOut)}
             />

@@ -79,11 +79,11 @@ const PhotoUpload: React.FC<IPhotoUploadProps> = ({ getUploadedImageId }) => {
         )}
         {error && (
           <div className="w-14 h-14 absolute bg-modal flex justify-center items-center border-[2px] object-contain border-red rounded-full">
-            <h1 className="text-red font-bold text-[10px] ">error</h1>
+            <h1 className="text-Red font-bold text-[10px] ">error</h1>
           </div>
         )}
         {error && (
-          <h1 className="absolute text-[10px] capitalize text-red  w-[500px] text-center -bottom-4">
+          <h1 className="absolute text-[10px] capitalize text-Red  w-[500px] text-center -bottom-4">
             Image upload Failed. please try again
           </h1>
         )}

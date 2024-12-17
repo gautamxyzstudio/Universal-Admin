@@ -85,7 +85,7 @@ const FormRenderer = React.memo(
       );
     } else if (item.type === IFieldTypes.STATUS) {
       const isTrue = fields[item.apiKey] === "true";
-      const styles = isTrue ? "text-sm text-green" : "text-sm text-disable";
+      const styles = isTrue ? "text-sm text-Green" : "text-sm text-disable";
       return (
         <div className="flex flex-col">
           {STRINGS.status}

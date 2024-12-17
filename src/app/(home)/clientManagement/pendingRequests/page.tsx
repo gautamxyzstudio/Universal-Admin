@@ -135,7 +135,7 @@ const PendingRequests = () => {
       width: 90,
       renderCell: (params) => (
         <span
-          className="text-green cursor-pointer font-bold "
+          className="text-Green cursor-pointer font-bold "
           onClick={() => handleSelectClient(params.row)}
         >
           {STRINGS.verify}

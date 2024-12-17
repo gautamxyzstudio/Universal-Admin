@@ -126,8 +126,8 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                 <TextWithBgColor
                   textStyle={`${
                     document.docStatus === IDocumentStatus.APPROVED
-                      ? 'bg-lightGreen text-green'
-                      : 'bg-lightRed text-red'
+                      ? 'bg-lightGreen text-Green'
+                      : 'bg-lightRed text-Red'
                   }`}
                   textLabel={getDocumentStatusTextByStatus(document.docStatus)}
                 />

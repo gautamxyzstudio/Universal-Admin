@@ -26,12 +26,12 @@ export const getStylesAttributes = (type: IUserImageRendererTypes) => {
     case "green":
       return {
         backgroundColor: "bg-lightGreen",
-        textColor: "text-green",
+        textColor: "text-Green",
       };
     case "red":
       return {
         backgroundColor: "bg-lightRed",
-        textColor: "text-red",
+        textColor: "text-Red",
       };
     case "orange":
       return {

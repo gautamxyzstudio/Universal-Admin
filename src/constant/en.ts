@@ -84,6 +84,8 @@ export const STRINGS = {
   jobName: "Job Name",
   jobDes: "Job Description",
   jobDut: "Job Duties",
+  jobStatus: "Job Status",
+
   reqCert: "Required Certificate",
   pendingReq: "Pending Request",
   selectComp: "Select the company",
@@ -154,5 +156,15 @@ export const STRINGS = {
   closed: "Closed",
   open : "Open",
   help: "Help & Support",
-  noIssue: "NoIssue"
+  noIssue: "NoIssue",
+  activity: "Activity",
+  recentAct: "Recent Activity",
+  daily: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
+  yearly: "Yearly",
+  jobPosting: "Job Posting",
+  newClient: "New Client",
+  newEmp: "New Employee",
+  compareWeek: 'Compare to last week',
 };

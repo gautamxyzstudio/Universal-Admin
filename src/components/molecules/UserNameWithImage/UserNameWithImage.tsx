@@ -76,7 +76,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
               {subText && (
                 <>
                   <SVGComponent svg={SVGS.circleDot} />
-                  <span className="text-[12px] leading-4 font-bold text-red">
+                  <span className="text-[12px] leading-4 font-bold text-Red">
                     {subText}
                   </span>
                 </>

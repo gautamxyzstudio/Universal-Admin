@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 import CustomSpeedDial from "@/components/organism/CustomSpeedDial/CustomSpeedDial";
+import BarChart from "@/components/molecules/ChartTypes/BarChart/BarChart";
+import DoughnutChart from "@/components/molecules/ChartTypes/DoughnutChart/DoughnutChart";
+import InfoCard from "@/components/molecules/InfoCard/InfoCard";
 
 export default function Home() {
   const route = useRouter();
@@ -107,9 +110,9 @@ export default function Home() {
   const handleOnClickSpeedDial = () => {
     setOpenSpeedDial((prevOpenSpeedDial) => !prevOpenSpeedDial);
   };
-  
+
   return (
-    <div className=" w-full h-[86%] mb-5">
+    <div className=" w-full h-full overflow-scroll scrollbar-none">
       <div className="flex justify-between items-center w-full">
         <PageHeader title={STRINGS.dashboard} />
         <div
@@ -129,16 +132,52 @@ export default function Home() {
           />
         </div>
       </div>
-      <DataTable
-        columns={columns}
-        rows={users}
-        isLoading={isFetching}
-        withPagination={false}
-        tableHeightPercent={85}
-        headerView={
-          <span className="text-Black text-text-md">Recent Activity</span>
-        }
-      />
+      <div className="flex gap-x-4 w-full">
+        <InfoCard items={infoCardItems} />
+      </div>
+      <div className="flex gap-x-4 my-4 w-full">
+        <BarChart />
+        <DoughnutChart />
+      </div>
+      <div className="w-full h-[70%]">
+        <DataTable
+          columns={columns}
+          rows={users}
+          isLoading={isFetching}
+          withPagination={false}
+          tableHeightPercent={85}
+          headerView={
+            <span className="text-Black text-text-md">{STRINGS.recentAct}</span>
+          }
+        />
+      </div>
     </div>
   );
 }
+
+export const infoCardItems = [
+  {
+    label: "Total Clients",
+    value: "100",
+    icon: Icons.newClient,
+    weekPercentage: "2%",
+  },
+  {
+    label: "Total Employees",
+    value: "100",
+    icon: Icons.employee,
+    weekPercentage: "2%",
+  },
+  {
+    label: STRINGS.pendingReq,
+    value: "100",
+    icon: Icons.pending,
+    weekPercentage: "2%",
+  },
+  {
+    label: "Job opening",
+    value: "100",
+    icon: Icons.job,
+    weekPercentage: "2%",
+  },
+];

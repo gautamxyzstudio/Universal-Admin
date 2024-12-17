@@ -11,6 +11,7 @@ const TableFilter: React.FC<IMenuProps> = ({
   initialSelectedOption,
   data,
   title,
+  menuButtonStyle,
 }) => {
   const [selectedItem, setSelectedItem] = useState(initialSelectedOption.value);
 
@@ -21,7 +22,7 @@ const TableFilter: React.FC<IMenuProps> = ({
     <div className="flex items-center  gap-x-2 ">
       <p className="text-[12px] leading-4">{title}</p>
       <Dropdown>
-        <MenuButton className="bg-white items-center flex  text-disable flex-row justify-between text-text-12 min-w-24 border-[1px] rounded-[4px] border-backgroundLight pl-2 pr-1 py-1">
+        <MenuButton className={" bg-white items-center flex text-disable flex-row justify-between text-text-12 min-w-24 border-[1px] rounded-[4px] border-backgroundLight pl-2 pr-1 py-1 " + menuButtonStyle}>
           {selectedItem}
           <Image
             src={Icons.arrow}
