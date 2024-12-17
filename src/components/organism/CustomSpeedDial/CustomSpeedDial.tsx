@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Backdrop,
   SpeedDial,
@@ -13,15 +13,16 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
-const CustomSpeedDial = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+import { STRINGS } from "@/constant/en";
 
+interface ICustomSpeedDialProps {
+  open: boolean;
+  onClickSpeedDial: () => void;
+}
+const CustomSpeedDial: React.FC<ICustomSpeedDialProps> = ({
+  open,
+  onClickSpeedDial,
+}) => {
   const route = useRouter();
   const actions = [
     {
@@ -56,7 +57,7 @@ const CustomSpeedDial = () => {
       <SpeedDial
         ariaLabel="speedDial menu"
         sx={{
-          position: "absolute",
+          position: "relative",
           right: "0px",
           top: "10px",
           ".MuiSpeedDial-actions ": {
@@ -66,10 +67,12 @@ const CustomSpeedDial = () => {
             fill: open ? "#FF7312" : "#fff",
             opacity: 1,
           },
+          ".MuiSpeedDialIcon-icon": {
+            transform: open ? "rotate(45deg)" : "",
+          },
         }}
         FabProps={{
           sx: {
-            display: "flex",
             width: open ? "40px" : "97px ",
             height: "40px",
             justifyContent: "center",
@@ -85,10 +88,13 @@ const CustomSpeedDial = () => {
           },
         }}
         direction="down"
-        onClick={handleOpen}
-        // onClose={handleClose}
+        onClick={onClickSpeedDial}
         open={open}
-        icon={<SpeedDialIcon />}
+        icon={
+          <>
+            <SpeedDialIcon /> {!open && STRINGS.create}
+          </>
+        }
       >
         {actions.map((item, index) => {
           return (

@@ -3,19 +3,6 @@ import { STRINGS } from "@/constant/en";
 import Image from "next/image";
 import { Icons } from "../../../public/exporter";
 import PageHeader from "@/components/organism/PageHeader/PageHeader";
-import CustomButton from "@/components/atoms/CustomButton/CustomButton";
-import {
-  Add,
-  Apartment,
-  ApartmentOutlined,
-  ManageAccounts,
-  ManageAccountsOutlined,
-  ManageAccountsSharp,
-  PeopleAltOutlined,
-  PeopleAltRounded,
-  Person,
-  PersonOutline,
-} from "@mui/icons-material";
 import DataTable from "@/components/atoms/DataTable/DataTable";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useGetAllUsersQuery } from "@/api/fetures/Users/UsersApi";
@@ -32,6 +19,7 @@ export default function Home() {
   const route = useRouter();
   const { data, isFetching } = useGetAllUsersQuery("");
   const [users, setUsers] = useState<IUsers[]>([]);
+  const [openSpeedDial, setOpenSpeedDial] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -116,30 +104,29 @@ export default function Home() {
     },
   ];
 
-  const CreateButton = () => {
-    return (
-      <CustomButton
-        title={STRINGS.create}
-        onClick={undefined}
-        buttonType={"primary-small"}
-        icon={<Add />}
-      />
-    );
+  const handleOnClickSpeedDial = () => {
+    setOpenSpeedDial((prevOpenSpeedDial) => !prevOpenSpeedDial);
   };
-
+  
   return (
     <div className=" w-full h-[86%] mb-5">
       <div className="flex justify-between items-center w-full">
         <PageHeader title={STRINGS.dashboard} />
-        <div className="inline-flex gap-x-6 items-center w-[15%] h-[60px]">
-          <div className=" bg-extraWhite rounded-full  w-20 h-9 flex justify-center items-center">
-            <Image
-              src={Icons.calendar}
-              alt="notification"
-              className="w-full h-full"
-            />
-          </div>
-          <CustomSpeedDial />
+        <div
+          className={`inline-flex gap-x-6 items-center ${
+            openSpeedDial ? "w-[10%]" : "w-[17%]"
+          } h-[60px]`}
+        >
+          <Image
+            src={Icons.calendar}
+            alt="notification"
+            className="w-9 h-9 object-contain"
+          />
+
+          <CustomSpeedDial
+            open={openSpeedDial}
+            onClickSpeedDial={handleOnClickSpeedDial}
+          />
         </div>
       </div>
       <DataTable
