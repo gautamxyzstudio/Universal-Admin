@@ -111,6 +111,33 @@ export default function Home() {
     setOpenSpeedDial((prevOpenSpeedDial) => !prevOpenSpeedDial);
   };
 
+  const infoCardItems = [
+    {
+      label: "Total Clients",
+      value: "100",
+      icon: Icons.newClient,
+      weekPercentage: "2%",
+    },
+    {
+      label: "Total Employees",
+      value: "100",
+      icon: Icons.employee,
+      weekPercentage: "2%",
+    },
+    {
+      label: STRINGS.pendingReq,
+      value: "100",
+      icon: Icons.pending,
+      weekPercentage: "2%",
+    },
+    {
+      label: "Job opening",
+      value: "100",
+      icon: Icons.job,
+      weekPercentage: "2%",
+    },
+  ];
+  
   return (
     <div className=" w-full h-full overflow-scroll scrollbar-none">
       <div className="flex justify-between items-center w-full">
@@ -154,29 +181,4 @@ export default function Home() {
   );
 }
 
-export const infoCardItems = [
-  {
-    label: "Total Clients",
-    value: "100",
-    icon: Icons.newClient,
-    weekPercentage: "2%",
-  },
-  {
-    label: "Total Employees",
-    value: "100",
-    icon: Icons.employee,
-    weekPercentage: "2%",
-  },
-  {
-    label: STRINGS.pendingReq,
-    value: "100",
-    icon: Icons.pending,
-    weekPercentage: "2%",
-  },
-  {
-    label: "Job opening",
-    value: "100",
-    icon: Icons.job,
-    weekPercentage: "2%",
-  },
-];
+ 

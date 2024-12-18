@@ -1,4 +1,4 @@
-import { IJobTypesEnum, IUserTypesEnum } from "@/constant/enums";
+import { IUserTypesEnum } from "@/constant/enums";
 
 export interface IGetUsersApiResponse {
   data: {

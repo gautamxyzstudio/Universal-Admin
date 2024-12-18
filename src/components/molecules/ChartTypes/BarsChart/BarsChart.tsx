@@ -52,7 +52,7 @@ const BarsChart = () => {
           ]}
           borderRadius={8}
           grid={{ horizontal: true }}
-          width={500}
+          width={590}
           height={195}
           series={[
             {
@@ -72,10 +72,10 @@ const BarsChart = () => {
               scaleType: "band",
               categoryGapRatio: 0.8,
               barGapRatio: 0,
-              disableLine: true, // Disable the line on x-axis
-              disableTicks: true, // Disable ticks on x-axis
+              disableLine: true,
+              disableTicks: true,
               tickLabelStyle: {
-                fill: "#868686", // Set the tick label color
+                fill: "#868686",
               },
             } as unknown as AxisConfig<"band", any, ChartsAxisProps>,
           ]}
