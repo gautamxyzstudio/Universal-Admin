@@ -53,6 +53,7 @@ export default function Home() {
               params.row.client?.clientCompanyLogo
             }
             imageStyle="!w-8 !h-8 object-cover"
+            type={"orange"}
           />
         );
       },

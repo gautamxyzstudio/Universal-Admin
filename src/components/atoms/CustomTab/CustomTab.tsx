@@ -10,15 +10,15 @@ function a11yProps(index: number) {
   };
 }
 
-const CustomTab: React.FC<ICustomTabProps> = ({ tabs, children, ...props }) => {
+const CustomTab: React.FC<ICustomTabProps> = ({ tabs, children, tabOuterDivStyle,tabInnerDivStyle, ...props }) => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
   const handleTabChange = (event: React.SyntheticEvent, tabIndex: number) => {
     setCurrentTabIndex(tabIndex);
   };
 
   return (
-    <div className="border border-borderGrey rounded-t-lg mt-3 bg-white h-fit">
-      <div className="border-b border-borderGrey h-fit">
+    <div className={tabOuterDivStyle + " border border-borderGrey rounded-t-lg mt-3 bg-white h-fit"}>
+      <div className={tabInnerDivStyle +"border-b border-borderGrey h-fit"}>
         <Tabs
           {...props}
           value={currentTabIndex}

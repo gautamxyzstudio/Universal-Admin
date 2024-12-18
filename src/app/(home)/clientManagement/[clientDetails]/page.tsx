@@ -27,12 +27,13 @@ import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditF
 
 const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   const [openEditForm, setOpenEditForm] = useState<boolean>(false);
-  const { data, isFetching } = useGetClientDetailsQuery(params.clientDetails);
+  const { data, isLoading } = useGetClientDetailsQuery(params.clientDetails);
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [client, setClient] = useState<IClientDetailsResponse | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [updateClientStatus, { isLoading }] = useChangeClientStatusMutation();
+  const [updateClientStatus, { isLoading: isLoadingStatus }] =
+    useChangeClientStatusMutation();
   const [clientJobs, setClientJobs] = useState<IJobPost[]>([]);
   const [selectedJobPost, setSelectedJobPost] = useState<IJobPost | null>(null);
   const [fetchClientJobs, { isFetching: isClientJobFecthing }] =
@@ -46,8 +47,8 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   }, [data]);
 
   useEffect(() => {
-    changeLoaderState(isLoading);
-  }, [isLoading]);
+    changeLoaderState(isLoadingStatus);
+  }, [isLoadingStatus]);
 
   useEffect(() => {
     if (params.clientDetails) {
@@ -97,8 +98,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
         });
         displaySnackbar("success", "Status updated successful");
       }
-    },
-    displaySnackbar
+    }
   );
 
   const tabsData = [
@@ -136,7 +136,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   return (
     <div className="w-full h-[90%]">
       <PageSubHeader
-        isLoading={isFetching}
+        isLoading={isLoading}
         pageTitle={STRINGS.clientManagement}
         name={client?.name || ""}
       />
@@ -145,13 +145,14 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
           <div className="flex justify-between h-fit mb-3">
             <UserNameWithImage
               name={client?.name || ""}
-              isLoading={isFetching}
+              isLoading={isLoading}
               image={client?.companyLogo ?? ""}
               imageStyle="!w-14 !h-14"
               companyName={client?.companyName || ""}
               companyNameStyle="!text-[14px] !leading-[18px] !w-fit"
               joinDate={dateMonthFormat(client?.createdAt ?? new Date()) ?? ""}
             />
+
             <Switch
               checked={client?.status === IClientStatus.ACTIVE ? true : false}
               onChange={handleStatusChange}
@@ -162,7 +163,7 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
           </div>
           <ContactDetailCard
             email={client?.email || ""}
-            isLoading={isFetching}
+            isLoading={isLoading}
             phoneNumber={client?.contactNo || ""}
             address={client?.location || ""}
             department={client?.industry || ""}

@@ -18,4 +18,6 @@ interface TabItemProps {
 
 export interface ICustomTabProps  extends TabsProps {
   tabs: TabItemProps[];
+  tabOuterDivStyle? : string;
+  tabInnerDivStyle? : string;
 }

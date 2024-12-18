@@ -132,6 +132,7 @@ const clientApi = baseApi.injectEndpoints({
         },
       }),
     }),
+    
     registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
       query: (body: IRegisterClientReq) => ({
         url: Endpoints.registerClient,

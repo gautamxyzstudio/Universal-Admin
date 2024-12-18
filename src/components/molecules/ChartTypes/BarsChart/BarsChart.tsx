@@ -70,7 +70,7 @@ const BarsChart = () => {
             {
               data: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
               scaleType: "band",
-              categoryGapRatio: 0.8,
+              categoryGapRatio: 0.84,
               barGapRatio: 0,
               disableLine: true,
               disableTicks: true,

@@ -11,10 +11,12 @@ import ConfirmationDialog from "@/components/molecules/DialogTypes/ConfirmationD
 import { useRouter } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
 import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
+import NotificationDrawer from "@/components/molecules/DrawerTypes/NotificationDrawer/NotificationDrawer";
 
 const Topbar = () => {
   const userName = "Sumit";
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const { changeLoaderState } = useShowLoaderContext();
   const route = useRouter();
 
@@ -27,6 +29,9 @@ const Topbar = () => {
 
   const onPressClose = () => {
     setShowDialog(false);
+  };
+  const handleDrawer = () => {
+    setOpenDrawer(!openDrawer);
   };
 
   const menuHandler = (option: string) => {
@@ -44,7 +49,7 @@ const Topbar = () => {
       </p>
 
       <div className="flex items-center my-[10px] gap-x-3">
-        <IconButton>
+        <IconButton onClick={() => setOpenDrawer(true)}>
           <div className=" bg-backgroundLight rounded-full  w-9 h-9">
             <Image
               src={Icons.notification}
@@ -94,6 +99,11 @@ const Topbar = () => {
         onPressButton={logoutHandler}
         onClose={onPressClose}
         open={showDialog}
+      />
+      <NotificationDrawer
+        open={openDrawer}
+        handleClose={handleDrawer}
+        onPressCross={handleDrawer}
       />
     </div>
   );

@@ -85,8 +85,6 @@ const ClientManagement = () => {
     }
   };
 
-  console.log(clients);
-
   //Add registered client details
   const addRegisteredClientDetails = async (
     userId: number,
