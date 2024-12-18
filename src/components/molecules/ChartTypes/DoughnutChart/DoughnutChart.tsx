@@ -1,4 +1,4 @@
-import { daysTerm } from "@/app/(home)/employeeManagement/types";
+import { daysTerm } from "@/app/(home)/types";
 import React from "react";
 import TableFilter from "../../TableFilter/TableFilter";
 import { STRINGS } from "@/constant/en";

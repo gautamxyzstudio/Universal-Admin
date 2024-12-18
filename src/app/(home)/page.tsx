@@ -14,9 +14,9 @@ import { useRouter } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 import CustomSpeedDial from "@/components/organism/CustomSpeedDial/CustomSpeedDial";
-import BarChart from "@/components/molecules/ChartTypes/BarChart/BarChart";
 import DoughnutChart from "@/components/molecules/ChartTypes/DoughnutChart/DoughnutChart";
 import InfoCard from "@/components/molecules/InfoCard/InfoCard";
+import BarsChart from "@/components/molecules/ChartTypes/BarsChart/BarsChart";
 
 export default function Home() {
   const route = useRouter();
@@ -136,8 +136,7 @@ export default function Home() {
         <InfoCard items={infoCardItems} />
       </div>
       <div className="flex gap-x-4 my-4 w-full">
-        <BarChart />
-        <DoughnutChart />
+        <BarsChart /> <DoughnutChart />
       </div>
       <div className="w-full h-[70%]">
         <DataTable
