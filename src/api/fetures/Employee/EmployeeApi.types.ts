@@ -1,8 +1,6 @@
 import {
   IDocumentNames,
   IDocumentStatus,
-  IEmployeeApiKeyStatus,
-  IEmployeeDocsApiKeys,
   IJobPostStatus,
   IJobTypesEnum,
 } from '@/constant/enums';
@@ -75,11 +73,10 @@ export interface IEmployeeAdvance {
     bankAccNo: string;
     institutionNumber: string;
     transitNumber: string;
-    chique: IEmployeeDocument;
+    chique: IEmployeeDocument | null;
   };
   documents: IEmployeeDocument[];
-  documentRequests: IEmployeeDocument[];
-  otherDocuments: IEmployeeDocument[];
+  update_requests: IEmployeeDocument[];
 }
 
 export type IDoc = {
@@ -94,10 +91,8 @@ export interface IEmployeeDocument {
   docName: string;
   docStatus: IDocumentStatus;
   isUpdate?: boolean;
-  docStatusKey: IEmployeeApiKeyStatus;
   doc: IDoc | null;
   docId: number | null;
-  apiKey?: IEmployeeDocsApiKeys;
   licenseNo?: string | null | undefined;
 }
 
@@ -163,7 +158,7 @@ export interface IGetEmployeeByIdResponse {
                   id: number;
                   attributes:
                     | {
-                        DocName: IDocumentNames | null | undefined;
+                        name: string | null | undefined;
                         status: IDocumentStatus | null | undefined;
                         document:
                           | {
@@ -190,91 +185,7 @@ export interface IGetEmployeeByIdResponse {
               | undefined
             ];
           };
-          govtid:
-            | {
-                data: {
-                  id: number;
-                  attributes: {
-                    url: string | null | undefined;
-                    mime: string | null | undefined;
-                    size: number | null | undefined;
-                    name: string | null | undefined;
-                  };
-                };
-              }
-            | null
-            | undefined;
           selfie:
-            | {
-                data: {
-                  id: number;
-                  attributes: {
-                    url: string | null | undefined;
-                    mime: string | null | undefined;
-                    size: number | null | undefined;
-                    name: string | null | undefined;
-                  };
-                };
-              }
-            | null
-            | undefined;
-          directDepositVoidCheque:
-            | {
-                data: {
-                  id: number;
-                  attributes: {
-                    url: string | null | undefined;
-                    mime: string | null | undefined;
-                    size: number | null | undefined;
-                    name: string | null | undefined;
-                  };
-                };
-              }
-            | null
-            | undefined;
-          supportingDocument:
-            | {
-                data: {
-                  id: number;
-                  attributes: {
-                    url: string | null | undefined;
-                    mime: string | null | undefined;
-                    size: number | null | undefined;
-                    name: string | null | undefined;
-                  };
-                };
-              }
-            | null
-            | undefined;
-          sinDocument:
-            | {
-                data: {
-                  id: number;
-                  attributes: {
-                    url: string | null | undefined;
-                    mime: string | null | undefined;
-                    size: number | null | undefined;
-                    name: string | null | undefined;
-                  };
-                };
-              }
-            | null
-            | undefined;
-          securityDocumentAdv:
-            | {
-                data: {
-                  id: number;
-                  attributes: {
-                    url: string | null | undefined;
-                    mime: string | null | undefined;
-                    size: number | null | undefined;
-                    name: string | null | undefined;
-                  };
-                };
-              }
-            | null
-            | undefined;
-          securityDocumentBasic:
             | {
                 data: {
                   id: number;

@@ -16,15 +16,12 @@ import {
   IJobPost,
 } from './EmployeeApi.types';
 import {
-  IDocumentNames,
   IDocumentStatus,
-  IEmployeeApiKeyStatus,
   IEmployeeDocsApiKeys,
   IJobTypesEnum,
 } from '@/constant/enums';
 import { createImageUrl } from '@/utility/cookies';
 import { STRINGS } from '@/constant/en';
-import { getDocumentNameFromCode } from '@/utility/utils';
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -95,12 +92,9 @@ const authApi = baseApi.injectEndpoints({
                 response.data.attributes?.selfie.data[0].attributes.size ?? 0,
             }
           : null;
-
-        const documents: IEmployeeDocument[] =
-          extractEmployeeDocumentsFromApiResponse(response);
         const documentRequests: IEmployeeDocument[] =
           extractDocumentRequestsFromApiResponse(response);
-        const secondaryDocuments: IEmployeeDocument[] =
+        const documents: IEmployeeDocument[] =
           extractOtherDocumentsFromApiResponse(response);
 
         const employee: IEmployeeAdvance = {
@@ -116,45 +110,12 @@ const authApi = baseApi.injectEndpoints({
             institutionNumber:
               response.data.attributes?.institutionNumber ?? '',
             transitNumber: response.data.attributes?.trasitNumber ?? '',
-            chique: {
-              docName:
-                response.data.attributes?.directDepositVoidCheque?.data
-                  ?.attributes?.name ?? '',
-              docStatusKey: IEmployeeApiKeyStatus.CHEQUE,
-              docStatus:
-                response.data.attributes?.directDepositVoidChequeStatus ??
-                IDocumentStatus.PENDING,
-              doc: {
-                url: response.data.attributes?.directDepositVoidCheque?.data
-                  .attributes.url
-                  ? createImageUrl(
-                      response.data.attributes?.directDepositVoidCheque?.data
-                        .attributes.url
-                    )
-                  : null,
-                mime:
-                  response.data.attributes?.directDepositVoidCheque?.data
-                    .attributes.mime ?? '',
-                id:
-                  response.data.attributes?.directDepositVoidCheque?.data.id ??
-                  0,
-                name:
-                  response.data.attributes?.directDepositVoidCheque?.data
-                    .attributes.name ?? '',
-                size:
-                  response.data.attributes?.directDepositVoidCheque?.data
-                    .attributes.size ?? 0,
-              },
-              docId:
-                response.data.attributes?.directDepositVoidCheque?.data?.id ??
-                0,
-            },
+            chique: null,
           },
           selfie: selfie,
           id: response.data.id,
           documents: documents,
-          otherDocuments: secondaryDocuments,
-          documentRequests: documentRequests,
+          update_requests: documentRequests,
         };
         return employee;
       },
@@ -287,7 +248,6 @@ const addDocument = (
         doc: IDoc;
         id: number;
         key?: IEmployeeDocsApiKeys;
-        docStatusKey: IEmployeeApiKeyStatus;
       }
     | undefined,
   isUpdate: boolean,
@@ -298,7 +258,6 @@ const addDocument = (
     ? {
         docName: document.name,
         docStatus: status,
-        docStatusKey: document.docStatusKey,
         doc: {
           url: document.doc.url ? createImageUrl(document.doc.url) : null,
           id: document.doc.id,
@@ -308,7 +267,6 @@ const addDocument = (
         },
         isUpdate: isUpdate,
         docId: document.id,
-        apiKey: document.key,
         licenseNo:
           status !== IDocumentStatus.PENDING
             ? document.name === STRINGS.license_advance || STRINGS.license_basic
@@ -331,7 +289,6 @@ export const extractOtherDocumentsFromApiResponse = (
         {
           name: doc?.attributes?.name ?? '',
           id: doc?.id ?? 0,
-          docStatusKey: IEmployeeApiKeyStatus.NULL,
           doc: {
             mime: doc?.attributes?.Document?.data?.attributes.mime ?? '',
             url: doc?.attributes?.Document?.data?.attributes.url ?? '',
@@ -340,7 +297,12 @@ export const extractOtherDocumentsFromApiResponse = (
           },
         },
         false,
-        doc?.attributes?.Docstatus ?? IDocumentStatus.PENDING
+        doc?.attributes?.Docstatus ?? IDocumentStatus.PENDING,
+        doc?.attributes?.name === STRINGS.license_advance
+          ? employeeDetails.securityAdvNo
+          : doc?.attributes?.name === STRINGS.license_basic
+          ? employeeDetails.securityBasicNo
+          : null
       );
       if (document) documents.push(document);
     });
@@ -357,11 +319,9 @@ export const extractDocumentRequestsFromApiResponse = (
     employeeDetails.document_requests.data.forEach((doc) => {
       const document = addDocument(
         {
-          name: getDocumentNameFromCode(
-            doc?.attributes?.DocName ?? IDocumentNames.NULL
-          ),
+          name: doc?.attributes?.name ?? '',
           id: doc?.id ?? 0,
-          docStatusKey: IEmployeeApiKeyStatus.NULL,
+
           doc: {
             mime: doc?.attributes?.document?.data?.attributes.mime ?? '',
             url: doc?.attributes?.document?.data?.attributes.url ?? '',
@@ -371,162 +331,14 @@ export const extractDocumentRequestsFromApiResponse = (
         },
         true,
         doc?.attributes?.status ?? IDocumentStatus.PENDING,
-        getDocumentNameFromCode(
-          doc?.attributes?.DocName ?? IDocumentNames.NULL
-        ) === STRINGS.license_advance
+        doc?.attributes?.name ?? '' === STRINGS.license_advance
           ? employeeDetails.securityAdvNo
-          : getDocumentNameFromCode(
-              doc?.attributes?.DocName ?? IDocumentNames.NULL
-            ) === STRINGS.license_basic
+          : doc?.attributes?.name ?? '' === STRINGS.license_basic
           ? employeeDetails.securityBasicNo
           : undefined
       );
       if (document) documents.push(document);
     });
   }
-  return documents;
-};
-
-//to format employee documents
-export const extractEmployeeDocumentsFromApiResponse = (
-  response: IGetEmployeeByIdResponse
-): IEmployeeDocument[] | [] => {
-  //to merge doc details into one
-
-  const documents: IEmployeeDocument[] = [];
-  const employeeDetails = response.data.attributes;
-
-  if (
-    employeeDetails &&
-    employeeDetails.sinDocument &&
-    employeeDetails.sinDocument?.data?.id
-  ) {
-    const sinDocument = addDocument(
-      {
-        name: STRINGS.sinDocument,
-        id: employeeDetails.sinDocument.data.id,
-        docStatusKey: IEmployeeApiKeyStatus.SIN_DOCUMENT,
-        doc: {
-          mime: employeeDetails.sinDocument.data.attributes?.mime ?? '',
-          url: employeeDetails.sinDocument.data.attributes?.url ?? '',
-          size: employeeDetails.sinDocument.data.attributes?.size ?? 0,
-          name: employeeDetails.sinDocument.data.attributes?.name ?? '',
-        },
-        key: IEmployeeDocsApiKeys.SIN_DOCUMENT,
-      },
-      false,
-      employeeDetails.sinDocumentStatus ?? IDocumentStatus.PENDING
-    );
-    sinDocument && documents.push(sinDocument);
-  }
-  if (
-    employeeDetails &&
-    employeeDetails.govtid &&
-    employeeDetails.govtid?.data?.id
-  ) {
-    const govtID = addDocument(
-      {
-        name: STRINGS.Govt_ID,
-        id: employeeDetails.govtid.data.id,
-        docStatusKey: IEmployeeApiKeyStatus.GOVT_ID,
-        doc: {
-          mime: employeeDetails.govtid.data.attributes?.mime ?? '',
-          url: employeeDetails.govtid.data.attributes?.url ?? '',
-          size: employeeDetails.govtid.data.attributes?.size ?? 0,
-          name: employeeDetails.govtid.data.attributes?.name ?? '',
-        },
-        key: IEmployeeDocsApiKeys.GOVT_ID,
-      },
-      false,
-      employeeDetails.govtidStaus ?? IDocumentStatus.PENDING
-    );
-    govtID && documents.push(govtID);
-  }
-  if (
-    employeeDetails &&
-    employeeDetails.supportingDocument &&
-    employeeDetails.supportingDocument?.data?.id
-  ) {
-    const supportingDocument = addDocument(
-      {
-        name: STRINGS.document,
-        id: employeeDetails.supportingDocument.data.id,
-        docStatusKey: IEmployeeApiKeyStatus.SUPPORTING_DOCUMENT,
-        doc: {
-          mime:
-            employeeDetails?.supportingDocument?.data.attributes?.mime ?? '',
-          url: employeeDetails?.supportingDocument?.data?.attributes?.url ?? '',
-          size:
-            employeeDetails?.supportingDocument?.data?.attributes?.size ?? 0,
-          name:
-            employeeDetails?.supportingDocument?.data?.attributes?.name ?? '',
-        },
-        key: IEmployeeDocsApiKeys.SUPPORTING_DOCUMENT,
-      },
-      false,
-      employeeDetails.supportingDocumentStatus ?? IDocumentStatus.PENDING
-    );
-    supportingDocument && documents.push(supportingDocument);
-  }
-  if (
-    employeeDetails &&
-    employeeDetails.securityDocumentAdv &&
-    employeeDetails.securityDocumentAdv?.data?.id
-  ) {
-    const securityDocumentAdv = addDocument(
-      {
-        name: STRINGS.license_advance,
-        id: employeeDetails?.securityDocumentAdv?.data?.id ?? 0,
-        docStatusKey: IEmployeeApiKeyStatus.LICENSE_ADVANCE,
-        doc: {
-          mime:
-            employeeDetails?.securityDocumentAdv?.data?.attributes?.mime ?? '',
-          url:
-            employeeDetails?.securityDocumentAdv?.data?.attributes?.url ?? '',
-          size:
-            employeeDetails?.securityDocumentAdv?.data?.attributes?.size ?? 0,
-          name:
-            employeeDetails?.securityDocumentAdv?.data?.attributes?.name ?? '',
-        },
-        key: IEmployeeDocsApiKeys.LICENSE_ADVANCE,
-      },
-      false,
-      employeeDetails.securityDocumentAdvStatus ?? IDocumentStatus.PENDING,
-      employeeDetails.securityAdvNo
-    );
-    securityDocumentAdv && documents.push(securityDocumentAdv);
-  }
-  if (
-    employeeDetails &&
-    employeeDetails.securityDocumentBasic &&
-    employeeDetails.securityDocumentBasic?.data?.id
-  ) {
-    const securityDocumentBasic = addDocument(
-      {
-        name: STRINGS.license_basic,
-
-        id: employeeDetails?.securityDocumentBasic?.data?.id ?? 0,
-        docStatusKey: IEmployeeApiKeyStatus.LICENSE_BASIC,
-        doc: {
-          mime:
-            employeeDetails?.securityDocumentBasic?.data?.attributes?.mime ??
-            '',
-          url:
-            employeeDetails?.securityDocumentBasic?.data?.attributes?.url ?? '',
-          size:
-            employeeDetails?.securityDocumentBasic?.data?.attributes?.size ?? 0,
-          name:
-            employeeDetails?.securityDocumentBasic?.data?.attributes?.name ??
-            '',
-        },
-        key: IEmployeeDocsApiKeys.LICENSE_ADVANCE,
-      },
-      false,
-      employeeDetails.securityDocBasicStatus ?? IDocumentStatus.PENDING,
-      employeeDetails.securityBasicNo
-    );
-    securityDocumentBasic && documents.push(securityDocumentBasic);
-  }
-
   return documents;
 };

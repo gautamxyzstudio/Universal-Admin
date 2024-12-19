@@ -3,16 +3,14 @@ import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
 import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenView';
 import { STRINGS } from '@/constant/en';
-import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
+import { IDocumentStatus } from '@/constant/enums';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Images } from '../../../../../../public/exporter';
 
 export type IDocumentDetailsViewType = {
   onPressButton: (
-    item: IEmployeeDocument,
+    item: IEmployeeDocument | null,
     status: IDocumentStatus,
-    key: IEmployeeApiKeyStatus,
-    id: number,
     isUpdate?: boolean,
     licenseNumber?: string
   ) => void;
@@ -43,14 +41,7 @@ const DocumentDetailsView: React.FC<IDocumentDetailsViewType> = ({
           doc={item}
           isPrevious={index === 1 && data.heading !== 'New Requests'}
           onPressButton={(status, licenseNumber) => {
-            onPressButton(
-              item,
-              status,
-              item?.docStatusKey ?? IEmployeeApiKeyStatus.SIN_DOCUMENT,
-              item.docId ?? 0,
-              item.isUpdate,
-              licenseNumber
-            );
+            onPressButton(item, status, item.isUpdate, licenseNumber);
           }}
         />
       </div>

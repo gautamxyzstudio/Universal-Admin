@@ -137,7 +137,7 @@ export const STRINGS = {
   pay_schedule: 'Payment schedule',
   postalCode: 'Postal Code',
   city: 'City',
-
+  cheque: 'Direct deposit/ void cheque',
   saveChange: 'Save Changes',
   myacc: 'My Account',
   faq: 'FAQs',

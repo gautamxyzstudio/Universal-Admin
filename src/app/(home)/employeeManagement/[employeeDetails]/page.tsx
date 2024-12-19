@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import PageSubHeader from '@/components/organism/PageSubHeader/PageSubHeader';
 import { STRINGS } from '@/constant/en';
@@ -18,19 +19,19 @@ import {
   IEmployeeDocument,
   IJobPost,
 } from '@/api/fetures/Employee/EmployeeApi.types';
-import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
+import { IDocumentStatus } from '@/constant/enums';
 import DocumentDetailsView from './RightViews/DocumentDetailsView';
 import BankDetailsView from './RightViews/BankDetailsView';
 import ProfileHistoryView from './RightViews/ProfileHistoryView';
 import DocumentList from './LeftTabViewss/DocumentList';
 import { SxProps, Theme } from '@mui/material';
 import TabButton from '@/components/molecules/ButtonTypes/TabButton/TabButton';
-import { withAsyncErrorHandlingPost } from '@/utility/utils';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import EmployeeJobsList from './LeftTabViewss/EmployeeJobsList';
 import JobDetails from '@/components/organism/JobDetails/JobDetails';
 import { ITextGroupTypes } from '@/components/organism/TextGroup/TextGroup.types';
+import { withAsyncErrorHandlingPost } from '@/utility/utils';
 
 const EmployeeDetails = ({
   params,
@@ -67,11 +68,11 @@ const EmployeeDetails = ({
   // to save the tab index for the custom tab component
   const [selectedTabIndex, setSelectedTabItemIndex] = useState(0);
 
+  const [cheque, setCheque] = useState<null | IEmployeeDocument>(null);
+
   // to persist state when render occurs on the page
-  const [tabChangeAttributes, setTabChangeAttributes] = useState<{
-    doc: null | IEmployeeDocument;
-    type: 'primary' | 'secondary' | null;
-  }>({ doc: null, type: null });
+  const [tabChangeAttributes, setTabChangeAttributes] =
+    useState<null | IEmployeeDocument>(null);
 
   // to save the current selected job post employee
   const [selectedJobPost, setSelectedJobPost] = useState<IJobPost | null>(null);
@@ -80,15 +81,9 @@ const EmployeeDetails = ({
   const [jobEmployees, setJobEmployees] = useState<IJobPost[]>([]);
 
   // to save the all kinds of docs to show on the left side tabs
-  const [employeeDocsTabList, setEmployeeDocsTabList] = useState<{
-    primaryDocuments: IEmployeeDocument[] | null;
-    otherDocuments: IEmployeeDocument[] | null;
-    docRequests: IEmployeeDocument[] | null;
-  }>({
-    primaryDocuments: null,
-    docRequests: null,
-    otherDocuments: null,
-  });
+  const [employeeDocsTabList, setEmployeeDocsTabList] = useState<
+    IEmployeeDocument[]
+  >([]);
 
   //to save the all kinds of docs to show on the right side tabs
   const [employeeDocs, setEmployeeDocs] = useState<{
@@ -136,25 +131,28 @@ const EmployeeDetails = ({
 
   // executes when there is a change in any employee document states to
   useEffect(() => {
-    if (employee) {
-      if (!tabChangeAttributes.type) {
+    if (employee?.documents) {
+      employee.documents.forEach((doc) => {
+        if (doc.docName === STRINGS.cheque) {
+          setCheque(doc);
+        }
+      });
+      if (tabChangeAttributes) {
+        const requests = employee.documents.filter(
+          (doc) => doc.docName === tabChangeAttributes?.docName
+        );
+        const updateRequest = employee.update_requests.filter(
+          (doc) => doc.docName === tabChangeAttributes.docName
+        );
+        setEmployeeDocs({
+          heading: requests[0].docName,
+          docs: [...updateRequest, ...requests],
+        });
+      } else {
         const pendingRequest = getCurrentPendingRequests(employee);
         setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
-      } else {
-        const allEmployeeDocs = getAllDocumentEmployee(employee);
-        const requests = allEmployeeDocs.filter(
-          (doc) => doc.docName === tabChangeAttributes?.doc?.docName
-        );
-        requests.sort((a, b) =>
-          a.isUpdate === b.isUpdate ? 0 : a.isUpdate ? -1 : 1
-        );
-        setEmployeeDocs({ heading: requests[0].docName, docs: requests });
       }
-      setEmployeeDocsTabList({
-        primaryDocuments: employee?.documents ?? [],
-        otherDocuments: employee?.otherDocuments ?? [],
-        docRequests: employee.documentRequests ?? [],
-      });
+      setEmployeeDocsTabList(employee.documents);
     }
   }, [employee]);
 
@@ -164,101 +162,24 @@ const EmployeeDetails = ({
 
   // call when to make change in any document
   const updateDocStatusHandler = (
-    item: IEmployeeDocument,
+    item: IEmployeeDocument | null,
     status: IDocumentStatus,
-    key: IEmployeeApiKeyStatus,
-    isCheque?: boolean,
-    docId?: number,
     isUpdate?: boolean,
     licenseNumber?: string
   ) => {
-    if (key === IEmployeeApiKeyStatus.NULL) {
-      if (isUpdate) {
-        mutateUpdateDocumentStatusHandler(
-          docId,
-          status,
-          licenseNumber,
-          item.docName
-        );
-      } else {
-        updateOtherDocStatus(docId, status);
-      }
-    } else {
-      updateMandatoryDocumentsStatus(
-        item,
+    if (isUpdate) {
+      mutateUpdateDocumentStatusHandler(
+        item?.docId,
         status,
-        key,
         licenseNumber,
-        isCheque
+        item?.docName
       );
+    } else {
+      if (item) {
+        updateOtherDocStatus(item.docName, item.docId, status, licenseNumber);
+      }
     }
   };
-  // to update the status of mandatory document
-  const updateMandatoryDocumentsStatus = withAsyncErrorHandlingPost(
-    async (
-      item: IEmployeeDocument,
-      status: IDocumentStatus,
-      key: IEmployeeApiKeyStatus,
-      licenseNumber: string,
-      isCheque?: boolean
-    ) => {
-      let body: { [key: string]: string } = {};
-      body = {
-        [key]: status,
-      };
-      if (item.docName === STRINGS.license_advance && licenseNumber) {
-        body = {
-          ...body,
-          securityAdvNo: licenseNumber,
-        };
-      }
-      if (item.docName === STRINGS.license_basic && licenseNumber) {
-        body = {
-          ...body,
-          securityBasicNo: licenseNumber,
-        };
-      }
-      const response = await updateDocStatus({
-        docId: parseInt(params.employeeDetails),
-        body: body,
-      }).unwrap();
-      if (response) {
-        if (isCheque) {
-          setEmployee((prev) => {
-            if (!prev) return null;
-            return {
-              ...prev,
-              bankingDetails: {
-                ...prev.bankingDetails,
-                chique: {
-                  ...prev.bankingDetails.chique,
-                  docStatus: status,
-                },
-              },
-            };
-          });
-        } else {
-          setEmployee((prev) => {
-            if (!prev) return null;
-            let prevEmpDetails = { ...prev };
-            const prevEmpDocs = [...prev.documents];
-            const index = prevEmpDocs.findIndex(
-              (doc) => doc.docStatusKey === key
-            );
-            prevEmpDocs[index] = {
-              ...prevEmpDocs[index],
-              docStatus: status,
-              licenseNo: licenseNumber,
-            };
-            prevEmpDetails = { ...prevEmpDetails, documents: prevEmpDocs };
-            return prevEmpDetails;
-          });
-        }
-        displaySnackbar('success', 'Document  updated successfully');
-      }
-    },
-    displaySnackbar
-  );
 
   // to update the status of update document requests
   const mutateUpdateDocumentStatusHandler = withAsyncErrorHandlingPost(
@@ -268,62 +189,40 @@ const EmployeeDetails = ({
       licenseNumber?: string,
       docName?: string
     ) => {
-      let body: { [key: string]: string } = {};
-      if (docName === STRINGS.license_advance && licenseNumber) {
-        body = {
-          securityAdvNo: licenseNumber,
-        };
-      }
-      if (docName === STRINGS.license_basic && licenseNumber) {
-        body = {
-          securityBasicNo: licenseNumber,
-        };
-      }
-      if (Object.keys(body).length > 0) {
-        const response = await updateDocStatus({
-          docId: parseInt(params.employeeDetails),
-          body: body,
-        }).unwrap();
-        if (response) {
-          setEmployee((prev) => {
-            if (!prev) return null;
-            let prevEmployee = { ...prev };
-            const employeeDocs = [...prevEmployee.documentRequests];
-            const index = employeeDocs.findIndex(
-              (doc) => doc.docName === docName
-            );
-            if (index !== -1) {
-              employeeDocs[index] = {
-                ...employeeDocs[index],
-                licenseNo: licenseNumber,
-              };
-            }
-            prevEmployee = { ...prevEmployee, documentRequests: employeeDocs };
-            return prevEmployee;
-          });
+      const licenseNum =
+        status === IDocumentStatus.DENIED && licenseNumber ? '' : licenseNumber;
+      if (licenseNumber) {
+        const licenseUpdateSuccess = await updateLicenseNumber(
+          docName ?? '',
+          licenseNum as any
+        );
+        if (!licenseUpdateSuccess) {
+          displaySnackbar('error', 'Failed to update license');
+          return;
         }
       }
-      const response = await mutateUpdateRequest({
+      const updateRequestResult = await mutateUpdateRequest({
         id: docId,
         status: status,
       }).unwrap();
-      if (response) {
+      if (updateRequestResult) {
         setEmployee((prev) => {
           if (!prev) return null;
           let prevEmpDetails = { ...prev };
-          const prevDocsRequest = [...prev.documentRequests];
-          const index = prevDocsRequest.findIndex((doc) => doc.docId === docId);
-          prevDocsRequest[index] = {
-            ...prevDocsRequest[index],
+          const prevOtherDocs = [...prev.update_requests];
+          const index = prevOtherDocs.findIndex((doc) => doc.docId === docId);
+          prevOtherDocs[index] = {
+            ...prevOtherDocs[index],
             docStatus: status,
+            licenseNo: licenseNumber,
           };
           prevEmpDetails = {
             ...prevEmpDetails,
-            documentRequests: prevDocsRequest,
+            update_requests: prevOtherDocs,
           };
           return prevEmpDetails;
         });
-        displaySnackbar('success', 'Document updated successfully');
+        displaySnackbar('success', 'Document status updated successfully');
       }
     },
     displaySnackbar
@@ -331,7 +230,24 @@ const EmployeeDetails = ({
 
   // to update the status of other documents document
   const updateOtherDocStatus = withAsyncErrorHandlingPost(
-    async (docId: number, status: IDocumentStatus) => {
+    async (
+      docName: string,
+      docId: number,
+      status: IDocumentStatus,
+      licenseNumber: string | null
+    ) => {
+      const licenseNum =
+        status === IDocumentStatus.DENIED && licenseNumber ? '' : licenseNumber;
+      if (licenseNumber) {
+        const licenseUpdateSuccess = await updateLicenseNumber(
+          docName,
+          licenseNum as any
+        );
+        if (!licenseUpdateSuccess) {
+          displaySnackbar('error', 'Failed to update license');
+          return;
+        }
+      }
       const response = await updateOtherDocsStatus({
         docId: docId,
         DocStatus: status,
@@ -340,20 +256,51 @@ const EmployeeDetails = ({
         setEmployee((prev) => {
           if (!prev) return null;
           let prevEmpDetails = { ...prev };
-          const prevOtherDocs = [...prev.otherDocuments];
+          const prevOtherDocs = [...prev.documents];
           const index = prevOtherDocs.findIndex((doc) => doc.docId === docId);
           prevOtherDocs[index] = {
             ...prevOtherDocs[index],
             docStatus: status,
+            licenseNo: licenseNumber,
           };
-          prevEmpDetails = { ...prevEmpDetails, otherDocuments: prevOtherDocs };
+          prevEmpDetails = { ...prevEmpDetails, documents: prevOtherDocs };
           return prevEmpDetails;
         });
+        displaySnackbar('success', 'Document status updated successfully');
       }
-      displaySnackbar('success', 'Document status updated successfully');
     },
     displaySnackbar
   );
+
+  const updateLicenseNumber = async (
+    docName: string,
+    licenseNumber: string
+  ) => {
+    try {
+      let body: { [key: string]: string } = {};
+      if (docName === STRINGS.license_advance && licenseNumber) {
+        body = {
+          ...body,
+          securityAdvNo: licenseNumber,
+        };
+      }
+      if (docName === STRINGS.license_basic && licenseNumber) {
+        body = {
+          ...body,
+          securityBasicNo: licenseNumber,
+        };
+      }
+      const licenseResponse = await updateDocStatus({
+        docId: parseInt(params.employeeDetails),
+        body: body,
+      }).unwrap();
+      if (licenseResponse) {
+        return licenseNumber;
+      }
+    } catch {
+      return null;
+    }
+  };
 
   //  to get current employee details
   const getEmployeeHandler = async (empId: string) => {
@@ -391,13 +338,11 @@ const EmployeeDetails = ({
       label: 'Document',
       onClickAction: () => {
         setSelectedTabItemIndex(0);
-        setEmployeeDocsTabList({
-          primaryDocuments: employee?.documents ?? [],
-          otherDocuments: employee?.otherDocuments ?? [],
-          docRequests: employee?.documentRequests ?? [],
-        });
-        const pendingRequest = getCurrentPendingRequests(employee);
-        setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
+        if (employee?.documents) {
+          setEmployeeDocsTabList(employee.documents);
+          const pendingRequest = getCurrentPendingRequests(employee);
+          setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
+        }
       },
     },
     {
@@ -414,54 +359,29 @@ const EmployeeDetails = ({
     },
   ];
 
-  console.log(
-    '_==-=-=-=-=-=-=-=-=-=-=-=-=-EMPLOYEE DOCS=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
-  );
-  console.log(employee);
-  console.log(
-    '_==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
-  );
-
   // executes when there is a change in current selected document type
-  const onChangeDocTabHandler = (
-    type: 'primary' | 'secondary' | null,
-    doc: IEmployeeDocument
-  ) => {
-    setTabChangeAttributes({ doc: doc.docId === null ? null : doc, type });
+  const onChangeDocTabHandler = (doc: IEmployeeDocument | null) => {
+    setTabChangeAttributes(doc);
     if (employee?.documents) {
-      const employeeDocs = [...employee?.documents];
-      const otherDocs = [...employee?.otherDocuments];
-      const requestedDocs = [...employee.documentRequests];
-      if (type === null) {
+      const documents = [...employee?.documents];
+      const requestedDocs = [...employee.update_requests];
+      if (doc) {
+        const docs: IEmployeeDocument[] = [];
+        const requests =
+          documents.find((document) => document.docId === doc.docId) ?? null;
+        const updateRequest = requestedDocs.find(
+          (request) => request.docName === doc.docName
+        );
+        if (updateRequest) {
+          docs.push(updateRequest);
+        }
+        if (requests) {
+          docs.push(requests);
+        }
+        setEmployeeDocs({ heading: docs[0].docName, docs: docs });
+      } else {
         const pendingRequest = getCurrentPendingRequests(employee);
         setEmployeeDocs({ heading: 'New Requests', docs: pendingRequest });
-      }
-      if (type === 'primary') {
-        const docs: IEmployeeDocument[] = [];
-        const otherItem =
-          requestedDocs.find((document) => document.docName === doc.docName) ??
-          null;
-        if (otherItem) {
-          docs.push(otherItem);
-        }
-        const item =
-          employeeDocs.find((document) => document.docId === doc.docId) ?? null;
-        if (item) {
-          docs.push(item);
-        }
-        if (item)
-          setEmployeeDocs({
-            heading: docs[0].docName,
-            docs: docs,
-          });
-      }
-      if (type === 'secondary') {
-        const item = otherDocs.find((document) => document.docId === doc.docId);
-        if (item)
-          setEmployeeDocs({
-            heading: item.docName,
-            docs: [item],
-          });
       }
     }
   };
@@ -543,24 +463,7 @@ const EmployeeDetails = ({
           <div className="flex w-[63.6%] bg-white border border-borderGrey rounded-lg mt-4 p-6 overflow-scroll scrollbar-none">
             {selectedTabIndex === 0 && (
               <DocumentDetailsView
-                onPressButton={(
-                  item,
-                  status,
-                  key,
-                  id,
-                  isUpdate,
-                  licenseNumber
-                ) =>
-                  updateDocStatusHandler(
-                    item,
-                    status,
-                    key,
-                    false,
-                    id,
-                    isUpdate,
-                    licenseNumber
-                  )
-                }
+                onPressButton={updateDocStatusHandler}
                 data={employeeDocs}
               />
             )}
@@ -568,9 +471,8 @@ const EmployeeDetails = ({
             {selectedTabIndex === 1 && (
               <BankDetailsView
                 employee={employee}
-                onPressButton={(item, status, id) =>
-                  updateDocStatusHandler(item, status, id, true)
-                }
+                onPressButton={updateDocStatusHandler}
+                cheque={cheque}
               />
             )}
             {selectedTabIndex === 2 && <ProfileHistoryView />}
@@ -615,23 +517,9 @@ const getCurrentPendingRequests = (
   if (!emp) return [];
   const localDocs: IEmployeeDocument[] | [] = [
     ...emp.documents,
-    ...emp.otherDocuments,
-    ...emp.documentRequests,
+    ...emp.update_requests,
   ]
     .map((doc) => (doc.docStatus === IDocumentStatus.PENDING ? doc : null))
     .filter((doc) => doc !== null);
-  return localDocs;
-};
-
-const getAllDocumentEmployee = (
-  emp: IEmployeeAdvance | null
-): IEmployeeDocument[] | [] => {
-  if (!emp) return [];
-  const localDocs: IEmployeeDocument[] | [] = [
-    ...emp.documents,
-    ...emp.otherDocuments,
-    ...emp.documentRequests,
-  ].map((doc) => doc);
-
   return localDocs;
 };

@@ -5,22 +5,22 @@ import {
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';
 import TextGroup from '@/components/organism/TextGroup/TextGroup';
 import { ITextGroupTypes } from '@/components/organism/TextGroup/TextGroup.types';
-import { IDocumentStatus, IEmployeeApiKeyStatus } from '@/constant/enums';
+import { IDocumentStatus } from '@/constant/enums';
 import React from 'react';
 
 type IBankDetailsViewProps = {
   employee: IEmployeeAdvance | null;
+  cheque: IEmployeeDocument | null;
   onPressButton: (
-    item: IEmployeeDocument,
-    status: IDocumentStatus,
-    key: IEmployeeApiKeyStatus,
-    isCheque?: boolean
+    item: IEmployeeDocument | null,
+    status: IDocumentStatus
   ) => void;
 };
 
 const BankDetailsView: React.FC<IBankDetailsViewProps> = ({
   employee,
   onPressButton,
+  cheque,
 }) => {
   return (
     <div className="flex flex-col gap-y-6 w-full">
@@ -39,18 +39,11 @@ const BankDetailsView: React.FC<IBankDetailsViewProps> = ({
         title={'Transit Number'}
         text={employee?.bankingDetails?.transitNumber ?? ''}
       />
-      {employee?.bankingDetails.chique && (
+      {cheque && (
         <DocumentCard
           fileStyle="bg-lightPrimary"
-          doc={employee?.bankingDetails.chique}
-          onPressButton={(status) =>
-            onPressButton(
-              employee?.bankingDetails.chique,
-              status,
-              IEmployeeApiKeyStatus.CHEQUE,
-              true
-            )
-          }
+          doc={cheque}
+          onPressButton={(status) => onPressButton(cheque, status)}
         />
       )}
     </div>
