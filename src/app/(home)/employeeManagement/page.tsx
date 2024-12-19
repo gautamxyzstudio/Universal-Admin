@@ -1,35 +1,75 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import DataTable from '@/components/atoms/DataTable/DataTable';
 import { STRINGS } from '@/constant/en';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Images } from '../../../../public/exporter';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import TableFilter from '@/components/molecules/TableFilter/TableFilter';
-import { docStatus, workStatus } from './types';
-import { useGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
-import ExportButton from '@/components/molecules/ButtonTypes/ExportButton/ExportButton';
+import { docStatus } from './types';
+import { useLazyGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import { useRouter } from 'next/navigation';
 import { IEmployeeBasic } from '@/api/fetures/Employee/EmployeeApi.types';
 import ContactDetails from '@/components/molecules/ContactDetails/ContactDetails';
-
+import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
+import { getDocumentStatusTextByStatus } from '@/utility/utils';
+import _ from 'lodash';
 const EmployeeManagement = () => {
-  const { data, isLoading, error } = useGetEmployeesQuery(null);
+  const [fetchEmployees, { data, isFetching, error }] =
+    useLazyGetEmployeesQuery();
   const router = useRouter();
   const [employees, setEmployees] = useState<IEmployeeBasic[]>(
     data?.employees ?? []
   );
+  const [searchVal, setSearchVal] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecord, setTotalRecord] = useState(0);
+  const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
+    'idle'
+  );
 
   useEffect(() => {
-    if (data) {
-      setEmployees(data.employees);
+    if (searchVal.length > 0) {
+      updateSearchState('searching');
+      handleSearch(searchVal);
+    } else {
+      getEmployees(searchVal, 1);
     }
-  }, [data]);
+  }, [searchVal]);
 
-  const handleOnRowClick = (row: any) => {
-    router.push(`/employeeManagement/${row.id}`);
+  const handleSearch = useCallback(
+    _.debounce((query) => {
+      if (query) {
+        getEmployees(query, 1);
+      }
+    }, 300),
+    []
+  );
+
+  const getEmployees = async (searchVal: string, page: number) => {
+    try {
+      const fetchEmployeesResponse = await fetchEmployees({
+        searchVal: searchVal,
+        pageNo: page,
+      }).unwrap();
+      if (fetchEmployeesResponse) {
+        setEmployees(fetchEmployeesResponse.employees);
+        setCurrentPage(fetchEmployeesResponse.pagination.page);
+        setTotalRecord(fetchEmployeesResponse.pagination.total);
+        updateSearchState('idle');
+      }
+    } catch (error) {
+      setEmployees([]);
+      updateSearchState('idle');
+      console.log('Error fetching employees', error);
+    }
+  };
+
+  const handleOnRowClick = (row: IEmployeeBasic) => {
+    router.push(`/employeeManagement/${row.detailsId}`);
   };
 
   const columns: GridColDef[] = [
@@ -37,6 +77,7 @@ const EmployeeManagement = () => {
       field: 'name',
       headerName: 'Employee Name',
       width: 224,
+
       renderCell: (params: GridRenderCellParams) => (
         <UserNameWithImage
           type={'white'}
@@ -51,13 +92,42 @@ const EmployeeManagement = () => {
       headerName: 'Contact Details',
       width: 224,
       renderCell: (params: GridRenderCellParams) => (
-        <ContactDetails phone={params.row.phone} email={params.row.email} />
+        <div className=" flex flex-row  justify-center items-center h-full">
+          <ContactDetails phone={params.row.phone} email={params.row.email} />
+        </div>
       ),
     },
     {
       field: 'sinNo',
       headerName: 'SIN Number',
+      width: 112,
+    },
+    {
+      field: 'license number',
+      headerName: 'License Number',
       width: 180,
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <div className="flex flex-col">
+            {params.row.securityAdvNo && (
+              <span className="text-sx text-black font-bold">
+                {STRINGS.advance}
+                <span className="text-sx  text-black font-normal">
+                  {params.row.securityAdvNo}
+                </span>
+              </span>
+            )}
+            {params.row.securityBasicNo && (
+              <span className="text-sx text-black font-bold">
+                {STRINGS.basic}
+                <span className="text-sx  text-black font-normal">
+                  {params.row.securityBasicNo}
+                </span>
+              </span>
+            )}
+          </div>
+        );
+      },
     },
     {
       field: 'gender',
@@ -65,59 +135,63 @@ const EmployeeManagement = () => {
       width: 104,
     },
     {
-      field: 'workStatus',
-      headerName: 'Work Status',
-      width: 104,
-    },
-    {
       field: 'docStatus',
       headerName: 'Document Status',
-      width: 130,
+      width: 150,
       renderCell: (params: GridRenderCellParams) => {
         const status =
           params.row.document_status === STRINGS.approved
-            ? 'text-green'
+            ? 'text-Green'
             : 'text-yellow';
-        return <span className={status}>{params.row?.docStatus}</span>;
+        return (
+          <span className={status}>
+            {getDocumentStatusTextByStatus(params.row?.docStatus)}
+          </span>
+        );
       },
     },
     {
       field: 'action',
       headerName: 'Action',
-      width: 104,
-      renderCell: () => {
-        return <span className="text-primary">{STRINGS.view}</span>;
+      width: 80,
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <span
+            onClick={() => handleOnRowClick(params.row)}
+            className="text-primary sticky"
+          >
+            {STRINGS.view}
+          </span>
+        );
       },
     },
   ];
+
+  const onPageChangeHandler = (_, pageNumber) => {
+    getEmployees('', pageNumber + 1);
+  };
+
   const onPressPrimaryButton = () => {};
   return (
-    <div className="w-full h-[85%] mb-5">
+    <div className="w-full h-[86%] mb-5">
       <PageHeader
-        primaryButtonTitle={STRINGS.addEmployee}
         title={STRINGS.employeeManagement}
+        primaryButtonTitle={STRINGS.addEmployee}
         onPressButton={onPressPrimaryButton}
+        withPrimaryButton
       />
       <DataTable
         columns={columns}
-        onPressRow={handleOnRowClick}
         rows={employees}
         headerView={
           <div className="flex w-full  justify-between items-center mb-4">
             <div className="flex items-center">
-              {/* <SearchField
-                searchStyle="w-[288px]"
-                onChangeText={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error('Function not implemented.');
-                }}
-                value={''}
-                isLoading={false}
-                onPressCross={function (): void {
-                  throw new Error('Function not implemented.');
-                }}
-              /> */}
+              <SearchField
+                onPressCross={() => setSearchVal('')}
+                onChangeText={(e) => setSearchVal(e.target.value)}
+                value={searchVal}
+                isLoading={searchState === 'searching'}
+              />
             </div>
             <div className="flex flex-row gap-x-8">
               <TableFilter
@@ -125,22 +199,20 @@ const EmployeeManagement = () => {
                 initialSelectedOption={docStatus[0]}
                 title={STRINGS.documentStatus}
               />
-              <TableFilter
-                data={workStatus}
-                initialSelectedOption={workStatus[0]}
-                title={STRINGS.workStatus}
-              />
             </div>
-            <ExportButton onClick={undefined} />
           </div>
         }
-        isLoading={isLoading}
-        tableHeightPercent={90}
+        isLoading={isFetching}
+        tableHeightPercent={85}
         emptyViewTitle={STRINGS.noEmployees}
         emptyViewSubTitle={''}
         illustration={Images.noSubAdmin}
         error={error}
+        page={currentPage}
+        totalCount={totalRecord}
+        onPressPageChange={onPageChangeHandler}
         isDataEmpty={employees.length === 0}
+        withPagination={true}
       />
     </div>
   );

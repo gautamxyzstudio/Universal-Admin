@@ -1,5 +1,5 @@
 'use client';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { Add } from '@mui/icons-material';
 import React from 'react';
 import { IPageHeaderProps } from './PageHeader.types';

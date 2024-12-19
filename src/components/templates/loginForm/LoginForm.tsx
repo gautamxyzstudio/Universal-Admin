@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useLoginMutation } from '@/api/fetures/Auth/AuthApis';
 import CustomInput from '@/components/atoms/CustomInput/CustomInput';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { STRINGS } from '@/constant/en';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { IUserCookies, saveUserDetailsInCookies } from '@/utility/cookies';
@@ -55,7 +56,7 @@ const LoginForm = () => {
     }, displaySnackbar);
 
     return (
-        <div className="w-[532px]">
+        <div className="w-[604px] bg-loginBgcolor p-9 shadow-loginForm">
             <h1 className="text-heading-40 text-white">{STRINGS.login}</h1>
             <div className="h-9" />
             <h1 className="text-subHeading-24 text-white">{STRINGS.pleaseEnterYour}</h1>

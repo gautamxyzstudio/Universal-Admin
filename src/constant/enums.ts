@@ -12,10 +12,75 @@ export enum IDocumentStatus {
   APPROVED = 's1',
   DENIED = 's2',
   UPDATE = 's3',
+  VERIFIED = 's5',
+  NULL = 'null',
 }
 
 export enum IClientStatus {
   PENDING = 's0',
   ACTIVE = 's1',
   INACTIVE = 's2',
+}
+
+export enum IJobPostStatus {
+  OPEN = 's0',
+  CLOSED = 's1',
+  APPLIED = 's2',
+  DECLINED = 's3',
+  CONFIRMED = 's4',
+  NO_SHOW = 's5',
+  COMPLETED = 's6',
+  CANCELED = 's7',
+}
+
+export enum IJobTypesEnum {
+  EVENT = 'event',
+  STATIC = 'static',
+}
+
+export enum IWorkStatus {
+  PART_TIME = 's0',
+  FULL_TIME = 's1',
+}
+
+export enum IEmployeeDocsApiKeys {
+  SIN_DOCUMENT = 'sinDocument',
+  LICENSE_ADVANCE = 'securityDocumentAdv',
+  LICENSE_BASIC = 'securityDocumentBasic',
+  SUPPORTING_DOCUMENT = 'supportingDocument',
+  GOVT_ID = 'govtid',
+  CHEQUE = 'directDepositVoidCheque',
+  RESUME = 'resume',
+}
+
+export enum IEmployeeApiKeyStatus {
+  SIN_DOCUMENT = 'sinDocumentStatus',
+  LICENSE_ADVANCE = 'securityDocumentAdvStatus',
+  LICENSE_BASIC = 'securityDocBasicStatus',
+  SUPPORTING_DOCUMENT = 'supportingDocumentStatus',
+  GOVT_ID = 'govtidStatus',
+  CHEQUE = 'directDepositVoidChequeStatus',
+  NULL = 'null',
+}
+
+export enum IDocumentNames {
+  GOVT_ID = 'd0',
+  DIRECT_DEPOSIT_VOID_CHEQUE = 'd1',
+  SIN_DOCUMENT = 'd2',
+  SECURITY_DOCUMENT_BASIC = 'd3',
+  SECURITY_DOCUMENT_ADV = 'd4',
+  SUPPORTING_DOCUMENT = 'd5',
+  RESUME = 'd6',
+  NULL = 'd7',
+}
+export enum IUserTypesEnum {
+  EMPLOYEE = 'emp',
+  CLIENT = 'client',
+  SUPERADMIN = 'supAdmin',
+}
+
+export enum IIssueRaisedStatusEnum {
+  OPEN = 's0',
+  CLOSED = 's1',
+  NO_ISSUE = 's2',
 }

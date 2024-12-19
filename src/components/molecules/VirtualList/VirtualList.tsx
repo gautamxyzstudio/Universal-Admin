@@ -51,6 +51,10 @@ const VirtualList: React.FC<IVirtualListProps> = ({
             }}
             endReached={onReachEnd}
             itemContent={renderItem}
+            style={{
+              scrollbarWidth: "none",
+              cursor: "pointer",
+            }}
             {...props}
           />
         </>

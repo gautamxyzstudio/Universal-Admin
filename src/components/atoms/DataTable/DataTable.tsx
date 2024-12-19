@@ -11,6 +11,8 @@ import {
   TableHead,
   TableRow,
   Paper,
+  TableFooter,
+  TablePagination,
 } from '@mui/material';
 import { GridRenderCellParams, GridValidRowModel } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
@@ -20,12 +22,14 @@ import EmptyScreenView from '@/components/templates/EmptyScreenView/EmptyScreenV
 const DataTable: React.FC<IDataTableProps> = ({
   rows,
   columns,
-  onPressRow,
   isLoading,
   illustration,
   tableHeightPercent = 100,
   headerView,
-  onReachEnd,
+  withPagination,
+  onPressPageChange,
+  totalCount,
+  page,
   emptyViewSubTitle,
   emptyViewTitle,
   isDataEmpty,
@@ -54,7 +58,7 @@ const DataTable: React.FC<IDataTableProps> = ({
   }, []);
 
   const rowStyles = useMemo(() => {
-    return { border: 'none', cursor: 'pointer' };
+    return { border: 'none' };
   }, []);
 
   const tableCellStyles = useMemo(() => {
@@ -62,9 +66,14 @@ const DataTable: React.FC<IDataTableProps> = ({
       backgroundColor: '#FAFAFA',
       color: '#868686',
       borderRight: '1px solid #EBEBEB',
+      height: 10,
+      '.MuiTableCell-head': {
+        padding: '8px',
+      },
       borderBottomColor: '#EBEBEB',
     };
   }, []);
+
   const VirtuosoTableComponents: TableComponents = {
     Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
       <TableContainer
@@ -76,12 +85,25 @@ const DataTable: React.FC<IDataTableProps> = ({
     )),
     Table: (props) => <Table {...props} sx={tableStyles} />,
     TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
-      <TableHead {...props} ref={ref} />
+      <TableHead {...props} sx={tableCellStyles} ref={ref} />
     )),
     TableRow,
 
     TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
       <TableBody {...props} ref={ref} />
+    )),
+    TableFoot: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+      <TableFooter
+        sx={{
+          position: 'relative !important',
+          display: 'flex !important',
+          width: '74.5vw',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        {...props}
+        ref={ref}
+      />
     )),
   };
 
@@ -91,7 +113,15 @@ const DataTable: React.FC<IDataTableProps> = ({
         {columns.map((column, _index) => {
           return (
             <TableCell
-              onClick={() => onPressRow && onPressRow(row)}
+              className="bg-white"
+              style={{
+                position: column.headerName === 'Action' ? 'sticky' : 'unset',
+                right: column.headerName === 'Action' ? 0 : 'unset',
+                zIndex: column.headerName === 'Action' ? 1 : 0.5,
+                cursor: column.headerName === 'Action' ? 'pointer' : 'unset',
+                backgroundColor:
+                  column.headerName === 'Action' ? '#fafafa' : '#fff',
+              }}
               key={_index}
               sx={rowStyles}
               align="left"
@@ -139,7 +169,12 @@ const DataTable: React.FC<IDataTableProps> = ({
             key={column.field}
             variant="head"
             align="left"
-            style={{ width: column.width }}
+            style={{
+              width: column.width,
+              position: column.headerName === 'Action' ? 'sticky' : 'unset',
+              right: column.headerName === 'Action' ? 0 : 'unset',
+              zIndex: column.headerName === 'Action' ? 1 : 0.5,
+            }}
             sx={tableCellStyles}
           >
             {column.headerName}
@@ -151,16 +186,9 @@ const DataTable: React.FC<IDataTableProps> = ({
   );
 
   return (
-    <div className="p-4  w-full h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
-      {rows.length > 0 && <div className="w-full">{headerView}</div>}
-      {isLoading ? (
-        <TableVirtuoso
-          data={data.rows}
-          components={VirtuosoTableComponents as TableComponents}
-          fixedHeaderContent={fixedHeaderContent}
-          itemContent={rowContentLoading}
-        />
-      ) : rows.length === 0 ? (
+    <div className="px-4 pt-4  w-full bg-white h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
+      <div className="w-full mb-4">{headerView}</div>
+      {!isLoading && rows.length === 0 ? (
         <div className="h-full flex justify-center items-center">
           <EmptyScreenView
             emptyViewTitle={emptyViewTitle}
@@ -172,12 +200,28 @@ const DataTable: React.FC<IDataTableProps> = ({
         </div>
       ) : (
         <TableVirtuoso
-          data={rows}
+          data={isLoading ? data.rows : rows}
           components={VirtuosoTableComponents as any}
-          defaultItemHeight={70}
-          endReached={onReachEnd}
+          defaultItemHeight={68}
           fixedHeaderContent={fixedHeaderContent}
-          itemContent={rowContent}
+          itemContent={isLoading ? rowContentLoading : rowContent}
+        />
+      )}
+      {withPagination && !isDataEmpty && onPressPageChange && (
+        <TablePagination
+          className="stick"
+          component="div"
+          sx={{
+            '.MuiTablePagination-toolbar': {
+              minHeight: '40px',
+            },
+          }}
+          height={32}
+          count={totalCount ?? 0}
+          page={page ? page - 1 : 0}
+          rowsPerPage={10}
+          rowsPerPageOptions={[]}
+          onPageChange={onPressPageChange}
         />
       )}
     </div>

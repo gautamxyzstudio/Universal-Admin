@@ -9,7 +9,7 @@ import FormDrawer from '@/components/molecules/DrawerTypes/FormDrawer/FormDrawer
 import { STRINGS } from '@/constant/en';
 import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
 import { CompanyStateFields } from '../AddCompanyForm/AddCompany.types';
-import CustomButton from '@/components/atoms/CutomButton/CustomButton';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
 import { ICompany } from '@/api/fetures/Company/Company.types';
 import LinkedCompanyCard from '@/components/organism/LinkedCompanyCard/LinkedCompanyCard';
 
@@ -201,7 +201,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
       handleClose={handleClickOutside}
       onPressCross={onPressCross}
     >
-      <div className="px-6 flex h-[88%] overflow-scroll flex-col gap-y-4 pt-6">
+      <div className="px-6 flex h-[88%] overflow-scroll flex-col gap-y-4 pt-6 scrollbar-none">
         <FormTextInput
           value={state.clientName}
           size="medium"
@@ -290,7 +290,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
               }
               className={
                 state.status === IClientStatus.ACTIVE
-                  ? 'text-sm text-green'
+                  ? 'text-sm text-Green'
                   : 'text-sm text-disable'
               }
             />
@@ -314,7 +314,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
                   fill="#469C73"
                 />
               </svg>
-              <p className="text-xl text-green">Linked</p>
+              <p className="text-xl text-Green">Linked</p>
             </div>
             <LinkedCompanyCard
               companyLogo={selectedCompany?.companylogo}

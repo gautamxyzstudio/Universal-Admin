@@ -1,11 +1,11 @@
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="katman 2">
-<path id="Vector" d="M11.6668 0.833008H5.00016C4.55814 0.833008 4.13421 1.0086 3.82165 1.32116C3.50909 1.63372 3.3335 2.05765 3.3335 2.49967V17.4997C3.3335 17.9417 3.50909 18.3656 3.82165 18.6782C4.13421 18.9907 4.55814 19.1663 5.00016 19.1663H15.0002C15.4422 19.1663 15.8661 18.9907 16.1787 18.6782C16.4912 18.3656 16.6668 17.9417 16.6668 17.4997V5.83301" stroke="url(#paint0_linear_7572_56)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_2" d="M11.6665 0.833008V4.16634C11.6665 4.60837 11.8421 5.03229 12.1547 5.34485C12.4672 5.65741 12.8911 5.83301 13.3332 5.83301H16.6665L11.6665 0.833008Z" stroke="url(#paint1_linear_7572_56)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_3" d="M8.33317 5.83301H6.6665" stroke="url(#paint2_linear_7572_56)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_4" d="M13.3332 9.16699H6.6665" stroke="url(#paint3_linear_7572_56)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_5" d="M13.3332 12.5H6.6665" stroke="url(#paint4_linear_7572_56)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_6" d="M13.3332 15.833H11.6665" stroke="url(#paint5_linear_7572_56)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector" d="M11.6668 0.833008H5.00016C4.55814 0.833008 4.13421 1.0086 3.82165 1.32116C3.50909 1.63372 3.3335 2.05765 3.3335 2.49967V17.4997C3.3335 17.9417 3.50909 18.3656 3.82165 18.6782C4.13421 18.9907 4.55814 19.1663 5.00016 19.1663H15.0002C15.4422 19.1663 15.8661 18.9907 16.1787 18.6782C16.4912 18.3656 16.6668 17.9417 16.6668 17.4997V5.83301" stroke="url(#paint0_linear_7572_56)" stroke-width="1.25" strokeLinecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M11.6665 0.833008V4.16634C11.6665 4.60837 11.8421 5.03229 12.1547 5.34485C12.4672 5.65741 12.8911 5.83301 13.3332 5.83301H16.6665L11.6665 0.833008Z" stroke="url(#paint1_linear_7572_56)" stroke-width="1.25" strokeLinecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M8.33317 5.83301H6.6665" stroke="url(#paint2_linear_7572_56)" stroke-width="1.25" strokeLinecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M13.3332 9.16699H6.6665" stroke="url(#paint3_linear_7572_56)" stroke-width="1.25" strokeLinecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M13.3332 12.5H6.6665" stroke="url(#paint4_linear_7572_56)" stroke-width="1.25" strokeLinecap="round" stroke-linejoin="round"/>
+<path id="Vector_6" d="M13.3332 15.833H11.6665" stroke="url(#paint5_linear_7572_56)" stroke-width="1.25" strokeLinecap="round" stroke-linejoin="round"/>
 </g>
 <defs>
 <linearGradient id="paint0_linear_7572_56" x1="10.0002" y1="1.06805" x2="10.0002" y2="18.4612" gradientUnits="userSpaceOnUse">

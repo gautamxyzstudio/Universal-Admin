@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import DataTable from '@/components/atoms/DataTable/DataTable';
-import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import AddSubAdminForm from '@/components/templates/AddSubAdminForm/AddSubAdminForm';
+"use client";
+import DataTable from "@/components/atoms/DataTable/DataTable";
+import PageHeader from "@/components/organism/PageHeader/PageHeader";
+import AddSubAdminForm from "@/components/templates/AddSubAdminForm/AddSubAdminForm";
 import {
   addNewSubAdminData,
   ApiKeys,
-} from '@/components/templates/AddSubAdminForm/AddSubAdminForm.types';
-import { STRINGS } from '@/constant/en';
-import React, { useEffect, useState } from 'react';
-import { Icons, Images } from '../../../../public/exporter';
-import { useGetSubAdminsQuery } from '@/api/fetures/SubAdmin/SubAdminApi';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import Image from 'next/image';
-import { IDynamicFormField } from '@/components/organism/AddNewForm/AddNewForm.types';
-import { ISubAdmin } from '@/api/fetures/SubAdmin/SubAdminApi.types';
-import { IFieldTypes } from '@/constant/enums';
-import { useSubAdminContext } from '@/contexts/SubAdminContext/SubAdminContext';
+} from "@/components/templates/AddSubAdminForm/AddSubAdminForm.types";
+import { STRINGS } from "@/constant/en";
+import React, { useEffect, useState } from "react";
+import { Icons, Images } from "../../../../public/exporter";
+import { useGetSubAdminsQuery } from "@/api/fetures/SubAdmin/SubAdminApi";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import Image from "next/image";
+import { IDynamicFormField } from "@/components/organism/AddNewForm/AddNewForm.types";
+import { ISubAdmin } from "@/api/fetures/SubAdmin/SubAdminApi.types";
+import { IFieldTypes } from "@/constant/enums";
+import { useSubAdminContext } from "@/contexts/SubAdminContext/SubAdminContext";
 
 const SubAdminManagement = () => {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -53,38 +53,38 @@ const SubAdminManagement = () => {
 
   const subAdminDataColumn: GridColDef[] = [
     {
-      field: 'UserNameFL',
-      headerName: 'Name',
+      field: "UserNameFL",
+      headerName: "Name",
       width: 280,
       renderCell: (params: GridRenderCellParams) => (
         <UserNameWithImage
           image={null}
           name={params?.row?.UserNameFL}
-          type={'green'}
+          type={"green"}
         />
       ),
     },
 
     {
-      field: 'email',
-      headerName: 'E-Mail',
+      field: "email",
+      headerName: "E-Mail",
       width: 287,
     },
     {
-      field: 'phoneNumber',
-      headerName: 'Contact Number',
+      field: "phoneNumber",
+      headerName: "Contact Number",
       width: 270,
     },
     {
-      field: 'status',
-      headerName: 'Status',
+      field: "status",
+      headerName: "Status",
       width: 140,
       renderCell: (params: GridRenderCellParams) => {
         const color =
-          params.row.UserStatus === true ? 'text-green' : 'text-red';
+          params.row.UserStatus === true ? "text-Green" : "text-Red";
         return (
           <div className="h-full w-full flex flex-col justify-center items-start">
-            <p className={color + '  text-sm'}>
+            <p className={color + "  text-sm"}>
               {params.row.UserStatus ? STRINGS.active : STRINGS.inActive}
             </p>
           </div>
@@ -92,8 +92,8 @@ const SubAdminManagement = () => {
       },
     },
     {
-      field: 'action',
-      headerName: 'Action',
+      field: "action",
+      headerName: "Action",
       width: 70,
       renderCell: (params: GridRenderCellParams) => (
         <div className="h-full w-full flex flex-col justify-center items-start">
@@ -101,7 +101,7 @@ const SubAdminManagement = () => {
             className="cursor-pointer"
             onClick={() => onPressEdit(params.row)}
             src={Icons.pencil}
-            alt={'pencil'}
+            alt={"pencil"}
           />
         </div>
       ),
@@ -128,9 +128,9 @@ const SubAdminManagement = () => {
       {
         id: 5,
         displayName: STRINGS.status,
-        apiKey: 'status',
+        apiKey: "status",
         type: IFieldTypes.STATUS,
-        value: user.UserStatus === true ? 'true' : 'false',
+        value: user.UserStatus === true ? "true" : "false",
       },
     ];
     setFormData(data);
@@ -156,6 +156,7 @@ const SubAdminManagement = () => {
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={true}
+        withPagination={false}
       />
       <AddSubAdminForm
         setGlobalModalState={(state) => setShowFormModal(state)}

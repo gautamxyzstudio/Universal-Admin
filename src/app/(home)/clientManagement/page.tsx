@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { IClient } from '@/api/fetures/Client/Client.types';
 import {
   useAddClientDetailsMutation,
+  useGetPendingRequestsQuery,
   useLazyGetClientsQuery,
   useRegisterClientMutation,
 } from '@/api/fetures/Client/ClientApi';
@@ -19,16 +22,18 @@ import { routeNames } from '@/utility/routesName';
 import AddCompanyList from '@/components/templates/AddCompanyList/AddCompanyList';
 import LinkOrAddClientFrom from '@/components/templates/LinkOrAddClientForm/LinkOrAddClientForm';
 import { ICompany } from '@/api/fetures/Company/Company.types';
-import { IAddEmployeeClientArgs } from './[pendingRequests]/types';
+import { IAddEmployeeClientArgs } from './pendingRequests/types';
 import { generateUniqueUserName } from '@/utility/utils';
 import { ICustomErrorResponse } from '@/api/types';
 import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { IClientStatus } from '@/constant/enums';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
+import TableFilter from '@/components/molecules/TableFilter/TableFilter';
+import { docStatus } from '../employeeManagement/types';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
   const [showCompanyList, setShowCompanyList] = useState(false);
   const router = useRouter();
@@ -37,19 +42,23 @@ const ClientManagement = () => {
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [addClientModal, setAddClientModal] = useState(false);
-  // const [isLastPage, setIsLastPage] = useState(true);
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecord, setTotalRecord] = useState(0);
+  const {data} = useGetPendingRequestsQuery({page: 1})
 
   //====================================================Apis start====================
   //get Clients list
-  const getClientsHandler = async () => {
-    const page = 1;
+  const getClientsHandler = async (page: number) => {
     try {
       const clientResponse = await getClients({ page }).unwrap();
       if (clientResponse) {
         setClients(clientResponse.data);
+        setCurrentPage(clientResponse.pagination.page);
+        setTotalRecord(clientResponse.pagination.total);
       }
     } catch (e) {
+      setClients([]);
       console.log(e);
     }
   };
@@ -180,7 +189,7 @@ const ClientManagement = () => {
           imageStyle="!w-8 !h-8"
           divStyle="gap-y-0"
           name={params.row.name ?? ''}
-          image={params.row.company?.companylogo}
+          image={params.row.company?.companylogo ?? ''}
           companyNameStyle=" text-disable "
           companyName={
             params.row.company?.companyname ?? params.row.companyName
@@ -214,12 +223,23 @@ const ClientManagement = () => {
       field: STRINGS.action,
       headerName: 'Action',
       width: 104,
-      renderCell: () => <span className="text-primary">{STRINGS.view}</span>,
+      renderCell: (params) => (
+        <span
+          onClick={() => handleOnRowClick(params.row)}
+          className="text-primary"
+        >
+          {STRINGS.view}
+        </span>
+      ),
     },
   ];
 
+  const handleOnRowClick = (row: any) => {
+    router.push(`/clientManagement/${row.detailsId}`);
+  };
+
   useEffect(() => {
-    getClientsHandler();
+    getClientsHandler(currentPage);
   }, []);
 
   const onSelectCompany = (company) => {
@@ -234,6 +254,10 @@ const ClientManagement = () => {
     }
   };
 
+  const onPageChangeHandler = (_, pageNumber) => {
+    getClientsHandler(pageNumber + 1);
+  };
+
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
@@ -242,18 +266,45 @@ const ClientManagement = () => {
         withPrimaryButton
         primaryButtonTitle={STRINGS.addClient}
         onPressSecondaryButton={() => router.push(routeNames.PendingRequests)}
-        secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
+        secondaryButtonTitle={STRINGS.pendingReq + ` (${data?.data.length})` }
         onPressButton={() => setAddClientModal(true)}
       />
       <DataTable
+        headerView={
+          <div className="flex w-full  justify-between items-center mb-4">
+            <div className="flex items-center">
+              <SearchField
+                searchStyle="w-[288px]"
+                onChangeText={() => console.log('e')}
+                value={''}
+                isLoading={false}
+                onPressCross={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            </div>
+            <div className="flex flex-row gap-x-8">
+              <TableFilter
+                data={docStatus}
+                initialSelectedOption={docStatus[0]}
+                title={STRINGS.documentStatus}
+              />
+            </div>
+          </div>
+        }
         columns={columns}
         rows={clients}
         isLoading={isFetching}
+        page={currentPage}
+        tableHeightPercent={85}
+        onPressPageChange={onPageChangeHandler}
+        totalCount={totalRecord}
         emptyViewTitle={STRINGS.noClients}
         emptyViewSubTitle={STRINGS.noClientDec}
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={clients.length === 0}
+        withPagination={true}
       />
       <AddCompanyList
         show={showCompanyList}

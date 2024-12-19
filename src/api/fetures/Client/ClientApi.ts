@@ -4,7 +4,11 @@ import { baseApi } from '@/api/BaseApi';
 import { Endpoints } from '@/api/Endpoints';
 import {
   IClient,
+  IClientDetailsResponse,
+  ICustomizedGetClientResponse,
   ICustomizedGetClientsResponse,
+  IGetClientDetailsResponse,
+  IGetClientJobsResponse,
   IGetClientsResponse,
   ILinkClientRequest,
   IRegisterClientReq,
@@ -13,6 +17,8 @@ import {
   IUpdateClientDetailsResponse,
 } from './Client.types';
 import { createImageUrl } from '@/utility/cookies';
+import { IClientStatus, IJobPostStatus, IJobTypesEnum } from '@/constant/enums';
+import { IJobPost } from '../Employee/EmployeeApi.types';
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -114,6 +120,19 @@ const clientApi = baseApi.injectEndpoints({
         body: body.clientDetails,
       }),
     }),
+    changeClientStatus: builder.mutation<
+      IClientDetailsResponse,
+      { clientId: number; status: IClientStatus }
+    >({
+      query: (body: { clientId: number; status: IClientStatus }) => ({
+        url: Endpoints.getClientDetails(body.clientId),
+        method: ApiMethodType.patch,
+        body: {
+          status: body.status,
+        },
+      }),
+    }),
+    
     registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
       query: (body: IRegisterClientReq) => ({
         url: Endpoints.registerClient,
@@ -136,6 +155,100 @@ const clientApi = baseApi.injectEndpoints({
         body: body,
       }),
     }),
+    getClientDetails: builder.query({
+      query: (detailsId) => ({
+        url: Endpoints.getClientDetails(detailsId),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (
+        res: IGetClientDetailsResponse
+      ): IClientDetailsResponse => {
+        return {
+          id: res.data?.id,
+          name: res.data?.attributes?.Name,
+          location: res.data?.attributes?.location,
+          email: res.data?.attributes?.Email,
+          contactNo: res.data?.attributes?.contactno,
+          status: res.data?.attributes?.status,
+          createdAt: res.data?.attributes?.createdAt,
+          companyName:
+            res.data.attributes.company_detail?.data?.attributes.companyname,
+          industry:
+            res.data.attributes.company_detail?.data?.attributes.Industry,
+          companyLogo: res.data.attributes.company_detail?.data?.attributes
+            .companylogo?.data?.attributes
+            ? createImageUrl(
+                res.data.attributes.company_detail.data.attributes.companylogo
+                  .data.attributes.url
+              )
+            : null,
+        };
+      },
+    }),
+    getPostedJobByClient: builder.query({
+      query: ({ clientId, page }: { clientId: number; page: number }) => ({
+        url: Endpoints.getPostJobsByClient(clientId, page, 10),
+        method: ApiMethodType.get,
+      }),
+      transformResponse: (
+        response: IGetClientJobsResponse
+      ): ICustomizedGetClientResponse => {
+        let resp: ICustomizedGetClientResponse = {
+          data: [],
+          pagination: undefined,
+        };
+        const jobs: IJobPost[] = [];
+        if (response.data && response.data.length > 0) {
+          response.data.forEach((job) => {
+            if (job) {
+              jobs.push({
+                status: job?.status ?? IJobPostStatus.OPEN,
+                CheckIn: null,
+                CheckOut: null,
+                id: job.id ?? 0,
+                job_name: job.job_name ?? '',
+                city: job.city ?? '',
+                address: job.address ?? '',
+                postalCode: job.postalCode ?? '',
+                postID: job.postID ?? '',
+                notAccepting: job.notAccepting ?? null,
+                gender: job.gender ?? '',
+                salary: job.salary ?? '',
+                job_type: job.job_type ?? IJobTypesEnum.EVENT,
+                location: job.location ?? '',
+                required_certificates: job.required_certificates ?? [],
+                eventDate: job.eventDate ?? null,
+                startShift: job.startShift ?? null,
+                description: job.description ?? '',
+                jobDuties: job.jobDuties ?? '',
+                endShift: job.endShift ?? null,
+                requiredEmployee: job.requiredEmployee ?? 0,
+                client_details: {
+                  clientId: job.client_details[0]?.id ?? 0,
+                  clientName: job.client_details[0]?.Name ?? '',
+                  id: job.client_details[0]?.company_detail.id ?? 0,
+                  companyname:
+                    job.client_details[0]?.company_detail.companyname ?? '',
+                  companyemail:
+                    job.client_details[0]?.company_detail.companyemail ?? '',
+                  companylogo: job.client_details[0]?.company_detail.companylogo
+                    .url
+                    ? createImageUrl(
+                        job.client_details[0]?.company_detail.companylogo.url
+                      )
+                    : '',
+                },
+              });
+            }
+          });
+          resp = {
+            data: jobs,
+            pagination: response.meta,
+          };
+        }
+        return resp;
+      },
+    }),
   }),
 });
 
@@ -145,4 +258,9 @@ export const {
   useLinkClientMutation,
   useAddClientDetailsMutation,
   useRegisterClientMutation,
+  useGetClientDetailsQuery,
+  useLazyGetClientDetailsQuery,
+  useChangeClientStatusMutation,
+  useLazyGetPostedJobByClientQuery,
+  useLazyGetPendingRequestsQuery,
 } = clientApi;

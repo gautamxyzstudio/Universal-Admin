@@ -1,7 +1,8 @@
 export interface IMenuProps {
   data: IMenuItem[];
   initialSelectedOption: IMenuItem;
-  title: string;
+  title?: string;
+  menuButtonStyle?: string;
 }
 
 export interface IMenuItem {

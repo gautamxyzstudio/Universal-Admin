@@ -1,43 +1,80 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { ICompany } from '@/api/fetures/Company/Company.types';
-import { useGetCompanyQuery } from '@/api/fetures/Company/CompanyApi';
+import { useLazyGetCompanyQuery } from '@/api/fetures/Company/CompanyApi';
 import DataTable from '@/components/atoms/DataTable/DataTable';
+import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import AddCompanyForm from '@/components/templates/AddCompanyForm/AddCompanyForm';
 import { STRINGS } from '@/constant/en';
 import { GridColDef } from '@mui/x-data-grid';
 import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
+import { Images } from '../../../../public/exporter';
+import { useRouter } from 'next/navigation';
 
 const Company = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLastPage, setIsLastPage] = useState(true);
-  const { data, isLoading, error } = useGetCompanyQuery({
-    page: 1,
-    search: '',
-    perPage: 100,
-  });
+  const [totalRecord, setTotalRecord] = useState(0);
+  const [fetchCompanies, { error, isFetching }] = useLazyGetCompanyQuery();
   const [showFormModal, setShowFormModal] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
+  const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
+    'idle'
+  );
+  // const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<ICompany[]>([]);
 
-  useEffect(() => {
-    if (data) {
-      if (data.meta.pagination.page === 1) {
-        setCompanies(data?.data);
-      } else {
-        setCompanies((prev) => [...prev, ...data?.data]);
+  const fetchCompaniesHandler = async (
+    characters: string,
+    currentPage: number
+  ) => {
+    try {
+      const response = await fetchCompanies({
+        page: currentPage,
+        search: characters,
+        perPage: 10,
+      }).unwrap();
+      if (response) {
+        // setIsLoading(false);
+        setCompanies(response.data);
+        setTotalRecord(response.meta.pagination.total);
+        setCurrentPage(response.meta.pagination.page);
+        updateSearchState('idle');
       }
-      setIsLastPage(
-        data?.data.length === 0 ||
-          currentPage === data?.meta.pagination.pageCount
-      );
+    } catch (error) {
+      // setIsLoading(false);
+      updateSearchState('idle');
+      console.log('Error fetching companies', error);
     }
-  }, [data]);
+  };
+  useEffect(() => {
+    if (searchVal.length > 0) {
+      updateSearchState('searching');
+      handleSearch(searchVal);
+    } else {
+      fetchCompaniesHandler(searchVal, 1);
+    }
+  }, [searchVal]);
 
+  const handleSearch = useCallback(
+    _.debounce((query) => {
+      if (query) {
+        fetchCompaniesHandler(query, 1);
+      }
+    }, 300),
+    []
+  );
+
+  const router = useRouter();
+  const handleOnRowClick = (row: ICompany) => {
+    router.push(`/company/${row.id}`);
+  };
   const columns: GridColDef[] = [
     {
       headerName: 'S.no',
-
       width: 48,
       field: 'sNum',
     },
@@ -77,22 +114,27 @@ const Company = () => {
       width: 80,
       field: '',
       renderCell: useCallback(
-        () => <h1 className="text-sm cursor-pointer text-primary">View</h1>,
+        (params) => (
+          <h1
+            onClick={() => handleOnRowClick(params.row)}
+            className="text-sm cursor-pointer text-primary"
+          >
+            View
+          </h1>
+        ),
         []
       ),
     },
   ];
 
-  const onReachEnd = () => {
-    if (!isLastPage) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
   const companyAddHandler = (comp: ICompany) => {
     setCompanies((prev) => {
       return [...prev, comp];
     });
+  };
+
+  const onPageChangeHandler = (_, pageNumber) => {
+    fetchCompaniesHandler('', pageNumber + 1);
   };
 
   return (
@@ -106,13 +148,27 @@ const Company = () => {
       <DataTable
         columns={columns}
         rows={companies}
-        isLoading={isLoading}
-        onReachEnd={onReachEnd}
-        emptyViewTitle={''}
+        headerView={
+          <div className="flex w-full  justify-start items-start mb-4">
+            <SearchField
+              onPressCross={() => setSearchVal('')}
+              onChangeText={(e) => setSearchVal(e.target.value)}
+              value={searchVal}
+              isLoading={searchState === 'searching'}
+            />
+          </div>
+        }
+        isLoading={isFetching}
+        page={currentPage}
+        totalCount={totalRecord}
+        onPressPageChange={onPageChangeHandler}
+        tableHeightPercent={85}
+        emptyViewTitle={STRINGS.no_companies}
         emptyViewSubTitle={''}
-        illustration={undefined}
+        illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={companies.length === 0}
+        withPagination={true}
       />
       <AddCompanyForm
         show={showFormModal}

@@ -1,3 +1,4 @@
+import DocumentExpandedViewContextProvider from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
 import LoaderContextProvider from '@/contexts/LoaderContext/LoaderContext';
 import SubAdminContextProvider from '@/contexts/SubAdminContext/SubAdminContext';
 import MaterialThemeProvider from '@/providers/MaterialThemeProvider';
@@ -13,7 +14,11 @@ const HomeProviders = ({ children }: { children: React.ReactNode }) => {
         <SnackBarProvider>
           <ReduxProvider>
             <LoaderContextProvider>
-              <SubAdminContextProvider>{children}</SubAdminContextProvider>
+              <SubAdminContextProvider>
+                <DocumentExpandedViewContextProvider>
+                  {children}
+                </DocumentExpandedViewContextProvider>
+              </SubAdminContextProvider>
             </LoaderContextProvider>
           </ReduxProvider>
         </SnackBarProvider>

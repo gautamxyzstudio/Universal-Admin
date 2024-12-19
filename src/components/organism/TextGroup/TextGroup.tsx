@@ -1,25 +1,80 @@
-import React from "react";
-import { ITextGroupProps } from "./TextGroup.types";
-import Image from "next/image";
+import React from 'react';
+import {
+  getTextGroupStyles,
+  ITextGroupProps,
+  ITextGroupTypes,
+} from './TextGroup.types';
+import Image from 'next/image';
+import { Skeleton } from '@mui/material';
 
 const TextGroup: React.FC<ITextGroupProps> = ({
   title,
-  titleStyle,
   subTitle,
-  subTitleStyle,
-  divStyle,
-  textgroupStyle,
+  titleStyle,
+  text,
+  subText,
+  type = ITextGroupTypes.default,
+  textStyle,
+  isLoading,
+
   icon,
 }) => {
-  return (
-    <div className={"flex items-center gap-x-1 h-fit " + divStyle}>
-      {icon && <Image src={icon} alt={title} className="w-6 h-6" />}
-      <div className={textgroupStyle}>
-        <span className={titleStyle + " text-disable"}>{title}</span>
-        <span className={subTitleStyle + " text-Black"}>{subTitle}</span>
+  const styles = getTextGroupStyles(type);
+  if (isLoading) {
+    return (
+      <div className={'flex   items-center gap-x-1 h-fit' + styles.divStyle}>
+        {icon && <Skeleton variant="circular" width={24} height={24} />}
+        <div className=" items-center gap-x-1 h-fit">
+          <Skeleton variant="text" width={100} height={20} />
+          <Skeleton variant="text" width={100} height={20} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className={'flex items-center gap-x-1 h-fit ' + styles.divStyle}>
+        {icon && <Image src={icon} alt={title} className="w-6 h-6" />}
+        <div className={styles.textgroupStyle}>
+          <div
+            className={'flex gap-x-3 items-center text-disable ' + titleStyle}
+          >
+            {title}
+            {subTitle && (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="14"
+                  viewBox="0 0 2 14"
+                  fill="none"
+                >
+                  <path d="M1 1V13" stroke="#DBDBDB" strokeLinecap="round" />
+                </svg>
+                {subTitle}
+              </>
+            )}
+          </div>
+          <div className={'flex gap-x-3 items-center  text-Black' + textStyle}>
+            {text}
+            {subText && (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="14"
+                  viewBox="0 0 2 14"
+                  fill="none"
+                >
+                  <path d="M1 1V13" stroke="#DBDBDB" strokeLinecap="round" />
+                </svg>
+                {subText}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default TextGroup;
