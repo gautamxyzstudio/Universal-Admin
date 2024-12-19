@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { IconButton } from "@mui/material";
 import { Icons } from "../../../../public/exporter";
-import { removeUserDetailsFromCookies } from "@/utility/cookies";
+import {
+  getUserNameFormCookies,
+  removeUserDetailsFromCookies,
+} from "@/utility/cookies";
 import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
 import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
 import { STRINGS } from "@/constant/en";
@@ -14,7 +17,7 @@ import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
 import NotificationDrawer from "@/components/molecules/DrawerTypes/NotificationDrawer/NotificationDrawer";
 
 const Topbar = () => {
-  const userName = "Sumit";
+  const userName = getUserNameFormCookies();
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const { changeLoaderState } = useShowLoaderContext();

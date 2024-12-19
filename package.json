@@ -23,6 +23,7 @@
     "@mui/x-data-grid-generator": "^7.20.0",
     "@mui/x-date-pickers": "^7.22.3",
     "@reduxjs/toolkit": "^2.2.8",
+    "cookies-next": "^4.3.0",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",

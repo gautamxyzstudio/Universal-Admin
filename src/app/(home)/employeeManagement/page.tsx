@@ -107,7 +107,6 @@ const EmployeeManagement = () => {
       headerName: 'License Number',
       width: 180,
       renderCell: (params: GridRenderCellParams) => {
-        console.log(params.row.securityAdvNo, params.row.securityBasicNo);
         return (
           <div className="flex flex-col">
             {params.row.securityAdvNo && (
@@ -176,9 +175,10 @@ const EmployeeManagement = () => {
   return (
     <div className="w-full h-[86%] mb-5">
       <PageHeader
-        primaryButtonTitle={STRINGS.addEmployee}
         title={STRINGS.employeeManagement}
+        primaryButtonTitle={STRINGS.addEmployee}
         onPressButton={onPressPrimaryButton}
+        withPrimaryButton
       />
       <DataTable
         columns={columns}

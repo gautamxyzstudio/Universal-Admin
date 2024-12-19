@@ -1,5 +1,4 @@
 import {
-  IDocumentNames,
   IDocumentStatus,
   IJobPostStatus,
   IJobTypesEnum,

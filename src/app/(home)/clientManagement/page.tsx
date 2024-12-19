@@ -4,6 +4,7 @@
 import { IClient } from '@/api/fetures/Client/Client.types';
 import {
   useAddClientDetailsMutation,
+  useGetPendingRequestsQuery,
   useLazyGetClientsQuery,
   useRegisterClientMutation,
 } from '@/api/fetures/Client/ClientApi';
@@ -44,6 +45,7 @@ const ClientManagement = () => {
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecord, setTotalRecord] = useState(0);
+  const {data} = useGetPendingRequestsQuery({page: 1})
 
   //====================================================Apis start====================
   //get Clients list
@@ -264,7 +266,7 @@ const ClientManagement = () => {
         withPrimaryButton
         primaryButtonTitle={STRINGS.addClient}
         onPressSecondaryButton={() => router.push(routeNames.PendingRequests)}
-        secondaryButtonTitle={STRINGS.pendingReq + ' (48)'}
+        secondaryButtonTitle={STRINGS.pendingReq + ` (${data?.data.length})` }
         onPressButton={() => setAddClientModal(true)}
       />
       <DataTable

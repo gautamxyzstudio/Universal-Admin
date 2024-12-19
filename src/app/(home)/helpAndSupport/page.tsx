@@ -27,13 +27,21 @@ import { getIssueRaisedStatus } from "@/constant/constant";
 const HelpAndSupport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   // By Employees
-  const [fetchHelpIssueByEmp, { isFetching: isFetchingByEmp }] = useLazyGetHelpIssuesByEmpQuery();
-  const [issueMessageByEmp, setIssueMessageByEmp] = useState<IIssueRaisedByEmployee[]>([]);
+  const [fetchHelpIssueByEmp, { isFetching: isFetchingByEmp }] =
+    useLazyGetHelpIssuesByEmpQuery();
+  const [issueMessageByEmp, setIssueMessageByEmp] = useState<
+    IIssueRaisedByEmployee[]
+  >([]);
   // By Clients
-  const [fetchHelpIssueByClient, { isFetching: isFetchingByClient }] = useLazyGetHelpIssuesByClientQuery();
-  const [issueMessageByClient, setIssueMessageByClient] = useState<IIssueRaisedByClient[]>([]);
+  const [fetchHelpIssueByClient, { isFetching: isFetchingByClient }] =
+    useLazyGetHelpIssuesByClientQuery();
+  const [issueMessageByClient, setIssueMessageByClient] = useState<
+    IIssueRaisedByClient[]
+  >([]);
   //Selected Message by Id
-  const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
+  const [selectedMessageId, setSelectedMessageId] = useState<number | null>(
+    null
+  );
   // Filter Status
   const [filterStatus, setFilterStatus] = useState<IIssueRaisedStatusEnum>();
   // Pagination
@@ -41,7 +49,9 @@ const HelpAndSupport = () => {
   const [isLastPage, setIsLastPage] = useState(true);
   // Searching
   const [searchVal, setSearchVal] = useState("");
-  const [searchState, updateSearchState] = useState<"idle" | "searching">("idle");
+  const [searchState, updateSearchState] = useState<"idle" | "searching">(
+    "idle"
+  );
   // Fetch Issues By Employee
   const getIssueMessageByEmp = async (
     searchVal: string,
@@ -124,8 +134,6 @@ const HelpAndSupport = () => {
   // Handle Filter Change
   const handleFilterChange = (status?: IIssueRaisedStatusEnum) => {
     setFilterStatus(status);
-    getIssueMessageByEmp(searchVal, true);
-    getIssueMessageByClient(searchVal, true);
   };
   // Handle Search
   const handleSearch = useCallback(
@@ -152,7 +160,7 @@ const HelpAndSupport = () => {
         setSelectedMessageId(null);
       }
     }
-  }, [selectedTabIndex === 0, filterStatus,  searchVal]);
+  }, [selectedTabIndex === 0, filterStatus, searchVal]);
   // Client Tab Index
   useEffect(() => {
     if (selectedTabIndex === 1) {
@@ -186,9 +194,21 @@ const HelpAndSupport = () => {
   );
   const FILTER_OPTIONS = [
     { icon: Icons.allMessage, value: STRINGS.all, status: undefined },
-    { icon: Icons.openMessage, value: "Open", status: IIssueRaisedStatusEnum.OPEN },
-    { icon: Icons.closedMessage, value: "Closed", status: IIssueRaisedStatusEnum.CLOSED },
-    { icon: Icons.notAnIssueMessage, value: "Not an Issue", status: IIssueRaisedStatusEnum.NO_ISSUE },
+    {
+      icon: Icons.openMessage,
+      value: "Open",
+      status: IIssueRaisedStatusEnum.OPEN,
+    },
+    {
+      icon: Icons.closedMessage,
+      value: "Closed",
+      status: IIssueRaisedStatusEnum.CLOSED,
+    },
+    {
+      icon: Icons.notAnIssueMessage,
+      value: "Not an Issue",
+      status: IIssueRaisedStatusEnum.NO_ISSUE,
+    },
   ];
   // List Header Options
   const ListHeader = () => (
@@ -220,12 +240,19 @@ const HelpAndSupport = () => {
         </div>
       </div>
       {filterStatus && filterStatus !== undefined && (
-        <span className="text-accentColor text-sm font-bold">{`${getIssueRaisedStatus(
-          filterStatus
-        )} Ticket (${
-          (selectedTabIndex === 0 && issueMessageByEmp.length) ||
-          (selectedTabIndex === 1 && issueMessageByClient.length)
-        })`}</span>
+        <span className="text-accentColor text-sm font-bold">
+          {`${getIssueRaisedStatus(filterStatus)} Ticket (${
+            selectedTabIndex === 0
+              ? issueMessageByEmp.length > 0
+                ? issueMessageByEmp.length
+                : 0
+              : selectedTabIndex === 1
+              ? issueMessageByClient.length > 0
+                ? issueMessageByClient.length
+                : 0
+              : 0
+          })`}
+        </span>
       )}
     </div>
   );
@@ -369,4 +396,3 @@ const styles: SxProps<Theme> = {
     fontWeight: "bold",
   },
 };
-

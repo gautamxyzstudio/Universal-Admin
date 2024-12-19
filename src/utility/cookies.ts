@@ -65,3 +65,4 @@ export const extractFirstAndLastNameFromName = (
 };
 export const createImageUrl = (url: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}${url}`;
+

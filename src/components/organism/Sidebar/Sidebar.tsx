@@ -3,45 +3,24 @@ import { Icons } from "../../../../public/exporter";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { IQuickLinkData, quickLink } from "@/api/mockData/data";
-import Link from "next/link";
 import { STRINGS } from "@/constant/en";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { routeNames } from "@/utility/routesName";
 import { splitRoute } from "@/utility/utils";
+import LinkWithImageRender from "@/components/atoms/LinkWithImageRender/LinkWithImageRender";
 
 const Sidebar = () => {
-  const [translateY, setTranslateValue] = useState(0);
-  const [activeSetting, setActiveSetting] = useState(false);
-  const [activeHelp, setActiveHelp] = useState(false);
-
   const currentPathName = usePathname();
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (currentPathName) {
-      const index = quickLink.findIndex(
-        (link) => link.path === currentPathName
-      );
-      if (index !== -1) {
-        setTranslateValue(index * 72); // Set translateY based on the current path
-        setActiveSetting(false);
-        setActiveHelp(false);
-      }
+    const index = quickLink.findIndex(
+      (link) => link.path === `/${splitRoute(currentPathName)}`
+    );
+    if (index === index) {
+      setIndex(index);
     }
-  }, [currentPathName]); // Ensure the useEffect depends on currentPathName
-
-  const route = useRouter();
-  const onPressSettings = () => {
-    route.push(routeNames.Settings);
-    setTranslateValue(-1);
-    setActiveSetting(true);
-    setActiveHelp(false);
-  };
-  const onPressHelp = () => {
-    route.push(routeNames.Help);
-    setTranslateValue(-2);
-    setActiveHelp(true);
-    setActiveSetting(false);
-  };
+  }, [currentPathName]);
 
   const SideBarTab = (
     data: IQuickLinkData,
@@ -49,24 +28,37 @@ const Sidebar = () => {
     isActive: boolean
   ) => {
     return (
-      <Link
+      <LinkWithImageRender
         key={data.id}
         href={data.path}
-        className={`flex flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
-      >
-        <Image
-          src={isActive ? data.iconfill : data.icon}
-          alt={data.title}
-          className="w-6 h-6"
-        />
-        <span
-          className={`text-md ${
-            isActive ? "font-bold text-primary" : "text-disable"
-          }`}
-        >
-          {data.title}
-        </span>
-      </Link>
+        icon={isActive ? data.iconfill : data.icon}
+        title={data.title}
+        isActive={isActive}
+      />
+    );
+  };
+
+  const RenderSettings = () => {
+    const isActive = `/${splitRoute(currentPathName)}` === routeNames.Settings;
+
+    return (
+      <LinkWithImageRender
+        href={routeNames.Settings}
+        icon={isActive ? Icons.settingfill : Icons.setting}
+        title={STRINGS.settings}
+        isActive={isActive}
+      />
+    );
+  };
+  const RenderHelp = () => {
+    const isActive = `/${splitRoute(currentPathName)}` === routeNames.Help;
+    return (
+      <LinkWithImageRender
+        href={routeNames.Help}
+        icon={isActive ? Icons.helpFill : Icons.help}
+        title={STRINGS.help}
+        isActive={isActive}
+      />
     );
   };
 
@@ -82,52 +74,23 @@ const Sidebar = () => {
       <div className="w-full h-full mt-16 flex flex-col justify-between">
         <div className="flex justify-between flex-col relative">
           {/* Vertical indicator */}
-          {translateY >= 0 ? (
+          {index > -1 && (
             <div
               className={`h-[72px] w-1 bg-primary rounded-custom absolute transition-transform duration-300 ease-in-out`}
-              style={{ transform: `translateY(${translateY}px)` }} // Use inline style for translation
+              style={{
+                transform: `translateY(${index * 72}px)`,
+              }} // Use inline style for translation
             />
-          ) : null}
+          )}
+
           {quickLink.map((data, index) => {
             const isActive = `/${splitRoute(currentPathName)}` === data.path;
             return SideBarTab(data, index, isActive);
           })}
         </div>
         <div>
-          <div
-            onClick={onPressSettings}
-            className={`flex cursor-pointer flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
-          >
-            <Image
-              src={activeSetting ? Icons.settingfill : Icons.setting}
-              alt={"settings"}
-              className="w-6 h-6"
-            />
-            <span
-              className={`text-text-md ${
-                activeSetting ? "text-primary font-bold" : "text-disable"
-              }`}
-            >
-              {STRINGS.settings}
-            </span>
-          </div>
-          <div
-            onClick={onPressHelp}
-            className={`flex cursor-pointer flex-row pl-6 max-w-full h-[72px] items-center gap-x-3`}
-          >
-            <Image
-              src={activeHelp ? Icons.helpFill : Icons.help}
-              alt={STRINGS.help}
-              className="w-6 h-6"
-            />
-            <span
-              className={`text-text-md ${
-                activeHelp ? "text-primary font-bold" : "text-disable"
-              }`}
-            >
-              {STRINGS.help}
-            </span>
-          </div>
+          {RenderSettings()}
+          {RenderHelp()}
         </div>
       </div>
     </div>

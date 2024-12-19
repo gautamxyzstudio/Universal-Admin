@@ -81,6 +81,7 @@ export const STRINGS = {
   gender: 'Gender',
   male: 'Male',
   female: 'Female',
+  jobName: "Job Name",
   jobDes: 'Job Description',
   jobDut: 'Job Duties',
   reqCert: 'Required Certificate',
@@ -172,4 +173,6 @@ export const STRINGS = {
   newClient: 'New Client',
   newEmp: 'New Employee',
   compareWeek: 'Compare to last week',
+  noHelp: "No Issues Raised Yet",
+  jobStatus: 'Job Status'
 };

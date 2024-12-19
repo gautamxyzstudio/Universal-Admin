@@ -5,7 +5,6 @@ export type IUserImageRendererProps = {
   name: string;
   type?: IUserImageRendererTypes;
   imageStyle?: string;
-
   size?: number;
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
 import DocumentCard from '@/components/organism/DocumentCard/DocumentCard';

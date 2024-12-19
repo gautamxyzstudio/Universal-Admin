@@ -1,17 +1,18 @@
-import { STRINGS } from '@/constant/en';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { base64Icon, Icons } from '../../../../public/exporter';
-import TextWithBgColor from '@/components/molecules/TextWithBgColor/TextWithBgColor';
-import { IEmployeeDocument } from '@/api/fetures/Employee/EmployeeApi.types';
-import { IDocumentStatus, IJobPostStatus } from '@/constant/enums';
+import { STRINGS } from "@/constant/en";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { base64Icon, Icons } from "../../../../public/exporter";
+import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
+import { IEmployeeDocument } from "@/api/fetures/Employee/EmployeeApi.types";
+import { IDocumentStatus, IJobPostStatus } from "@/constant/enums";
 import {
   getDocumentStatusStyles,
   getDocumentStatusTextByStatus,
-} from '@/utility/utils';
-import { useDocumentExpandViewContext } from '@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext';
-import CustomButton from '@/components/atoms/CustomButton/CustomButton';
-import CustomMenuComponent from '@/components/atoms/CustomMenuComponent/CustomMenuComponent';
+} from "@/utility/utils";
+import { useDocumentExpandViewContext } from "@/contexts/DocumentExpandedViewContext/DocumentExpandedViewContext";
+import CustomButton from "@/components/atoms/CustomButton/CustomButton";
+import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
+import { MoreVertOutlined } from "@mui/icons-material";
 
 interface IUploadedFileProps {
   document: IEmployeeDocument;
@@ -60,14 +61,14 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
 
   return (
     <div
-      className={fileStyles + ' rounded p-3 flex  items-center justify-between'}
+      className={fileStyles + " rounded p-3 flex  items-center justify-between"}
     >
       {empDocument && (
         <>
           <div className="flex items-center gap-x-3">
             <div className="group flex justify-center text-center relative overflow-hidden rounded-md cursor-pointe">
               <Image
-                src={empDocument.doc?.url ?? ''}
+                src={empDocument.doc?.url ?? ""}
                 alt="documents image"
                 placeholder="blur"
                 blurDataURL={base64Icon.spinner}
@@ -94,8 +95,8 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
               <>
                 <CustomButton
                   customStyles={{
-                    '.MuiLoadingButton-label': {
-                      gap: '4px',
+                    ".MuiLoadingButton-label": {
+                      gap: "4px",
                     },
                   }}
                   buttonType="outline-small-red"
@@ -113,8 +114,8 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                 {empDocument.isUpdate ? (
                   <CustomButton
                     customStyles={{
-                      '.MuiLoadingButton-label': {
-                        gap: '4px',
+                      ".MuiLoadingButton-label": {
+                        gap: "4px",
                       },
                     }}
                     buttonType="outline-small-blue"
@@ -132,8 +133,8 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                 ) : (
                   <CustomButton
                     customStyles={{
-                      '.MuiLoadingButton-label': {
-                        gap: '4px',
+                      ".MuiLoadingButton-label": {
+                        gap: "4px",
                       },
                     }}
                     buttonType="outline-small-green"
@@ -166,13 +167,13 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                         icon: Icons.denyIcon,
                         value:
                           document.docStatus === IDocumentStatus.DENIED
-                            ? 'Approve'
-                            : 'Deny',
+                            ? "Approve"
+                            : "Deny",
                         onPresItem: onPressTreeDotOption,
                       },
                     ]}
                     isOpen={true}
-                    menuButton={undefined}
+                    menuButton={<MoreVertOutlined />}
                   />
                 )}
               </>
