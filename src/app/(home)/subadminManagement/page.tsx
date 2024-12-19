@@ -81,7 +81,7 @@ const SubAdminManagement = () => {
       width: 140,
       renderCell: (params: GridRenderCellParams) => {
         const color =
-          params.row.UserStatus === true ? "text-green" : "text-red";
+          params.row.UserStatus === true ? "text-Green" : "text-Red";
         return (
           <div className="h-full w-full flex flex-col justify-center items-start">
             <p className={color + "  text-sm"}>
@@ -156,6 +156,7 @@ const SubAdminManagement = () => {
         illustration={Images.noSubAdmin}
         error={error}
         isDataEmpty={true}
+        withPagination={false}
       />
       <AddSubAdminForm
         setGlobalModalState={(state) => setShowFormModal(state)}

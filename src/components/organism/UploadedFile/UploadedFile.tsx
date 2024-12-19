@@ -172,6 +172,7 @@ const UploadedFile: React.FC<IUploadedFileProps> = ({
                       },
                     ]}
                     isOpen={true}
+                    menuButton={undefined}
                   />
                 )}
               </>

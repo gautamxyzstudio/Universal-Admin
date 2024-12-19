@@ -199,7 +199,7 @@ const authApi = baseApi.injectEndpoints({
                 description: job.jobs[0]?.description ?? '',
                 jobDuties: job.jobs[0]?.jobDuties ?? '',
                 endShift: job.jobs[0]?.endShift ?? null,
-                requiredEmployee: job.jobs[0]?.requiredEmployee ?? null,
+                requiredEmployee: job.jobs[0]?.requiredEmployee ?? 0,
                 client_details: {
                   clientId: job.jobs[0]?.client_details[0]?.id ?? 0,
                   clientName: job.jobs[0]?.client_details[0]?.Name ?? '',

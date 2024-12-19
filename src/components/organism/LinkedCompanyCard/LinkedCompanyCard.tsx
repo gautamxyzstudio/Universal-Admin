@@ -18,7 +18,7 @@ const LinkedCompanyCard: React.FC<ILinkedCompanyCardProps> = ({
       <UserNameWithImage
         name={companyName ?? ''}
         divStyle=" !gap-y-0"
-        imageStyle="w-10 h-10"
+        imageStyle="!w-10 !h-10"
         companyNameStyle="text-disable !text-text-12"
         companyName="IT Sector"
         image={companyLogo ?? ''}

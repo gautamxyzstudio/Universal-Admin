@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { IMenuItemProps } from './CustomMenuComponent.types';
 import { Menu, Fade, MenuItem, IconButton } from '@mui/material';
 import Image from 'next/image';
-import { MoreVertOutlined } from '@mui/icons-material';
 
-const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
+const CustomMenuComponent: React.FC<IMenuItemProps> = ({
+  data,
+  menuButton,
+  textSize = 'text-text-12',
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,7 +32,7 @@ const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
         sx={{ padding: 0 }}
         onClick={onPressKebab}
       >
-        <MoreVertOutlined />
+        {menuButton}
       </IconButton>
 
       <Menu
@@ -41,12 +44,11 @@ const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
         sx={{
           '.MuiList-root': {
             padding: '0px',
+            width: '180px',
           },
           '.MuiMenuItem-root': {
             padding: '12px 125px 12px 12px',
             gap: '12px',
-            fontSize: '12px',
-            lineHeight: '16px',
           },
         }}
         onClose={handleClose}
@@ -61,8 +63,8 @@ const CustomMenuComponent: React.FC<IMenuItemProps> = ({ data }) => {
                 handleClose();
               }}
             >
-              <Image width={16} height={16} src={item.icon} alt={''} />
-              <span>{item.value}</span>
+              <Image className="w-5 h-5" src={item.icon} alt={item.value} />
+              <span className={textSize}>{item.value}</span>
             </MenuItem>
           );
         })}

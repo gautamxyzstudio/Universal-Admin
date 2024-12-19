@@ -58,7 +58,7 @@ export enum IEmployeeApiKeyStatus {
   LICENSE_ADVANCE = 'securityDocumentAdvStatus',
   LICENSE_BASIC = 'securityDocBasicStatus',
   SUPPORTING_DOCUMENT = 'supportingDocumentStatus',
-  GOVT_ID = 'govtidStaus',
+  GOVT_ID = 'govtidStatus',
   CHEQUE = 'directDepositVoidChequeStatus',
   NULL = 'null',
 }
@@ -72,4 +72,15 @@ export enum IDocumentNames {
   SUPPORTING_DOCUMENT = 'd5',
   RESUME = 'd6',
   NULL = 'd7',
+}
+export enum IUserTypesEnum {
+  EMPLOYEE = 'emp',
+  CLIENT = 'client',
+  SUPERADMIN = 'supAdmin',
+}
+
+export enum IIssueRaisedStatusEnum {
+  OPEN = 's0',
+  CLOSED = 's1',
+  NO_ISSUE = 's2',
 }

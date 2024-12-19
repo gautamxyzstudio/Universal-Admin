@@ -156,7 +156,7 @@ const AddCompanyList: React.FC<IAddCompanyListProps> = ({
             name={company.companyname ?? ""}
             companyNameStyle="text-disable text-[12px] leading-4"
             companyName={company.Industry ?? ""}
-            image={company.companylogo}
+            image={company.companylogo ?? ""}
           />
           <div className="ml-2 mt-2 flex flex-col gap-y-1">
             <IconWithText

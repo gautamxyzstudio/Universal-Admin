@@ -1,3 +1,9 @@
+import { IIssueRaisedStatusEnum } from '@/constant/enums';
+import {
+  getIssueRaisedByClientUrl,
+  getIssueRaisedByEmployeeUrl,
+} from './types';
+
 export const Endpoints = {
   login: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/local?populate=*`,
   getSubAdmins: (page: number) =>
@@ -53,4 +59,21 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/other-documents/${docId}`,
   mutateUpdateDocRequest: (docId: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/document-requests/${docId}/status`,
+  getHelpSupportIssueByEmployee: (
+    searchVal: string,
+    page: number,
+    status: IIssueRaisedStatusEnum
+  ) => getIssueRaisedByEmployeeUrl(searchVal, page, status),
+  getHelpSupportIssueByClient: (
+    searchVal: string,
+    page: number,
+    status: IIssueRaisedStatusEnum
+  ) => getIssueRaisedByClientUrl(searchVal, page, status),
+  getUsers: `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findAllUsers`,
+  getIssueRaisedById: (id: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds/${id}?populate=*`,
+  updateIssueStatusIsResolveById: (id: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds/${id}/resolve`,
+  updateIssueStatusIsNotAnIssueById: (id: number) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds/${id}/not-an-issue`,
 };

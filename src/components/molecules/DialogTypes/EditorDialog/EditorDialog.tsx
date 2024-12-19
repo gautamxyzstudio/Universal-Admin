@@ -59,7 +59,7 @@ const EditorDialog: React.FC<IEditorDialogProps> = ({
       <h3 className="text-2xl font-bold p-4">
         {fieldName === JobPostStateFields.JOB_DESCRIPTION
           ? STRINGS.jobDes
-          : STRINGS.jobDuty}{" "}
+          : STRINGS.jobDut}{" "}
         Preview
       </h3>
       <div className="px-4">

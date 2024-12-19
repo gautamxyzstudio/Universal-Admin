@@ -47,7 +47,7 @@ const UserImageRenderer: React.FC<IUserImageRendererProps> = ({
             ' flex flex-row justify-center items-center w-8 h-8 rounded-full border border-borderGrey'
           }
         >
-          <p className={textColor + ' text-sm'}>
+          <p className={textColor + ' text-xl'}>
             {getFirstLetterFromName(name)}
           </p>
         </div>

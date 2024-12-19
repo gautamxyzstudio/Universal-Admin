@@ -1,43 +1,42 @@
-import React from 'react';
-import { Icons } from '../../../../public/exporter';
-import TextWithBgColor from '@/components/molecules/TextWithBgColor/TextWithBgColor';
-import { STRINGS } from '@/constant/en';
-import TextGroup from '../TextGroup/TextGroup';
-import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import { dateMonthFormat, timeFormat } from '@/utility/utils';
-import { getJobStatus, getJobType } from '@/constant/constant';
-import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
-import CustomMenuComponent from '@/components/atoms/CustomMenuComponent/CustomMenuComponent';
-import { ITextGroupTypes } from '../TextGroup/TextGroup.types';
+import React from "react";
+import { Icons } from "../../../../public/exporter";
+import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
+import { STRINGS } from "@/constant/en";
+import TextGroup from "../TextGroup/TextGroup";
+import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import {
+  dateMonthFormat,
+  getJobStatusColor,
+  timeFormat,
+} from "@/utility/utils";
+import { getJobStatus, getJobType } from "@/constant/constant";
+import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
+import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
+import { ITextGroupTypes } from "../TextGroup/TextGroup.types";
+import { IJobPostStatus } from "@/constant/enums";
+import { MoreVertOutlined } from "@mui/icons-material";
+
 const JobDetails = ({
   data,
   isEmployee,
+  onPressMenuItem,
 }: {
   data: IJobPost;
+  onPressMenuItem?: (item: string) => void;
   isEmployee: boolean;
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const statusStyle =
-    getJobStatus(data.status) === 'Open'
-      ? 'text-green bg-statusLightGreen'
-      : 'text-red bg-lightRedSecondary';
   return (
     <>
       <div className="w-full h-full">
         <div className="flex justify-between pb-3 border-b border-borderGrey w-full">
           <div className="flex-1">
             <UserNameWithImage
-              image={data.client_details.companylogo}
+              image={data.client_details?.companylogo ?? ''}
               name={data.job_name}
-              companyName={data.client_details.companyname}
+              containerStyle={
+                !isEmployee ? "!flex-col !items-start gap-y-3" : ""
+              }
+              companyName={isEmployee ? data.client_details?.companyname : ""}
               imageStyle="!w-14 !h-14"
               nameStyle="font-bold !text-[24px] !leading-[28px]"
               postby={data.client_details?.clientName}
@@ -45,27 +44,38 @@ const JobDetails = ({
               subText={
                 !isEmployee
                   ? data.notAccepting === false
-                    ? ''
+                    ? ""
                     : STRINGS.notAccept
-                  : ''
+                  : ""
               }
             />
           </div>
           <div className=" flex flex-col justify-between items-end">
-            {!isEmployee && (
+            {!isEmployee && data?.status === IJobPostStatus.OPEN && (
               <CustomMenuComponent
+                menuButton={<MoreVertOutlined />}
                 isOpen={true}
-                onPresItem={function (type: string): void {
-                  throw new Error('Function not implemented.');
-                }}
-                data={[]}
-                onClose={undefined}
+                data={[
+                  {
+                    icon: Icons.crossForm,
+                    value: STRINGS.close,
+                    onPresItem: () =>
+                      onPressMenuItem && onPressMenuItem(STRINGS.close),
+                  },
+                  {
+                    icon: Icons.pencil,
+                    value: STRINGS.edit,
+                    onPresItem: () =>
+                      onPressMenuItem && onPressMenuItem(STRINGS.edit),
+                  },
+                ]}
               />
             )}
+            <div />
 
             <TextWithBgColor
               textLabel={getJobStatus(data?.status)}
-              textStyle={' text-skyBlue bg-lightSkyBlue'}
+              textStyle={getJobStatusColor(data?.status)}
             />
           </div>
         </div>
@@ -78,7 +88,7 @@ const JobDetails = ({
           <TextGroup
             icon={Icons.dollar}
             title={STRINGS.wageRate}
-            text={data.salary + '$ /hr'}
+            text={data.salary + "$ /hr"}
           />
           <TextGroup
             icon={Icons.timeDate}
@@ -86,7 +96,7 @@ const JobDetails = ({
             subTitle={STRINGS.date}
             text={
               timeFormat(data.startShift ?? new Date()) +
-              ' - ' +
+              " - " +
               timeFormat(data.endShift ?? new Date())
             }
             subText={dateMonthFormat(data.eventDate ?? new Date())}
@@ -96,14 +106,14 @@ const JobDetails = ({
             <TextGroup
               icon={Icons.check_in}
               title={STRINGS.checkin}
-              titleStyle="text-green"
+              titleStyle="text-Green"
               text={timeFormat(data.CheckIn)}
             />
           )}
           {isEmployee && data.CheckOut && (
             <TextGroup
               icon={Icons.check_in}
-              titleStyle="text-red"
+              titleStyle="text-Red"
               title={STRINGS.checkin}
               text={timeFormat(data.CheckOut)}
             />
@@ -120,7 +130,7 @@ const JobDetails = ({
             title={STRINGS.reqcandidate}
             titleStyle="!text-Black font-bold"
             type={ITextGroupTypes.textType}
-            text={data.requiredEmployee ?? ''}
+            text={data.requiredEmployee ?? ""}
           />
           <TextGroup
             title={STRINGS.gender}

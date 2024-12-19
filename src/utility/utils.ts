@@ -7,6 +7,7 @@ import {
   IDocumentStatus,
   IJobPostStatus,
   IWorkStatus,
+  IIssueRaisedStatusEnum,
 } from '@/constant/enums';
 import moment from 'moment';
 
@@ -134,15 +135,15 @@ export const getDocumentStatusColor = (status: IDocumentStatus) => {
 export const getJobStatusColor = (status: IJobPostStatus) => {
   switch (status) {
     case IJobPostStatus.OPEN:
-      return `text-green bg-statusLightGreen`;
+      return `text-Green bg-statusLightGreen`;
     case IJobPostStatus.CLOSED:
-      return `text-red bg-lightRed`;
+      return `text-Red bg-lightRed`;
     case IJobPostStatus.COMPLETED:
       return `text-skyBlue bg-lightSkyBlue`;
     case IJobPostStatus.DECLINED:
-      return `text-red bg-lightRed`;
+      return `text-Red bg-lightRed`;
     default:
-      return `text-red bg-lightRed`;
+      return `text-Red bg-lightRed`;
   }
 };
 
@@ -156,6 +157,18 @@ export const getDocumentStatusStyles = (status: IDocumentStatus) => {
       return `text-skyBlue bg-lightSkyBlue`;
     default:
       return `text-red bg-lightRed`;
+  }
+};
+export const getIssueRaisedStatusColor = (status: IIssueRaisedStatusEnum) => {
+  switch (status) {
+    case IIssueRaisedStatusEnum.OPEN:
+      return `text-Green bg-statusLightGreen`;
+    case IIssueRaisedStatusEnum.CLOSED:
+      return `text-Red bg-lightRed`;
+    case IIssueRaisedStatusEnum.NO_ISSUE:
+      return `text-yellow bg-lightYellowSecondary`;
+    default:
+      return `text-Red bg-lightRed`;
   }
 };
 

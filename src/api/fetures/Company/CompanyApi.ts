@@ -12,10 +12,13 @@ import {
   IGetCompanyClientResponse,
   IGetCompanyDetailsResponse,
   IJobPostCustomizedResponse,
-  IJobPostTypes,
-  IPostedJobsResponse,
+  IGetPostedJobsResponse,
+  ICompanyClientDetails,
+  IGetCustomizeCompanyClientResponse,
 } from "./Company.types";
 import { createImageUrl } from "@/utility/cookies";
+import { IJobPost } from "../Employee/EmployeeApi.types";
+import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
 
 const companiesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -66,7 +69,7 @@ const companiesApi = baseApi.injectEndpoints({
       }),
     }),
     getCompanyDetails: builder.query({
-      query: (company_id) => ({
+      query: (company_id: number) => ({
         url: Endpoints.getCompanyDetails(company_id),
         method: ApiMethodType.get,
       }),
@@ -96,52 +99,50 @@ const companiesApi = baseApi.injectEndpoints({
         method: ApiMethodType.get,
       }),
       transformResponse: (
-        response: IPostedJobsResponse
+        response: IGetPostedJobsResponse
       ): IJobPostCustomizedResponse => {
-        const data: IJobPostTypes[] = [];
+        const data: IJobPost[] = [];
         if (response.data) {
           response.data.forEach((job) => {
-            if (job.id) {
+            if (job) {
               data.push({
                 ...job,
-                id: job.id,
-                status: job.status,
-                notAccepting: job?.notAccepting ?? false,
-                client_details: job.client_details
-                  ? {
-                      id: job.client_details[0].id,
-                      Name: job.client_details[0].Name,
-                      companyname: job.client_details[0].companyname,
-                      Industry: job.client_details[0].Industry,
-                      Email: job.client_details[0].Email,
-                      location: job.client_details[0].location,
-                      company_detail: job.client_details[0].company_detail
-                        ? {
-                            companyname:
-                              job.client_details[0].company_detail
-                                ?.companyname ?? "",
-                            id: job.client_details[0].company_detail?.id ?? 0,
-                            companylogo: job.client_details[0].company_detail
-                              ?.companylogo
-                              ? {
-                                  url: createImageUrl(
-                                    job.client_details[0].company_detail
-                                      ?.companylogo.url || ""
-                                  ),
-                                  mime: job.client_details[0].company_detail
-                                    ?.companylogo.mime,
-                                  id: job.client_details[0].company_detail
-                                    ?.companylogo.id,
-                                  name: job.client_details[0].company_detail
-                                    ?.companylogo.name,
-                                  size: job.client_details[0].company_detail
-                                    ?.companylogo.size,
-                                }
-                              : null,
-                          }
-                        : null,
-                    }
-                  : null,
+                id: job.id ?? 0,
+                status: job?.status ?? IJobPostStatus.OPEN,
+                CheckIn: null,
+                CheckOut: null,
+                notAccepting: job?.notAccepting ?? null,
+                job_name: job.job_name ?? "",
+                city: job.city ?? "",
+                address: job.address ?? "",
+                location: job.location ?? "",
+                postalCode: job.postalCode ?? "",
+                postID: job.postID ?? "",
+                gender: job.gender ?? "",
+                salary: job.salary ?? "",
+                job_type: job.job_type ?? IJobTypesEnum.EVENT,
+                required_certificates: job.required_certificates ?? [],
+                eventDate: job.eventDate ?? null,
+                startShift: job.startShift ?? null,
+                description: job.description ?? "",
+                jobDuties: job.jobDuties ?? "",
+                endShift: job.endShift ?? null,
+                requiredEmployee: job.requiredEmployee ?? 0,
+                client_details: {
+                  clientId: job.client_details[0]?.id ?? 0,
+                  clientName: job.client_details[0]?.Name ?? "",
+                  id: job.client_details[0]?.company_detail.id ?? 0,
+                  companyname:
+                    job.client_details[0]?.company_detail.companyname ?? "",
+                  companyemail:
+                    job.client_details[0]?.company_detail.companyemail ?? "",
+                  companylogo: job.client_details[0]?.company_detail.companylogo
+                    .url
+                    ? createImageUrl(
+                        job.client_details[0]?.company_detail.companylogo.url
+                      )
+                    : "",
+                },
               });
             }
           });
@@ -164,52 +165,50 @@ const companiesApi = baseApi.injectEndpoints({
         method: ApiMethodType.get,
       }),
       transformResponse: (
-        response: IPostedJobsResponse
+        response: IGetPostedJobsResponse
       ): IJobPostCustomizedResponse => {
-        const data: IJobPostTypes[] = [];
+        const data: IJobPost[] = [];
         if (response.data) {
           response.data.forEach((job) => {
             if (job.id) {
               data.push({
                 ...job,
-                id: job.id,
-                status: job.status,
-                notAccepting: job?.notAccepting ?? false,
-                client_details: job.client_details
-                  ? {
-                      id: job.client_details[0].id,
-                      Name: job.client_details[0].Name,
-                      companyname: job.client_details[0].companyname,
-                      Industry: job.client_details[0].Industry,
-                      Email: job.client_details[0].Email,
-                      location: job.client_details[0].location,
-                      company_detail: job.client_details[0].company_detail
-                        ? {
-                            companyname:
-                              job.client_details[0].company_detail
-                                ?.companyname ?? "",
-                            id: job.client_details[0].company_detail?.id ?? 0,
-                            companylogo: job.client_details[0].company_detail
-                              ?.companylogo
-                              ? {
-                                  url: createImageUrl(
-                                    job.client_details[0].company_detail
-                                      ?.companylogo.url || ""
-                                  ),
-                                  mime: job.client_details[0].company_detail
-                                    ?.companylogo.mime,
-                                  id: job.client_details[0].company_detail
-                                    ?.companylogo.id,
-                                  name: job.client_details[0].company_detail
-                                    ?.companylogo.name,
-                                  size: job.client_details[0].company_detail
-                                    ?.companylogo.size,
-                                }
-                              : null,
-                          }
-                        : null,
-                    }
-                  : null,
+                id: job.id ?? 0,
+                status: job?.status ?? IJobPostStatus.OPEN,
+                CheckIn: null,
+                CheckOut: null,
+                notAccepting: job?.notAccepting ?? null,
+                job_name: job.job_name ?? "",
+                city: job.city ?? "",
+                address: job.address ?? "",
+                location: job.location ?? "",
+                postalCode: job.postalCode ?? "",
+                postID: job.postID ?? "",
+                gender: job.gender ?? "",
+                salary: job.salary ?? "",
+                job_type: job.job_type ?? IJobTypesEnum.EVENT,
+                required_certificates: job.required_certificates ?? [],
+                eventDate: job.eventDate ?? null,
+                startShift: job.startShift ?? null,
+                description: job.description ?? "",
+                jobDuties: job.jobDuties ?? "",
+                endShift: job.endShift ?? null,
+                requiredEmployee: job.requiredEmployee ?? 0,
+                client_details: {
+                  clientId: job.client_details[0]?.id ?? 0,
+                  clientName: job.client_details[0]?.Name ?? "",
+                  id: job.client_details[0]?.company_detail.id ?? 0,
+                  companyname:
+                    job.client_details[0]?.company_detail.companyname ?? "",
+                  companyemail:
+                    job.client_details[0]?.company_detail.companyemail ?? "",
+                  companylogo: job.client_details[0]?.company_detail.companylogo
+                    .url
+                    ? createImageUrl(
+                        job.client_details[0]?.company_detail.companylogo.url
+                      )
+                    : "",
+                },
               });
             }
           });
@@ -231,16 +230,35 @@ const companiesApi = baseApi.injectEndpoints({
         url: Endpoints.getCompanyClients(company_id),
         method: ApiMethodType.get,
       }),
-      transformResponse: (response: IGetCompanyClientResponse) => {
-        const data = response.map((client) => {
-          return client;
-        });
-        console.log(data);
-        return data;
+      transformResponse: (
+        response: IGetCompanyClientResponse
+      ): IGetCustomizeCompanyClientResponse => {
+        const data: ICompanyClientDetails[] = [];
+        if (response) {
+          response.data.forEach((client) => {
+            if (client) {
+              data.push({
+                id: client.attributes?.id ?? 0,
+                clientName: client.attributes?.Name ?? "",
+                clientEmail: client.attributes?.Email ?? "",
+                clientLocation: client.attributes?.location ?? "",
+                clientContactno: client.attributes?.contactno ?? "",
+                joinDate: client.attributes?.publishedAt ?? new Date(),
+                clientCompanyName:
+                  client.attributes?.company_detail?.companyname ?? "",
+                clientCompanyIndustry:
+                  client.attributes?.company_detail?.Industry ?? "",
+              });
+            }
+          });
+        }
+        return {
+          data: data,
+        };
       },
     }),
     updateJobPost: builder.mutation<
-      IJobPostTypes,
+      IJobPost,
       { jobPostDetails: IAddNewJobPostRequest; jobPostId: number }
     >({
       query: (body: {
@@ -251,7 +269,7 @@ const companiesApi = baseApi.injectEndpoints({
         method: ApiMethodType.patch,
         body: body.jobPostDetails,
       }),
-      transformResponse: (response: IJobPostTypes) => {
+      transformResponse: (response: IJobPost) => {
         console.log(response, "api response");
         return response;
       },

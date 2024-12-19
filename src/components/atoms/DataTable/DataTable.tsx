@@ -187,7 +187,7 @@ const DataTable: React.FC<IDataTableProps> = ({
 
   return (
     <div className="px-4 pt-4  w-full bg-white h-full shadow-custom-shadow rounded-[8px] justify-center items-center">
-      <div className="w-full">{headerView}</div>
+      <div className="w-full mb-4">{headerView}</div>
       {!isLoading && rows.length === 0 ? (
         <div className="h-full flex justify-center items-center">
           <EmptyScreenView

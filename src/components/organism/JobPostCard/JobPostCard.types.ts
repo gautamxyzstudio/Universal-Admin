@@ -5,9 +5,9 @@ export interface IJobPostCardProps {
   companyName?: string;
   postByName?: string;
   profileName: string;
-  days?: Date | undefined;
+  days?: Date | string | null;
   image: StaticImport | string | null | undefined;
-  textLabel: string;
-  textStyle?: string;
+  textLabel?: string | null | undefined;
+  textStyle?: string | null | undefined;
   iconWithTexts: IIconWithTextProps[];
 }

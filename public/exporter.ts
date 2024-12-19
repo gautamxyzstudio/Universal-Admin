@@ -55,6 +55,19 @@ import faq from './faq.svg';
 import faqs from './faqs.svg';
 import dropdownFill from './dropdownFill.svg';
 import deleteIcon from './deleteIcon.svg';
+import help from './help.svg';
+import helpFill from './helpFill.svg';
+import filter from './filter.svg';
+import allMessage from './allMessage.svg';
+import openMessage from './openMessage.svg';
+import closedMessage from './closedMessage.svg';
+import notAnIssueMessage from './notAnIssueMessage.svg';
+import newClient from './newClient.svg';
+import employee from './employee.svg';
+import pending from './pending.svg';
+import job from './job.svg';
+import graphUp from './graphGrowUpArrow.svg';
+import graphDown from './graphGrowDownArrow.svg';
 import denyIcon from './denyIcon.svg';
 
 // Icon Object
@@ -116,6 +129,19 @@ export const Icons = {
   faqs,
   dropdownFill,
   deleteIcon,
+  help,
+  helpFill,
+  filter,
+  allMessage,
+  openMessage,
+  closedMessage,
+  notAnIssueMessage,
+  newClient,
+  employee,
+  pending,
+  job,
+  graphDown,
+  graphUp,
 };
 
 // Images
@@ -127,6 +153,7 @@ import tabLogin from './tabLogin.svg';
 import webLogin from './webLogin.svg';
 import noDocRequest from './noDocsRequest.svg';
 import noJobs from './noJobs.svg';
+import noHelpSupport from './noHelpSupport.svg';
 // Image Object
 export const Images = {
   demoImg,
@@ -137,6 +164,7 @@ export const Images = {
   mobileLogin,
   tabLogin,
   webLogin,
+  noHelpSupport,
 };
 
 export const base64Icon = {

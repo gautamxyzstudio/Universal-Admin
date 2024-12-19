@@ -290,7 +290,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
               }
               className={
                 state.status === IClientStatus.ACTIVE
-                  ? 'text-sm text-green'
+                  ? 'text-sm text-Green'
                   : 'text-sm text-disable'
               }
             />
@@ -314,7 +314,7 @@ const LinkOrAddClientFrom: React.FC<ILinkOrAddClientFrom> = ({
                   fill="#469C73"
                 />
               </svg>
-              <p className="text-xl text-green">Linked</p>
+              <p className="text-xl text-Green">Linked</p>
             </div>
             <LinkedCompanyCard
               companyLogo={selectedCompany?.companylogo}

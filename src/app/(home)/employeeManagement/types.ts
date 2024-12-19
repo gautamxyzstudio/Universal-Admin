@@ -28,3 +28,4 @@ export const workStatus = [
     value: STRINGS.partTime,
   },
 ];
+

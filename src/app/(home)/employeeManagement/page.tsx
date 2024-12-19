@@ -142,7 +142,7 @@ const EmployeeManagement = () => {
       renderCell: (params: GridRenderCellParams) => {
         const status =
           params.row.document_status === STRINGS.approved
-            ? 'text-green'
+            ? 'text-Green'
             : 'text-yellow';
         return (
           <span className={status}>
