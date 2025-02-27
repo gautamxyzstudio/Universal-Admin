@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["universalapp.xyz.studio"], // Add your external domain here
+    domains: ["universalapp.universalworkforceandlabour.com"], // Add your external domain here
   },
   distDir: "build",
 };
