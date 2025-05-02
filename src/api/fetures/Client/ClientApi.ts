@@ -22,9 +22,12 @@ import { IJobPost } from '../Employee/EmployeeApi.types';
 
 const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getClients: builder.query<ICustomizedGetClientsResponse, { page: number }>({
-      query: ({ page }: { page: number }) => ({
-        url: Endpoints.getClients(page),
+    getClients: builder.query<
+      ICustomizedGetClientsResponse,
+      { page: number; search: string }
+    >({
+      query: ({ page, search }: { page: number; search: string }) => ({
+        url: Endpoints.getClients(page, search),
         method: ApiMethodType.get,
       }),
       transformResponse: (res: IGetClientsResponse) => {
@@ -132,7 +135,7 @@ const clientApi = baseApi.injectEndpoints({
         },
       }),
     }),
-    
+
     registerClient: builder.mutation<{ clientId: number }, IRegisterClientReq>({
       query: (body: IRegisterClientReq) => ({
         url: Endpoints.registerClient,

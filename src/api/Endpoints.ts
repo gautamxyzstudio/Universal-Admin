@@ -24,8 +24,8 @@ export const Endpoints = {
     }&search=${search}&sort=id:desc`,
   addCompany: `${process.env.NEXT_PUBLIC_BASE_URL}/api/company-details?populate=*`,
   uploadFiles: `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
-  getClients: (page: number) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=20&populate=*&sort=id:desc`,
+  getClients: (page: number, search: string) =>
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/client?page=${page}&pageSize=20&search=${search}&populate=*&sort=id:desc`,
   getPendingRequests: (page: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/findPendingClients?page=${page}&pageSize=20&sort=id:desc`,
   linkClient: (userId: number) =>

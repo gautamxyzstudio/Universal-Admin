@@ -1,6 +1,5 @@
 'use client';
 import { STRINGS } from '@/constant/en';
-import Image from 'next/image';
 import { Icons } from '../../../public/exporter';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import DataTable from '@/components/atoms/DataTable/DataTable';
@@ -19,6 +18,7 @@ import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserName
 import CustomSpeedDial from '@/components/organism/CustomSpeedDial/CustomSpeedDial';
 import DoughnutChart from '@/components/molecules/ChartTypes/DoughnutChart/DoughnutChart';
 import InfoCard from '@/components/molecules/InfoCard/InfoCard';
+import { ICustomErrorResponse } from '@/api/types';
 
 export default function Home() {
   const route = useRouter();
@@ -35,12 +35,8 @@ export default function Home() {
     { refetchOnMountOrArgChange: true }
   );
 
-  console.log(selectedValue, 'selectedValue');
-
   const [users, setUsers] = useState<IUsers[]>([]);
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
-
-  console.log(analyticsData);
 
   useEffect(() => {
     if (data) {
@@ -199,7 +195,7 @@ export default function Home() {
   ];
 
   // Error handling logic
-  const renderError = (error: any) => {
+  const renderError = (error: ICustomErrorResponse) => {
     if (error) {
       return (
         <div className="text-red-500">

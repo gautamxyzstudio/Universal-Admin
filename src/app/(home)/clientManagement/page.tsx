@@ -14,7 +14,7 @@ import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserName
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
 import { STRINGS } from '@/constant/en';
 import { GridColDef } from '@mui/x-data-grid';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Images } from '../../../../public/exporter';
 import { getClientStatusAttributesFromType } from './types';
 import { useRouter } from 'next/navigation';
@@ -31,6 +31,7 @@ import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
 import TableFilter from '@/components/molecules/TableFilter/TableFilter';
 import { docStatus } from '../employeeManagement/types';
+import _ from 'lodash';
 
 const ClientManagement = () => {
   const [clients, setClients] = useState<IClient[]>([]);
@@ -42,16 +43,23 @@ const ClientManagement = () => {
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [addClientModal, setAddClientModal] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
   const [getClients, { isFetching, error }] = useLazyGetClientsQuery();
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchState, updateSearchState] = useState<'idle' | 'searching'>(
+    'idle'
+  );
   const [totalRecord, setTotalRecord] = useState(0);
   const { data } = useGetPendingRequestsQuery({ page: 1 });
 
   //====================================================Apis start====================
   //get Clients list
-  const getClientsHandler = async (page: number) => {
+  const getClientsHandler = async (page: number, searchVal: string) => {
     try {
-      const clientResponse = await getClients({ page }).unwrap();
+      const clientResponse = await getClients({
+        page,
+        search: searchVal,
+      }).unwrap();
       if (clientResponse) {
         setClients(clientResponse.data);
         setCurrentPage(clientResponse.pagination.page);
@@ -60,6 +68,8 @@ const ClientManagement = () => {
     } catch (e) {
       setClients([]);
       console.log(e);
+    } finally {
+      updateSearchState('idle');
     }
   };
 
@@ -239,8 +249,22 @@ const ClientManagement = () => {
   };
 
   useEffect(() => {
-    getClientsHandler(currentPage);
-  }, []);
+    if (searchVal.length > 0) {
+      updateSearchState('searching');
+      handleSearch(searchVal);
+    } else {
+      getClientsHandler(currentPage, '');
+    }
+  }, [searchVal]);
+
+  const handleSearch = useCallback(
+    _.debounce((query) => {
+      if (query) {
+        getClientsHandler(1, query);
+      }
+    }, 300),
+    []
+  );
 
   const onSelectCompany = (company) => {
     setShowCompanyList(false);
@@ -255,7 +279,7 @@ const ClientManagement = () => {
   };
 
   const onPageChangeHandler = (_, pageNumber) => {
-    getClientsHandler(pageNumber + 1);
+    getClientsHandler(pageNumber + 1, searchVal);
   };
 
   return (
@@ -275,12 +299,10 @@ const ClientManagement = () => {
             <div className="flex items-center">
               <SearchField
                 searchStyle="w-[288px]"
-                onChangeText={() => console.log('e')}
-                value={''}
-                isLoading={false}
-                onPressCross={function (): void {
-                  throw new Error('Function not implemented.');
-                }}
+                onChangeText={(e) => setSearchVal(e.target.value)}
+                value={searchVal}
+                isLoading={searchState === 'searching'}
+                onPressCross={() => setSearchVal('')}
               />
             </div>
             <div className="flex flex-row gap-x-8">
