@@ -46,11 +46,4 @@ export const quickLink: IQuickLinkData[] = [
     icon: Icons.subAdmin,
     iconfill: Icons.subAdminfill,
   },
-  {
-    id: 6,
-    title: STRINGS.activityLog,
-    path: routeNames.Activity,
-    icon: Icons.report,
-    iconfill: Icons.reportfill,
-  },
 ];

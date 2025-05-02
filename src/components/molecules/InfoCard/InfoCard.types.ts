@@ -1,5 +1,6 @@
 export interface IInfoCardProps {
   items: IInfoCardItem[];
+  isLoading: boolean;
 }
 export interface IInfoCardItem {
   label: string;
@@ -7,4 +8,3 @@ export interface IInfoCardItem {
   icon: string;
   weekPercentage: string;
 }
-

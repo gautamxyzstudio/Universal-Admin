@@ -1,5 +1,8 @@
 import React from 'react';
-import { IActivityIndicatorProps } from './ActivityIndicator.types';
+
+export interface IActivityIndicatorProps {
+  size?: number;
+}
 
 const ActivityIndicator: React.FC<IActivityIndicatorProps> = ({
   size = 80,

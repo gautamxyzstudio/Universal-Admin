@@ -1,28 +1,46 @@
-"use client";
-import { STRINGS } from "@/constant/en";
-import Image from "next/image";
-import { Icons } from "../../../public/exporter";
-import PageHeader from "@/components/organism/PageHeader/PageHeader";
-import DataTable from "@/components/atoms/DataTable/DataTable";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { useGetAllUsersQuery } from "@/api/fetures/Users/UsersApi";
-import { getUsersType } from "@/constant/constant";
-import { useEffect, useState } from "react";
-import { IUsers } from "@/api/fetures/Users/UsersApi.types";
+'use client';
+import { STRINGS } from '@/constant/en';
+import Image from 'next/image';
+import { Icons } from '../../../public/exporter';
+import PageHeader from '@/components/organism/PageHeader/PageHeader';
+import DataTable from '@/components/atoms/DataTable/DataTable';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  useGetAllUsersQuery,
+  useGetAnalyticsQuery,
+} from '@/api/fetures/Users/UsersApi';
+import { getUsersType } from '@/constant/constant';
+import { useEffect, useState } from 'react';
+import { IUsers } from '@/api/fetures/Users/UsersApi.types';
 
-import { useRouter } from "next/navigation";
-import { routeNames } from "@/utility/routesName";
-import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import CustomSpeedDial from "@/components/organism/CustomSpeedDial/CustomSpeedDial";
-import DoughnutChart from "@/components/molecules/ChartTypes/DoughnutChart/DoughnutChart";
-import InfoCard from "@/components/molecules/InfoCard/InfoCard";
-import BarsChart from "@/components/molecules/ChartTypes/BarsChart/BarsChart";
+import { useRouter } from 'next/navigation';
+import { routeNames } from '@/utility/routesName';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
+import CustomSpeedDial from '@/components/organism/CustomSpeedDial/CustomSpeedDial';
+import DoughnutChart from '@/components/molecules/ChartTypes/DoughnutChart/DoughnutChart';
+import InfoCard from '@/components/molecules/InfoCard/InfoCard';
 
 export default function Home() {
   const route = useRouter();
-  const { data, isFetching } = useGetAllUsersQuery("");
+  const { data, isFetching, error: usersError } = useGetAllUsersQuery('');
+  const [selectedValue, setSelectedValue] = useState<
+    'weekly' | 'monthly' | 'yearly' | 'daily'
+  >('daily');
+  const {
+    data: analyticsData,
+    isFetching: isFetchingAnalytics,
+    error: analyticsError,
+  } = useGetAnalyticsQuery(
+    { type: selectedValue },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  console.log(selectedValue, 'selectedValue');
+
   const [users, setUsers] = useState<IUsers[]>([]);
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
+
+  console.log(analyticsData);
 
   useEffect(() => {
     if (data) {
@@ -34,14 +52,14 @@ export default function Home() {
 
   const columns: GridColDef[] = [
     {
-      field: "createdAt",
+      field: 'createdAt',
       headerName: STRINGS.date,
       width: 88,
       renderCell: (params: GridRenderCellParams) =>
         new Date(params.row.createdAt).toLocaleDateString(),
     },
     {
-      field: "name",
+      field: 'name',
       headerName: STRINGS.name,
       width: 240,
       renderCell: (params: GridRenderCellParams) => {
@@ -53,18 +71,18 @@ export default function Home() {
               params.row.client?.clientCompanyLogo
             }
             imageStyle="!w-8 !h-8 object-cover"
-            type={"orange"}
+            type={'orange'}
           />
         );
       },
     },
     {
-      field: "email",
+      field: 'email',
       headerName: STRINGS.email,
       width: 220,
     },
     {
-      field: "contact",
+      field: 'contact',
       headerName: STRINGS.contactNumber,
       width: 140,
       renderCell: (params: GridRenderCellParams) => {
@@ -77,16 +95,16 @@ export default function Home() {
       },
     },
     {
-      field: "role",
-      headerName: "Role",
+      field: 'role',
+      headerName: 'Role',
       width: 140,
       renderCell: (params: GridRenderCellParams) => {
         return getUsersType(params.row.role);
       },
     },
     {
-      field: "action",
-      headerName: "Action",
+      field: 'action',
+      headerName: 'Action',
       width: 80,
       renderCell: (params: GridRenderCellParams) => {
         return (
@@ -112,48 +130,95 @@ export default function Home() {
     setOpenSpeedDial((prevOpenSpeedDial) => !prevOpenSpeedDial);
   };
 
-  const infoCardItems = [
+  const pieData = [
     {
-      label: "Total Clients",
-      value: "100",
-      icon: Icons.newClient,
-      weekPercentage: "2%",
+      id: 1,
+      label: STRINGS.jobPosting,
+      value: Number(analyticsData?.openJobs ?? 0),
+      color: '#FFA600',
+      customColor: 'bg-pieChartJob',
     },
     {
-      label: "Total Employees",
-      value: "100",
+      id: 2,
+      label: STRINGS.newEmp,
+      value: Number(analyticsData?.newEmployees ?? 0),
+      color: '#00B2Db',
+      customColor: 'bg-pieChartEmp',
+    },
+    {
+      id: 3,
+      label: STRINGS.newClient,
+      value: Number(analyticsData?.newClients ?? 0),
+      color: '#0023B9',
+      customColor: 'bg-pieChartClient',
+    },
+  ];
+
+  const infoCardItems = [
+    {
+      label: 'New Clients',
+      value: analyticsData?.totalClients,
+      icon: Icons.newClient,
+      weekPercentage: `${analyticsData?.clientChange}%`,
+    },
+    {
+      label: 'Total Employees',
+      value: analyticsData?.totalEmployees,
       icon: Icons.employee,
-      weekPercentage: "2%",
+      weekPercentage: `${analyticsData?.employeeChange}%`,
     },
     {
       label: STRINGS.pendingReq,
-      value: "100",
+      value: analyticsData?.pendingRequests ?? 0,
       icon: Icons.pending,
-      weekPercentage: "2%",
+      weekPercentage: `${analyticsData?.pendingRequestChange}%`,
     },
     {
-      label: "Job opening",
-      value: "100",
+      label: 'Job opening',
+      value: analyticsData?.openJobs,
       icon: Icons.job,
-      weekPercentage: "2%",
+      weekPercentage: `${analyticsData?.totalJobsChange}%`,
     },
   ];
-  
+
+  const analyticsDataPie = [
+    {
+      id: 2,
+      label: STRINGS.totalEmployees,
+      value: Number(analyticsData?.totalEmployees ?? 0),
+      color: '#00B2Db',
+      customColor: 'bg-pieChartEmp',
+    },
+    {
+      id: 3,
+      label: STRINGS.totalClients,
+      value: Number(analyticsData?.totalClients ?? 0),
+      color: '#0023B9',
+      customColor: 'bg-pieChartClient',
+    },
+  ];
+
+  // Error handling logic
+  const renderError = (error: any) => {
+    if (error) {
+      return (
+        <div className="text-red-500">
+          Error: {error.message || 'An error occurred'}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className=" w-full h-full overflow-scroll scrollbar-none">
       <div className="flex justify-between items-center w-full">
         <PageHeader title={STRINGS.dashboard} />
         <div
           className={`inline-flex gap-x-6 items-center ${
-            openSpeedDial ? "w-[10%]" : "w-[17%]"
+            openSpeedDial ? 'w-[10%]' : 'w-[17%]'
           } h-[60px]`}
         >
-          <Image
-            src={Icons.calendar}
-            alt="notification"
-            className="w-9 h-9 object-contain"
-          />
-
           <CustomSpeedDial
             open={openSpeedDial}
             onClickSpeedDial={handleOnClickSpeedDial}
@@ -161,10 +226,30 @@ export default function Home() {
         </div>
       </div>
       <div className="flex gap-x-4 w-full">
-        <InfoCard items={infoCardItems} />
+        {renderError(usersError)}
+        {renderError(analyticsError)}
+        <InfoCard
+          isLoading={isFetchingAnalytics}
+          items={infoCardItems.map((item) => ({
+            ...item,
+            value: item.value?.toString() ?? '0',
+          }))}
+        />
       </div>
       <div className="flex gap-x-4 my-4 w-full">
-        <BarsChart /> <DoughnutChart />
+        <DoughnutChart
+          isLoading={isFetchingAnalytics}
+          showFilter={false}
+          data={analyticsDataPie}
+          heading={STRINGS.analytics}
+        />
+        <DoughnutChart
+          isLoading={isFetchingAnalytics}
+          data={pieData}
+          getSelectedValue={setSelectedValue}
+          heading={STRINGS.activity}
+          selectedValue={selectedValue}
+        />
       </div>
       <div className="w-full h-[70%]">
         <DataTable
@@ -181,5 +266,3 @@ export default function Home() {
     </div>
   );
 }
-
- 

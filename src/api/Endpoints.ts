@@ -76,4 +76,5 @@ export const Endpoints = {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds/${id}/resolve`,
   updateIssueStatusIsNotAnIssueById: (id: number) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/issue-raiseds/${id}/not-an-issue`,
+  analytics: `${process.env.NEXT_PUBLIC_BASE_URL}/api/analytics`,
 };

@@ -1,42 +1,67 @@
-import { daysTerm } from "@/app/(home)/types";
-import React from "react";
-import TableFilter from "../../TableFilter/TableFilter";
-import { STRINGS } from "@/constant/en";
-import { PieChart } from "@mui/x-charts";
+import { daysTerm } from '@/app/(home)/types';
+import React from 'react';
+import TableFilter from '../../TableFilter/TableFilter';
+import { PieChart } from '@mui/x-charts';
+import { Skeleton } from '@mui/material';
 
-const DoughnutChart = () => {
-  const data = [
-    {
-      id: 1,
-      label: STRINGS.jobPosting,
-      value: 100,
-      color: "#FFA600",
-      customColor: "bg-pieChartJob",
-    },
-    {
-      id: 2,
-      label: STRINGS.newEmp,
-      value: 300,
-      color: "#00B2Db",
-      customColor: "bg-pieChartEmp",
-    },
-    {
-      id: 3,
-      label: STRINGS.newClient,
-      value: 300,
-      color: "#0023B9",
-      customColor: "bg-pieChartClient",
-    },
-  ];
+type DoughnutChartProps = {
+  data: {
+    id: number;
+    label: string;
+    customColor: string;
+    value: number;
+    color: string;
+  }[];
+  selectedValue?: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  getSelectedValue?: (
+    menuItem: 'daily' | 'weekly' | 'monthly' | 'yearly'
+  ) => void;
+  heading: string;
+  showFilter?: boolean;
+  isLoading?: boolean;
+};
+
+const DoughnutChart = ({
+  data,
+  heading,
+  selectedValue,
+  isLoading = false,
+  showFilter = true,
+  getSelectedValue,
+}: DoughnutChartProps) => {
+  if (isLoading) {
+    return (
+      <div className="w-1/2 bg-white h-72 shadow-custom-shadow rounded-lg p-4 flex flex-col ">
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+      </div>
+    );
+  }
+
   return (
-    <div className="w-1/2 bg-white shadow-custom-shadow rounded-lg p-4 flex flex-col h-fit">
+    <div className="w-1/2 bg-white shadow-custom-shadow rounded-lg p-4 flex flex-col h-72">
       <div className="flex justify-between mb-6 w-full items-center">
-        <span className="text-Black text-text-md">{STRINGS.activity}</span>
-        <TableFilter
-          data={daysTerm}
-          initialSelectedOption={daysTerm[1]}
-          menuButtonStyle="!rounded-[80px] !px-[11px] !py-[7px] !text-primary !text-text-14"
-        />
+        <span className="text-Black text-text-md">{heading}</span>
+        <div className="absolute right-16">
+          {showFilter && (
+            <TableFilter
+              data={daysTerm}
+              selectedValue={selectedValue}
+              initialSelectedOption={daysTerm[1]}
+              menuButtonStyle="!rounded-[80px] !px-[11px] !py-[7px] !text-primary !text-text-14"
+              getSelectedValue={getSelectedValue}
+            />
+          )}
+        </div>
       </div>
       <div className="flex justify-between items-center w-full h-fit gap-x-5">
         <div className="flex flex-col gap-y-8 w-1/2">

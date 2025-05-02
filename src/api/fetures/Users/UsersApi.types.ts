@@ -1,4 +1,4 @@
-import { IUserTypesEnum } from "@/constant/enums";
+import { IUserTypesEnum } from '@/constant/enums';
 
 export interface IGetUsersApiResponse {
   data: {
@@ -67,4 +67,42 @@ export interface IGetUsersCustomizedResponse {
     pageSize: number;
     totalPages: number;
   };
+}
+
+export interface IAnalyticsResponse {
+  message: string;
+  data: {
+    id: number;
+    totalEmployees: number;
+    totalClients: number;
+    totalJobs: number;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    publishedAt: null;
+    openJobs: number;
+    totalCompany: number;
+    newClients: string;
+    newEmployees: string;
+    pendingRequests: number | null;
+    employeeChange: number;
+    clientChange: number;
+    pendingRequestChange: number;
+    totalJobsChange: number;
+  };
+}
+
+export interface IAnalytics {
+  id: number;
+  totalEmployees: number;
+  totalClients: number;
+  totalJobs: number;
+  openJobs: number;
+  totalCompany: number;
+  newClients: string;
+  newEmployees: string;
+  pendingRequests: number | null;
+  employeeChange: number;
+  clientChange: number;
+  pendingRequestChange: number;
+  totalJobsChange: number;
 }
