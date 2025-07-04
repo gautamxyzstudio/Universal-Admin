@@ -1,25 +1,25 @@
-import { outlinedInputClasses } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
+import { outlinedInputClasses } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   cssVariables: true,
   palette: {
     primary: {
-      main: "#FF7312",
+      main: '#109b4f',
     },
     secondary: {
-      main: "#CCD4F2",
-      dark: "#868686",
+      main: '#CCD4F2',
+      dark: '#868686',
     },
   },
   components: {
     MuiTextField: {
       styleOverrides: {
         root: {
-          "--TextField-brandBorderColor": "#E0E3E7",
-          "--TextField-brandBorderHoverColor": "#B2BAC2",
-          "--TextField-brandBorderFocusedColor": "#6F7E8C",
-          "& label.Mui-focused": {
-            color: "var(--TextField-brandBorderFocusedColor)",
+          '--TextField-brandBorderColor': '#E0E3E7',
+          '--TextField-brandBorderHoverColor': '#B2BAC2',
+          '--TextField-brandBorderFocusedColor': '#6F7E8C',
+          '& label.Mui-focused': {
+            color: 'var(--TextField-brandBorderFocusedColor)',
           },
         },
       },
@@ -28,18 +28,15 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {
-          borderColor: "#EBEBEB",
-          
+          borderColor: '#EBEBEB',
         },
         root: {
-          "--mui-palette-common-onBackgroundChannel": "#B2BAC2",
+          '--mui-palette-common-onBackgroundChannel': '#B2BAC2',
           [`&:hover .${outlinedInputClasses.notchedOutline}`]: {
-            borderColor:
-              "var(--mui-palette-common-onBackgroundChannel)",
+            borderColor: 'var(--mui-palette-common-onBackgroundChannel)',
           },
           [`&.Mui-focused .${outlinedInputClasses.notchedOutline}`]: {
-            borderColor:
-              "var(--mui-palette-common-onBackgroundChannel)",
+            borderColor: 'var(--mui-palette-common-onBackgroundChannel)',
           },
         },
       },
@@ -47,14 +44,14 @@ const theme = createTheme({
     MuiInput: {
       styleOverrides: {
         root: {
-          "&::before": {
-            borderBottom: "2px solid var(--TextField-brandBorderColor)",
+          '&::before': {
+            borderBottom: '2px solid var(--TextField-brandBorderColor)',
           },
-          "&:hover:not(.Mui-disabled, .Mui-error):before": {
-            borderBottom: "2px solid var(--TextField-brandBorderHoverColor)",
+          '&:hover:not(.Mui-disabled, .Mui-error):before': {
+            borderBottom: '2px solid var(--TextField-brandBorderHoverColor)',
           },
-          "&.Mui-focused:after": {
-            borderBottom: "2px solid var(--TextField-brandBorderFocusedColor)",
+          '&.Mui-focused:after': {
+            borderBottom: '2px solid var(--TextField-brandBorderFocusedColor)',
           },
         },
       },

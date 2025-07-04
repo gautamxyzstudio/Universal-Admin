@@ -59,8 +59,8 @@ const CustomList: React.FC<ICustomListProps> = ({
               sx={{
                 '&.Mui-selected': {
                   border: '1px solid',
-                  borderColor: '#FF7312',
-                  color: '#FF7312',
+                  borderColor: '#109b4f',
+                  color: '#109b4f',
                 },
               }}
               selected={selectedIndex === index}

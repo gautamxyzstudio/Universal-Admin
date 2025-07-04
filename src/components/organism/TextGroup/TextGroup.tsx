@@ -22,7 +22,7 @@ const TextGroup: React.FC<ITextGroupProps> = ({
   const styles = getTextGroupStyles(type);
   if (isLoading) {
     return (
-      <div className={'flex   items-center gap-x-1 h-fit' + styles.divStyle}>
+      <div className={'flex  items-center gap-x-1 h-fit' + styles.divStyle}>
         {icon && <Skeleton variant="circular" width={24} height={24} />}
         <div className=" items-center gap-x-1 h-fit">
           <Skeleton variant="text" width={100} height={20} />

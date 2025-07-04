@@ -49,9 +49,9 @@ const DoughnutChart = ({
 
   return (
     <div className="w-1/2 bg-white shadow-custom-shadow rounded-lg p-4 flex flex-col h-72">
-      <div className="flex justify-between mb-6 w-full items-center">
+      <div className="flex relative justify-between mb-6 w-full items-center">
         <span className="text-Black text-text-md">{heading}</span>
-        <div className="absolute right-16">
+        <div className="absolute right-2 top-2">
           {showFilter && (
             <TableFilter
               data={daysTerm}

@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-"use client";
+'use client';
 import {
   ICompanyClientDetails,
   ICompanyDetails,
-} from "@/api/fetures/Company/Company.types";
+} from '@/api/fetures/Company/Company.types';
 import {
   useLazyGetClosedJobsQuery,
   useLazyGetCompanyClientDetailsQuery,
   useLazyGetCompanyDetailsQuery,
   useLazyGetPostedJobQuery,
-} from "@/api/fetures/Company/CompanyApi";
-import CustomTab from "@/components/atoms/CustomTab/CustomTab";
-import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
-import PageSubHeader from "@/components/organism/PageSubHeader/PageSubHeader";
-import TextGroup from "@/components/organism/TextGroup/TextGroup";
-import { STRINGS } from "@/constant/en";
-import React, { useEffect, useState } from "react";
-import JobDetails from "@/components/organism/JobDetails/JobDetails";
-import ContactDetailCard from "@/components/organism/ContactDetailCard/ContactDetailCard";
-import { ITextGroupTypes } from "@/components/organism/TextGroup/TextGroup.types";
-import { SxProps } from "@mui/material";
-import { Theme } from "@emotion/react";
-import CompanyJobsList from "./LeftTabViews/CompanyJobsPostList";
-import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
-import AllClientsList from "./LeftTabViews/AllCLientsList";
-import ClientDetailsView from "./RightTabViews/ClientDetailsViews";
-import JobPostEditForm from "@/components/templates/JobPostEditForm/JobPostEditForm";
+} from '@/api/fetures/Company/CompanyApi';
+import CustomTab from '@/components/atoms/CustomTab/CustomTab';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
+import PageSubHeader from '@/components/organism/PageSubHeader/PageSubHeader';
+import TextGroup from '@/components/organism/TextGroup/TextGroup';
+import { STRINGS } from '@/constant/en';
+import React, { useEffect, useState } from 'react';
+import JobDetails from '@/components/organism/JobDetails/JobDetails';
+import ContactDetailCard from '@/components/organism/ContactDetailCard/ContactDetailCard';
+import { ITextGroupTypes } from '@/components/organism/TextGroup/TextGroup.types';
+import { SxProps } from '@mui/material';
+import { Theme } from '@emotion/react';
+import CompanyJobsList from './LeftTabViews/CompanyJobsPostList';
+import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
+import AllClientsList from './LeftTabViews/AllCLientsList';
+import ClientDetailsView from './RightTabViews/ClientDetailsViews';
+import JobPostEditForm from '@/components/templates/JobPostEditForm/JobPostEditForm';
 
 const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
   const [fetchCompanyDetail, { isFetching }] = useLazyGetCompanyDetailsQuery();
@@ -63,7 +63,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         setCompanyData(res);
       }
     } catch (err) {
-      console.log("Error in fetching company details", err);
+      console.log('Error in fetching company details', err);
     }
   };
   //Company Client Information
@@ -75,7 +75,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         setSelectedClient(response.data[0]);
       }
     } catch (err) {
-      console.log("Error in fetching company clients", err);
+      console.log('Error in fetching company clients', err);
     }
   };
 
@@ -89,7 +89,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         setSelectedJob(response.data[0]);
       }
     } catch (error) {
-      console.log("Error in fetching open Job", error);
+      console.log('Error in fetching open Job', error);
     }
   };
 
@@ -103,7 +103,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         setSelectedJob(response.data[0]);
       }
     } catch (error) {
-      console.log("Error in fetching open Job", error);
+      console.log('Error in fetching open Job', error);
     }
   };
 
@@ -183,31 +183,31 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
       <PageSubHeader
         isLoading={isFetching}
         pageTitle={STRINGS.company}
-        name={companyData?.companyname || ""}
+        name={companyData?.companyname || ''}
       />
       <div className="flex gap-x-10 w-full h-full mt-2">
         {/* Left Side */}
         <div className="flex flex-col w-[36.4%] overflow-scroll scrollbar-none">
           <UserNameWithImage
             isLoading={isFetching}
-            name={companyData?.companyname || ""}
-            image={companyData?.companylogo ?? ""}
+            name={companyData?.companyname || ''}
+            image={companyData?.companylogo ?? ''}
             imageStyle="!w-14 !h-14"
             nameStyle="!text-[24px] !leading-[28px]"
           />
           <div className="w-full h-3" />
           <ContactDetailCard
             isLoading={isFetching}
-            email={companyData?.companyemail || ""}
-            phoneNumber={companyData?.contactno || ""}
-            address={companyData?.address || ""}
-            link={companyData?.Website || ""}
+            email={companyData?.companyemail || ''}
+            phoneNumber={companyData?.contactno || ''}
+            address={companyData?.address || ''}
+            link={companyData?.Website || ''}
           />
-          <div className="flex gap-x-[13px] border border-borderGrey rounded-lg p-3 text-[16px] leading-[20px] mt-3 w-full">
+          <div className="flex gap-x-[13px] flex-wrap border border-borderGrey rounded-lg p-3 text-[16px] leading-[20px] mt-3 w-full">
             <TextGroup
               isLoading={isFetching}
               title={STRINGS.coRegisteredNumber}
-              text={companyData?.regNo || ""}
+              text={companyData?.regNo || ''}
               type={ITextGroupTypes.detailPage}
             />
             <svg
@@ -222,7 +222,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
             <TextGroup
               isLoading={isFetching}
               title={STRINGS.gstHSTNumber}
-              text={companyData?.gstNo || ""}
+              text={companyData?.gstNo || ''}
               type={ITextGroupTypes.detailPage}
             />
           </div>
@@ -230,9 +230,9 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
             tabs={tabsData}
             TabIndicatorProps={{
               style: {
-                height: "3px",
-                borderTopRightRadius: "3px",
-                borderTopLeftRadius: "3px",
+                height: '3px',
+                borderTopRightRadius: '3px',
+                borderTopLeftRadius: '3px',
               },
             }}
             sx={styles}
@@ -243,7 +243,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
                 data={clientDetails}
                 isLoading={fetchCompanyClientLoading}
                 selectedClientId={selectedClient?.id ?? null}
-                image={companyData?.companylogo ?? ""}
+                image={companyData?.companylogo ?? ''}
                 onPressButton={(client) => setSelectedClient(client)}
               />
             )}
@@ -272,7 +272,7 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
             {selectedTabItemIndex === 0 && (
               <ClientDetailsView
                 data={selectedClient}
-                image={companyData.companylogo ?? ""}
+                image={companyData.companylogo ?? ''}
               />
             )}
             {(selectedTabItemIndex === 1 || selectedTabItemIndex === 2) && (
@@ -302,12 +302,12 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
 export default CompanyDetails;
 
 const styles: SxProps<Theme> = {
-  "&": { paddingX: "12px", paddingTop: "4px" },
-  ".MuiButtonBase-root": {
-    fontSize: "16px",
-    lineHeight: "20px",
-    textTransform: "none",
+  '&': { paddingX: '12px', paddingTop: '4px' },
+  '.MuiButtonBase-root': {
+    fontSize: '16px',
+    lineHeight: '20px',
+    textTransform: 'none',
   },
-  ".MuiTabs-flexContainer": { gap: "10px" },
-  ".Mui-selected": { fontWeight: "bold" },
+  '.MuiTabs-flexContainer': { gap: '10px' },
+  '.Mui-selected': { fontWeight: 'bold' },
 };

@@ -86,7 +86,7 @@ export const getStylesFromButtonType = (
       };
     case 'outline-primary-small':
       return {
-        color: '#FF7312',
+        color: '#109b4f',
         fontSize: '16px',
         lineHeight: '20px',
         fontWeight: '400',

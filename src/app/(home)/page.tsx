@@ -15,7 +15,6 @@ import { IUsers } from '@/api/fetures/Users/UsersApi.types';
 import { useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
-import CustomSpeedDial from '@/components/organism/CustomSpeedDial/CustomSpeedDial';
 import DoughnutChart from '@/components/molecules/ChartTypes/DoughnutChart/DoughnutChart';
 import InfoCard from '@/components/molecules/InfoCard/InfoCard';
 import { ICustomErrorResponse } from '@/api/types';
@@ -36,7 +35,7 @@ export default function Home() {
   );
 
   const [users, setUsers] = useState<IUsers[]>([]);
-  const [openSpeedDial, setOpenSpeedDial] = useState(false);
+  // const [openSpeedDial, setOpenSpeedDial] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -122,9 +121,9 @@ export default function Home() {
     },
   ];
 
-  const handleOnClickSpeedDial = () => {
-    setOpenSpeedDial((prevOpenSpeedDial) => !prevOpenSpeedDial);
-  };
+  // const handleOnClickSpeedDial = () => {
+  //   setOpenSpeedDial((prevOpenSpeedDial) => !prevOpenSpeedDial);
+  // };
 
   const pieData = [
     {
@@ -210,7 +209,7 @@ export default function Home() {
     <div className=" w-full h-full overflow-scroll scrollbar-none">
       <div className="flex justify-between items-center w-full">
         <PageHeader title={STRINGS.dashboard} />
-        <div
+        {/* <div
           className={`inline-flex gap-x-6 items-center ${
             openSpeedDial ? 'w-[10%]' : 'w-[17%]'
           } h-[60px]`}
@@ -219,7 +218,7 @@ export default function Home() {
             open={openSpeedDial}
             onClickSpeedDial={handleOnClickSpeedDial}
           />
-        </div>
+        </div> */}
       </div>
       <div className="flex gap-x-4 w-full">
         {renderError(usersError)}

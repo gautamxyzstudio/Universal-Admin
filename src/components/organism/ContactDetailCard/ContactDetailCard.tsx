@@ -1,9 +1,9 @@
-import React from "react";
-import { Icons } from "../../../../public/exporter";
-import IconWithText from "@/components/molecules/IconWithText/IconWithText";
-import Link from "next/link";
-import { Skeleton } from "@mui/material";
-import CustomAccordion from "@/components/atoms/CustomAccordion/CustomAccordion";
+import React from 'react';
+import { Icons } from '../../../../public/exporter';
+import IconWithText from '@/components/molecules/IconWithText/IconWithText';
+import Link from 'next/link';
+import { Skeleton } from '@mui/material';
+import CustomAccordion from '@/components/atoms/CustomAccordion/CustomAccordion';
 
 export interface IContactCardProps {
   department?: string;
@@ -50,22 +50,22 @@ const ContactDetailCard: React.FC<IContactCardProps> = ({
   if (isLoading) {
     return (
       <div className="flex flex-col mt-3 border border-borderGrey rounded-lg p-4">
-        <Skeleton variant="text" height={20} width={"30%"} />
+        <Skeleton variant="text" height={20} width={'30%'} />
         <div className="flex flex-col mt-5 leading-[18px] ">
-          <Skeleton variant="text" height={32} width={"80%"} />
-          <Skeleton variant="text" height={32} width={"80%"} />
-          <Skeleton variant="text" height={32} width={"80%"} />
+          <Skeleton variant="text" height={32} width={'80%'} />
+          <Skeleton variant="text" height={32} width={'80%'} />
+          <Skeleton variant="text" height={32} width={'80%'} />
         </div>
       </div>
     );
   } else {
     return (
-      <div className="flex flex-col mt-3 border border-borderGrey rounded-lg px-4">
+      <div className="flex flex-col  mt-3 border border-borderGrey rounded-lg px-4">
         {expanded ? (
           <CustomAccordion
             title="Contact Details"
             description={<DetailListComponent />}
-            isExpanded= {expanded}
+            isExpanded={expanded}
           />
         ) : (
           <CustomAccordion

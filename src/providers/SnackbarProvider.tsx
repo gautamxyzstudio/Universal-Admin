@@ -1,13 +1,13 @@
 'use client';
 import CustomSnackbar from '@/components/atoms/Snackbar/Snackbar';
 import { SnackbarCloseReason } from '@mui/material';
-import React, { useState } from 'react';
-import { createContext, ReactNode } from 'react';
+import React, { useState, createContext, ReactNode } from 'react';
 
 type SnackBarContextTypes = {
   displaySnackbar: (
-    type: 'success' | 'error' | 'warning',
-    message: string
+    type: 'success' | 'error' | 'warning' | 'notification',
+    message: string,
+    onClick?: () => void
   ) => void;
 };
 
@@ -16,15 +16,22 @@ const SnackBarContext = createContext<SnackBarContextTypes | null>(null);
 const SnackBarProvider = ({ children }: { children: ReactNode }) => {
   const [message, setMessage] = useState('');
   const [open, setState] = useState<boolean>(false);
-  const [type, setType] = useState<'success' | 'error' | 'warning'>('success');
+  const [type, setType] = useState<
+    'success' | 'error' | 'warning' | 'notification'
+  >('success');
+  const [snackbarOnClick, setSnackbarOnClick] = useState<
+    (() => void) | undefined
+  >(undefined);
 
   const displaySnackBarHandler = (
-    type: 'success' | 'error' | 'warning',
-    message: string
+    type: 'success' | 'error' | 'warning' | 'notification',
+    message: string,
+    onClick?: () => void
   ) => {
     setType(type);
     setState(true);
     setMessage(message);
+    setSnackbarOnClick(() => onClick);
   };
 
   const contextValue: SnackBarContextTypes = {
@@ -38,9 +45,9 @@ const SnackBarProvider = ({ children }: { children: ReactNode }) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setState(false);
     setMessage('');
+    setSnackbarOnClick(undefined);
   };
 
   return (
@@ -51,6 +58,7 @@ const SnackBarProvider = ({ children }: { children: ReactNode }) => {
         message={message}
         open={open}
         handleClose={handleClose}
+        onClick={snackbarOnClick}
       />
     </SnackBarContext.Provider>
   );

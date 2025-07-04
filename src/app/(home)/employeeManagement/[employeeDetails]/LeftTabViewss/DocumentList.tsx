@@ -69,7 +69,7 @@ const DocumentList: React.FC<IEmployeeDocumentList> = ({
     }
   }, [documents]);
 
-  const renderItemLoading = () => {
+  if (isLoading) {
     return (
       <>
         {DemoData.rows.map((row, index) => (
@@ -77,38 +77,33 @@ const DocumentList: React.FC<IEmployeeDocumentList> = ({
         ))}
       </>
     );
-  };
+  }
 
-  const renderItem = () => {
-    return (
-      <>
-        {documents.map((doc, index) => {
-          if (index === 0) {
-            return (
-              <DetailPageDocumentTab
-                key={index}
-                document={allRetested}
-                isSelected={selectedDocId === null}
-                onPressTab={() => onPressDoc(null)}
-              />
-            );
-          } else {
-            return (
-              <DetailPageDocumentTab
-                key={index}
-                document={doc}
-                isSelected={selectedDocId === doc.docId}
-                onPressTab={() => onPressDoc(doc)}
-              />
-            );
-          }
-        })}
-      </>
-    );
-  };
-
-  if (isLoading) return renderItemLoading();
-  else return renderItem();
+  return (
+    <>
+      {documents.map((doc, index) => {
+        if (index === 0) {
+          return (
+            <DetailPageDocumentTab
+              key={index}
+              document={allRetested}
+              isSelected={selectedDocId === null}
+              onPressTab={() => onPressDoc(null)}
+            />
+          );
+        } else {
+          return (
+            <DetailPageDocumentTab
+              key={index}
+              document={doc}
+              isSelected={selectedDocId === doc.docId}
+              onPressTab={() => onPressDoc(doc)}
+            />
+          );
+        }
+      })}
+    </>
+  );
 };
 
 export default DocumentList;

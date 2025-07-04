@@ -1,10 +1,10 @@
-import UserImageRenderer from "@/components/atoms/UserImageRenderer/UserImageRenderer";
-import React from "react";
-import { IUserNameWithImageProps } from "./UserNameWithImage.types";
-import { formatDateFromNow } from "@/utility/utils";
-import SVGComponent from "@/components/atoms/SvgComponent/SVGComponent";
-import { SVGS } from "@/constant/staticSvgs";
-import { Skeleton } from "@mui/material";
+import UserImageRenderer from '@/components/atoms/UserImageRenderer/UserImageRenderer';
+import React from 'react';
+import { IUserNameWithImageProps } from './UserNameWithImage.types';
+import { formatDateFromNow } from '@/utility/utils';
+import SVGComponent from '@/components/atoms/SvgComponent/SVGComponent';
+import { SVGS } from '@/constant/staticSvgs';
+import { Skeleton } from '@mui/material';
 
 const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
   image,
@@ -30,8 +30,8 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
       <div className="w-full flex flex-row  items-center justify-start">
         <Skeleton variant="circular" width={56} height={56} />
         <div className=" flex-1 ml-1">
-          <Skeleton variant="text" width={"50%"} height={20} />
-          <Skeleton variant="text" width={"50%"} height={20} />
+          <Skeleton variant="text" width={'50%'} height={20} />
+          <Skeleton variant="text" width={'50%'} height={20} />
         </div>
       </div>
     );
@@ -39,11 +39,11 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
     return (
       <div
         className={
-          "w-full flex flex-row  items-center justify-start " + containerStyle
+          'w-full flex flex-row  items-center justify-start ' + containerStyle
         }
       >
         <UserImageRenderer
-          imageStyle={imageStyle ?? ""}
+          imageStyle={imageStyle ?? ''}
           image={image}
           name={name}
           type={type}
@@ -51,28 +51,28 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
         <div
           className={
             divStyle +
-            " ml-[10px]  flex flex-col flex-1 w-full  gap-y-1  capitalize"
+            ' ml-[10px]  flex flex-col flex-1 w-full  gap-y-1  capitalize'
           }
         >
           {name && (
             <span
               className={
                 nameStyle +
-                " flex-1 text-[16px] leading-[20px] text-Black capitalize"
+                ' flex-1 text-[16px] leading-[20px] text-Black capitalize'
               }
             >
               {name}
             </span>
           )}
           {companyName && (
-            <div className={companyNameStyle + " flex w-full"}>
+            <div className={companyNameStyle + ' flex w-full'}>
               <span>{companyName}</span>
             </div>
           )}
 
           {postby && (
-            <div className={postbyStyle + " flex gap-x-2 items-center w-full"}>
-              <span>Posted by {postby}</span>{" "}
+            <div className={postbyStyle + ' flex gap-x-2 items-center w-full'}>
+              <span>Posted by {postby}</span>{' '}
               {subText && (
                 <>
                   <SVGComponent svg={SVGS.circleDot} />
@@ -85,7 +85,7 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           )}
           {issueId && (
             <div className="flex gap-x-2 items-center w-full text-disable text-[12px] leading-4 ">
-              <span>#{issueId}</span>{" "}
+              <span>#{issueId}</span>{' '}
               {issuePublish && (
                 <>
                   <SVGComponent svg={SVGS.circleDot} />
@@ -96,12 +96,12 @@ const UserNameWithImage: React.FC<IUserNameWithImageProps> = ({
           )}
           {days && (
             <span className="text-disable text-[12px] leading-[16px]">
-              {formatDateFromNow(days)}{" "}
+              {formatDateFromNow(days)}{' '}
             </span>
           )}
 
           {joinDate && (
-            <span className={"text-[14px] leading-[18px] w-full text-disable "}>
+            <span className={'text-[14px] leading-[18px] w-full text-disable '}>
               Joined - {joinDate}
             </span>
           )}

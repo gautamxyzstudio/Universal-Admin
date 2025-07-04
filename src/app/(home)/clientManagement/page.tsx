@@ -29,8 +29,6 @@ import { useSnackBarContext } from '@/providers/SnackbarProvider';
 import { IClientStatus } from '@/constant/enums';
 import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
 import SearchField from '@/components/molecules/InputTypes/SearchInput/SearchInput';
-import TableFilter from '@/components/molecules/TableFilter/TableFilter';
-import { docStatus } from '../employeeManagement/types';
 import _ from 'lodash';
 
 const ClientManagement = () => {
@@ -50,7 +48,10 @@ const ClientManagement = () => {
     'idle'
   );
   const [totalRecord, setTotalRecord] = useState(0);
-  const { data } = useGetPendingRequestsQuery({ page: 1 });
+  const { data } = useGetPendingRequestsQuery(
+    { page: 1 },
+    { refetchOnMountOrArgChange: true }
+  );
 
   //====================================================Apis start====================
   //get Clients list
@@ -282,6 +283,8 @@ const ClientManagement = () => {
     getClientsHandler(pageNumber + 1, searchVal);
   };
 
+  const clientCount = data?.data?.length ?? 0;
+
   return (
     <div className="w-full h-[85%] mb-5">
       <PageHeader
@@ -290,7 +293,7 @@ const ClientManagement = () => {
         withPrimaryButton
         primaryButtonTitle={STRINGS.addClient}
         onPressSecondaryButton={() => router.push(routeNames.PendingRequests)}
-        secondaryButtonTitle={STRINGS.pendingReq + ` (${data?.data.length})`}
+        secondaryButtonTitle={STRINGS.pendingReq + ` (${clientCount})`}
         onPressButton={() => setAddClientModal(true)}
       />
       <DataTable
@@ -303,13 +306,6 @@ const ClientManagement = () => {
                 value={searchVal}
                 isLoading={searchState === 'searching'}
                 onPressCross={() => setSearchVal('')}
-              />
-            </div>
-            <div className="flex flex-row gap-x-8">
-              <TableFilter
-                data={docStatus}
-                initialSelectedOption={docStatus[0]}
-                title={STRINGS.documentStatus}
               />
             </div>
           </div>

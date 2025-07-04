@@ -1,26 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   IEditJobPostState,
   IJobPostEditFromProps,
   JobPostStateFields,
-} from "./JobPostEditFrom.types";
-import FormDrawer from "@/components/molecules/DrawerTypes/FormDrawer/FormDrawer";
-import { STRINGS } from "@/constant/en";
-import CustomButton from "@/components/atoms/CustomButton/CustomButton";
-import FormTextInput from "@/components/molecules/InputTypes/FormTextInput/FormTextInput";
-import EditorDialog from "../../molecules/DialogTypes/EditorDialog/EditorDialog";
-import { IJobPostStatus, IJobTypesEnum } from "@/constant/enums";
-import { getJobType } from "@/constant/constant";
-import CustomSelectInput from "@/components/molecules/InputTypes/SelectInput/CustomSelectInput";
-import DatePickerComponent from "./DatePickerComponent";
-import dayjs from "dayjs";
-import TimePickerComponent from "./TimePickerComponent";
-import { InputAdornment } from "@mui/material";
-import { useShowLoaderContext } from "@/contexts/LoaderContext/LoaderContext";
-import { useSnackBarContext } from "@/providers/SnackbarProvider";
-import { ICustomErrorResponse } from "@/api/types";
-import { useUpdateJobPostMutation } from "@/api/fetures/Company/CompanyApi";
+} from './JobPostEditFrom.types';
+import FormDrawer from '@/components/molecules/DrawerTypes/FormDrawer/FormDrawer';
+import { STRINGS } from '@/constant/en';
+import CustomButton from '@/components/atoms/CustomButton/CustomButton';
+import FormTextInput from '@/components/molecules/InputTypes/FormTextInput/FormTextInput';
+import EditorDialog from '../../molecules/DialogTypes/EditorDialog/EditorDialog';
+import { IJobPostStatus, IJobTypesEnum } from '@/constant/enums';
+import { getJobType } from '@/constant/constant';
+import CustomSelectInput from '@/components/molecules/InputTypes/SelectInput/CustomSelectInput';
+import DatePickerComponent from './DatePickerComponent';
+import dayjs from 'dayjs';
+import TimePickerComponent from './TimePickerComponent';
+import { InputAdornment } from '@mui/material';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import { useSnackBarContext } from '@/providers/SnackbarProvider';
+import { ICustomErrorResponse } from '@/api/types';
+import { useUpdateJobPostMutation } from '@/api/fetures/Company/CompanyApi';
 
 const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
   show,
@@ -30,28 +30,28 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
 }) => {
   const [displayFrom, setDisplayFrom] = useState(show);
   const [showEditorDialog, setShowEditorDialog] = useState<boolean>(false);
-  const [editData, setEditData] = useState<string>("");
-  const [fieldToEdit, setFieldToEdit] = useState<string>("");
+  const [editData, setEditData] = useState<string>('');
+  const [fieldToEdit, setFieldToEdit] = useState<string>('');
   const { changeLoaderState } = useShowLoaderContext();
   const { displaySnackbar } = useSnackBarContext();
   const [updateJobPost] = useUpdateJobPostMutation();
 
   const initialState = {
-    jobName: "",
-    jobDescription: "",
-    jobDuties: "",
+    jobName: '',
+    jobDescription: '',
+    jobDuties: '',
     jobType: IJobTypesEnum.EVENT,
-    eventDate: "" ,
-    startShift: "",
-    endShift: "",
-    location: "",
-    address: "",
-    city: "",
-    postalCode: "",
+    eventDate: '',
+    startShift: '',
+    endShift: '',
+    location: '',
+    address: '',
+    city: '',
+    postalCode: '',
     requiredEmployee: 0,
-    salary: "",
+    salary: '',
     requiredCertificates: [],
-    gender: "",
+    gender: '',
     status: IJobPostStatus.OPEN,
   };
 
@@ -75,9 +75,9 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
         jobDescription: currentPost.description,
         jobDuties: currentPost.jobDuties,
         jobType: currentPost.job_type,
-        eventDate: currentPost.eventDate ?? "",
-        startShift: currentPost.startShift ?? "",
-        endShift: currentPost.endShift ?? "",
+        eventDate: currentPost.eventDate ?? '',
+        startShift: currentPost.startShift ?? '',
+        endShift: currentPost.endShift ?? '',
         location: currentPost.location,
         address: currentPost.address,
         city: currentPost.city,
@@ -93,9 +93,9 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
 
   const handleClickOutside = (
     event: object,
-    reason: "backdropClick" | "escapeKeyDown"
+    reason: 'backdropClick' | 'escapeKeyDown'
   ) => {
-    if (reason == "backdropClick") {
+    if (reason == 'backdropClick') {
       return;
     }
     setDisplayFrom(false);
@@ -152,21 +152,21 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
               status: state.status,
               CheckIn: null,
               CheckOut: null,
-              postID: "",
+              postID: '',
               notAccepting: null,
               client_details: null,
             });
-            displaySnackbar("success", "Job Post updated successfully");
+            displaySnackbar('success', 'Job Post updated successfully');
             onPressEditCross();
           }
         } catch (err) {
           const error = err as ICustomErrorResponse;
-          displaySnackbar("error", error.message);
+          displaySnackbar('error', error.message);
         } finally {
           changeLoaderState(false);
         }
       } else {
-        displaySnackbar("error", "Failed to update job post");
+        displaySnackbar('error', 'Failed to update job post');
       }
     }
   };
@@ -187,7 +187,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
 
   // Function to handle updated data from the editor dialog
   const handleUpdateData = (updatedData: string, fieldName: string) => {
-    console.log("Updated Description:", updatedData);
+    console.log('Updated Description:', updatedData);
     setEditData(updatedData);
     setState({ ...state, [fieldName]: updatedData });
     setShowEditorDialog(false);
@@ -217,7 +217,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
         handleClose={handleClickOutside}
         onPressCross={onPressEditCross}
         styles={{
-          width: "30%",
+          width: '30%',
         }}
       >
         <div className="h-[90vh] overflow-scroll scrollbar-none">
@@ -230,7 +230,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.JOB_NAME)
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.jobName}
               />
               {/* Job descriptions */}
@@ -311,7 +311,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.LOCATION)
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.location}
               />
               <FormTextInput
@@ -319,7 +319,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.ADDRESS)
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.address}
               />
               <FormTextInput
@@ -327,7 +327,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.CITY)
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.city}
               />
               <FormTextInput
@@ -338,7 +338,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                     JobPostStateFields.POSTAL_CODE
                   )
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.postalCode}
               />
             </div>
@@ -356,7 +356,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                     JobPostStateFields.REQUIRED_EMPLOYEE
                   )
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.num_of_employees}
               />
               <FormTextInput
@@ -371,11 +371,11 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.SALARY)
                 }
-                errorMessage={""}
+                errorMessage={''}
                 label={STRINGS.wagePerHour}
               />
               <CustomSelectInput
-                label={STRINGS.gender + " (optional)"}
+                label={STRINGS.gender + ' (optional)'}
                 value={state.gender}
                 onChange={(e) =>
                   onChangeTextField(e.target.value, JobPostStateFields.GENDER)
@@ -391,7 +391,7 @@ const JobPostEditForm: React.FC<IJobPostEditFromProps> = ({
             title={STRINGS.update}
             onClick={onPressSave}
             fullWidth
-            buttonType={"primary-small"}
+            buttonType={'primary-small'}
           />
           <div className="mt-2 h-1" />
         </div>
@@ -423,10 +423,10 @@ export const jobTypeSelection = [
 ];
 // gender preference selection
 export const genderPreferences = [
-  { itemLabel: "Male", itemValue: "Male" },
-  { itemLabel: "Female", itemValue: "Female" },
-  { itemLabel: "No Preference", itemValue: "No Preference" },
-  { itemLabel: "Other", itemValue: "Other" },
+  { itemLabel: 'Male', itemValue: 'Male' },
+  { itemLabel: 'Female', itemValue: 'Female' },
+  { itemLabel: 'No Preference', itemValue: 'No Preference' },
+  { itemLabel: 'Other', itemValue: 'Other' },
 ];
 
-export const ReadMore: string = `<span style="color:#FF7312; font-size: 16px; cursor:pointer">...Read more</span>`;
+export const ReadMore: string = `<span style="color:#109b4f; font-size: 16px; cursor:pointer">...Read more</span>`;

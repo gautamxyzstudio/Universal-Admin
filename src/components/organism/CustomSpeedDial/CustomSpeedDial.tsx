@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 import {
   Backdrop,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
-} from "@mui/material";
+} from '@mui/material';
 import {
   ManageAccountsOutlined,
   ApartmentOutlined,
   PersonOutline,
   PeopleAltOutlined,
-} from "@mui/icons-material";
-import { useRouter } from "next/navigation";
-import { routeNames } from "@/utility/routesName";
-import { STRINGS } from "@/constant/en";
+} from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
+import { routeNames } from '@/utility/routesName';
+import { STRINGS } from '@/constant/en';
 
 interface ICustomSpeedDialProps {
   open: boolean;
@@ -27,22 +27,22 @@ const CustomSpeedDial: React.FC<ICustomSpeedDialProps> = ({
   const actions = [
     {
       icon: <ManageAccountsOutlined />,
-      name: "Administrator",
+      name: 'Administrator',
       onclick: () => route.push(routeNames.SubAdmin),
     },
     {
       icon: <ApartmentOutlined />,
-      name: "Company",
+      name: 'Company',
       onclick: () => route.push(routeNames.Company),
     },
     {
       icon: <PersonOutline />,
-      name: "Employee",
+      name: 'Employee',
       onclick: () => route.push(routeNames.Employees),
     },
     {
       icon: <PeopleAltOutlined />,
-      name: "Client",
+      name: 'Client',
       onclick: () => route.push(routeNames.Client),
     },
   ];
@@ -51,39 +51,39 @@ const CustomSpeedDial: React.FC<ICustomSpeedDialProps> = ({
       <Backdrop
         open={open}
         sx={{
-          zIndex: "10",
+          zIndex: '10',
         }}
       />
       <SpeedDial
         ariaLabel="speedDial menu"
         sx={{
-          position: "relative",
-          right: "0px",
-          top: "10px",
-          ".MuiSpeedDial-actions ": {
-            paddingTop: "39px",
+          position: 'relative',
+          right: '0px',
+          top: '10px',
+          '.MuiSpeedDial-actions ': {
+            paddingTop: '39px',
           },
-          ".MuiSvgIcon-root": {
-            fill: open ? "#FF7312" : "#fff",
+          '.MuiSvgIcon-root': {
+            fill: open ? '#109b4f' : '#fff',
             opacity: 1,
           },
-          ".MuiSpeedDialIcon-icon": {
-            transform: open ? "rotate(45deg)" : "",
+          '.MuiSpeedDialIcon-icon': {
+            transform: open ? 'rotate(45deg)' : '',
           },
         }}
         FabProps={{
           sx: {
-            width: open ? "40px" : "97px ",
-            height: "40px",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: open ? "#fff" : "#FF7312",
-            gap: " 4px;",
-            borderRadius: "8px",
-            boxShadow: "none",
-            color: "white",
-            ":hover": {
-              backgroundColor: open ? "#fff" : "#FF7312",
+            width: open ? '40px' : '97px ',
+            height: '40px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: open ? '#fff' : '#109b4f',
+            gap: ' 4px;',
+            borderRadius: '8px',
+            boxShadow: 'none',
+            color: 'white',
+            ':hover': {
+              backgroundColor: open ? '#fff' : '#109b4f',
             },
           },
         }}
@@ -105,27 +105,27 @@ const CustomSpeedDial: React.FC<ICustomSpeedDialProps> = ({
               tooltipTitle={item.name}
               onClick={item.onclick}
               sx={{
-                ".MuiSpeedDialAction-staticTooltipLabel": {
-                  color: "white",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                  fontSize: "16px",
-                  lineHeight: "20px",
+                '.MuiSpeedDialAction-staticTooltipLabel': {
+                  color: 'white',
+                  backgroundColor: 'transparent',
+                  boxShadow: 'none',
+                  fontSize: '16px',
+                  lineHeight: '20px',
                   padding: 0,
                   margin: 0,
                 },
-                ".MuiButtonBase-root": {
-                  boxShadow: "none",
-                  backgroundColor: "#FF7312",
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  ":hover": {
-                    backgroundColor: "#FF7312",
+                '.MuiButtonBase-root': {
+                  boxShadow: 'none',
+                  backgroundColor: '#109b4f',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  ':hover': {
+                    backgroundColor: '#109b4f',
                   },
                 },
-                ".MuiSvgIcon-root": {
-                  fill: "#fff",
+                '.MuiSvgIcon-root': {
+                  fill: '#fff',
                 },
               }}
             />

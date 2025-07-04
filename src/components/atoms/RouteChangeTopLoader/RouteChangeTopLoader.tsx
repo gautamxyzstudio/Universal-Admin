@@ -5,7 +5,7 @@ const RouteChangeTopLoader = () => {
   return (
     <>
       <NextTopLoader
-        color="#FF7312"
+        color="#109b4f"
         initialPosition={0.08}
         crawlSpeed={300}
         height={3}

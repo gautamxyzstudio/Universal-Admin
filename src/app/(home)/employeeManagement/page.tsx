@@ -7,8 +7,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Images } from '../../../../public/exporter';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import PageHeader from '@/components/organism/PageHeader/PageHeader';
-import TableFilter from '@/components/molecules/TableFilter/TableFilter';
-import { docStatus } from './types';
 import { useLazyGetEmployeesQuery } from '@/api/fetures/Employee/EmployeeApi';
 import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import { useRouter } from 'next/navigation';
@@ -178,7 +176,7 @@ const EmployeeManagement = () => {
         title={STRINGS.employeeManagement}
         primaryButtonTitle={STRINGS.addEmployee}
         onPressButton={onPressPrimaryButton}
-        withPrimaryButton
+        withPrimaryButton={false}
       />
       <DataTable
         columns={columns}
@@ -193,13 +191,13 @@ const EmployeeManagement = () => {
                 isLoading={searchState === 'searching'}
               />
             </div>
-            <div className="flex flex-row gap-x-8">
+            {/* <div className="flex flex-row gap-x-8">
               <TableFilter
                 data={docStatus}
                 initialSelectedOption={docStatus[0]}
                 title={STRINGS.documentStatus}
               />
-            </div>
+            </div> */}
           </div>
         }
         isLoading={isFetching}

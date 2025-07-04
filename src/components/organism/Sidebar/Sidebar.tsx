@@ -1,13 +1,13 @@
-"use client";
-import { Icons } from "../../../../public/exporter";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { IQuickLinkData, quickLink } from "@/api/mockData/data";
-import { STRINGS } from "@/constant/en";
-import { usePathname } from "next/navigation";
-import { routeNames } from "@/utility/routesName";
-import { splitRoute } from "@/utility/utils";
-import LinkWithImageRender from "@/components/atoms/LinkWithImageRender/LinkWithImageRender";
+'use client';
+import { Icons } from '../../../../public/exporter';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import { IQuickLinkData, quickLink } from '@/api/mockData/data';
+import { STRINGS } from '@/constant/en';
+import { usePathname } from 'next/navigation';
+import { routeNames } from '@/utility/routesName';
+import { splitRoute } from '@/utility/utils';
+import LinkWithImageRender from '@/components/atoms/LinkWithImageRender/LinkWithImageRender';
 
 const Sidebar = () => {
   const currentPathName = usePathname();
@@ -67,6 +67,7 @@ const Sidebar = () => {
       <Image
         className="cursor-pointer mx-auto"
         width={144}
+        priority
         height={56}
         src={Icons.logo}
         alt="logo"

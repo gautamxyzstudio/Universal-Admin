@@ -1,6 +1,6 @@
-import { ListItemButton } from "@mui/material";
-import React from "react";
-import { ITabButtonProps } from "./TabButton.types";
+import { ListItemButton } from '@mui/material';
+import React from 'react';
+import { ITabButtonProps } from './TabButton.types';
 
 const TabButton: React.FC<ITabButtonProps> = ({
   isSelected,
@@ -17,20 +17,20 @@ const TabButton: React.FC<ITabButtonProps> = ({
         customButtonStyle
           ? customButtonStyle
           : {
-              "&.Mui-selected": {
-                border: "1px solid",
-                borderColor: "#FF7312",
-                minHeight: "60px",
-                color: "#FF7312",
+              '&.Mui-selected': {
+                border: '1px solid',
+                borderColor: '#109b4f',
+                minHeight: '60px',
+                color: '#109b4f',
               },
-              ".MuiButtonBase-root": {
+              '.MuiButtonBase-root': {
                 padding: 0,
               },
-              border: "1px solid",
-              borderColor: "#EBEBEB",
-              borderRadius: "8px",
-              marginX: "12px",
-              marginBottom: "12px",
+              border: '1px solid',
+              borderColor: '#EBEBEB',
+              borderRadius: '8px',
+              marginX: '12px',
+              marginBottom: '12px',
             }
       }
       selected={isSelected}
