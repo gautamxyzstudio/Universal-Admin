@@ -22,7 +22,6 @@
     "@mui/x-data-grid": "^7.20.0",
     "@mui/x-data-grid-generator": "^7.20.0",
     "@mui/x-date-pickers": "^7.22.3",
-    "@next/swc-darwin-arm64": "^15.3.1",
     "@reduxjs/toolkit": "^2.2.8",
     "cookies-next": "^4.3.0",
     "crypto-js": "^4.2.0",
