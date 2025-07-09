@@ -11,6 +11,7 @@ import report from './report.svg';
 import search from './search.svg';
 import setting from './setting.svg';
 import subAdmin from './subAdmin.svg';
+import logoutDisabled from './logoutDisabled.svg';
 import buildingfill from './buildingfill.svg';
 import clientfill from './clientfill.svg';
 import peoplefill from './peoplefill.svg';
@@ -118,6 +119,7 @@ export const Icons = {
   timeDate,
   event,
   clock,
+  logoutDisabled,
   calendar,
   add,
   jobId,

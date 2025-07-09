@@ -4,14 +4,20 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { IQuickLinkData, quickLink } from '@/api/mockData/data';
 import { STRINGS } from '@/constant/en';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { routeNames } from '@/utility/routesName';
 import { splitRoute } from '@/utility/utils';
 import LinkWithImageRender from '@/components/atoms/LinkWithImageRender/LinkWithImageRender';
+import { removeUserDetailsFromCookies } from '@/utility/cookies';
+import { useShowLoaderContext } from '@/contexts/LoaderContext/LoaderContext';
+import ConfirmationDialog from '@/components/molecules/DialogTypes/ConfirmationDialog/ConfirmationDialog';
 
 const Sidebar = () => {
   const currentPathName = usePathname();
+  const router = useRouter();
+  const { changeLoaderState } = useShowLoaderContext();
   const [index, setIndex] = useState(0);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   useEffect(() => {
     const index = quickLink.findIndex(
@@ -62,6 +68,41 @@ const Sidebar = () => {
     );
   };
 
+  const RenderLogout = () => {
+    const logoutHandler = () => {
+      setShowDialog(false);
+      router.push(routeNames.Login);
+      removeUserDetailsFromCookies();
+      changeLoaderState(true);
+    };
+
+    const onPressClose = () => {
+      setShowDialog(false);
+    };
+
+    const handleLogoutClick = () => {
+      setShowDialog(true);
+    };
+
+    return (
+      <>
+        <LinkWithImageRender
+          href="#"
+          icon={Icons.logoutDisabled}
+          title={STRINGS.logout}
+          isActive={false}
+          onClickOption={handleLogoutClick}
+        />
+        <ConfirmationDialog
+          type={'logout'}
+          onPressButton={logoutHandler}
+          onClose={onPressClose}
+          open={showDialog}
+        />
+      </>
+    );
+  };
+
   return (
     <div className="pt-6 h-screen flex flex-col relative">
       <Image
@@ -72,7 +113,7 @@ const Sidebar = () => {
         src={Icons.logo}
         alt="logo"
       />
-      <div className="w-full h-full mt-16 flex flex-col justify-between">
+      <div className="w-full h-full  flex flex-col justify-between">
         <div className="flex justify-between flex-col relative">
           {/* Vertical indicator */}
           {index > -1 && (
@@ -92,6 +133,7 @@ const Sidebar = () => {
         <div>
           {RenderSettings()}
           {RenderHelp()}
+          {RenderLogout()}
         </div>
       </div>
     </div>
