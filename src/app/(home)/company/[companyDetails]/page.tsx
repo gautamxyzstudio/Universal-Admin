@@ -144,12 +144,6 @@ const CompanyDetails = ({ params }: { params: { companyDetails: string } }) => {
         setSelectedTabItemIndex(1);
       },
     },
-    {
-      label: STRINGS.closeJob,
-      onClickAction: () => {
-        setSelectedTabItemIndex(2);
-      },
-    },
   ];
 
   const menuPressHandler = (option: string) => {

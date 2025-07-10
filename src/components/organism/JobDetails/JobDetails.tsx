@@ -1,20 +1,20 @@
-import React from "react";
-import { Icons } from "../../../../public/exporter";
-import TextWithBgColor from "@/components/molecules/TextWithBgColor/TextWithBgColor";
-import { STRINGS } from "@/constant/en";
-import TextGroup from "../TextGroup/TextGroup";
-import UserNameWithImage from "@/components/molecules/UserNameWithImage/UserNameWithImage";
+import React from 'react';
+import { Icons } from '../../../../public/exporter';
+import TextWithBgColor from '@/components/molecules/TextWithBgColor/TextWithBgColor';
+import { STRINGS } from '@/constant/en';
+import TextGroup from '../TextGroup/TextGroup';
+import UserNameWithImage from '@/components/molecules/UserNameWithImage/UserNameWithImage';
 import {
   dateMonthFormat,
   getJobStatusColor,
   timeFormat,
-} from "@/utility/utils";
-import { getJobStatus, getJobType } from "@/constant/constant";
-import { IJobPost } from "@/api/fetures/Employee/EmployeeApi.types";
-import CustomMenuComponent from "@/components/atoms/CustomMenuComponent/CustomMenuComponent";
-import { ITextGroupTypes } from "../TextGroup/TextGroup.types";
-import { IJobPostStatus } from "@/constant/enums";
-import { MoreVertOutlined } from "@mui/icons-material";
+} from '@/utility/utils';
+import { getJobStatus, getJobType } from '@/constant/constant';
+import { IJobPost } from '@/api/fetures/Employee/EmployeeApi.types';
+import CustomMenuComponent from '@/components/atoms/CustomMenuComponent/CustomMenuComponent';
+import { ITextGroupTypes } from '../TextGroup/TextGroup.types';
+import { IJobPostStatus } from '@/constant/enums';
+import { MoreVertOutlined } from '@mui/icons-material';
 
 const JobDetails = ({
   data,
@@ -34,9 +34,9 @@ const JobDetails = ({
               image={data.client_details?.companylogo ?? ''}
               name={data.job_name}
               containerStyle={
-                !isEmployee ? "!flex-col !items-start gap-y-3" : ""
+                !isEmployee ? '!flex-col !items-start gap-y-3' : ''
               }
-              companyName={isEmployee ? data.client_details?.companyname : ""}
+              companyName={isEmployee ? data.client_details?.companyname : ''}
               imageStyle="!w-14 !h-14"
               nameStyle="font-bold !text-[24px] !leading-[28px]"
               postby={data.client_details?.clientName}
@@ -44,9 +44,9 @@ const JobDetails = ({
               subText={
                 !isEmployee
                   ? data.notAccepting === false
-                    ? ""
+                    ? ''
                     : STRINGS.notAccept
-                  : ""
+                  : ''
               }
             />
           </div>
@@ -56,12 +56,6 @@ const JobDetails = ({
                 menuButton={<MoreVertOutlined />}
                 isOpen={true}
                 data={[
-                  {
-                    icon: Icons.crossForm,
-                    value: STRINGS.close,
-                    onPresItem: () =>
-                      onPressMenuItem && onPressMenuItem(STRINGS.close),
-                  },
                   {
                     icon: Icons.pencil,
                     value: STRINGS.edit,
@@ -88,7 +82,7 @@ const JobDetails = ({
           <TextGroup
             icon={Icons.dollar}
             title={STRINGS.wageRate}
-            text={data.salary + "$ /hr"}
+            text={data.salary + '$ /hr'}
           />
           <TextGroup
             icon={Icons.timeDate}
@@ -96,7 +90,7 @@ const JobDetails = ({
             subTitle={STRINGS.date}
             text={
               timeFormat(data.startShift ?? new Date()) +
-              " - " +
+              ' - ' +
               timeFormat(data.endShift ?? new Date())
             }
             subText={dateMonthFormat(data.eventDate ?? new Date())}
@@ -130,7 +124,7 @@ const JobDetails = ({
             title={STRINGS.reqcandidate}
             titleStyle="!text-Black font-bold"
             type={ITextGroupTypes.textType}
-            text={data.requiredEmployee ?? ""}
+            text={data.requiredEmployee ?? ''}
           />
           <TextGroup
             title={STRINGS.gender}

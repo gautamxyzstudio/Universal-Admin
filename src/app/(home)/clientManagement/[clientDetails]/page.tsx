@@ -107,8 +107,6 @@ const ClientDetails = ({ params }: { params: { clientDetails: string } }) => {
   ];
 
   const menuPressHandler = (option: string) => {
-    if (option === STRINGS.close) {
-    }
     if (option === STRINGS.edit) {
       setOpenEditForm(true);
     }
